@@ -1,0 +1,18 @@
+The following files were changed to create a MATLAB mex interface
+
+1) Add mex.c
+This file contains the code for my interface.
+
+2) Changed Makefile
+Added commands for compilation on an HP 9000/series 700.
+Made the MEX-file the default makefile target.
+
+3) Changed merge.c & merge.h
+These were changed according to my desire for facet merging to
+correct the vertices. Code for this in 3 and higher dimensions
+does not exist. These changes are not necessary for the MEX interface.
+
+4) set qh_RANDOMtype  to 4 in user.h.
+
+Richard Schreier
+Dec 1995
