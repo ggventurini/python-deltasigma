@@ -10,7 +10,7 @@ def padt(x, n, val=0.):
 	else:
 		xp = x
 	y = np.concatenate(
-	                   (float(val)*np.ones((n - x.shape[0], max(1, x.shape[1]))),
+	                   (float(val)*np.ones((n - xp.shape[0], xp.shape[1])),
 	                    xp
 	                   ), axis=0
 	                  )
