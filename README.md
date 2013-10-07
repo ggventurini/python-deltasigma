@@ -6,7 +6,68 @@ Schreier's MATLAB [delta sigma toolbox](http://www.mathworks.com/matlabcentral/f
 
 This project is at a very early stage. Take a look to files.ods for the current status. 
 
-Pull requests welcome! 
+Pull requests welcome!
+
+## Dependencies
+
+Using python-deltasigma requires:
+
+#### 1. **numpy** and **scipy** 
+
+**numpy** and **scipy** can be installed through the steps described below.
+
+On a Debian Linux system:
+
+```
+ # aptitude install python-numpy python-scipy python-matplotlib
+```
+
+Or, on a generic platform:
+
+```
+# pip install numpy scipy
+```
+
+More information on the [scipy install page](http://www.scipy.org/install.html).
+
+#### 2. Slycot
+
+**Slycot** is a *Python wrapper for selected SLICOT routines, notably including solvers for Riccati, Lyapunov and Sylvester equations.* (quoted from the project homepage.)
+
+It is a dependency for **python-controls** (see below). 
+
+**Slycot** can be found at [repagh's Github repository](https://github.com/repagh/Slycot) and requires **numpy**, a **fortran compiler** such as gfortran and **BLAS/LAPACK 
+libraries**. As, the README states, on a Debian Linux system, all of the above can be installed with:
+
+```
+# apt-get build-dep python-scipy
+```
+
+then check-out **Slycot** and install with distutils.
+
+```
+python setup.py install --user
+```
+
+If you are not using a Debian-based system, please check on the project page the dependencies to be installed.
+
+#### 3. python-controls
+
+**python-controls** can be installed downloading a release from [its homepage](http://sourceforge.net/projects/python-control/) or checking out its SVN repository with:
+
+```
+svn checkout svn://svn.code.sf.net/p/python-control/code/trunk python-control
+```
+
+Installing is straightforward with the distutils setup.py file:
+
+```
+$ python setup.py install --user
+```
+
+#### 4. Extras
+
+Not strictly needed, but **[matplotlib](http://matplotlib.org/)** is very useful for plotting and visually inspecting your data.
 
 ## Licensing and copyright notice
 
