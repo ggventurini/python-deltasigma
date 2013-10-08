@@ -4,6 +4,9 @@ The conversion will be performed according to the following steps:
 Python modules without touching the C Matlab EXtension (C MEX) files.
 Have a working unit test for each file.
 
+2. Arrange the converted files in a module (as opposed to the the 
+current arrangement where each function has its own module.)
+
 2. Study the C MEX files. Can their functionality be reproduced in
 straight Python, Python + numpy or Python + numpy/scipy + 
 python-controls, without a *very* high penality in terms of 
