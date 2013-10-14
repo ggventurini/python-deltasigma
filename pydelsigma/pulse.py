@@ -40,7 +40,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	x, df = rat(tfinal, 1e-3)
 	delta_t = 1. / lcm(dd, lcm(ddt, df))
 	delta_t = max(1e-3, delta_t)	# Put a lower limit on delta_t
-	y1, T1 = step(S, T=np.arange(0., tfinal, delta_t))
+	y1, T1 = step(S, T=np.arange(0., tfinal + delta_t, delta_t))
 
 	nd = np.round(dt/delta_t, 0)
 	nf = np.round(tfinal/delta_t, 0)
@@ -57,9 +57,9 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	nis = ni/ndac # Number of inputs grouped together with a common DAC timing
 	              # (2 for the complex case)
 	if not nosum: # Sum the responses due to each input set
-		y = np.zeros((np.ceil(tfinal/float(dt)), len(Sscipy[0]), nis))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(Sscipy[0]), nis))
 	else:
-		y = np.zeros((np.ceil(tfinal/float(dt)), len(Sscipy[0]), ni))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(Sscipy[0]), ni))
 
 	if len(y1.shape) == 1:
 		y1 = y1.reshape((y1.shape[0], 1, 1))
@@ -69,8 +69,8 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 		n2 = np.round(tp[i, 1]/delta_t, 0)
 		z1 = (n1, y1.shape[1], nis)
 		z2 = (n2, y1.shape[1], nis)
-		yy = + np.concatenate((np.zeros(z1), y1[:nf-n1, :, (i-1)*nis:i*nis+1]), axis=0) \
-		     - np.concatenate((np.zeros(z2), y1[:nf-n2, :, (i-1)*nis:i*nis+1]), axis=0)
+		yy = + np.concatenate((np.zeros(z1), y1[:nf-n1+1, :, (i-1)*nis:i*nis+1]), axis=0) \
+		     - np.concatenate((np.zeros(z2), y1[:nf-n2+1, :, (i-1)*nis:i*nis+1]), axis=0)
 		yy = yy[::nd, :, :]
 		if not nosum: # Sum the responses due to each input set
 			y = y + yy
@@ -86,7 +86,7 @@ def test_pulse():
 	pp = pulse(H, tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
 	pp = pp.reshape((pp.shape[0],1))
 	fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
-	pp2 = scipy.io.loadmat(fname)['pp'][:100] # FIXME? pulse returns 101 points, we return 100
+	pp2 = scipy.io.loadmat(fname)['pp']
 	assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
 	# FIXME ALSO CHECK MIMO TFS
 	
