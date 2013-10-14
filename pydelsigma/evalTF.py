@@ -50,9 +50,9 @@ def evalTF(tf, z):
 	
 def test_evalTF():
 	from control.matlab import tf, tf2zpk
+	from pydelsigma.utils import empty
 	num, den = np.poly([3, 0.3, 1]), np.poly([2, 0.5, .25])
 	H = tf(num, den, 1)
-	class empty: pass
 	tstr1 = empty()
 	tstr1.form, tstr1.num, tstr1.den = 'coeff', num, den
 	tstr2 = empty()
