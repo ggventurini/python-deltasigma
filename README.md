@@ -10,7 +10,7 @@ Pull requests welcome!
 
 ## Dependencies
 
-Using python-deltasigma requires:
+Using **python-deltasigma** requires:
 
 #### 1. **numpy** and **scipy** 
 
@@ -67,7 +67,9 @@ $ python setup.py install --user
 
 #### 4. Extras
 
-Not strictly needed, but **[matplotlib](http://matplotlib.org/)** is very useful for plotting and visually inspecting your data.
+Not strictly needed for the time being, but **[matplotlib](http://matplotlib.org/)** is very useful for plotting and visually inspecting your data.
+
+If you plan to run the provided unit tests, then you should install **[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the reference function outputs. Testing *can* be automated with **[nose](https://pypi.python.org/pypi/nose/)**, issuing `$ nosetests -v pydelsigma/*.py`.
 
 ## Licensing and copyright notice
 
