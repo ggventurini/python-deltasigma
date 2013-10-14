@@ -18,6 +18,16 @@ gcd = fractions.gcd
 
 lcm = lambda a, b: int(a*b / float(gcd(a, b)))
 
+class empty:
+	pass
+
+def mfloor(x):
+	def _mfloor(z):
+		return np.floor(z) if np.sign(z) >= 0 else -np.ceil(-z)
+	_internal = np.frompyfunc(_mfloor, 1, 1)
+	return np.array(_internal(x), dtype=x.dtype)
+
+
 def test_rat():
 	import numpy.random as rnd
 	for i in range(10):
@@ -32,6 +42,15 @@ def test_gcd_lcm():
 	assert lcm(a, b) == tlcm
 	assert gcd(a, b) == tgcd
 
+def test_mfloor():
+	tv = np.linspace(-1, 1, 10)
+	tres = np.zeros(tv.shape)
+	tres[tv>=0] = np.floor(tv[tv>=0])
+	tres[tv<0] = -np.ceil(np.abs(tv[tv<0]))
+	tresf = mfloor(tv)
+	assert np.allclose(tres, tresf, atol=1e-8, rtol=1e-5)
+
 if __name__ == '__main__':
 	test_rat()
 	test_gcd_lcm()
+	test_mfloor()
