@@ -13,7 +13,15 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+__author__ = "Giuseppe Venturini and the python-deltasigma contributors"
+__copyright__ = "Copyright 2013, Giuseppe Venturini"
+__credits__ = ["Giuseppe Venturini"]
+__license__ = "BSD 3-Clause License"
 __version__ = '0.0001alpha'
+__maintainer__ = "Giuseppe Venturini"
+__email__ = "ggventurini+github@gmail.com"
+__status__ = "Pre-Pre-Alpha"
+
 from pydelsigma.evalRPoly import evalRPoly
 from pydelsigma.nabsH import nabsH
 from pydelsigma.evalTF import evalTF
