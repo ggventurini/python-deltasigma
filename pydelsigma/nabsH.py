@@ -1,9 +1,28 @@
+# -*- coding: utf-8 -*-
+# nabsH.py
+# This module provides the nabsH function.
+# Copyright 2013 Giuseppe Venturini
+# This file is part of python-deltasigma.
+#
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
+# The delta sigma toolbox is (c) 2009, Richard Schreier.
+#
+# python-deltasigma is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# LICENSE file for the licensing terms.
+
+"""This module provides the nabsH() function, which computes the negative of 
+the absolute value of H(z).
+"""
+
 import numpy as np
 import pydelsigma
 
 def nabsH(w, H):
 	""" nabsH(w, H) computes the negative of the absolute value of H 
-	at the specified frequency on the unit circle. 
+	at the specified angular frequency w on the unit circle.
 
 	This function is used by infnorm.py.
 	"""

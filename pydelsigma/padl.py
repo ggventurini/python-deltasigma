@@ -1,9 +1,28 @@
+# -*- coding: utf-8 -*-
+# padl.py
+# This module provides the padl function.
+# Copyright 2013 Giuseppe Venturini
+# This file is part of python-deltasigma.
+#
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
+# The delta sigma toolbox is (c) 2009, Richard Schreier.
+#
+# python-deltasigma is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# LICENSE file for the licensing terms.
+
+"""This module provides the padl() function, which pads a matrix on the 
+left.
+"""
+
 import numpy as np
 
 def padl(x, n, val=0.):
 	"""y = padb(x, n, val)
-	 Pad a matrix x on the right to length n with value val
-	The empty matrix is assumed to be have 1 empty row
+	 Pad a matrix x on the left to length n with value val
+	The empty matrix is assumed to be have 1 empty row.
 	"""
 	if len(x.shape) == 1:
 		xp = x.reshape((1, x.shape[0]))

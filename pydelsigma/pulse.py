@@ -1,3 +1,22 @@
+# -*- coding: utf-8 -*-
+# pulse.py
+# This module provides the pulse function.
+# Copyright 2013 Giuseppe Venturini
+# This file is part of python-deltasigma.
+#
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
+# The delta sigma toolbox is (c) 2009, Richard Schreier.
+#
+# python-deltasigma is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# LICENSE file for the licensing terms.
+
+"""This module provides the pulse() function, which calculates the sampled 
+pulse response of a CT system.
+"""
+
 from __future__ import division
 import numpy as np
 
@@ -6,8 +25,8 @@ from pydelsigma.utils import lcm, rat
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	""" y = pulse(S, tp=[0 1], dt=1, tfinal=10, nosum=0)
-	Calculate the sampled pulse response 
-	of a CT system. tp may be an array of pulse timings, one for each input.
+	Calculate the sampled pulse response of a CT system. 
+	tp may be an array of pulse timings, one for each input.
 	Outputs:
 	y	The pulse response
 	

@@ -1,3 +1,22 @@
+# -*- coding: utf-8 -*-
+# evalTF.py
+# This module provides the evalTF function.
+# Copyright 2013 Giuseppe Venturini
+# This file is part of python-deltasigma.
+#
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
+# The delta sigma toolbox is (c) 2009, Richard Schreier.
+#
+# python-deltasigma is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# LICENSE file for the licensing terms.
+
+"""This module provides the evalTF() function, used to evaluate a tf at the 
+point(s) given by the user.
+"""
+
 import numpy as np
 import control
 from control.xferfcn import TransferFunction
@@ -6,15 +25,15 @@ from pydelsigma import evalRPoly
 
 def evalTF(tf, z):
 	"""h = evalTF(tf, z)
-	Evaluates the rational function described by tf
-	at the point(s) given in the z vector.
+	Evaluates the rational function described by tf at the point(s) given in the z vector.
 	
 	TF must be either a TransferFunction or an LTI object or any object having the attributes:
 	 zeros, poles, k	if form == 'zp'
 	or:
 	 num, den		if form == 'coeff'
 	"""
-	#In Matlab 5, the ss/freqresp() function does nearly the same thing.
+	# Original comment in deltasig:
+	# In Matlab 5, the ss/freqresp() function does nearly the same thing.
 	
 	# in our case a transfer function is a 'TransferFunction' not a zpk
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
