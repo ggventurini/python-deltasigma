@@ -13,6 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+"""Module providing the axisLabel() function
+"""
+
 import numpy as np
 
 def axisLabels(ran, incr):
