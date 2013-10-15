@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# rms.py
+# _rms.py
 # This module provides the rms function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -29,7 +29,9 @@ def rms(x, no_dc=False):
 	    x = x - np.mean(x)
 	return la.norm(x)/np.sqrt(len(x))
 	
-def test():
+def test_rms():
+	"""Test function for rms()
+	"""
 	tv = np.arange(100)
 	res1 = np.sqrt(np.sum(tv**2.)/float(tv.shape[0]))
 	res2 = np.sqrt((np.sum((tv - tv.mean())**2.))/tv.shape[0])
@@ -38,5 +40,5 @@ def test():
 	assert np.allclose(rms(tv, no_dc=True), res2, rtol=1e-05, atol=1e-08)
 	
 if __name__ == '__main__':
-	test()
+	test_rms()
 

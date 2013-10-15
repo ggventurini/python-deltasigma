@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# dbv.py
+# _dbv.py
 # This module provides the dbv function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -13,7 +13,8 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 import numpy as np
-from pydelsigma import undbv
+from ._undbv import undbv
+
 
 def dbv(x):
 	""" dbv(x) = 20*log10(abs(x)); the dB equivalent of the voltage x"""
@@ -30,9 +31,9 @@ def dbv(x):
 	return y
 
 def test_dbv():
-	import undbv
+	"""Test function."""
 	t = np.array([3.0])
-	r1 = undbv.undbv(dbv(t))
+	r1 = undbv(dbv(t))
 	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
 
 if __name__ == '__main__':

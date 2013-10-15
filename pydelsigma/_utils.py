@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# utils.py
+# _utils.py
 # Miscellaneous functions and stdlib wrappers for MATLAB functions 
 # that do not find a direct replacement in numpy/scipy.
 # Copyright 2013 Giuseppe Venturini
@@ -45,6 +45,7 @@ def mfloor(x):
 
 
 def test_rat():
+	"""Test function for rat()"""
 	import numpy.random as rnd
 	for i in range(10):
 		n, d = rnd.randint(1, 5000), rnd.randint(1, 5000)
@@ -53,12 +54,14 @@ def test_rat():
 		assert np.allclose((n/float(d) -  nt/float(dt),), (0.,), atol=200e-6, rtol=1e-12)
 
 def test_gcd_lcm():
+	"""Test function for gcd() and lcm"""
 	a, b = 36, 31721
 	tlcm, tgcd = 1141956, 1
 	assert lcm(a, b) == tlcm
 	assert gcd(a, b) == tgcd
 
 def test_mfloor():
+	"""Test function for mfloor()"""
 	tv = np.linspace(-1, 1, 10)
 	tres = np.zeros(tv.shape)
 	tres[tv>=0] = np.floor(tv[tv>=0])

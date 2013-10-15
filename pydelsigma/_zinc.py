@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# zinc.py
+# _zinc.py
 # The zinc function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -25,3 +25,5 @@ def zinc(f, m=64, n=1):
 	comb filters at frequencies f.
 	"""
 	return np.fabs(np.sinc(m*f)/np.sinc(f) )**n
+
+#FIXME missing test function

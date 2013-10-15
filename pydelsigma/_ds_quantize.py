@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ds_quantize.py
+# _ds_quantize.py
 # This module provides the ds_quantize function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -50,6 +50,8 @@ def ds_quantize(y, n=2):
 	return v
 
 def test_ds_quantize():
+	"""Test function.
+	"""
 	t = np.arange(-3, 3, .2)
 	t = t.reshape((1, t.shape[0]))
 	y = t

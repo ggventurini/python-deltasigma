@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# undbv.py
+# _undbv.py
 # This module provides the undbv function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -26,6 +26,7 @@ def undbv(x):
 
 	
 def test():
+	"""Test function for undbv()"""
 	assert np.allclose([undbv(53.05)], [449.26232467], rtol=1e-05, atol=1e-08)
 	assert np.allclose([undbv(3)], [1.41253754462], rtol=1e-05, atol=1e-08)
 

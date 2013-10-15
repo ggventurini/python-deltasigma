@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# padt.py
+# _padt.py
 # This module provides the padt function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -36,6 +36,7 @@ def padt(x, n, val=0.):
 	return y
 	                  
 def test_padt():
+	"""Test function for padt()"""
 	tv = np.eye(15)
 	tr = padt(tv, n=25, val=2)
 	res = np.concatenate((2.*np.ones((10, 15)), tv), axis=0)

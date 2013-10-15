@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# undbm.py
+# _undbm.py
 # This module provides the undbm function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -26,6 +26,7 @@ def undbm(p, z=50):
 	return np.sqrt(z*10.**(p/10.-3))
 
 def test():
+	"""Test function for undbm()"""
 	assert np.allclose([undbm(53.015)], [100.054125892], rtol=1e-05, atol=1e-08)
 	assert np.allclose([undbm(3, 100)], [0.44668359215], rtol=1e-05, atol=1e-08)
 

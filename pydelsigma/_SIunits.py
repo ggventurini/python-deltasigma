@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# SIunits.py
+# _SIunits.py
 # This module provides the SIunits function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -31,9 +31,7 @@ The factors and suffixes supported are:
 
 from __future__ import division
 import numpy as np 
-import pydelsigma
-import pydelsigma.constants
-from pydelsigma.constants import eps
+from ._constants import eps
 
 def SIunits(x):
 	""" The factors and suffixes supported are:
@@ -68,6 +66,7 @@ def SIunits(x):
 	return factor, prefix
 
 def test():
+	"""Test function for SIunits()"""
 	tv = (1e3, 2100312.24, .32545, 21e-9, 34e-12, 9569300e-12)
 	correct = (1e3, 'k'), (1e6, 'M'), (1e-3, 'm'), (1e-9, 'n'), (1e-12, 'p'), (1e-6, 'u')
 	f, p = SIunits(tv)

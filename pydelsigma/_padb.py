@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# padb.py
+# _padb.py
 # This module provides the padb function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -36,6 +36,7 @@ def padb(x, n, val=0.):
 	return y
 	                  
 def test_padb():
+	"""Test function for padb()"""
 	tv = np.eye(15)
 	tr = padb(tv, n=25, val=2)
 	res = np.concatenate((tv, 2.*np.ones((10, 15))), axis=0)

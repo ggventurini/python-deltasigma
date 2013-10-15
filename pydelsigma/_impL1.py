@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# impL1.py
+# _impL1.py
 # This module provides the impL1 function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -17,14 +17,12 @@
 from the comparator output to the comparator input for a given NTF.
 """
 
-from pydelsigma import padr
 import numpy as np
 import scipy
 from scipy.signal import convolve as conv
 from control.matlab import impulse, tf
 
-# man this is ewwww
-padr = padr.padr
+from ._padr import padr
 
 def impL1(arg1, n=10):
 	""" y = impL1(ntf, n=10) 

@@ -22,7 +22,34 @@ __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Pre-Pre-Alpha"
 
-from pydelsigma.evalRPoly import evalRPoly
-from pydelsigma.nabsH import nabsH
-from pydelsigma.evalTF import evalTF
-from pydelsigma.dbp import dbp
+from ._SIunits import SIunits
+from ._axisLabels import axisLabels
+from ._bplogsmooth import bplogsmooth
+from ._bquantize import bquantize
+from ._constants import *
+from ._dbm import dbm
+from ._dbp import dbp
+from ._dbv import dbv
+from ._delay import delay
+from ._ds_f1f2 import ds_f1f2
+from ._ds_freq import ds_freq
+from ._ds_hann import ds_hann
+from ._ds_quantize import ds_quantize
+from ._evalRPoly import evalRPoly
+from ._evalTF import evalTF
+from ._impL1 import impL1
+from ._infnorm import infnorm
+from ._nabsH import nabsH
+from ._padb import padb
+from ._padl import padl
+from ._padr import padr
+from ._padt import padt
+from ._pulse import pulse
+from ._rms import rms
+from ._sinc_decimate import sinc_decimate
+from ._thermometer import thermometer
+from ._undbm import undbm
+from ._undbp import undbp
+from ._undbv import undbv
+from ._utils import *
+from ._zinc import zinc

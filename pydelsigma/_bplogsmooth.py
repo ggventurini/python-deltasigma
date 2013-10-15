@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# bplogsmooth.py
+# _bplogsmooth.py
 # Module providing the bplogsmooth function
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -20,8 +20,7 @@ converts it to dB.
 import numpy as np
 from numpy.linalg import norm
 
-import pydelsigma
-from pydelsigma import dbp
+from ._dbp import dbp
 
 def bplogsmooth(X, tbin, f0):
 	"""f, p = bplogsmooth(X, tbin, f0)
@@ -74,7 +73,7 @@ def bplogsmooth(X, tbin, f0):
 	return f, p
 
 def test_bplogsmooth():
-	"""Test function
+	"""Test function.
 	"""
 	# FIXME WRITE PROPER TEST
 	bplogsmooth(np.arange(100), 100, 50)

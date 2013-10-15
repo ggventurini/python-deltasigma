@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ds_f1f2.py
+# _ds_f1f2.py
 # This module provides the ds_f1f2 function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -33,6 +33,8 @@ def ds_f1f2(OSR=64, f0=0., complex_flag=False):
 	return f1, f2
 
 def test_ds_f1f2():
+	"""Test function.
+	"""
 	f0 = 1e3
 	OSR = 128
 	cf = False

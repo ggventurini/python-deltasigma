@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# sinc_decimate.py
+# _sinc_decimate.py
 # This module provides the sinc_decimate function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -30,7 +30,8 @@ def sinc_decimate(x, m, r):
 		x = np.concatenate((x[:r], x[r:] - x[:-r]), axis=0)/r
 	return x[r::r]
 
-def test():
+def test_sinc_decimate():
+	"""Test function for sinc_decimate()"""
 	tv = np.sin(2*np.pi*.1*np.arange(0, 100))
 	r = [-1.33907057e-17, -3.55951662e-17, -2.28847549e-18, 
 	     -3.55951662e-17, -1.02208548e-16, -4.35275455e-16, 
@@ -38,4 +39,4 @@ def test():
 	assert np.allclose(sinc_decimate(tv, 1, 10), r, rtol=1e-5, atol=1e-8)
 
 if __name__ == '__main__':
-	test()
+	test_sinc_decimate()

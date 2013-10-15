@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ds_hann.py
+# _ds_hann.py
 # This module provides the ds_hann function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -27,6 +27,8 @@ def ds_hann(n):
 	return .5*(1 - np.cos(2*np.pi*x/n))
 
 def test_ds_hann():
+	"""Test function.
+	"""
 	res = np.array([ 0.        ,  0.02148628,  0.06768441,  0.0954915 ,  0.06533781,
 	                -0.03015369, -0.1545085 , -0.24133259, -0.22851372, -0.0954915 ])
 	assert np.allclose(res, np.hanning(10) - ds_hann(10), atol=1e-8, rtol=1e-5)

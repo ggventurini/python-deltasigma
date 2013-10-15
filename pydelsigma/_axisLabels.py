@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# axisLabels.py
+# _axisLabels.py
 # Module providing the axisLabel function
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -20,7 +20,7 @@ import numpy as np
 
 def axisLabels(ran, incr):
 	"""function s = axisLabels(ran, incr)
-	range is an array containing the axis points (floats)
+	ran is an array containing the axis points (floats)
 	incr may be:
 	* an int, the function returns an array of strings corresponding to:
 	each element of range[0]:range[-1]:incr formatted as '%g'
@@ -44,6 +44,8 @@ def axisLabels(ran, incr):
 	return s
 	
 def test_axisLabels():
+	"""Test function.
+	"""
 	ran = np.arange(100)
 	ss = axisLabels(ran, incr=10)
 	r = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90']

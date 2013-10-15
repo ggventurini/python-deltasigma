@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# constants.py
+# _constants.py
 # This module holds a few constants that are built-in in MATLAB and that were
 # not found in Python.
 # Copyright 2013 Giuseppe Venturini

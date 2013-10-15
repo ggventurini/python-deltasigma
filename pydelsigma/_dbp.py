@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# dbp.py
+# _dbp.py
 # This module provides the dbp function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -29,6 +29,8 @@ def dbp(x):
 	return y
 
 def test_dbp():
+	"""Test function.
+	"""
 	tv = np.array([2])
 	r = np.array([3.01029996])
 	res = dbp(tv)

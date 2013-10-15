@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# evalRPoly.py
+# _evalRPoly.py
 # This module provides the evalRPoly function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -30,7 +30,9 @@ def evalRPoly(roots, x, k=1):
 	return y
 	
 def test_evalRPoly():
-	x = np.arange(1001)-500
+	"""Test function.
+	"""
+	x = np.arange(1001) - 500
 	a = [1, 0, 1, 2]
 	r1 = np.polyval(a, x)
 	rts = np.roots(a)

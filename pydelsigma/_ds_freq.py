@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# ds_freq.py
+# _ds_freq.py
 # This module provides the ds_freq function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -40,6 +40,8 @@ def ds_freq(osr=64., f0=0., quadrature=False):
 	return f
 	
 def test_ds_freq():
+	"""Test function.
+	"""
 	a = ds_freq(osr=128, f0=0., quadrature=True)
 	b = np.diff(a)
 	res = (0.00190595677588, 0.00510204081633, 0.207803148686, 0.00491921819577)

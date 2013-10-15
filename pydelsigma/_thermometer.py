@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# thermometer.py
+# _thermometer.py
 # This module provides the thermometer function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -29,6 +29,7 @@ def thermometer(x, m):
 	return t
 	
 def test():
+	"""Test function for thermometer()"""
 	tv = np.arange(50)
 	rm = np.zeros((70, 50))
 	for i in range(50):

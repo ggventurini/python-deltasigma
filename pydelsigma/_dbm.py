@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# dbm.py
+# _dbm.py
 # This module provides the dbm function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -33,6 +33,8 @@ def dbm(v, R=50):
 	return y
 
 def test_dbm():
+	"""Test function.
+	"""
 	v = np.arange(10)*1e-3
 	r = [-np.inf, -46.98970004, -40.96910013, -37.44727495, -34.94850022,
 	     -33.01029996, -31.42667504, -30.08773924, -28.9279003, -27.90484985]

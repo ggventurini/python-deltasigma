@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# padr.py
+# _padr.py
 # This module provides the padr function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -36,6 +36,7 @@ def padr(x, n, val=0.):
 	return y
 	                  
 def test_padr():
+	"""Test function for padr()"""
 	tv = np.eye(15)
 	tr = padr(tv, n=25, val=2)
 	res = np.concatenate((tv, 2.*np.ones((15, 10))), axis=1)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# bquantize.py
+# _bquantize.py
 # Bipolar quantization module
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -14,8 +14,8 @@
 # LICENSE file for the licensing terms.
 
 import numpy as np
-from pydelsigma.constants import eps
-from pydelsigma.utils import empty, mfloor
+from ._constants import eps
+from ._utils import empty, mfloor
 
 def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	"""y = bquantize(x,nsd=3,abstol=eps,reltol=10*eps)
@@ -53,6 +53,8 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	return y
 	
 def test_bquantize():
+	"""Test function.
+	"""
 	import scipy.io, pkg_resources
 	x = np.linspace(-10, 10, 101)
 	y = bquantize(x)

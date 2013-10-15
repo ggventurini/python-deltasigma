@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# evalTF.py
+# _evalTF.py
 # This module provides the evalTF function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -21,7 +21,7 @@ import numpy as np
 import control
 from control.xferfcn import TransferFunction
 from control.statesp import StateSpace
-from pydelsigma import evalRPoly
+from ._evalRPoly import evalRPoly
 
 def evalTF(tf, z):
 	"""h = evalTF(tf, z)
@@ -68,8 +68,10 @@ def evalTF(tf, z):
 	return h
 	
 def test_evalTF():
+	"""Test function.
+	"""
 	from control.matlab import tf, tf2zpk
-	from pydelsigma.utils import empty
+	from ._utils import empty
 	num, den = np.poly([3, 0.3, 1]), np.poly([2, 0.5, .25])
 	H = tf(num, den, 1)
 	tstr1 = empty()

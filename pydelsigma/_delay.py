@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# delay.py
+# _delay.py
 # This module provides the delay function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -36,6 +36,8 @@ def delay(x, n=1):
 	return y
 
 def test_delay():
+	"""Test function.
+	"""
 	v1 = np.arange(4)
 	v2 = np.ones((10, 1))
 	v3 = np.ones((1, 10))

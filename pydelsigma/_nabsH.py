@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# nabsH.py
+# _nabsH.py
 # This module provides the nabsH function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -18,24 +18,26 @@ the absolute value of H(z).
 """
 
 import numpy as np
-import pydelsigma
+
+from ._evalTF import evalTF
 
 def nabsH(w, H):
 	""" nabsH(w, H) computes the negative of the absolute value of H 
 	at the specified angular frequency w on the unit circle.
 
-	This function is used by infnorm.py.
+	This function is used by _infnorm.py.
 	"""
 	z = np.exp(1j*w)
-	return -np.abs(pydelsigma.evalTF(H, z))
+	return -np.abs(evalTF(H, z))
 	
 def test_nabsH():
+	"""Test function for nabsH()"""
 	from control.matlab import tf
 	H = tf([1, 2], [2, 0, .25], 1)
 	N = 129
 	w = np.linspace(0, 2*np.pi, num=N, endpoint=True)
 	z = np.exp(1j*w)
-	r1 = -np.abs(pydelsigma.evalTF(H, z))
+	r1 = -np.abs(evalTF(H, z))
 	r2 = nabsH(w, H)
 	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-5)
 

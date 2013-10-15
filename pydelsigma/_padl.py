@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# padl.py
+# _padl.py
 # This module provides the padl function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -37,6 +37,7 @@ def padl(x, n, val=0.):
 	return y
 	                  
 def test_padl():
+	"""Test function for padl()"""
 	tv = np.eye(15)
 	tr = padl(tv, n=25, val=2)
 	res = np.concatenate((2.*np.ones((15, 10)), tv), axis=1)

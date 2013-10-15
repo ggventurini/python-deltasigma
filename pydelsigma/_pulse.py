@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# pulse.py
+# _pulse.py
 # This module provides the pulse function.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
@@ -21,7 +21,7 @@ from __future__ import division
 import numpy as np
 
 from control import step
-from pydelsigma.utils import lcm, rat
+from ._utils import lcm, rat
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	""" y = pulse(S, tp=[0 1], dt=1, tfinal=10, nosum=0)
@@ -98,6 +98,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	return y
 
 def test_pulse():
+	"""Test function for pulse()"""
 	from control import tf
 	import pkg_resources
 	import scipy.io
