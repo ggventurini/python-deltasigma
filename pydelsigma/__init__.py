@@ -25,3 +25,4 @@ __status__ = "Pre-Pre-Alpha"
 from pydelsigma.evalRPoly import evalRPoly
 from pydelsigma.nabsH import nabsH
 from pydelsigma.evalTF import evalTF
+from pydelsigma.dbp import dbp
