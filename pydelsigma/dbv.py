@@ -17,8 +17,13 @@ from pydelsigma import undbv
 
 def dbv(x):
 	""" dbv(x) = 20*log10(abs(x)); the dB equivalent of the voltage x"""
-	if not len(x):
-		return
+	if not hasattr(x, 'shape'):
+		if not hasattr(x, '__len__'):
+			x = np.array((x,))
+		else:
+			x = np.array(x)
+	elif x.shape == ():
+		x = np.array((x,))
 	y = -np.inf*np.ones(x.shape)
 	nonzero = (x != 0)
 	y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))

@@ -20,9 +20,13 @@ def dbm(v, R=50):
 	""" dbm(v, R=50) = 10*log10(v^2/50*1000)  
 	The equivalent in dBm of an rms voltage v
 	"""
-	if not len(v):
-		return
-	
+	if not hasattr(v, 'shape'):
+		if not hasattr(v, '__len__'):
+			v = np.array((v,))
+		else:
+			v = np.array(v)
+	elif v.shape == ():
+		v = np.array((v,))
 	y = -np.Inf*np.ones(np.size(v))
 	nonzero = (v != 0)
 	y[nonzero] = 10.*np.log10(np.abs(v[nonzero]**2.)/R) + 30

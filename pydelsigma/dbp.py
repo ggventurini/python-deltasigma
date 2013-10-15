@@ -16,8 +16,13 @@ import numpy as np
 
 def dbp(x):
 	""" dbp(x) = 10*log10(x): the dB equivalent of the power x"""
-	if not len(x):
-		return 
+	if not hasattr(x, 'shape'):
+		if not hasattr(x, '__len__'):
+			x = np.array((x,))
+		else:
+			x = np.array(x)
+	elif x.shape == ():
+		x = np.array((x,))
 	y = -np.inf*np.ones(x.shape)
 	nonzero = (x != 0)
 	y[nonzero] = 10.*np.log10(np.abs(x[nonzero]))
@@ -26,6 +31,14 @@ def dbp(x):
 def test_dbp():
 	tv = np.array([2])
 	r = np.array([3.01029996])
+	res = dbp(tv)
+	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	tv = 2
+	r = 3.01029996
+	res = dbp(tv)
+	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	tv = 2, 2
+	r = 3.01029996, 3.01029996
 	res = dbp(tv)
 	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
 
