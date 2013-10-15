@@ -34,7 +34,7 @@ More information on the [scipy install page](http://www.scipy.org/install.html).
 
 **Slycot** is a *Python wrapper for selected SLICOT routines, notably including solvers for Riccati, Lyapunov and Sylvester equations.* (quoted from the project homepage.)
 
-It is a dependency for **python-controls** (see below). 
+It is a dependency for **python-control** (see below). 
 
 **Slycot** can be found at [repagh's Github repository](https://github.com/repagh/Slycot) and requires **numpy**, a **fortran compiler** such as gfortran and **BLAS/LAPACK 
 libraries**. As, the README states, on a Debian Linux system, all of the above can be installed with:
@@ -51,9 +51,9 @@ python setup.py install --user
 
 If you are not using a Debian-based system, please check on the project page the dependencies to be installed.
 
-#### 3. python-controls
+#### 3. python-control
 
-**python-controls** can be installed downloading a release from [its homepage](http://sourceforge.net/projects/python-control/) or checking out its SVN repository with:
+**python-control** can be installed downloading a release from [its homepage](http://sourceforge.net/projects/python-control/) or checking out its SVN repository with:
 
 ```
 svn checkout svn://svn.code.sf.net/p/python-control/code/trunk python-control
