@@ -18,9 +18,12 @@
  that do not find a direct replacement in numpy/scipy.
 """
 
-import numpy as np
+from warnings import warn
 import fractions
 from fractions import Fraction as Fr
+import numpy as np
+from ._dbp import dbp
+from ._dbv import dbv
 
 def rat(x, tol):
 	"""num, den = rat(x, tol)
@@ -38,12 +41,54 @@ class empty:
 	pass
 
 def mfloor(x):
+	"""MATLAB-like floor function.
+	"""
 	def _mfloor(z):
 		return np.floor(z) if np.sign(z) >= 0 else -np.ceil(-z)
 	_internal = np.frompyfunc(_mfloor, 1, 1)
 	return np.array(_internal(x), dtype=x.dtype)
 
+def zpk(z, p, k):
+	"""Returns a zpk object with the zeros (z), poles (p) and gain (k) provided.
+	"""
+	t = empty()
+	t.form = 'zp'
+	t.zeros, t.poles, t.k = list(z), list(p), k
+	return t
+	
+def db(x, input_type='voltage', R=1.):
+	"""The return value is defined as:
+	y = dbv(x) - 20*log10(R) if input_type == 'voltage'
+	y = dbp(x) if input type
+	
+	MATLAB provides a function with this exact signature.
+    """
+	if input_type.lower().strip() == 'voltage':
+			y = dbv(x) - 10.*np.log10(R)
+	elif input_type.lower().strip() == 'power':
+		y = dbp(x)
+		if R != 1.:
+			warn("db called with a non default R value, " + 
+			     "but R is going to be ignored since input_type is power",
+				 RuntimeWarning)
+	else:
+		raise ValueError, "db got input_type %s, instead of voltage or power" % input_type
+	return y
 
+def carray(x):
+	"""Check that x is an ndarray. If not, try to convert it to ndarray.
+	"""
+	if not hasattr(x, 'shape'):
+		if not hasattr(x, '__len__'):
+			x = np.array((x,))
+		else:
+			x = np.array(x)
+	elif x.shape == ():
+		x = np.array((x,))
+	else:
+		pass #nothing to do here
+	return x
+	
 def test_rat():
 	"""Test function for rat()"""
 	import numpy.random as rnd
@@ -69,7 +114,41 @@ def test_mfloor():
 	tresf = mfloor(tv)
 	assert np.allclose(tres, tresf, atol=1e-8, rtol=1e-5)
 
+def test_zpk():
+	"""Test function for zpk.
+	"""
+	z = (2,)
+	p = (1, 3)
+	k = 1
+	t = zpk(z, p, k)
+	assert t.form == 'zp'
+	assert t.zeros == list(z)
+	assert t.poles == list(p)
+	assert t.k == k	
+
+def test_db():
+	import warnings
+	from ._undbv import undbv
+	tv = np.array([2])
+	r = np.array([3.01029996])
+	res = db(tv, 'power')
+	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	tv = 2
+	r = 3.01029996
+	a = False
+	res = db(tv, 'power') 
+	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	tv = 2, 2
+	r = 3.01029996, 3.01029996
+	res = db(tv, 'power')
+	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	t = np.array([3.0])
+	r1 = undbv(db(t, 'voltage'))
+	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
+	
 if __name__ == '__main__':
 	test_rat()
 	test_gcd_lcm()
 	test_mfloor()
+	test_zpk()
+	test_db()
