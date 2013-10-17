@@ -22,7 +22,7 @@ from ._constants import eps
 from ._utils import empty, mfloor
 
 def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
-	"""y = bquantize(x,nsd=3,abstol=eps,reltol=10*eps)
+	"""y = bquantize(x, nsd=3, abstol=eps, reltol=10*eps)
 	Bidirectionally quantize a n by 1 vector x to nsd signed digits, 
 	Terminate early if the error is less than the specified tolerances.
 	y is a list of instances with the same length as x and the 
@@ -42,7 +42,7 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	for i in range(n):
 		xp = x[i]
 		y[i].val = 0.
-		y[i].csd = np.zeros((2,0), dtype='int16')
+		y[i].csd = np.zeros((2, 0), dtype='int16')
 		for j in range(nsd):
 			error = np.abs(y[i].val - x[i])
 			if error <= abstol and error <= np.abs(x[i])*reltol: #rep? in the orig: or
@@ -73,9 +73,12 @@ def test_bquantize():
 		mcsd.append(s[0, i][1])
 	for i in range(len(mval)):
 		assert np.allclose(mval[i], yval[i], atol=1e-8, rtol=1e-5)
-		mcsd[i].shape == ycsd[i].shape
+		print mcsd[i].shape, ycsd[i].shape
+		assert np.prod(mcsd[i].shape) + np.prod(ycsd[i].shape) == 0 or \
+		       mcsd[i].shape == ycsd[i].shape
+
 		if not 0 in ycsd[i].shape:
 			assert np.allclose(mcsd[i], ycsd[i], atol=1e-8, rtol=1e-5)
-	
+
 if __name__ == '__main__':
 	test_bquantize()
