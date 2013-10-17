@@ -21,6 +21,7 @@ import numpy as np
 from numpy.linalg import norm
 
 from ._dbp import dbp
+from ._utils import carray
 
 def bplogsmooth(X, tbin, f0):
 	"""f, p = bplogsmooth(X, tbin, f0)
@@ -30,10 +31,11 @@ def bplogsmooth(X, tbin, f0):
 	For tbin, group the bins together. TBIN IS ASSUMED TO BE IN THE UPPER SIDEBAND!
 	Use this for nice double-sided log-log plots.
 	"""
+	X = carray(X)
 	if hasattr(X, 'shape') and len(X.shape) == 2 and \
 	   not X.shape[0]*X.shape[1] == max(X.shape):
-		raise VelueError, "The X vector is not unidimensional: " + str(X.shape)
-	N = max(X.shape) if hasattr(X, 'shape') else len(X)
+		raise ValueError, "The X vector is not unidimensional: " + str(X.shape)
+	N = max(X.shape)
 	tbin = int(tbin)
 	n = 8
 
@@ -76,7 +78,7 @@ def test_bplogsmooth():
 	"""Test function.
 	"""
 	# FIXME WRITE PROPER TEST
-	bplogsmooth(np.arange(100), 100, 50)
+	bplogsmooth(np.arange(200), 10, 0)
 	
 if __name__ == '__main__':
 	test_bplogsmooth()

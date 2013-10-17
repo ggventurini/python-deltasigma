@@ -13,6 +13,10 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+"""This module provides the bquantize() function, used to bidirectionally 
+quantize a vector to signed digits.
+"""
+
 import numpy as np
 from ._constants import eps
 from ._utils import empty, mfloor

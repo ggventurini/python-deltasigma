@@ -42,9 +42,9 @@ def test_delay():
 	v2 = np.ones((10, 1))
 	v3 = np.ones((1, 10))
 	r1 = np.array((0, 0, 0, 0))
-	r2 = np.zeros((10,1))
+	r2 = np.zeros((10, 1))
 	r2[5:, 0] = 1
-	r3 = np.zeros((1,10))
+	r3 = np.zeros((1, 10))
 	r3[0, 5:] = 1
 	assert np.allclose(delay(v1, 5), r1)
 	assert np.allclose(delay(v2, 5), r2)
