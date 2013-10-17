@@ -24,6 +24,7 @@ from fractions import Fraction as Fr
 import numpy as np
 from ._dbp import dbp
 from ._dbv import dbv
+from._constants import eps
 
 def rat(x, tol):
 	"""num, den = rat(x, tol)
@@ -88,6 +89,29 @@ def carray(x):
 	else:
 		pass #nothing to do here
 	return x
+
+def cplxpair(x, tol=100):
+	"""
+	Sort complex numbers into complex conjugate pairs.
+
+	This function replaces MATLAB's cplxpair for vectors.
+	"""
+	x = carray(x)
+	x = x.tolist()
+	x = map(lambda x: np.real_if_close(x, tol), x)
+	xreal = np.array(filter(np.isreal, x))
+	xcomplex = np.array(filter(np.iscomplex, x))
+	xreal = np.sort_complex(xreal)
+	xcomplex = np.sort_complex(xcomplex)
+	xcomplex_ipos = xcomplex[xcomplex.imag >  0.]
+	xcomplex_ineg = xcomplex[xcomplex.imag <= 0.]
+	res = []
+	for i, j in zip(xcomplex_ipos, xcomplex_ineg):
+		if not abs(i - np.conj(j)) < tol*eps:
+			raise ValueError, "Complex numbers can't be paired."
+		res += [j, i]
+	return np.hstack((np.array(res), xreal))
+
 	
 def test_rat():
 	"""Test function for rat()"""
@@ -146,9 +170,15 @@ def test_db():
 	r1 = undbv(db(t, 'voltage'))
 	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
 	
+def test_cplxpair():
+	a = np.array([1 + eps*20j, 1.1 + 2j, 1.1 - (2+50*eps)*1j, .1 + (1+99*eps)*.2j, .1 - .2j])
+	assert np.allclose(cplxpair(a), np.array([0.1-0.2j, 0.1+0.2j, 1.1-2.j, 1.1+2.j, 1.0+0.j]), 
+	                   atol=100*eps)
+
 if __name__ == '__main__':
 	test_rat()
 	test_gcd_lcm()
 	test_mfloor()
 	test_zpk()
 	test_db()
+	test_cplxpair()
