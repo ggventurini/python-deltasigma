@@ -65,9 +65,14 @@ Installing is straightforward with the distutils setup.py file:
 $ python setup.py install --user
 ```
 
-#### 4. Extras
+#### 4. matplotlib
 
-Not strictly needed for the time being, but **[matplotlib](http://matplotlib.org/)** is very useful for plotting and visually inspecting your data.
+**[matplotlib](http://matplotlib.org/)** is used for plotting and it is also very useful for visually inspecting your data.
+
+
+#### 5. Extras
+
+Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package.
 
 If you plan to run the provided unit tests, then you should install **[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the reference function outputs. Testing *can* be automated with **[nose](https://pypi.python.org/pypi/nose/)**, issuing `$ nosetests -v pydelsigma/*.py`.
 
