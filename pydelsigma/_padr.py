@@ -30,7 +30,7 @@ def padr(x, n, val=0.):
 		xp = x
 	y = np.concatenate(
 	                   (xp, 
-	                    float(val)*np.ones((xp.shape[0], n - xp.shape[1]))
+	                    val*np.ones((xp.shape[0], n - xp.shape[1]))
 	                   ), axis=1
 	                  )
 	return y

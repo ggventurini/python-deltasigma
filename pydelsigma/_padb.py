@@ -30,7 +30,7 @@ def padb(x, n, val=0.):
 		xp = x
 	y = np.concatenate(
 	                   (xp, 
-	                    float(val)*np.ones((n - xp.shape[0], xp.shape[1]))
+	                    val*np.ones((n - xp.shape[0], xp.shape[1]))
 	                   ), axis=0
 	                  )
 	return y

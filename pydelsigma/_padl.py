@@ -30,7 +30,7 @@ def padl(x, n, val=0.):
 		xp = x
 	y = np.concatenate(
 	                   ( 
-	                    float(val)*np.ones((xp.shape[0], n - xp.shape[1])),
+	                    val*np.ones((xp.shape[0], n - xp.shape[1])),
 	                    xp
 	                   ), axis=1
 	                  )
