@@ -23,11 +23,12 @@ to work on your system:
 - slycot: https://github.com/repagh/Slycot
 - python-control: 
   http://sourceforge.net/projects/python-control/
+- matplotlib: http://matplotlib.sourceforge.net/
 
 Recommended:
 - setuptools: https://pypi.python.org/pypi/setuptools
 - nose: https://pypi.python.org/pypi/nose/
-- matplotlib: http://matplotlib.sourceforge.net/
+- shinx: http://sphinx-doc.org/
 - patience and stubbornness.
 
 Most of which are available through PyPi.
