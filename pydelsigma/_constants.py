@@ -18,4 +18,7 @@
 not found in Python.
 """
 
-eps = 2.22044604925e-16
+import numpy as np
+
+eps = np.finfo(np.float).eps # x86 2.22044604925e-16
+
