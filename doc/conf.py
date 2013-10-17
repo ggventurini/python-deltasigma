@@ -11,7 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import sys, os, re
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -240,3 +240,12 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+def is_test_function(app, what, name, obj, skip, options):
+	rg = re.compile('(test)', re.IGNORECASE|re.DOTALL)
+	m = rg.match(name)
+	ret = True if m else False
+	return ret
+
+def setup(app):
+	app.connect('autodoc-skip-member', is_test_function)
