@@ -37,3 +37,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+#OS X DS_Store
+.DS_Store
