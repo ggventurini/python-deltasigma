@@ -51,5 +51,5 @@ from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
 from ._undbv import undbv
-from ._utils import *
+from ._utils import mfloor, rat, gcd, lcm, db
 from ._zinc import zinc
