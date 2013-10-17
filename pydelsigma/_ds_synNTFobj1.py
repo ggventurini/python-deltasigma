@@ -48,5 +48,7 @@ def ds_synNTFobj1(x, p, osr, f0):
 def test_ds_synNTFobj1():
 	"""Test function for ds_synNTFobj1()
 	"""
-	ds_synNTFobj1(.5, (.9, 2), 64, .1)
-	#FIXME! need proper test function
+	res = -27.167735573627283
+	tv =  ds_synNTFobj1(.5, (.9, 2), 64, .1)
+	np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5)
+
