@@ -54,7 +54,7 @@ def zpk(z, p, k):
 	"""
 	t = empty()
 	t.form = 'zp'
-	t.zeros, t.poles, t.k = list(z), list(p), k
+	t.zeros, t.poles, t.k = carray(z), carray(p), k
 	return t
 	
 def db(x, input_type='voltage', R=1.):
@@ -141,13 +141,13 @@ def test_mfloor():
 def test_zpk():
 	"""Test function for zpk.
 	"""
-	z = (2,)
-	p = (1, 3)
+	z = [2,]
+	p = [1, 3]
 	k = 1
 	t = zpk(z, p, k)
 	assert t.form == 'zp'
-	assert t.zeros == list(z)
-	assert t.poles == list(p)
+	assert t.zeros.tolist() == z
+	assert t.poles.tolist() == p
 	assert t.k == k	
 
 def test_db():
