@@ -37,6 +37,8 @@ from ._ds_hann import ds_hann
 from ._ds_optzeros import ds_optzeros
 from ._ds_quantize import ds_quantize
 from ._ds_synNTFobj1 import ds_synNTFobj1
+from ._dsclansNTF import dsclansNTF
+from ._dsclansObj import dsclansObj
 from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._impL1 import impL1
