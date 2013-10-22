@@ -12,6 +12,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
+
+"""This module provides the dbp() function, used to convert a power gain to dB.
+"""
+
 import numpy as np
 
 def dbp(x):

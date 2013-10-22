@@ -28,7 +28,7 @@ def evalRPoly(roots, x, k=1):
 	y = k * np.ones(x.shape)
 	roots = roots[~np.isinf(roots)]        # remove roots at infinity
 	for r in roots:
-	    y = y*(x - r)
+		y = y*(x - r)
 	return y
 	
 def test_evalRPoly():

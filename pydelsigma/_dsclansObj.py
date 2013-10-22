@@ -34,7 +34,7 @@ def dsclansObj(x, order, OSR, Q, rmax, Hz):
 	# Compute f and g
 	f = np.abs(evalTF(H, np.exp(np.pi*1.j/OSR)))
 	T = np.arange(101)
-	y, t = impulse((H.zeros, H.poles, H.k), T=T)
+	y, _ = impulse((H.zeros, H.poles, H.k), T=T)
 	g = np.sum(np.abs(y)) - 1. - Q
 
 	return f, g
@@ -48,7 +48,7 @@ def test_dsclansObj():
 	order = 3
 	rmax = 5.
 	Hz = 100.
-	r = dsclansObj(x, order, OSR, Q, rmax, Hz)
+	dsclansObj(x, order, OSR, Q, rmax, Hz)
 	assert False
 
 	

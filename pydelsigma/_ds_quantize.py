@@ -55,7 +55,7 @@ def test_ds_quantize():
 	t = np.arange(-3, 3, .2)
 	t = t.reshape((1, t.shape[0]))
 	y = t
-	for i in range(2):
+	for _ in range(2):
 		y = np.concatenate((y, t), axis=0)
 	n = np.array([2, 3, 4])
 	re1 = ds_quantize(y, n)

@@ -12,6 +12,10 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
+
+"""This module provides the dbv() function, used to convert a voltage gain to dB.
+"""
+
 import numpy as np
 from ._undbv import undbv
 

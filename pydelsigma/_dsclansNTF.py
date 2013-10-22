@@ -48,7 +48,7 @@ def dsclansNTF(x, order, rmax, Hz):
 def test_dsclansNTF():
 	"""Test function for dsclansNTF()
 	"""
-	x = dsclansNTF(np.arange(1, 100.001, .001), 3,.5,100)
+	x = dsclansNTF(np.arange(1, 100.001, .001), 3, .5, 100)
 	rt = np.array(x.poles[:])
 	rt.sort()
 	rp = np.array([0, -0.016805373426715, 0.014809370415763])

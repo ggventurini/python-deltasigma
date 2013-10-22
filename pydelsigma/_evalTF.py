@@ -38,7 +38,7 @@ def evalTF(tf, z):
 	# in our case a transfer function is a 'TransferFunction' not a zpk
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
-			raise TypeError, "Only SISO transfer functions can be evaluated."
+		raise TypeError, "Only SISO transfer functions can be evaluated."
 	if hasattr(tf, 'num') and hasattr(tf, 'den'):
 		filt = hasattr(tf, 'outputs')
 		num = tf.num[0][0] if filt else tf.num
@@ -48,8 +48,8 @@ def evalTF(tf, z):
 	   (hasattr(tf, 'zero') and hasattr(tf, 'pole')):
 		# LTI objects have poles and zeros, 
 		# TransferFunction-s have pole() and zero()
-	   	zeros = tf.zeros if hasattr(tf, 'zeros') else tf.zero()
-	   	poles = tf.poles if hasattr(tf, 'poles') else tf.pole()
+		zeros = tf.zeros if hasattr(tf, 'zeros') else tf.zero()
+		poles = tf.poles if hasattr(tf, 'poles') else tf.pole()
 		if hasattr(tf, 'k'):
 			k = tf.k
 		elif hasattr(tf, 'gain'):
@@ -60,7 +60,7 @@ def evalTF(tf, z):
 	elif hasattr(tf, 'form') and tf.form == 'zp':
 		h = tf.k * evalRPoly(tf.zeros, z) / evalRPoly(tf.poles, z)
 	elif hasattr(tf, 'form') and tf.form == 'coeff':
-		h = np.polyval(tf.num, z) / np.polyval(tf.den, z);
+		h = np.polyval(tf.num, z) / np.polyval(tf.den, z)
 	elif hasattr(tf, 'form'):
 		raise ValueError, '%s: Unknown form: %s' % (__name__, tf.form)
 	else:

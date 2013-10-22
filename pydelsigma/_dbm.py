@@ -13,6 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+"""This module provides the dbm() function, used to convert an RMS voltage to dBm.
+"""
+
 from __future__ import division
 import numpy as np
 

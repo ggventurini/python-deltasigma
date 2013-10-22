@@ -43,7 +43,7 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 		xp = x[i]
 		y[i].val = 0.
 		y[i].csd = np.zeros((2, 0), dtype='int16')
-		for j in range(nsd):
+		for _ in range(nsd):
 			error = np.abs(y[i].val - x[i])
 			if error <= abstol and error <= np.abs(x[i])*reltol: #rep? in the orig: or
 				break
