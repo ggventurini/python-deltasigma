@@ -41,6 +41,14 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_bunquantize` Module
+--------------------------
+
+.. automodule:: pydelsigma._bunquantize
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_constants` Module
 ------------------------
 
@@ -105,10 +113,42 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_ds_optzeros` Module
+--------------------------
+
+.. automodule:: pydelsigma._ds_optzeros
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_ds_quantize` Module
 --------------------------
 
 .. automodule:: pydelsigma._ds_quantize
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_ds_synNTFobj1` Module
+----------------------------
+
+.. automodule:: pydelsigma._ds_synNTFobj1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_dsclansNTF` Module
+-------------------------
+
+.. automodule:: pydelsigma._dsclansNTF
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_dsclansObj` Module
+-------------------------
+
+.. automodule:: pydelsigma._dsclansObj
     :members:
     :undoc-members:
     :show-inheritance:
@@ -141,6 +181,14 @@ pydelsigma Package
 ----------------------
 
 .. automodule:: pydelsigma._infnorm
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_lollipop` Module
+-----------------------
+
+.. automodule:: pydelsigma._lollipop
     :members:
     :undoc-members:
     :show-inheritance:
@@ -181,6 +229,14 @@ pydelsigma Package
 -------------------
 
 .. automodule:: pydelsigma._padt
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_plotPZ` Module
+---------------------
+
+.. automodule:: pydelsigma._plotPZ
     :members:
     :undoc-members:
     :show-inheritance:
