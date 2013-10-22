@@ -13,6 +13,108 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+"""
+python-deltasigma
+=================
+
+The **python-deltasigma** project aims to provide a 1:1 Python
+replacement of Richard Schreier's MATLAB `delta sigma
+toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`_.
+
+**python-deltasigma** requires:
+------------
+
+Note: using virtualenv could be very useful to have an up-to-date setup without 
+touching the packages installed by your OS.
+
+1. **numpy** and **scipy**
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+On a generic platform, they can be installed with:
+
+::
+
+    # pip install numpy scipy
+
+More information on the `scipy install
+page <http://www.scipy.org/install.html>`_.
+
+2. Slycot
+^^^^^^^^^
+
+**Slycot** is a *Python wrapper for selected SLICOT routines, notably
+including solvers for Riccati, Lyapunov and Sylvester equations.*
+(quoted from the project homepage.)
+
+It is a dependency for **python-control** (see below).
+
+**Slycot** can be found at `repagh's Github
+repository <https://github.com/repagh/Slycot>`_ and requires **numpy**,
+a **fortran compiler** such as gfortran and **BLAS/LAPACK libraries**.
+As, the README states, on a Debian Linux system, all of the above can be
+installed with:
+
+::
+
+    # apt-get build-dep python-scipy
+
+then check-out **Slycot** and install with distutils.
+
+::
+
+    python setup.py install --user
+
+If you are not using a Debian-based system, please check on the project
+page the dependencies to be installed.
+
+3. python-control
+^^^^^^^^^^^^^^^^^
+
+**python-control** can be installed downloading a release from `its
+homepage <http://sourceforge.net/projects/python-control/>`_ or checking
+out its SVN repository with:
+
+::
+
+    svn checkout svn://svn.code.sf.net/p/python-control/code/trunk python-control
+
+Installing is straightforward with the distutils setup.py file:
+
+::
+
+    $ python setup.py install --user
+
+4. matplotlib
+^^^^^^^^^^^^^
+
+**`matplotlib <http://matplotlib.org/>`_** is used for plotting and it
+is also very useful for visually inspecting your data.
+
+5. Extras
+^^^^^^^^^
+
+Building the documentation requires the
+**`sphinx <http://sphinx-doc.org/>`_** package.
+
+If you plan to run the provided unit tests, then you should install
+**`setuptools <https://pypi.python.org/pypi/setuptools>`_**, used to
+access the reference function outputs. Testing *can* be automated with
+**`nose <https://pypi.python.org/pypi/nose/>`_**, issuing
+``$ nosetests -v pydelsigma/*.py``.
+
+Licensing and copyright notice
+------------------------------
+
+All original MATLAB code is Copyright (c) 2009, Richard Schreier. See
+the LICENSE file for the licensing terms.
+
+The Python here provided is a derivative work from the above toolkit and
+subject to the same license terms.
+
+The Python code is Copyright 2013, Giuseppe Venturini and the
+python-deltasigma contributors.
+"""
+
 __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
@@ -26,6 +128,7 @@ from ._SIunits import SIunits
 from ._axisLabels import axisLabels
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
+from ._bunquantize import bunquantize
 from ._constants import *
 from ._dbm import dbm
 from ._dbp import dbp
@@ -43,6 +146,7 @@ from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._impL1 import impL1
 from ._infnorm import infnorm
+from ._lollipop import lollipop
 from ._nabsH import nabsH
 from ._padb import padb
 from ._padl import padl
