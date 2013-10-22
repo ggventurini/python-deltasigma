@@ -1,7 +1,7 @@
 python-deltasigma
 ===============
 
-The **python-deltasigma** project aims to provide a 1:1 Python replacement of Richard 
+The **python-deltasigma** project aims to provide **a 1:1 Python replacement** of Richard 
 Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based. The original toolbox is also known as *delsig* or *delsigma*.
 
 This project is at a very early stage. Take a look to files.ods for the current status. 
