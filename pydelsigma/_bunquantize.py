@@ -27,9 +27,6 @@ def bunquantize(q):
 	
 	See also bquantize in _bunquantize.py
 	"""
-
-	tns = len(q)
-	#n = q.shape[0]/2.
 	y = []
 	for qi in q:
 		y += [(qi[1:qi.shape[0]+1:2, :]*2.**qi[:qi.shape[0]:2, :]).sum()]
