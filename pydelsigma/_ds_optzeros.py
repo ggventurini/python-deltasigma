@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # _ds_optzeros.py
-# Module providing the optZeros function
+# Module providing the optzeros function
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
