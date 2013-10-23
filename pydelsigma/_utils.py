@@ -22,6 +22,7 @@ from warnings import warn
 import fractions
 from fractions import Fraction as Fr
 import numpy as np
+from scipy.signal import lti
 from ._dbp import dbp
 from ._dbv import dbv
 from._constants import eps
@@ -39,12 +40,15 @@ gcd = fractions.gcd
 lcm = lambda a, b: int(a*b / float(gcd(a, b)))
 
 class empty:
-	pass
+	"""An empty function used to hold attributes"""
+	def __init__(self):
+		pass
 
 def mfloor(x):
 	"""MATLAB-like floor function.
 	"""
 	def _mfloor(z):
+		"""Base function to generate the ufunc floor"""
 		return np.floor(z) if np.sign(z) >= 0 else -np.ceil(-z)
 	_internal = np.frompyfunc(_mfloor, 1, 1)
 	return np.array(_internal(x), dtype=x.dtype)
@@ -65,7 +69,7 @@ def db(x, input_type='voltage', R=1.):
 	MATLAB provides a function with this exact signature.
     """
 	if input_type.lower().strip() == 'voltage':
-			y = dbv(x) - 10.*np.log10(R)
+		y = dbv(x) - 10.*np.log10(R)
 	elif input_type.lower().strip() == 'power':
 		y = dbp(x)
 		if R != 1.:
@@ -112,11 +116,83 @@ def cplxpair(x, tol=100):
 		res += [j, i]
 	return np.hstack((np.array(res), xreal))
 
+def minreal(tf, tol=None):
+	"""Remove pole/zero pairs from a transfer function
+	when the two match within the tolerance tol.
 	
+	tf may be a transfer function (lti object) or a list of transfer functions
+	tol is optional and defaults to the system epsilon if unset.
+	
+	return a list of tfs or a tf, depending on the input type.
+	"""
+	# initially based on python-control
+	# which is in turn based on octave minreal
+	# then modified considerably
+
+	# recursively handle multiple tfs
+	if isinstance(tf, list) or isinstance(tf, tuple):
+		ret = []
+		for tfi in tf:
+			ret += [minreal(tfi, tol)]
+		return ret
+
+	# default accuracy
+	sqrt_eps = np.sqrt(eps)
+	
+	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
+	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
+		raise TypeError, "Only SISO transfer functions can be evaluated."
+	if hasattr(tf, 'num') and hasattr(tf, 'den'):
+		#filt = hasattr(tf, 'outputs')
+		num = tf.num #[0][0] if filt else tf.num
+		den = tf.den #[0][0] if filt else tf.den
+		k = num[0] / den[0]
+		zeros = np.roots(num)
+		poles = np.roots(den)
+	elif (hasattr(tf, 'zeros') and hasattr(tf, 'poles')) or \
+	   (hasattr(tf, 'zero') and hasattr(tf, 'pole')):
+		# LTI objects have poles and zeros, 
+		# python-control TransferFunction-s have pole() and zero()
+		zeros = tf.zeros if hasattr(tf, 'zeros') else tf.zero()
+		poles = tf.poles if hasattr(tf, 'poles') else tf.pole()
+		if hasattr(tf, 'k'):
+			k = tf.k
+		elif hasattr(tf, 'gain'):
+			k = tf.gain  
+		elif hasattr(tf, 'returnScipySignalLti'): 
+			k = np.array(tf.returnScipySignalLti()[0][0].gain)
+	else:
+		raise ValueError, "Unknown transfer function type."
+	
+	zeros = carray(zeros)
+	poles = carray(poles)
+	zeros.sort()
+	poles.sort()
+	reducedzeros = []
+
+	for z in zeros:
+		t = tol or 1000 * max(eps, abs(z) * sqrt_eps)
+		idx = np.where(abs(poles - z) < t)[0]
+		if len(idx):
+			# cancel this zero against one of the poles
+			# remove the pole and do not add the zero to the new
+			poles = np.delete(poles, idx[0])
+		else:
+			# no matching pole
+			reducedzeros.append(z)
+	if len(reducedzeros):
+		newzeros = carray(reducedzeros)
+		num = k * np.real(np.poly(newzeros))
+	else:
+		num = np.array([k])
+	den = np.real(np.poly(poles))
+
+	return lti(num, den)
+
 def test_rat():
 	"""Test function for rat()"""
 	import numpy.random as rnd
-	for i in range(10):
+	for _ in range(10):
 		n, d = rnd.randint(1, 5000), rnd.randint(1, 5000)
 		fr = float(n)/float(d)
 		nt, dt = rat(fr, tol=200e-6)
@@ -133,8 +209,8 @@ def test_mfloor():
 	"""Test function for mfloor()"""
 	tv = np.linspace(-1, 1, 10)
 	tres = np.zeros(tv.shape)
-	tres[tv>=0] = np.floor(tv[tv>=0])
-	tres[tv<0] = -np.ceil(np.abs(tv[tv<0]))
+	tres[tv >= 0] = np.floor(tv[tv>=0])
+	tres[tv <  0] = -np.ceil(np.abs(tv[tv<0]))
 	tresf = mfloor(tv)
 	assert np.allclose(tres, tresf, atol=1e-8, rtol=1e-5)
 
@@ -151,7 +227,8 @@ def test_zpk():
 	assert t.k == k	
 
 def test_db():
-	import warnings
+	"""Test function for db()
+	"""
 	from ._undbv import undbv
 	tv = np.array([2])
 	r = np.array([3.01029996])
@@ -159,7 +236,6 @@ def test_db():
 	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
 	tv = 2
 	r = 3.01029996
-	a = False
 	res = db(tv, 'power') 
 	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
 	tv = 2, 2
@@ -171,14 +247,9 @@ def test_db():
 	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
 	
 def test_cplxpair():
+	"""Test function for cplxpair()
+	"""
 	a = np.array([1 + eps*20j, 1.1 + 2j, 1.1 - (2+50*eps)*1j, .1 + (1+99*eps)*.2j, .1 - .2j])
 	assert np.allclose(cplxpair(a), np.array([0.1-0.2j, 0.1+0.2j, 1.1-2.j, 1.1+2.j, 1.0+0.j]), 
 	                   atol=100*eps)
 
-if __name__ == '__main__':
-	test_rat()
-	test_gcd_lcm()
-	test_mfloor()
-	test_zpk()
-	test_db()
-	test_cplxpair()
