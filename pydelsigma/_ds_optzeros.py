@@ -56,7 +56,7 @@ def ds_optzeros(n, opt=1):
 	Returns the zeros which minimize the in-band noise power of 
 	a delta-sigma modulator's NTF.
 	"""
-	
+	opt = int(opt)	
 	if opt == 0:
 		optZeros = np.zeros((np.ceil(n/2.), ))
 	else:
