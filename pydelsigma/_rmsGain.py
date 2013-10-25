@@ -32,6 +32,8 @@ def rmsGain(H, f1, f2, N=100):
 	return g
 	
 def test_rmsGain():
+	"""Unit test for rmsGain()
+	"""
 	from ._utils import empty
 	H = empty()
 	H.num = (1,)
