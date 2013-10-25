@@ -21,7 +21,7 @@ from scipy.signal import tf2zpk
 import pylab as plt
 
 def plotPZ(H, color='b', markersize=5, showlist=False):
-	"""function plotPZ(H,color='b',markersize=5,list=0)
+	"""function plotPZ(H, color='b',markersize=5, list=0)
 	Plot the poles and zeros of a transfer function.
 	If list is non-zero, a list of the poles and zeros is superimposed on the plot.
 	"""
@@ -39,35 +39,29 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	
 	if (hasattr(H, 'inputs') and not H.inputs == 1) or \
 	   (hasattr(H, 'outputs') and not H.outputs == 1):
-			raise TypeError, "Only SISO transfer functions can be evaluated."
+		raise TypeError, "Only SISO transfer functions can be evaluated."
 	if hasattr(H, 'num') and hasattr(H, 'den'):
 		filt = hasattr(H, 'outputs')
 		num = H.num[0][0] if filt else H.num
 		den = H.den[0][0] if filt else H.den
-		z, p, k = tf2zpk(num, den)
+		z, p, _ = tf2zpk(num, den)
 	elif (hasattr(H, 'zeros') and hasattr(H, 'poles')) or \
 	   (hasattr(H, 'zero') and hasattr(H, 'pole')):
 		# LTI objects have poles and zeros, 
 		# TransferFunction-s have pole() and zero()
-	   	z = H.zeros if hasattr(H, 'zeros') else H.zero()
-	   	p = H.poles if hasattr(H, 'poles') else H.pole()
-		if hasattr(H, 'k'):
-			k = H.k
-		elif hasattr(H, 'gain'):
-			k = H.gain  
-		elif hasattr(H, 'returnScipySignalLti'): 
-			k = np.array(H.returnScipySignalLti()[0][0].gain)
+		z = H.zeros if hasattr(H, 'zeros') else H.zero()
+		p = H.poles if hasattr(H, 'poles') else H.pole()
 	elif hasattr(H, 'form') and H.form == 'zp':
-		z, p, k = H.k, H.zeros, H.poles
+		z, p, _ = H.k, H.zeros, H.poles
 	elif hasattr(H, 'form') and H.form == 'coeff':
-		z, p, k = tf2zpk(H.num, H.den)
+		z, p, _ = tf2zpk(H.num, H.den)
 	elif hasattr(H, 'form'):
 		raise ValueError, '%s: Unknown form: %s' % (__name__, H.form)
 	elif hasattr(H, '__len__'):
 		if len(H) == 2:
-			z, p, k = tf2zpk(H[0], H[1])
+			z, p, _ = tf2zpk(H[0], H[1])
 		elif len(H) == 3:
-			z, p, k = H
+			z, p = H[0:2]
 	else:
 		raise TypeError, '%s: Unknown transfer function %s' % (__name__, str(H))
 
@@ -93,44 +87,31 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	# Draw unit circle, real axis and imag axis
 	circle = np.exp(2j*np.pi*np.linspace(0, 1, 100))
 	plt.plot(circle.real, circle.imag)
-	plt.axis('equal')
-
+	
 	if showlist:
-		# List the poles and zeros
-		pp = p[p.imag >= 0]
-		y = 0.05*(len(pp)+1)
-		str_p = 'Poles:'
-		plt.text(-0.9, y, str_p,
-			 horizontalalignment = 'left',
-			 verticalalignment = 'center')
-	y = y - 0.1
-	for i in xrange(len(pp)):
-	    if pp[i].imag == 0:
-		str_p = '%+.4f' % pp[i].real
-	    else:
-		str_p = '%+.4f+/-j%.4f' %  (pp[i].real, pp[i].imag)
-	    plt.text(-0.9, y, str_p,
-		     horizontalalignment = 'left',
-		     verticalalignment = 'center')
-	    y = y - 0.1
-	if len(z) > 0:
-	    zz = z[z.imag >= 0]
-	    y = 0.05*(len(zz)+1)
-	    str_z = 'Zeros:'
-	    plt.text(0, y, str_z,
-		     horizontalalignment = 'left',
-		     verticalalignment = 'center')
-	    y = y - 0.1
-	    for i in xrange(len(zz)):
-		if zz[i].imag == 0:
-		    str_z = '%+.4f' % zz[i].real
-		else:
-		    str_z = '%+.4f+/-j%.4f' % (zz[i].real, zz[i].imag)
-		plt.text(0, y, str_z,
-		         horizontalalignment = 'left',
-		         verticalalignment = 'center')
-		y = y - 0.1
-
+		ax = plt.gca()
+		x1, x2, y1, y2 = ax.axis()
+		x2 = np.round((x2 - x1)*1.48 + x1, 1)
+		ax.axis((x1, x2, y1, y2))
+		markers = [] 
+		descr = []
+		ps = p[p.imag >= 0]
+		for pi in ps:
+			markers += [plt.Line2D((), (), linestyle='None', **pole_fmt)]
+			if pi.imag == 0:
+				descr += ['%+.4f' % pi.real]
+			else:
+				descr += ['%+.4f+/-j%.4f' %  (pi.real, pi.imag)]
+		if len(z) > 0:
+			for zi in z[z.imag >= 0]:
+				markers += [plt.Line2D((), (), linestyle='None', **zero_fmt)]
+				if zi.imag == 0:
+					descr += ['%+.4f' % zi.real]
+				else:
+					descr += ['%+.4f +/-j%.4f' % (zi.real, zi.imag)]
+		plt.legend(markers, descr, title="Poles (x) and zeros (o)", ncol=1, loc='best', prop={'size':10})
+	plt.axes().set_aspect('equal')
+	#plt.axes().set_aspect('equal', 'datalim')
 	plt.ylabel('Imag')
 	plt.xlabel('Real')
 
@@ -139,5 +120,5 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 
 if __name__ == '__main__':
 	plt.figure()
-	plotPZ(((1, .2), (1, 2, .10)), showlist=True)
+	plotPZ(((1, .2), (1, 0, .10)), showlist=True)
 	plt.show()
