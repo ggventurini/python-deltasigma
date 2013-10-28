@@ -24,8 +24,8 @@ def evalRPoly(roots, x, k=1):
 	""" y = evalRPoly(roots, x, k=1)
 	Compute the value of a polynomial which is given in terms of its roots.
 	"""
-	roots, x = carray(roots), carray(x)
-	y = k * np.ones(x.shape)
+	roots = carray(roots)
+	y = k
 	roots = roots[~np.isinf(roots)]        # remove roots at infinity
 	for r in roots:
 		y = y*(x - r)
