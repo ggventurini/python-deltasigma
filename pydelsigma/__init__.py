@@ -124,6 +124,7 @@ __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Pre-Pre-Alpha"
 
+from ._DocumentNTF import DocumentNTF
 from ._SIunits import SIunits
 from ._axisLabels import axisLabels
 from ._bplogsmooth import bplogsmooth
@@ -147,7 +148,7 @@ from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._impL1 import impL1
 from ._infnorm import infnorm
-from .__l1norm import l1norm
+from ._l1norm import l1norm
 from ._lollipop import lollipop
 from ._nabsH import nabsH
 from ._padb import padb
@@ -157,9 +158,12 @@ from ._padt import padt
 from ._partitionABCD import partitionABCD
 from ._plotPZ import plotPZ
 from ._pulse import pulse
+from ._realizeNTF import realizeNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._sinc_decimate import sinc_decimate
+from ._stuffABCD import stuffABCD
+from ._synthesizeNTF import synthesizeNTF
 from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
