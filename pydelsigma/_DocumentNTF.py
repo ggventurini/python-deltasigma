@@ -28,6 +28,7 @@ from ._ds_f1f2 import ds_f1f2
 from ._rmsGain import rmsGain
 from ._calculateTF import calculateTF
 from ._infnorm import infnorm
+from ._figureMagic import figureMagic
 
 def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	"""Plot the NTF's poles and zeros as well as its frequency-response
@@ -40,49 +41,57 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 		ntf, stf = calculateTF(ABCD)
 	else:
 		ntf = arg1
+		stf = None
 	
-	fig = plt.figure()
-	plt.subplot(211)
-	plotPZ(ntf, 'b', 6)
+	fig = plt.figure(figsize=(12, 5))
+	plt.subplot(121)
+	plotPZ(ntf, 'b', 6, showlist=False)
+	plt.title('Poles and Zeros')
+	plt.subplot(122)
 	f = ds_freq(osr, f0, quadrature)
 	z = np.exp(2j * np.pi * f)
 	H = dbv(evalTF(ntf, z))
 	plt.plot(f, H, 'b')
-	plt.subplot(212)
 	
-	if 'stf' in globals() and not (0 in stf.shape):
-		set_(gcf, 'name', 'NTF and STF')
+	if 'stf' is not None:
+		fig.suptitle('NTF and STF', fontsize=14)
 		G = dbv(evalTF(stf, z))
 		plt.hold(True)
 		plt.plot(f, G, 'm')
 		plt.hold(False)
+	else:
+		fig.suptitle('NTF', fontsize=14)
 	
 	f1, f2 = ds_f1f2(osr, f0, quadrature)
 	NG0 = dbv(rmsGain(ntf, f1, f2))
 	plt.hold(True)
-	plt.plot(np.array([f1, f2]).reshape(1, -1), NG0 * np.array([1, 1]).reshape(1, -1), 'k', linewidth=3)
+	plt.plot(np.array([f1, f2]), NG0*np.array([1, 1]), 'k', linewidth=3)
 	
 	if f0  ==  0:
-		text(0.5 / osr, NG0, sprintf('  %.0fdB', NG0), 'Vert', 'Mid', 'Hor', 'Left')
+		plt.text(0.5/osr, NG0, '  %.0fdB' % NG0, horizontalalignment = 'left', 
+		         verticalalignment = 'center')
 	else:
-		text(f0, NG0 + 1, sprintf('%.0fdB', NG0), 'Vert', 'Bot', 'Hor', 'Cen')
-	msg = ' Inf-norm of H = %.2f\n 2-norm of H = %.2f', infnorm(ntf), rmsGain(ntf, 0, 1)
-	if f0 < 0.25:
-		text(0.48, 0, msg, 'Vert', 'Top', 'Hor', 'Right')
-	else:
-		text(f_left, 0, msg, 'Vert', 'Top')
+		plt.text(f0, NG0 + 1, '%.0fdB' % NG0, horizontalalignment = 'center', 
+		         verticalalignment = 'bottom')
+	msg = ' Inf-norm of H = %.2f\n 2-norm of H = %.2f' % (infnorm(ntf)[0], rmsGain(ntf, 0, 1))
 	if quadrature:
 		ING0 = dbv(rmsGain(ntf, - f1, - f2))
-		plt.plot(- np.array([f1, f2]).reshape(1, -1), ING0 * np.array([1, 1]).reshape(1, -1), 'k', 'Linewidth', 3)
-		text(- f0, ING0 + 1, sprintf('%.0fdB', ING0), 'Vert', 'Bot', 'Hor', 'Cen')
+		plt.plot(-np.array([f1, f2]), ING0*np.array([1, 1]), 'k', linewidth=3)
+		plt.text(-f0, ING0 + 1, '%.0fdB' % ING0, horizontalalignment = 'center', 
+		         verticalalignment = 'bottom')
 		f_left = - 0.5
 	else:
 		f_left = 0
-	#figureMagic(np.array([f_left, 0.5]).reshape(1, -1), 1 / 16, 2, np.array([- 80, 15]).reshape(1, -1), 10, 2)
+	# variable 'f_left' used before assignment in DocumentNTF.m #REP
+	if f0 < 0.25:
+		plt.text(0.48, 0, msg, horizontalalignment = 'right', verticalalignment = 'top')
+	else:
+		plt.text(f_left, 0, msg, horizontalalignment = 'left', verticalalignment = 'top')
+	plt.grid(True)
+	y_bot = min(-80, np.round(NG0*1.1, -1))
+	figureMagic(xRange=(f_left, 0.5), dx=1/20., yRange=(y_bot, 15), dy=10)
+	plt.ylabel('|H(f)|')
 	plt.xlabel('frequency')
 	plt.title('Frequency Response')
-	return fig
-	
-def text(*args):
-	"""Dummy function for now"""
-	pass
+	return 
+
