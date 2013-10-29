@@ -29,7 +29,7 @@ def calculateTF(ABCD, k=1.):
 	Returns:
 	--------
 
-	The NTF and STF, a tuple of two zpk objects.
+	The NTF and STF, a tuple of two lti objects.
 	"""
 	A, B, C, D = partitionABCD(ABCD)
 	if B.shape[1] > 1:
@@ -56,7 +56,7 @@ def calculateTF(ABCD, k=1.):
 	stf = lti(stf_p, stf_z, stf_k)
 	ntf = lti(ntf_p, ntf_z, ntf_k)
 	stf_min, ntf_min = minreal((stf, ntf), tol)
-	return ntf, stf
+	return ntf_min, stf_min
 
 def test_calculateTF():
 	ABCD = [[1.000000000000000, 0., 0., 0.044408783846879, -0.044408783846879],
