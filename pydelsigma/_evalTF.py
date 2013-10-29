@@ -40,7 +40,9 @@ def evalTF(tf, z):
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
 		raise TypeError, "Only SISO transfer functions can be evaluated."
 	if hasattr(tf, 'num') and hasattr(tf, 'den'):
-		filt = hasattr(tf, 'outputs')
+		# for now we support both TransferFunction objects (python-control)
+		# and lti objects (scipy).
+		filt = hasattr(tf, '__class__') and tf.__class__.__name__ == 'TransferFunction'
 		num = tf.num[0][0] if filt else tf.num
 		den = tf.den[0][0] if filt else tf.den
 		h = np.polyval(num, z) / np.polyval(den, z)
