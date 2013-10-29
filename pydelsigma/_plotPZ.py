@@ -41,7 +41,9 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	   (hasattr(H, 'outputs') and not H.outputs == 1):
 		raise TypeError, "Only SISO transfer functions can be evaluated."
 	if hasattr(H, 'num') and hasattr(H, 'den'):
-		filt = hasattr(H, 'outputs')
+		# for now we support both TransferFunction objects (python-control)
+		# and lti objects (scipy).
+		filt = hasattr(H, '__class__') and H.__class__.__name__ == 'TransferFunction'
 		num = H.num[0][0] if filt else H.num
 		den = H.den[0][0] if filt else H.den
 		z, p, _ = tf2zpk(num, den)
@@ -88,6 +90,8 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	circle = np.exp(2j*np.pi*np.linspace(0, 1, 100))
 	plt.plot(circle.real, circle.imag)
 	
+	ax = plt.gca()
+	ax.set_autoscale_on(False)
 	if showlist:
 		ax = plt.gca()
 		x1, x2, y1, y2 = ax.axis()
@@ -109,8 +113,13 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 					descr += ['%+.4f' % zi.real]
 				else:
 					descr += ['%+.4f +/-j%.4f' % (zi.real, zi.imag)]
-		plt.legend(markers, descr, title="Poles (x) and zeros (o)", ncol=1, loc='best', prop={'size':10})
-	plt.axes().set_aspect('equal')
+		plt.legend(markers, descr, title="Poles (x) and zeros (o)", ncol=1, loc='best', 
+		           prop={'size':10})
+	else:
+		plt.xlim((-1.1, 1.1))
+		plt.ylim((-1.1, 1.1))
+	plt.gca().set_aspect('equal')
+	
 	#plt.axes().set_aspect('equal', 'datalim')
 	plt.ylabel('Imag')
 	plt.xlabel('Real')
@@ -121,4 +130,6 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 if __name__ == '__main__':
 	plt.figure()
 	plotPZ(((1, .2), (1, 0, .10)), showlist=True)
+	plt.figure()
+	plotPZ(((1, .2), (1, 0, .10)), showlist=False)
 	plt.show()
