@@ -146,6 +146,7 @@ from ._dsclansNTF import dsclansNTF
 from ._dsclansObj import dsclansObj
 from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
+from ._figureMagic import figureMagic
 from ._impL1 import impL1
 from ._infnorm import infnorm
 from ._l1norm import l1norm
