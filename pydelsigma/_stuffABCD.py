@@ -19,7 +19,6 @@
 from __future__ import division
 import numpy as np
 from ._partitionABCD import partitionABCD
-from ._utils import diagonal_indices
 
 def stuffABCD(a, g, b, c, form='CRFB'):
     """Compute the ABCD matrix for the specified structure.
