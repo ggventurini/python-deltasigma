@@ -25,7 +25,7 @@ from ._evalTF import evalTF
 from ._stuffABCD import stuffABCD
 from ._utils import cplxpair
 
-def realizeNTF(ntf, form = 'CRFB', stf=1):
+def realizeNTF(ntf, form = 'CRFB', stf=None):
 	""" [a, g, b, c]  =  realizeNTF(ntf, form = 'CRFB', stf = 1)
 	 Convert a noise transfer function into coefficients for the desired structure.
 	 Supported structures are
@@ -119,8 +119,8 @@ def realizeNTF(ntf, form = 'CRFB', stf=1):
 				T[j - 2, i] = product
 			if odd:
 				T[0, i] = product/(z - 1)
-		a = -np.real(np.linalg.lstsq(T.T, L1.T)[0])
-		if type(stf) == int:
+		a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+		if stf is None:
 			b[0, :order] = a[0, :]
 			b[0, order] = 1
 	elif 'CRFF' == form:
@@ -292,7 +292,7 @@ def realizeNTF(ntf, form = 'CRFB', stf=1):
 		a = - real(L1 / T)
 		if (0 in stf.shape):
 			b = np.array([1, np.zeros(1, order - 1), 1]).reshape(1, -1)
-	if not type(stf) == int:
+	if not stf is None:
 		# Compute the TF from each feed-in to the output 
 		# and solve for coefficients which yield the best match
 		# THIS CODE IS NOT OPTIMAL,  in terms of computational efficiency.
