@@ -114,7 +114,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 				else:
 					descr += ['%+.4f +/-j%.4f' % (zi.real, zi.imag)]
 		plt.legend(markers, descr, title="Poles (x) and zeros (o)", ncol=1, loc='best', 
-		           prop={'size':10})
+		           handlelength=.55, prop={'size':10})
 	else:
 		plt.xlim((-1.1, 1.1))
 		plt.ylim((-1.1, 1.1))
