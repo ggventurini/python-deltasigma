@@ -19,6 +19,7 @@
 from __future__ import division
 import numpy as np
 from ._partitionABCD import partitionABCD
+from ._utils import diagonal_indices
 
 def stuffABCD(a, g, b, c, form='CRFB'):
     """Compute the ABCD matrix for the specified structure.
@@ -40,19 +41,15 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         # C=(0 0...c_n)
         # This is done as part of the construction of A, below
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
-        ABCD[:, order] = b.T
+        ABCD[:, order] = b
         # B2 = -(a_1 a_2... a_n)
-        ABCD[:order, order + 1] = -a.T
-        # diagonal in 2d:
-        # :-1, 0 is the 2d version of 1:(order+2):order*(order+1) 
-        # subdiag in 2d
-        # even:-1:2, 1 is the 2d version of diagonal((1+even):2:order)+1
-        # supdiag in 2d
-        # odd:-1:2, -1 is the 2d version of subdiag((1+odd):length(subdiag))-2
-        ABCD[:-1, 0] = np.ones((1, order))
-        ABCD[even:-1:2, 1] = c[0, even:order:2]
-        #print range(odd, order
-        ABCD[odd:-1:2, -1] = -g
+        ABCD[:order, order + 1] = -a
+        diagonal = diagonal_indices(ABCD[:order, :order])
+        ABCD[diagonal] = np.ones((order,))
+        subdiag = map(lambda a: a[even:order:2], diagonal_indices(ABCD, -1))
+        ABCD[subdiag] = c[0, even:order:2]
+        supdiag = map(lambda a: a[odd:order:2], diagonal_indices(ABCD[:order, :order], +1))
+        ABCD[supdiag] = -g.reshape((-1,))
         # row numbers of delaying integrators
         dly = np.arange(odd + 1, order, 2)
         ABCD[dly, :] = ABCD[dly, :] + np.dot(np.diag(c[0, dly - 1]), ABCD[dly - 1, :])
