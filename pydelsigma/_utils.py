@@ -190,6 +190,15 @@ def minreal(tf, tol=None):
 	return lti(num, den)
 
 def diagonal_indices(a, offset=0):
+	"""Return the indices to the main diagonal of a 2D array a (if offset = 0),
+	or to a secondary diagonal, having the offset from the main one as specified.
+
+	The array a does not need to be square.
+
+	Note: the sup-diagonal is at offset +1, the sub-diagonal at offset -1.
+
+	Returns: (xs, ys)
+	"""
 	di, dj = np.diag_indices_from(a[:min(a.shape), :min(a.shape)])
 	if offset > 0:
 		di, dj = zip(*[(i, j) for i, j in zip(di, dj+offset) if 0 <= j < a.shape[1]])
@@ -263,3 +272,30 @@ def test_cplxpair():
 	assert np.allclose(cplxpair(a), np.array([0.1-0.2j, 0.1+0.2j, 1.1-2.j, 1.1+2.j, 1.0+0.j]), 
 	                   atol=100*eps)
 
+def test_diagonal_indices():
+	"""Unit test for diagonal_indices()
+	"""
+	a = np.arange(1, 26)
+	a = a.reshape((5, 5))
+	d = a[diagonal_indices(a)]
+	dp1 = a[diagonal_indices(a, 1)]
+	dm1 = a[diagonal_indices(a, -1)]
+	assert np.allclose(d, (1, 7, 13, 19, 25))
+	assert np.allclose(dp1, (2, 8, 14, 20))
+	assert np.allclose(dm1, (6, 12, 18, 24))
+	a = np.arange(1, 21)
+	a = a.reshape((4, 5))
+	d = a[diagonal_indices(a)]
+	dp1 = a[diagonal_indices(a, 1)]
+	dm1 = a[diagonal_indices(a, -1)]
+	assert np.allclose(d, (1, 7, 13, 19))
+	assert np.allclose(dp1, (2, 8, 14, 20))
+	assert np.allclose(dm1, (6, 12, 18))
+	a = a.reshape((5, 4))
+	d = a[diagonal_indices(a)]
+	dp1 = a[diagonal_indices(a, 1)]
+	dm1 = a[diagonal_indices(a, -1)]
+	assert np.allclose(d, (1, 6, 11, 16))
+	assert np.allclose(dp1, (2, 7, 12))
+	assert np.allclose(dm1, (5, 10, 15, 20))
+	
