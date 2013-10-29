@@ -189,6 +189,16 @@ def minreal(tf, tol=None):
 
 	return lti(num, den)
 
+def diagonal_indices(a, offset=0):
+	di, dj = np.diag_indices_from(a[:min(a.shape), :min(a.shape)])
+	if offset > 0:
+		di, dj = zip(*[(i, j) for i, j in zip(di, dj+offset) if 0 <= j < a.shape[1]])
+	elif offset == 0:
+		pass
+	else:
+		di, dj = zip(*[(i, j) for i, j in zip(di-offset, dj) if 0 <= i < a.shape[0]])
+	return di, dj
+
 def test_rat():
 	"""Test function for rat()"""
 	import numpy.random as rnd
