@@ -37,7 +37,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         b = np.vstack((b, np.zeros(1, order)))
 
     # mutually exclusive matrix stuffing
-    if 'CRFB' == form:
+    if form == 'CRFB':
         # C=(0 0...c_n)
         # This is done as part of the construction of A, below
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
@@ -53,30 +53,35 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         # row numbers of delaying integrators
         dly = np.arange(odd + 1, order, 2)
         ABCD[dly, :] = ABCD[dly, :] + np.dot(np.diag(c[0, dly - 1]), ABCD[dly - 1, :])
-    elif 'CRFF' == form:
+    elif form == 'CRFF':
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
-        ABCD[:, order] = b.T
+        ABCD[:, order] = b
         # B2 = -(c_1 0... 0)
-        ABCD[0, order + 1] = -c[0]
+        ABCD[0, order + 1] = -c[0, 0]
         # number of elements = order
-        diagonal = np.arange(0, order*(order + 1), order + 2)
-        ABCD[diagonal] = np.ones((1, order))
-        subdiag = diagonal[:order - 1:2] + 1
-        ABCD[subdiag] = c[1:order:2]
+        diagonal = diagonal_indices(ABCD[:order, :order])
+        ABCD[diagonal] = np.ones((order, ))
+        #subdiag = diagonal[:order - 1:2] + 1
+        subdiag = map(lambda a: a[:order - 1:2], diagonal_indices(ABCD, -1))
+        ABCD[subdiag] = c[0, 1:order:2]
         if even:
             # rows to have g*(following row) subtracted.
-            multg = range(0, order, 2)
-            ABCD[multg, :] = ABCD[multg, :] - np.diag(g) * ABCD[multg + 1, :]
+            multg = np.arange(0, order, 2)
+            ABCD[multg, :] = ABCD[multg, :] \
+                             - np.dot(np.diag(g.reshape((-1,))), ABCD[multg + 1, :])
         else:
             if order >= 3:
-                supdiag = diagonal[2:order:2] - 1
-                ABCD[supdiag] = -g
+                #supdiag = diagonal[2:order:2] - 1
+                supdiag = map(lambda a: a[1:order:2], 
+                              diagonal_indices(ABCD[:order, :order], +1)
+                             )
+                ABCD[supdiag] = -g.reshape((-1,))
         # rows to have c*(preceding row) added.
-        multc = range(2, order, 2)
-        ABCD[multc, :] = ABCD[multc, :] + np.diag(c[multc]) * ABCD[multc - 1, :]
-        ABCD[order, :order:2] = a[:order:2]
+        multc = np.arange(2, order, 2)
+        ABCD[multc, :] = ABCD[multc, :] + np.dot(np.diag(c[0, multc]), ABCD[multc - 1, :])
+        ABCD[order, :order:2] = a[0, :order:2]
         for i in range(1, order, 2):
-            ABCD[order, :] = ABCD[order, :] + a[i]*ABCD[i, :]
+            ABCD[order, :] = ABCD[order, :] + a[0, i]*ABCD[i, :]
     elif 'CIFB' == form:
         # C=(0 0...c_n)
         # This is done as part of the construction of A, below

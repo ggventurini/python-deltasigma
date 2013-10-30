@@ -123,26 +123,30 @@ def realizeNTF(ntf, form = 'CRFB', stf=None):
 		if stf is None:
 			b[0, :order] = a[0, :]
 			b[0, order] = 1
-	elif 'CRFF' == form:
+	elif form == 'CRFF':
+		# Find g
+		# Assume the roots are ordered, real first, then cx conj. pairs
 		for i in range(0, order2):
-			g[i] = 2*(1 - np.real(ntf_z[2*i + 1*odd]))
-		L1 = np.zeros((1, order))
+			g[0, i] = 2*(1 - np.real(ntf_z[2*i + 1*odd]))
+		L1 = np.zeros((1, order*2), dtype='complex')
+		# Form the linear matrix equation a*T*=L1
 		for i in range(0, 2*order):
 			z = zSet[i]
-			L1[i] = 1 - evalRPoly(ntf_p, z)/evalRPoly(ntf_z, z)
+			# L1(z) = 1-1/H(z)
+			L1[0, i] = 1. - evalRPoly(ntf_p, z)/evalRPoly(ntf_z, z)
 			if odd:
 				Dfactor = z - 1
 				product = 1/Dfactor
 				T[0, i] = product
 			else:
 				Dfactor = (z - 1)/z
-				product = 1
+				product = 1.
 			for j in range(0 + 1*odd, order, 2):
-				product = z / evalRPoly(ntf_z[j:j + 2], z) * product
+				product = z/evalRPoly(ntf_z[j:j + 2], z)*product
 				T[j, i] = product * Dfactor
 				T[j + 1, i] = product
-		a = - np.real(L1/T)
-		if 0 in stf.shape:
+		a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+		if stf is None:
 			b = np.hstack((np.atleast_2d(1), 
 			               np.zeros((1, order - 1)), 
 			               np.atleast_2d(1)
