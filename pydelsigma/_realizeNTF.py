@@ -17,7 +17,10 @@
 """
 
 from __future__ import division
+from warnings import warn
+
 import numpy as np
+from scipy.signal import tf2zpk
 
 from ._calculateTF import calculateTF
 from ._evalRPoly import evalRPoly
@@ -63,7 +66,7 @@ def realizeNTF(ntf, form = 'CRFB', stf=None):
 		# LTI objects have poles and zeros, 
 		# TransferFunction-s have pole() and zero()
 		ntf_z = ntf.zeros if hasattr(ntf, 'zeros') else ntf.zero()
-		p = ntf.poles if hasattr(ntf, 'poles') else ntf.pole()
+		ntf_p = ntf.poles if hasattr(ntf, 'poles') else ntf.pole()
 	elif hasattr(ntf, 'form') and ntf.form == 'zp':
 		ntf_z, ntf_p, _ = ntf.k, ntf.zeros, ntf.poles
 	elif hasattr(ntf, 'form') and ntf.form == 'coeff':
@@ -151,28 +154,28 @@ def realizeNTF(ntf, form = 'CRFB', stf=None):
 			               np.zeros((1, order - 1)), 
 			               np.atleast_2d(1)
 			             ))
-	elif 'CIFB' == form:
-		if any(abs(real(ntf_z) - 1) > 0.001):
-			fprintf(stderr, "%s Warning: The ntf's zeros have had their real parts set to one.\\n", mfilename)
-		ntf_z = 1 + 1j * imag(ntf_z)
-		for i in range(1, (order2+1)):
-			g[(i-1)] = imag(ntf_z[(2 * i - 1 + 1*odd-1)]) ** 2
-		L1 = np.zeros(1, order)
-		for i in range(1, (order * 2+1)):
-			z = zSet[(i-1)]
-			L1[(i-1)] = 1 - evalRPoly(ntf_p, z) / evalRPoly(ntf_z, z)
-			Dfactor = (z - 1)
-			product = 1
-			for j in range(order, ((1 + odd)+1), - 2):
-				product = product / evalRPoly(ntf_z[((j - 1)-1):j], z)
-				T[(j-1), (i-1)] = product * Dfactor
-				T[(j - 1-1), (i-1)] = product
-			if (odd):
-				T[0, (i-1)] = product / (z - 1)
-		a = - real(L1 / T)
-		if (0 in stf.shape):
-			b = a
-			b[(order + 1-1)] = 1
+	elif form == 'CIFB':
+		if any(abs(np.real(ntf_z) - 1) > 0.001):
+			warn("The ntf's zeros have had their real parts set to one.")
+		ntf_z = 1 + 1j*np.imag(ntf_z)
+		for i in range(order2):
+			g[0, i] = np.imag(ntf_z[2*i + 1*odd])**2
+		L1 = np.zeros((1, order*2), dtype='complex')
+		for i in range(order*2):
+			z = zSet[i]
+			L1[0, i] = 1. - evalRPoly(ntf_p, z)/evalRPoly(ntf_z, z)
+			Dfactor = z - 1.
+			product = 1.
+			for j in range(order, 2 + odd, -2):
+				product = product/evalRPoly(ntf_z[j-2:j], z)
+				T[j - 1, i] = product * Dfactor
+				T[j - 2, i] = product
+			if odd:
+				T[0, i] = product/(z - 1.)
+		a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+		if stf is None:
+			b[0, :order] = a
+			b[0, order] = 1.
 	elif 'CIFF' == form:
 		if any(abs(real(ntf_z) - 1) > 0.001):
 			fprintf(stderr, "%s Warning: The ntf's zeros have had their real parts set to one.\\n", mfilename)

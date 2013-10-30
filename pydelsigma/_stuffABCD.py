@@ -82,19 +82,19 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         ABCD[order, :order:2] = a[0, :order:2]
         for i in range(1, order, 2):
             ABCD[order, :] = ABCD[order, :] + a[0, i]*ABCD[i, :]
-    elif 'CIFB' == form:
+    elif form == 'CIFB':
         # C=(0 0...c_n)
         # This is done as part of the construction of A, below
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
-        ABCD[:, order] = b.T
+        ABCD[:, order] = b
         # B2 = -(a_1 a_2... a_n)
-        ABCD[:order, order + 1] = -a.T
-        diagonal = np.arange(0, order*(order + 1), order + 2)
-        ABCD[diagonal] = np.ones((1, order))
-        subdiag = diagonal[:order] + 1
-        ABCD[subdiag] = c
-        supdiag = diagonal[odd + 1:order+odd:2] - 1
-        ABCD[supdiag] = -g
+        ABCD[:order, order + 1] = -a
+        diagonal = diagonal_indices(ABCD[:order, :order])
+        ABCD[diagonal] = np.ones((order,))
+        subdiag = diagonal_indices(ABCD, -1)
+        ABCD[subdiag] = c.reshape((-1,))
+        supdiag = map(lambda a: a[odd:order+odd:2], diagonal_indices(ABCD[:order, :order], +1))
+        ABCD[supdiag] = -g.reshape((-1,))
     elif 'CIFF' == form:
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
         ABCD[:, order] = b.T
