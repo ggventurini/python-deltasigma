@@ -18,6 +18,7 @@ point(s) given by the user.
 """
 
 import numpy as np
+from scipy.signal import tf2zpk
 import control
 from control.xferfcn import TransferFunction
 from control.statesp import StateSpace
@@ -65,6 +66,13 @@ def evalTF(tf, z):
 		h = np.polyval(tf.num, z) / np.polyval(tf.den, z)
 	elif hasattr(tf, 'form'):
 		raise ValueError, '%s: Unknown form: %s' % (__name__, tf.form)
+	elif hasattr(tf, '__len__'):
+		if len(tf) == 2:
+			num, den = tf2zpk(tf[0], tf[1])
+			h = np.polyval(num, z) / np.polyval(den, z)
+		elif len(tf) == 3:
+			zeros, poles, k = tf
+			h = k * evalRPoly(zeros, z) / evalRPoly(poles, z)
 	else:
 		raise TypeError, '%s: Unknown transfer function %s' % (__name__, str(tf))
 	return h
