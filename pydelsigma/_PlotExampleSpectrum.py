@@ -22,6 +22,7 @@ import numpy as np
 from numpy.fft import fft, fftshift
 import pylab as plt
 
+from ._calculateSNR import calculateSNR
 from ._circ_smooth import circ_smooth
 from ._dbv import dbv
 from ._dbp import dbp
@@ -29,6 +30,7 @@ from ._ds_f1f2 import ds_f1f2
 from ._ds_hann import ds_hann
 from ._evalTF import evalTF
 from ._figureMagic import figureMagic
+from ._simulateDSM import simulateDSM
 from ._undbv import undbv
 
 # Requires the following unimplemented functions:
@@ -40,10 +42,8 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     Not operational function. FIXME!
     
     Requires the following unimplemented functions:
-    calculateSNR, simulateDSM, simulateQDSM
+    simulateQDSM
     """
-    raise NotImplemented("This function needs calculateSNR, simulateDSM, \
-                          simulateQDSM which are not yet available")
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2
     Amp = undbv(- 3)
@@ -55,35 +55,36 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     if not quadrature:
         t = np.arange(0, N).reshape((1, -1))
         u = Amp*M*np.cos((2*np.pi/N)*fin*t)
-        v = simulateDSM(u, ntf, M+1)
+        v, xn, xmax, y = simulateDSM(u, ntf, M+1)
     else:
         t = np.arange(0, N).reshape((1, -1))
         u = Amp*M*np.exp((2j*np.pi/N)*fin*t)
-        v = simulateQDSM(u, ntf, M + 1)
+        v, xn, xmax, y = simulateQDSM(u, ntf, M + 1)
     window = ds_hann(N)
     NBW = 1.5/N
-    spec0 = fft(v.dot(window))/(M*N/4)
+    spec0 = fft(v * window)/(M*N/4)
     if not quadrature:
         freq = np.linspace(0, 0.5, N/2 + 1)
-        plt.plot(freq, dbv(spec0[(1-1):N / 2 + 1]), 'c', 'Linewidth', 1)
+        plt.plot(freq, dbv(spec0[(1-1):N / 2 + 1]), 'c', linewidth=1)
         plt.hold(True)
         spec_smoothed = circ_smooth(np.abs(spec0)**2., 16)
-        plt.plot(freq, dbp(spec_smoothed[:N/2 + 1]), 'b', 'Linewidth', 3)
-        Snn = abs(evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta/M)**2
-        plt.plot(freq, dbp(Snn * NBW), 'm', 'Linewidth', 1)
+        plt.plot(freq, dbp(spec_smoothed[:N/2 + 1]), 'b', linewidth=3)
+        Snn = np.abs(evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta/M)**2
+        plt.plot(freq, dbp(Snn*NBW), 'm', linewidth=1)
         snr = calculateSNR(spec0[(f1_bin + 1-1):f2_bin + 1], fin - f1_bin)
-        msg = 'SQNR  =  %.1fdB\\n @ A = %.1fdBFS & osr = %.0f\\n' % \
+        msg = 'SQNR  =  %.1fdB\n @ A = %.1fdBFS & osr = %.0f\n' % \
               (snr, dbv(spec0[fin]), osr)
         if f0 < 0.25:
             plt.text(f0 + 1 / osr, - 15, msg, horizontalalignment='left',
-                     verticalalignment='bottom')
+                     verticalalignment='center')
         else:
             plt.text(f0 - 1 / osr, - 15, msg, horizontalalignment='right',
-                     verticalalignment='bottom')
+                     verticalalignment='center')
         plt.text(0.5, - 135, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='bottom')
         figureMagic((0, 0.5), 1./16, 4, (-140, 0), 10, 2)
     else:
+        raise NotImplemented("The required simulateQDSM function is not available yet.")
         spec0 = fftshift(spec0 / 2)
         freq = np.linspace(-0.5, 0.5, N + 1)
         freq = freq[:-1]
