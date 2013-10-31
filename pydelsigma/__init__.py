@@ -131,6 +131,7 @@ from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
 from ._calculateTF import calculateTF
+from ._circ_smooth import circ_smooth
 from ._constants import eps
 from ._dbm import dbm
 from ._dbp import dbp

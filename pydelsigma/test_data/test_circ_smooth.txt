@@ -1,0 +1,6 @@
+The variable b was obtained running:
+
+A = 1:100;
+b = circ_smooth(A, 16);
+
+And exporting b in .mat format.
