@@ -208,6 +208,43 @@ def diagonal_indices(a, offset=0):
 		di, dj = zip(*[(i, j) for i, j in zip(di-offset, dj) if 0 <= i < a.shape[0]])
 	return di, dj
 
+def circshift(a, shift):
+	"""Shift array circularly.
+	
+    The circshift(a, shift) function circularly shifts the values in the 
+	array 'a' by 'shift' elements. 
+	
+	Parameters:
+	
+	a, ndarray
+	       the array to be shifted. Notice that a should have a greater or equal 
+		   number of dimensions than 'shift' ('shift' being a scalar is equal to 
+		   'shift' having one dimension.)
+	
+	shift, int or ndarray-like of int.
+	       the N-th element specifies the shift amount for the N-th dimension 
+		   of the input array 'a'. 
+		   If an element in 'shift' is positive, the values of A are
+           shifted to higher-index rows (ie down) or to higher-index columns 
+		   (ie to the right). 
+		   If the element is negative, the values of A are shifted in the opposite 
+		   directions, towards lower-index rows (ie up) or to lower-index columns 
+		   (ie right).
+		   If shift is an int, the shift happens along axis=0.
+		   All dimensions that do not have a corresponding shift value in 'shift' 
+		   are left untouched (ie shift=(1,0,0) is equal to shift=(1,), with the
+		   exception that the former will trigger an IndexError if a.ndim < 3)
+
+	Returns:
+
+	The shifted array.
+	"""
+	if np.isscalar(shift):
+		shift = [shift]
+	for axis, ashift in enumerate(shift):
+		a = np.roll(a, ashift, axis=axis)
+	return a
+
 def test_rat():
 	"""Test function for rat()"""
 	import numpy.random as rnd
@@ -299,3 +336,9 @@ def test_diagonal_indices():
 	assert np.allclose(dp1, (2, 7, 12))
 	assert np.allclose(dm1, (5, 10, 15, 20))
 	
+def test_circshift():
+	A = np.arange(1, 10).reshape((3, 3))
+	shift = np.array((1, -1))
+	Ashifted = circshift(A, shift)
+	Ares = np.array(((8, 9, 7), (2, 3, 1), (5, 6, 4)))
+	assert np.allclose(Ashifted, Ares)
