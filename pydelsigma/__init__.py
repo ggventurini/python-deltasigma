@@ -125,11 +125,13 @@ __email__ = "ggventurini+github@gmail.com"
 __status__ = "Pre-Pre-Alpha"
 
 from ._DocumentNTF import DocumentNTF
+from ._PlotExampleSpectrum import PlotExampleSpectrum
 from ._SIunits import SIunits
 from ._axisLabels import axisLabels
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
+from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
 from ._circ_smooth import circ_smooth
 from ._constants import eps
@@ -163,6 +165,7 @@ from ._pulse import pulse
 from ._realizeNTF import realizeNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
+from ._simulateDSM import simulateDSM
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
 from ._synthesizeNTF import synthesizeNTF
