@@ -42,6 +42,11 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	#fprintf(1,'Please compile the mex version with "mex simulateDSM.c"\n');
 
 	nlev = carray(nlev)
+	u = np.array(u) if not hasattr(u, 'ndim') else u
+	if not max(u.shape) == np.prod(u.shape):
+		raise ValueErrror("The u vector has shape %s" % u.shape)
+	if u.ndim != 1:
+		u = u.reshape((1, -1))
 	u = carray(u)
 	nu = u.shape[0]
 	nq = 1 if np.isscalar(nlev) else nlev.shape[0]
@@ -115,7 +120,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	N = u.shape[1]
 	v = np.empty((nq, N))
 	y = np.empty((nq, N)) 	# to store the quantizer input
-	xn = np.empty((order, N)) # to store the state information 
+	xn = np.empty((order, N), dtype=np.complex64) # to store the state information 
 	xmax = np.abs(x0) # to keep track of the state maxima
 
 	for i in range(N):
