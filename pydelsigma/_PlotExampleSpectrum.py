@@ -46,7 +46,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     """
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2
-    Amp = undbv(- 3)
+    Amp = undbv(-3)
     f = 0.3
     N = 2**12
     f1_bin = np.round(f1*N)
@@ -57,6 +57,8 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         u = Amp*M*np.cos((2*np.pi/N)*fin*t)
         v, xn, xmax, y = simulateDSM(u, ntf, M+1)
     else:
+        raise NotImplementedError("The required simulateQDSM function " + \
+                                  "is not available yet.")
         t = np.arange(0, N).reshape((1, -1))
         u = Amp*M*np.exp((2j*np.pi/N)*fin*t)
         v, xn, xmax, y = simulateQDSM(u, ntf, M + 1)
@@ -65,13 +67,13 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     spec0 = fft(v * window)/(M*N/4)
     if not quadrature:
         freq = np.linspace(0, 0.5, N/2 + 1)
-        plt.plot(freq, dbv(spec0[(1-1):N / 2 + 1]), 'c', linewidth=1)
+        plt.plot(freq, dbv(spec0[:N/2 + 1]), 'c', linewidth=1)
         plt.hold(True)
         spec_smoothed = circ_smooth(np.abs(spec0)**2., 16)
         plt.plot(freq, dbp(spec_smoothed[:N/2 + 1]), 'b', linewidth=3)
         Snn = np.abs(evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta/M)**2
         plt.plot(freq, dbp(Snn*NBW), 'm', linewidth=1)
-        snr = calculateSNR(spec0[(f1_bin + 1-1):f2_bin + 1], fin - f1_bin)
+        snr = calculateSNR(spec0[f1_bin:f2_bin + 1], fin - f1_bin)
         msg = 'SQNR  =  %.1fdB\n @ A = %.1fdBFS & osr = %.0f\n' % \
               (snr, dbv(spec0[fin]), osr)
         if f0 < 0.25:
@@ -84,7 +86,6 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
                  verticalalignment='bottom')
         figureMagic((0, 0.5), 1./16, 4, (-140, 0), 10, 2)
     else:
-        raise NotImplemented("The required simulateQDSM function is not available yet.")
         spec0 = fftshift(spec0 / 2)
         freq = np.linspace(-0.5, 0.5, N + 1)
         freq = freq[:-1]
