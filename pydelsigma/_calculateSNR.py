@@ -35,13 +35,29 @@ def calculateSNR(hwfft, f, nsig=1):
 	hwfft = hwfft.squeeze()
 	signalBins = np.arange(f - nsig + 1, f + nsig + 2, dtype='int64')
 	signalBins = signalBins[signalBins > 0]
-	signalBins = signalBins[signalBins <= max(hwfft.shape) - 1]
-	s = norm(hwfft[signalBins - 1])
+	signalBins = signalBins[signalBins <= max(hwfft.shape)]
+	s = norm(hwfft[signalBins - 1]) # *4/(N*sqrt(3)) for true rms value;
 	noiseBins = np.arange(1, max(hwfft.shape) + 1, dtype='int64')
-	noiseBins = np.delete(noiseBins, noiseBins[signalBins - 1])
+	noiseBins = np.delete(noiseBins, noiseBins[signalBins - 1] - 1)
 	n = norm(hwfft[noiseBins - 1])
 	if n == 0:
 		snr = np.Inf
 	else:
-		snr = dbv(s / n)
+		snr = dbv(s/n)[0]
 	return snr
+
+def test_calculateSNR():
+	"""Test function for calculateSNR
+	"""
+	from numpy.fft import fft
+	from ._ds_hann import ds_hann
+	N = 2**12
+	t = np.arange(N)
+	f1, f2 = 1./8, 1./302
+	A = np.cos(2*np.pi*f1*t)
+	B = .01*np.cos(2*np.pi*f2*t)
+	y = A + B
+	window = ds_hann(N)
+	hwfft = fft(window*y)
+	snr = calculateSNR(hwfft[:N/2], int(N*f1))
+	assert np.allclose(snr, 40, atol=1e-8, rtol=1e-8)
