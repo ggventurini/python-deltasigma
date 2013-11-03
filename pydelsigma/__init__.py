@@ -166,6 +166,7 @@ from ._realizeNTF import realizeNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._simulateDSM import simulateDSM
+from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
 from ._synthesizeNTF import synthesizeNTF
