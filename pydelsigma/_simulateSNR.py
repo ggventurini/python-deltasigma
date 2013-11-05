@@ -21,7 +21,7 @@ from warnings import warn
 import numpy as np
 from numpy.fft import fft, fftshift
 
-from ._simulateDSM import simulateDSM
+from ._simulateDSM_scipy import simulateDSM
 from ._calculateSNR import calculateSNR
 from ._mapQtoR import mapQtoR
 
@@ -80,6 +80,10 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                               np.array((-15,)),
                               np.arange(-10, 1)
                             ))
+    elif not hasattr(amp, '__len__'):
+        amp = np.array((amp, ))
+    else:
+        amp = np.asarray(amp)
     osr_mult = 2
     if f0 != 0 and not quadrature:
         osr_mult = 2*osr_mult
