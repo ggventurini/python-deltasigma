@@ -160,6 +160,7 @@ from ._padl import padl
 from ._padr import padr
 from ._padt import padt
 from ._partitionABCD import partitionABCD
+from ._peakSNR import peakSNR
 from ._plotPZ import plotPZ
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
