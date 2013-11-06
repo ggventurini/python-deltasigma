@@ -21,7 +21,7 @@ from warnings import warn
 import numpy as np
 from numpy.fft import fft, fftshift
 
-from ._simulateDSM_scipy import simulateDSM
+from ._simulateDSM import simulateDSM
 from ._calculateSNR import calculateSNR
 from ._mapQtoR import mapQtoR
 
