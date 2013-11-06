@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-"""Module providing configuration switches.
+"""Module providing the DocumentNTF function.
 """
 
 from __future__ import division
