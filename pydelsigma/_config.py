@@ -21,3 +21,6 @@ optimize_NTF = False
 # how many iterations should allow to converge on NTF synthesis?
 # see synthesizeNTF
 itn_limit = 500
+
+# debug
+_debug = False
