@@ -45,9 +45,8 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	u = np.array(u) if not hasattr(u, 'ndim') else u
 	if not max(u.shape) == np.prod(u.shape):
 		raise ValueErrror("The u vector has shape %s" % u.shape)
-	if u.ndim != 1:
+	if u.ndim == 1:
 		u = u.reshape((1, -1))
-	u = carray(u)
 	nu = u.shape[0]
 	nq = 1 if np.isscalar(nlev) else nlev.shape[0]
 	# extract poles and zeros
@@ -149,9 +148,9 @@ def ds_quantize(y, n):
 	v = np.zeros(y.shape)
 	for qi in range(n.shape[0]): 
 		if n[qi] % 2 == 0: # mid-rise quantizer
-			v[qi] = 2*np.floor(0.5*y[qi]) + 1
-        else: # mid-tread quantizer
-            v[qi] = 2*np.floor(0.5*(y[qi] + 1))
-        L = n[qi] - 1
-        v[qi] = np.sign(v[qi])*np.max((np.abs(v[qi]), L))
+			v[qi, 0] = 2*np.floor(0.5*y[qi, 0]) + 1
+		else: # mid-tread quantizer
+			v[qi, 0] = 2*np.floor(0.5*(y[qi, 0] + 1))
+		L = n[qi] - 1
+		v[qi, 0] = np.sign(v[qi, 0])*np.max((np.abs(v[qi, 0]), L))
 	return v
