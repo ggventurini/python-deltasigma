@@ -152,5 +152,5 @@ def ds_quantize(y, n):
 		else: # mid-tread quantizer
 			v[qi, 0] = 2*np.floor(0.5*(y[qi, 0] + 1))
 		L = n[qi] - 1
-		v[qi, 0] = np.sign(v[qi, 0])*np.max((np.abs(v[qi, 0]), L))
+		v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
 	return v
