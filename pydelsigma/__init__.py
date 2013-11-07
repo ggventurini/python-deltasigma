@@ -162,6 +162,7 @@ from ._padt import padt
 from ._partitionABCD import partitionABCD
 from ._peakSNR import peakSNR
 from ._plotPZ import plotPZ
+from ._predictSNR import predictSNR
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
 from ._rms import rms
