@@ -101,6 +101,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	else:
 		A, B2, C, D2 = zpk2ss(poles, zeros, -1)	# A realization of 1/H
 		# Transform the realization so that C = [1 0 0 ...]
+		C, D2 = np.real_if_close(C), np.real_if_close(D2)
 		Sinv = orth(np.hstack((np.transpose(C), np.eye(order)))) / norm(C)
 		S = inv(Sinv)
 		C = np.dot(C, Sinv)
@@ -131,7 +132,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 		v[:, i] = ds_quantize(y0, nlev)
 		x0 = np.dot(A, x0) + np.dot(B, np.vstack((u[:, i], v[:, i])))
 		xn[:, i] = x0.T
-		xmax = np.max((np.abs(x0), xmax), 0)
+		xmax = np.max(np.hstack((np.abs(x0), xmax)), axis=1, keepdims=True)
 
 	return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
