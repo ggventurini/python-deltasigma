@@ -167,7 +167,7 @@ from ._pulse import pulse
 from ._realizeNTF import realizeNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
-from ._scaleABCD import _scaleABCD
+from ._scaleABCD import scaleABCD
 from ._simulateDSM import simulateDSM
 from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
