@@ -19,8 +19,7 @@ from the comparator output to the comparator input for a given NTF.
 
 import numpy as np
 import scipy
-from scipy.signal import convolve as conv
-from control.matlab import impulse, tf
+from scipy.signal import convolve, dimpulse
 
 from ._padr import padr
 
@@ -33,32 +32,38 @@ def impL1(arg1, n=10):
 	This function is useful when verifying the realization
 	of a NTF with a specified topology.
 	"""
-	if not hasattr(arg1, 'pole'):
-		raise ValueError, 'No poles field in the NTF.'
-	if not hasattr(arg1, 'zero'):
-		raise ValueError, 'No zeros field in the NTF.'
+	if not hasattr(arg1, '__len__'):
+		raise ValueError, 'LTI and TF objects support not added yet.'
+	if len(arg1) == 2:
+		num, den = arg1
+		p = np.roots(den)
+	elif len(arg1) == 3:
+		z, p, k = arg1
+		num = np.poly(z)
+		den = np.poly(p)
 
-	z = arg1.zero()
-	p = arg1.pole()
+	num = np.asarray(num)
+	den = np.asarray(num)
+	p = np.asarray(num)
 
-	lf_den = padr(arg1.num[0][0], len(p)+1)
-	lf_num = lf_den - arg1.den[0][0]
+	lf_den = padr(num, len(p)+1)
+	lf_num = lf_den - den
 	ts = np.arange(n)
 	all_lf = np.concatenate((lf_num, lf_den), axis=1)
 	if not np.allclose(np.imag(all_lf), np.zeros(all_lf.shape), atol=1e-9):
 		# Complex loop filter
-		lfr_den = np.real(conv(lf_den, np.conj(lf_den)))
-		lfr_num = conv(lf_num, np.conj(lf_den))
-		lf_i = tf(np.real(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
-		lf_q = tf(np.imag(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
-		y = impulse(lf_i, T=ts) + 1j * impulse(lf_q, T=ts)
+		lfr_den = np.real(conv(lf_den, np.conj(lf_den))).squeeze()
+		lfr_num = conv(lf_num, np.conj(lf_den)).squeeze()
+		lf_i = (np.real(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
+		lf_q = (np.imag(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
+		y = dimpulse(lf_i, t=ts) + 1j*dimpulse(lf_q, t=ts)
 	else:
-		y = impulse(tf(lf_num.tolist()[0], lf_den.tolist()[0], 1), T=ts)
+		y = dimpulse((lf_num, lf_den, 1), t=ts)
 	return y
 
 def test_impL1():
 	"""Test function for impL1()"""
-	sys1 = tf([1], [1, 2, 1])
+	sys1 = ([1], [1, 2, 1])
 	r1, t1 = impL1(sys1, n=10)
 	r2, t2 = np.array([[ -2.00000000e+00, -1.00000000e+00, 2.41009246e-16, 1.95887461e-17, 
 		    -8.67469990e-33, -3.83718972e-34, 2.47373167e-49, 7.51657350e-51, 

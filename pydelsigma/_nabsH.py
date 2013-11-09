@@ -32,8 +32,7 @@ def nabsH(w, H):
 	
 def test_nabsH():
 	"""Test function for nabsH()"""
-	from control.matlab import tf
-	H = tf([1, 2], [2, 0, .25], 1)
+	H = ([1, 2], [2, 0, .25], 1)
 	N = 129
 	w = np.linspace(0, 2*np.pi, num=N, endpoint=True)
 	z = np.exp(1j*w)

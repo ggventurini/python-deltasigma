@@ -53,9 +53,8 @@ def infnorm(H):
 def test_infnorm():
 	"""Test function."""
 	# FIXME M/P test needed
-	from control.matlab import tf, tf2zpk
 	num, den = np.poly([3, 0.3, 1]), np.poly([2, 0.5, .25])
-	H = tf(num, den, 1)
+	H = (num, den)
 	Hinf, fmax = infnorm(H)
 	assert np.allclose((Hinf, fmax), (np.array([ 1.84888889]), np.array([ 0.50000001])), 
 	                   atol=1e-8, rtol=1e-5)

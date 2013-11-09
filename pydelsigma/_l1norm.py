@@ -16,21 +16,22 @@
 """Module providing the l1norm() function
 """
 
+from __future__ import division
 import numpy as np
-from scipy.signal import impulse
+from scipy.signal import dimpulse
 
 def l1norm(H):
 	"""Compute the l1-norm of a z-domain transfer function.
 	"""
-	_, y = impulse(H, T=np.arange(544)/5.43) # how the faq does MATLAB pick the time points?
-	return np.sum(np.abs(y))
+	_, y = dimpulse(H, t=np.arange(100))
+	return np.sum(np.abs(y[0]))
 
 def test_l1norm():
 	"""Test function for l1norm
 	"""
 	zeros = np.array(())
-	poles = np.array((-.5,))
+	poles = np.array((.5,))
 	k = 1.
-	zpk_tuple = zeros, poles, k
-	assert np.allclose(l1norm(zpk_tuple), 11.3676723351, rtol=1e-5, atol=1e-8)
+	zpkt_tuple = zeros, poles, k, 1
+	assert np.allclose(l1norm(zpkt_tuple), 2., rtol=1e-5, atol=1e-8)
 

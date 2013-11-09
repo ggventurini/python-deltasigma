@@ -19,8 +19,8 @@ pulse response of a CT system.
 
 from __future__ import division
 import numpy as np
+from scipy.signal import step, lti
 
-from control import step
 from ._utils import lcm, rat
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
@@ -45,9 +45,6 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	if len(tp.shape) == 2: 
 		if not tp.shape[1] == 2:
 			raise ValueError, "tp is not (n, 2)-shaped"
-	# Check the arguments
-	if S.dt != None:
-	    raise VelueError, 'S must be a cts-time system.'
 
 	# Compute the time increment
 	dd = 1;
@@ -64,8 +61,9 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	nd = np.round(dt/delta_t, 0)
 	nf = np.round(tfinal/delta_t, 0)
 	ndac = tp.shape[0]
-	Sscipy = S.returnScipySignalLti()
-	ni = len(Sscipy)
+	if type(S) == tuple and type(S[0]) == tuple and np.isscalar(S[0][0]):
+		S = [[lti(S)]]
+	ni = len(S)
 	
 	if (ni % ndac) != 0:
 		raise ValueError, 'The number of inputs must be divisible by the number of dac timings.'
@@ -76,9 +74,9 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	nis = ni/ndac # Number of inputs grouped together with a common DAC timing
 	              # (2 for the complex case)
 	if not nosum: # Sum the responses due to each input set
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(Sscipy[0]), nis))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), nis))
 	else:
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(Sscipy[0]), ni))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), ni))
 
 	if len(y1.shape) == 1:
 		y1 = y1.reshape((y1.shape[0], 1, 1))
@@ -99,10 +97,9 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 
 def test_pulse():
 	"""Test function for pulse()"""
-	from control import tf
 	import pkg_resources
 	import scipy.io
-	H = tf([1], [1, 2, 10])
+	H = ([1], [1, 2, 10])
 	pp = pulse(H, tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
 	pp = pp.reshape((pp.shape[0],1))
 	fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
