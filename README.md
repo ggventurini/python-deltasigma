@@ -1,6 +1,8 @@
 python-deltasigma
 ===============
 
+The MATLAB Delta Sigma Toolbox with 0% MATLAB and a lot more Python.
+
 The **python-deltasigma** project aims to provide **a 1:1 Python replacement** of Richard 
 Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based. The original toolbox is also known as *delsig* or *delsigma*.
 
@@ -8,9 +10,19 @@ Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/m
 
 This project is at **a very early stage**. Not all functionality has been ported and currently *the example files do not run*. Take a look to files.ods for the current status. 
 
-**NEWS!** To have an idea of the currently implemented functionality, take a look at **[these preliminary results.](http://nbviewer.ipython.org/7251113)**
+**NEWS!** To have an idea of the currently implemented functionality, take a look at **[these preliminary results.](http://nbviewer.ipython.org/7251113)**, which showcases almost all `dsexample1.m`.
 
-Pull requests welcome!
+### How to contribute
+
+Pull requests are welcome!
+
+There are only a few *guidelines*, which can be overridden every time it is reasonable to do so:
+
+* Please try to follow PEP8. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
+
+* Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced replaced with None. 
+
+* If a function has a varible number of return values, its Python port should implement the maximum number of return values,
 
 ## Dependencies
 
@@ -34,47 +46,12 @@ Or, on a generic platform:
 
 More information on the [scipy install page](http://www.scipy.org/install.html).
 
-#### 2. Slycot
-
-**Slycot** is a *Python wrapper for selected SLICOT routines, notably including solvers for Riccati, Lyapunov and Sylvester equations.* (quoted from the project homepage.)
-
-It is a dependency for **python-control** (see below). 
-
-**Slycot** can be found at [repagh's Github repository](https://github.com/repagh/Slycot) and requires **numpy**, a **fortran compiler** such as gfortran and **BLAS/LAPACK 
-libraries**. As, the README states, on a Debian Linux system, all of the above can be installed with:
-
-```
-# apt-get build-dep python-scipy
-```
-
-then check-out **Slycot** and install with distutils.
-
-```
-python setup.py install --user
-```
-
-If you are not using a Debian-based system, please check on the project page the dependencies to be installed.
-
-#### 3. python-control
-
-**python-control** can be installed downloading a release from [its homepage](http://sourceforge.net/projects/python-control/) or checking out its SVN repository with:
-
-```
-svn checkout svn://svn.code.sf.net/p/python-control/code/trunk python-control
-```
-
-Installing is straightforward with the distutils setup.py file:
-
-```
-$ python setup.py install --user
-```
-
-#### 4. matplotlib
+#### 2. matplotlib
 
 **[matplotlib](http://matplotlib.org/)** is used for plotting and it is also very useful for visually inspecting your data.
 
 
-#### 5. Extras
+#### 3. Extras
 
 Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package.
 
@@ -87,3 +64,5 @@ All original MATLAB code is Copyright (c) 2009, Richard Schreier. See the LICENS
 The Python here provided is a derivative work from the above toolkit and subject to the same license terms.
 
 The Python code is Copyright 2013, Giuseppe Venturini and the python-deltasigma contributors.
+
+MATLAB is a registered trademark of The MathWorks, Inc.

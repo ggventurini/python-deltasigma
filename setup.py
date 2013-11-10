@@ -11,7 +11,8 @@ setup(name='pydelsigma',
       packages=['pydelsigma'],
       package_data={
         'pydelsigma': ['test_data/*.mat', 'test_data/*.txt']
-      }
+      },
+      install_requires = ['numpy', 'scipy', 'matplotlib']
      )
 
 print """
@@ -20,9 +21,6 @@ The following dependencies are needed for pydelsigma
 to work on your system:
 - numpy: http://numpy.scipy.org/
 - scipy: http://www.scipy.org/
-- slycot: https://github.com/repagh/Slycot
-- python-control: 
-  http://sourceforge.net/projects/python-control/
 - matplotlib: http://matplotlib.sourceforge.net/
 
 Recommended:
@@ -31,7 +29,6 @@ Recommended:
 - shinx: http://sphinx-doc.org/
 - patience and stubbornness.
 
-Most of which are available through PyPi.
-See Install.md for more.
+Available through PyPi. See Install.md for more.
 +---------------------------------------------------+
 """
