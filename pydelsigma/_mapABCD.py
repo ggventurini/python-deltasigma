@@ -29,22 +29,23 @@ def mapABCD(ABCD, form='CRFB'):
     order = ABCD.shape[0] - 1
     odd = order % 2
     even = 1 - odd
-    diagonal = diagonal_indices(ABCD[:order, :order])
-    subdiag = diagonal_indices(ABCD[:order, :order], -1)
-    supdiag = map(lambda a: a[1+odd:order - 1:2], diagonal_indices(ABCD, -1))
+    diagonal = diagonal_indices(ABCD)
+    subdiag = diagonal_indices(ABCD, -1)
+    supdiag = map(lambda a: a[odd:order - 1:2], diagonal_indices(ABCD, +1))
     if form in ('CRFB', 'CIFB', 'CRFBD'):
         c = ABCD[subdiag]
         g = -ABCD[supdiag]
         if form == 'CRFB':
             dly = np.arange(1 + odd, order, 2)
-            ABCD[dly, :] = ABCD[dly, :] - np.diag(c[dly - 1]) * ABCD[dly - 1, :]
+            ABCD[dly, :] = ABCD[dly, :] \
+                           - np.dot(np.diag(c[dly - 1]), ABCD[dly - 1, :])
         elif form == 'CRFBD':
             dly = np.arange(odd, order, 2)
-            ABCD[dly, :] = ABCD[dly, :] + np.diag(g)*ABCD[dly + 1, :]
+            ABCD[dly, :] = ABCD[dly, :] + np.dot(np.diag(g), ABCD[dly + 1, :])
             if order > 2:
                 coupl = np.arange(1 + even, order, 2)
                 ABCD[coupl, :] = ABCD[coupl, :] \
-                                 - np.diag(c[coupl - 1])*ABCD[coupl - 1, :]
+                                 - np.dot(np.diag(c[coupl - 1]), ABCD[coupl - 1, :])
         a = -ABCD[:order, order + 1].T
         b = ABCD[:, order].T
     elif form == 'CRFF':
