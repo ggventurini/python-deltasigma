@@ -18,9 +18,9 @@ Pull requests are welcome!
 
 There are only a few *guidelines*, which can be overridden every time it is reasonable to do so:
 
-* Please try to follow PEP8. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
+* Please try to follow `PEP8`. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
 
-* Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced replaced with None. 
+* Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced with `None`. 
 
 * If a function has a varible number of return values, its Python port should implement the maximum number of return values,
 
