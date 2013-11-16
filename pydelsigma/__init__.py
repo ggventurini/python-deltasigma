@@ -154,6 +154,9 @@ from ._impL1 import impL1
 from ._infnorm import infnorm
 from ._l1norm import l1norm
 from ._lollipop import lollipop
+from ._mapABCD import mapABCD
+from ._mapQtoR import mapQtoR
+from ._mapRtoQ import mapRtoQ
 from ._nabsH import nabsH
 from ._padb import padb
 from ._padl import padl
