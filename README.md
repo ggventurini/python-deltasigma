@@ -10,7 +10,7 @@ Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/m
 
 This project is at **an early stage**. Not all functionality has been ported and currently *most of the example files do not run*. Take a look to files.ods for the current status. 
 
-**NEWS!** To have an idea of the currently implemented functionality, take a look at these **[preliminary results (dsexample1).](http://nbviewer.ipython.org/7251113)**, which showcases almost all `dsexample1.m`.
+**NEWS!** To have an idea of the currently implemented functionality, take a look at these **[preliminary results](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
 
 ### How to contribute
 
