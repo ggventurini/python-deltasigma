@@ -39,58 +39,13 @@ On a generic platform, they can be installed with:
 More information on the `scipy install
 page <http://www.scipy.org/install.html>`_.
 
-2. Slycot
-^^^^^^^^^
-
-**Slycot** is a *Python wrapper for selected SLICOT routines, notably
-including solvers for Riccati, Lyapunov and Sylvester equations.*
-(quoted from the project homepage.)
-
-It is a dependency for **python-control** (see below).
-
-**Slycot** can be found at `repagh's Github
-repository <https://github.com/repagh/Slycot>`_ and requires **numpy**,
-a **fortran compiler** such as gfortran and **BLAS/LAPACK libraries**.
-As, the README states, on a Debian Linux system, all of the above can be
-installed with:
-
-::
-
-    # apt-get build-dep python-scipy
-
-then check-out **Slycot** and install with distutils.
-
-::
-
-    python setup.py install --user
-
-If you are not using a Debian-based system, please check on the project
-page the dependencies to be installed.
-
-3. python-control
-^^^^^^^^^^^^^^^^^
-
-**python-control** can be installed downloading a release from `its
-homepage <http://sourceforge.net/projects/python-control/>`_ or checking
-out its SVN repository with:
-
-::
-
-    svn checkout svn://svn.code.sf.net/p/python-control/code/trunk python-control
-
-Installing is straightforward with the distutils setup.py file:
-
-::
-
-    $ python setup.py install --user
-
-4. matplotlib
+2. matplotlib
 ^^^^^^^^^^^^^
 
 **`matplotlib <http://matplotlib.org/>`_** is used for plotting and it
 is also very useful for visually inspecting your data.
 
-5. Extras
+3. Extras
 ^^^^^^^^^
 
 Building the documentation requires the
@@ -133,6 +88,7 @@ from ._bquantize import bquantize
 from ._bunquantize import bunquantize
 from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
+from ._cancelPZ import cancelPZ
 from ._circ_smooth import circ_smooth
 from ._constants import eps
 from ._dbm import dbm
