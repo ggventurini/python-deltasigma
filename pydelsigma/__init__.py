@@ -89,6 +89,7 @@ from ._bunquantize import bunquantize
 from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
 from ._cancelPZ import cancelPZ
+from ._changeFig import changeFig
 from ._circ_smooth import circ_smooth
 from ._constants import eps
 from ._dbm import dbm
