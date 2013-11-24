@@ -28,6 +28,7 @@ def dsclansNTF(x, order, rmax, Hz):
 	
 	Returns the NTF, a (simplified) zpk object.
 	"""
+	x = x.squeeze()
 	Hz = carray(Hz)
 	Hp = np.zeros(Hz.shape)
 	odd = (order % 2 == 1)
@@ -56,5 +57,4 @@ def test_dsclansNTF():
 	rz = (100., )
 	assert np.allclose(rp, rt, rtol=1e-5, atol=1e-6)
 	assert np.allclose(rz, x.zeros, rtol=1e-5, atol=1e-8)
-	
 	
