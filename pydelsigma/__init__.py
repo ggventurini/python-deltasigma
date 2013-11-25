@@ -109,6 +109,7 @@ from ._evalF0 import evalF0
 from ._evalF1 import evalF1
 from ._evalTF import evalTF
 from ._figureMagic import figureMagic
+from ._frespF1 import frespF1
 from ._impL1 import impL1
 from ._infnorm import infnorm
 from ._l1norm import l1norm
