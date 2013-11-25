@@ -105,6 +105,8 @@ from ._ds_synNTFobj1 import ds_synNTFobj1
 from ._dsclansNTF import dsclansNTF
 from ._dsclansObj import dsclansObj
 from ._evalRPoly import evalRPoly
+from ._evalF0 import evalF0
+from ._evalF1 import evalF1
 from ._evalTF import evalTF
 from ._figureMagic import figureMagic
 from ._impL1 import impL1
