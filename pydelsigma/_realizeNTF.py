@@ -166,10 +166,10 @@ def realizeNTF(ntf, form = 'CRFB', stf=None):
 			L1[0, i] = 1. - evalRPoly(ntf_p, z)/evalRPoly(ntf_z, z)
 			Dfactor = z - 1.
 			product = 1.
-			for j in range(order, 2 + odd, -2):
-				product = product/evalRPoly(ntf_z[j-2:j], z)
-				T[j - 1, i] = product * Dfactor
-				T[j - 2, i] = product
+			for j in range(order - 1, 1*odd, -2):
+				product = product/evalRPoly(ntf_z[j-1:j+1], z)
+				T[j, i] = product * Dfactor
+				T[j - 1, i] = product
 			if odd:
 				T[0, i] = product/(z - 1.)
 		a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
