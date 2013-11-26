@@ -49,16 +49,20 @@ def mapABCD(ABCD, form='CRFB'):
         a = -ABCD[:order, order + 1].T
         b = ABCD[:, order].T
     elif form == 'CRFF':
-        c = np.vstack((-ABCD[0, order + 1], ABCD[subdiag[:-1]]))
+        a = np.zeros((order,))
+        c = np.concatenate((
+                            np.array((-ABCD[0, order + 1],)), 
+                            ABCD[subdiag][:-1]
+                          ))
         g = -ABCD[supdiag]
         if even:
             multg = np.arange(0, order, 2)
-            ABCD[multg, :] = ABCD[multg, :] + np.diag(g)*ABCD[multg + 1, :]
+            ABCD[multg, :] = ABCD[multg, :] + np.dot(np.diag(g), ABCD[multg + 1, :])
         multc = np.arange(2, order, 2)
-        ABCD[multc, :] = ABCD[multc, :] - np.diag(c[multc])*ABCD[multc - 1, :]
-        a[np.arange(2, order+1, 2)] = ABCD[order, 1:order:2]
+        ABCD[multc, :] = ABCD[multc, :] - np.dot(np.diag(c[multc]), ABCD[multc - 1, :])
+        a[1:order:2] = ABCD[order, 1:order:2]
         for i in range(1, order, 2):
-            ABCD[order, :] = ABCD[order, :] - a[i] * ABCD[i, :]
+            ABCD[order, :] = ABCD[order, :] - a[i]*ABCD[i, :]
         a[:order:2] = ABCD[order, :order:2]
         b = ABCD[:, order].T
     elif form == 'CRFFD':
