@@ -247,12 +247,13 @@ def stuffABCD(a, g, b, c, form='CRFB'):
 def test_stuffABCD():
 	"""Test unit for stuffABCD
 	"""
-	orders = (2, 3, 4, 5)
-	osr = 32
-	nlev = 2
-	f0s = (0., 0.25)
-	Hinf = 1.5
-	forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'Stratos')
+	# we test for the following values:
+	#orders = (2, 3, 4, 5)
+	#osr = 32
+	#nlev = 2
+	#f0s = (0., 0.25)
+	#Hinf = 1.5
+	#forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'Stratos')
 	tv = {0.:{'CIFB':{2:{'a':(0.2164, 0.7749),
 	                      'g':(0, ),
 	                      'b':(0.2164, 0.7749, 1.0000),
