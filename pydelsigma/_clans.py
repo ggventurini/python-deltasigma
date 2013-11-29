@@ -17,7 +17,7 @@ from __future__ import division
 from warnings import warn
 import numpy as np
 from scipy.optimize import minimize
-from scipy.signal import impulse
+from scipy.signal import dimpulse
 
 from ._synthesizeNTF import synthesizeNTF
 from ._utils import cplxpair
@@ -38,33 +38,33 @@ def clans(order=4, OSR=64, Q=5, rmax=0.95, opt=0):
     warn("Warning untested function.")
     # Create the initial guess
     Hz, poles, _ = synthesizeNTF(order, OSR, opt, 1 + Q, 0)
-    x = np.zeros((1, order))
+    x = np.zeros((order, ))
     odd = order % 2
     poles = cplxpair(poles)
     poles = poles[::-1]
     if odd == 1:
         z = poles[0]/rmax
         if (np.abs(z) > 1).any(): #project poles outside rmax onto the circle
-            z = z/abs(z)
+            z = z/np.abs(z)
         s = (z - 1)/(z + 1)
-        x[0, 0] = np.sqrt(-s)
+        x[0] = np.real_if_close(np.sqrt(-s))
     for i in range(odd, order, 2):
-        z = poles[i:i + 1] / rmax
-        if (np.abs(z) > 1).any(): #project poles outside rmax onto the circle
+        z = poles[i:i + 2]/rmax
+        if np.any(np.abs(z) > 1): #project poles outside rmax onto the circle
             z = z/np.abs(z)
         s = (z - 1)/(z + 1)
         coeffs = np.poly(s)
         wn = np.sqrt(coeffs[2])
         zeta = coeffs[1]/(2 * wn)
-        x[i] = np.sqrt(zeta)
-        x[i + 1] = np.sqrt(wn)
+        x[i] = np.real_if_close(np.sqrt(zeta))
+        x[i + 1] = np.real_if_close(np.sqrt(wn))
     #options=optimset('TolX',1e-06,'TolFun',1e-06,'TolCon',1e-06,'MaxIter',1000)
     #fobj = lambda x: dsclansObj6a(x, order, OSR, Q, rmax, Hz)
     #fconstr = lambda x: dsclansObj6b(x, order, OSR, Q, rmax, Hz)
-    minimize(dsclansObja, x, args=(order, OSR, Q, rmax, Hz), 
-             cons={'type':'ineq', 'fun':dsclansObjb, 
+    res = minimize(dsclansObja, x, args=(order, OSR, Q, rmax, Hz), 
+             method='COBYLA', constraints={'type':'ineq', 'fun':dsclansObjb, 
              'args':(order, OSR, Q, rmax, Hz)})
-    NTF = dsclansNTF(x, order, rmax, Hz)
+    NTF = dsclansNTF(res['x'], order, rmax, Hz)
     return NTF
 
 def dsclansObja(x, order, OSR, Q, rmax, Hz):
@@ -80,5 +80,7 @@ def dsclansObjb(x, order, OSR, Q, rmax, Hz):
     g =||h||_1 - Q
     """
     H = dsclansNTF(x, order, rmax, Hz)
-    g = np.sum(np.abs(impulse(H, 100))) - 1 - Q
-    return g
+    H = (H[0], H[1], H[2], 1.)
+    # dimpulse(H, n=100)[y is 0][output 0]
+    g = np.sum(np.abs(dimpulse(H, t=np.arange(100))[1][0])) - 1 - Q
+    return -g
