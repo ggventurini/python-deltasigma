@@ -91,6 +91,7 @@ from ._calculateTF import calculateTF
 from ._cancelPZ import cancelPZ
 from ._changeFig import changeFig
 from ._circ_smooth import circ_smooth
+from ._clans import clans
 from ._constants import eps
 from ._dbm import dbm
 from ._dbp import dbp
