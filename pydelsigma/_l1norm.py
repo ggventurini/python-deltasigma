@@ -27,7 +27,7 @@ def l1norm(H):
 	return np.sum(np.abs(y[0]))
 
 def test_l1norm():
-	"""Test function for l1norm
+	"""Test function for l1norm()
 	"""
 	zeros = np.array(())
 	poles = np.array((.5,))

@@ -33,7 +33,7 @@ def dbp(x):
 	return y
 
 def test_dbp():
-	"""Test function.
+	"""Test function for dbp()
 	"""
 	tv = np.array([2])
 	r = np.array([3.01029996])

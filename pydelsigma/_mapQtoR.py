@@ -31,7 +31,7 @@ def mapQtoR(Z):
     return A
 
 def test_mapQtoR():
-    """Test function for mapQtoR"""
+    """Test function for mapQtoR()"""
     Ares = \
     np.array([
        [  1,  -1,   7,  -7,  13, -13,  19, -19,  25, -25,  31, -31,  37, -37],

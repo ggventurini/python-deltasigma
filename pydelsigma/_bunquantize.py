@@ -33,7 +33,7 @@ def bunquantize(q):
 	return carray(y)
 
 def test_bunquantize():
-	"""Unit test for bunquantize()
+	"""Test function for bunquantize()
 	"""
 	from ._bquantize import bquantize
 	x = np.linspace(-10, 10, 101)
@@ -47,5 +47,3 @@ def test_bunquantize():
 	xres = bunquantize(y)
 	assert np.allclose(xres, yv, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_bunquantize()

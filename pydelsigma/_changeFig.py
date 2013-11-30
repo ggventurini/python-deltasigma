@@ -74,7 +74,7 @@ def _setTextFontsize(ax, fontsize):
             artist.set_size(fontsize)
 
 def test_changeFig():
-    """Test unit for changeFig()
+    """Function for changeFig()
     """
     fig = plt.figure()
     xval = np.arange(0, 1, .01)

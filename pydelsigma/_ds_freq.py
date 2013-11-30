@@ -40,7 +40,7 @@ def ds_freq(osr=64., f0=0., quadrature=False):
 	return f
 	
 def test_ds_freq():
-	"""Test function.
+	"""Test function for ds_freq()
 	"""
 	a = ds_freq(osr=128, f0=0., quadrature=True)
 	b = np.diff(a)

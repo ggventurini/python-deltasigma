@@ -36,7 +36,7 @@ def partitionABCD(ABCD, m=None):
 	return A, B, C, D
 
 def test_partitionABCD():
-	"""Unit test for partitionABCD"""
+	"""Test function for partitionABCD()"""
 	# FIXME: no test for m-input systems
 	import numpy as np
 	from scipy.signal import lti

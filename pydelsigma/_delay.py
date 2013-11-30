@@ -36,7 +36,7 @@ def delay(x, n=1):
 	return y
 
 def test_delay():
-	"""Test function.
+	"""Test function for delay()
 	"""
 	v1 = np.arange(4)
 	v2 = np.ones((10, 1))

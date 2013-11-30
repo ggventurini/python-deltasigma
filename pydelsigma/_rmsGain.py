@@ -32,7 +32,7 @@ def rmsGain(H, f1, f2, N=100):
 	return g
 	
 def test_rmsGain():
-	"""Unit test for rmsGain()
+	"""Test function for rmsGain()
 	"""
 	from ._utils import empty
 	H = empty()
@@ -43,7 +43,4 @@ def test_rmsGain():
 	res = rmsGain(H, f1, f2, N=1000)
 	res1 = 0.102245275091
 	assert np.allclose((res,), (res1,), rtol=1e-05, atol=1e-08)
-	
-	
-if __name__ == '__main__':
-	test_rmsGain()
+

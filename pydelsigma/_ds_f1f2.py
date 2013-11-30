@@ -33,7 +33,7 @@ def ds_f1f2(OSR=64, f0=0., complex_flag=False):
 	return f1, f2
 
 def test_ds_f1f2():
-	"""Test function.
+	"""Test function for ds_f1f2
 	"""
 	f0 = 1e3
 	OSR = 128

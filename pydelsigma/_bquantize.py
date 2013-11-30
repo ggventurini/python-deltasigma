@@ -57,7 +57,7 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	return y
 	
 def test_bquantize():
-	"""Test function.
+	"""Test function for bquantize()
 	"""
 	import scipy.io, pkg_resources
 	x = np.linspace(-10, 10, 101)
@@ -80,5 +80,3 @@ def test_bquantize():
 		if not 0 in ycsd[i].shape:
 			assert np.allclose(mcsd[i], ycsd[i], atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_bquantize()

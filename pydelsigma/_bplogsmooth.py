@@ -75,10 +75,8 @@ def bplogsmooth(X, tbin, f0):
 	return f, p
 
 def test_bplogsmooth():
-	"""Test function.
+	"""Test function for bplogsmooth()
 	"""
 	# FIXME WRITE PROPER TEST
 	bplogsmooth(np.arange(200), 10, 0)
-	
-if __name__ == '__main__':
-	test_bplogsmooth()
+

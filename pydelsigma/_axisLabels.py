@@ -44,12 +44,10 @@ def axisLabels(ran, incr):
 	return s
 	
 def test_axisLabels():
-	"""Test function.
+	"""Test function for axisLabels()
 	"""
 	ran = np.arange(100)
 	ss = axisLabels(ran, incr=10)
 	r = ['0', '10', '20', '30', '40', '50', '60', '70', '80', '90']
 	assert r == ss
-	
-if __name__ == '__main__':
-	test_axisLabels()
+

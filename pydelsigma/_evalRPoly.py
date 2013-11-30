@@ -32,7 +32,7 @@ def evalRPoly(roots, x, k=1):
 	return y
 	
 def test_evalRPoly():
-	"""Test function.
+	"""Test function for evalRPoly()
 	"""
 	x = np.arange(1001) - 500
 	a = [1, 0, 1, 2]

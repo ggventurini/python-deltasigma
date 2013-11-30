@@ -59,6 +59,7 @@ def calculateTF(ABCD, k=1.):
 	return ntf_min, stf_min
 
 def test_calculateTF():
+	"""Test function for calculateTF()"""
 	from ._utils import cplxpair
 	ABCD = [[1.000000000000000, 0., 0., 0.044408783846879, -0.044408783846879],
 	        [0.999036450096481, 0.997109907515262, -0.005777399147297, 0., 0.499759089304780],

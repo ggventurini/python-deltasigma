@@ -33,7 +33,7 @@ def cancelPZ(zpk1, tol=1e-6):
     return z, p, k
 
 def test_cancelPZ():
-    """Test unit for cancelPZ"""
+    """Test function for cancelPZ"""
     zt = np.array((1, 2, 3))
     pt = np.array((1 + 2e-5, 2 + .5e-5, 3))
     kt = 2

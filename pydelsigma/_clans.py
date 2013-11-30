@@ -84,7 +84,7 @@ def dsclansObjb(x, order, OSR, Q, rmax, Hz):
     return -g
 
 def test_clans():
-    """Test unit for clans()"""
+    """Test function for clans()"""
     ntf = clans(5, 32, 5, .95, 1)
     poles = np.array((0.41835234+0.j, 0.48922229+0.1709716j, 
                       0.48922229-0.1709716j, 0.65244885+0.3817224j, 

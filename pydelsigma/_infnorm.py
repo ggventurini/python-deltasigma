@@ -51,7 +51,7 @@ def infnorm(H):
 	return Hinf, fmax
 
 def test_infnorm():
-	"""Test function."""
+	"""Test function for infnorm()"""
 	# FIXME M/P test needed
 	num, den = np.poly([3, 0.3, 1]), np.poly([2, 0.5, .25])
 	H = (num, den)
@@ -59,5 +59,3 @@ def test_infnorm():
 	assert np.allclose((Hinf, fmax), (np.array([ 1.84888889]), np.array([ 0.50000001])), 
 	                   atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_infnorm()

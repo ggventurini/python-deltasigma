@@ -50,7 +50,7 @@ def ds_quantize(y, n=2):
 	return v
 
 def test_ds_quantize():
-	"""Test function.
+	"""Test function for ds_quantize()
 	"""
 	t = np.arange(-3, 3, .2)
 	t = t.reshape((1, t.shape[0]))

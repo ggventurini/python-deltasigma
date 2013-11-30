@@ -47,7 +47,7 @@ def calculateSNR(hwfft, f, nsig=1):
 	return snr
 
 def test_calculateSNR():
-	"""Test function for calculateSNR
+	"""Test function for calculateSNR()
 	"""
 	from numpy.fft import fft
 	from ._ds_hann import ds_hann

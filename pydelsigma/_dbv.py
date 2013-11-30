@@ -35,10 +35,8 @@ def dbv(x):
 	return y
 
 def test_dbv():
-	"""Test function."""
+	"""Test function for dbv()"""
 	t = np.array([3.0])
 	r1 = undbv(dbv(t))
 	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_dbv()

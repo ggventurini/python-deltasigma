@@ -71,5 +71,3 @@ def test_impL1():
 		    -6.36281335e-66, -1.47240249e-67]])
 	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_impL1()

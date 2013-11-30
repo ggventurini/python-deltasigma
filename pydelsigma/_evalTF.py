@@ -75,7 +75,7 @@ def evalTF(tf, z):
 	return h
 	
 def test_evalTF():
-	"""Test function.
+	"""Test function for evalTF()
 	"""
 	from scipy.signal import tf2zpk
 	from ._utils import empty

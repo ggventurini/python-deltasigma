@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-"""Module providing the optzeros() function
+"""Module providing the ds_optzeros() function
 """
 
 import numpy as np
@@ -77,7 +77,7 @@ def ds_optzeros(n, opt=1):
 	return optZeros
 
 def test_optzeros():
-	"""Test function for ds_optzeros"""
+	"""Test function for ds_optzeros()"""
 	import pkg_resources
 	import scipy.io
 	fname = pkg_resources.resource_filename(__name__, "test_data/test_ds_optzeros.mat")
