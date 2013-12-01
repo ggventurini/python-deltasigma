@@ -1,0 +1,237 @@
+# -*- coding: utf-8 -*-
+# _realizeNTF_ct.py
+# Module providing the realizeNTF_ct function
+# Copyright 2013 Giuseppe Venturini
+# This file is part of python-deltasigma.
+#
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
+# The delta sigma toolbox is (c) 2009, Richard Schreier.
+#
+# python-deltasigma is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# LICENSE file for the licensing terms.
+
+"""Module providing the realizeNTF_ct() function
+"""
+
+from __future__ import division
+from warning import warn
+
+import numpy as np
+import numpy.linalg as linalg
+
+from ._evalTFP import evalTFP
+from ._impL1 import impL1
+from ._padb import padb
+from ._pulse import pulse
+from ._utils import carray, eps
+
+def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
+                  ABCDc=None):
+    """Realize an NTF with a continuous-time loop filter.
+    
+     Output
+     ABCDc      A state-space description of the CT loop filter
+
+     tdac2      A matrix with the DAC timings, including ones
+    	     	that were automatically added.
+
+     Input Arguments
+     ntf	A noise transfer function in pole-zero form.
+    
+     form = {'FB','FF'}	
+           A string specifying the topology of the loop filter.
+    	For the FB structure, the elements of Bc are calculated
+     	so that the sampled pulse response matches the L1 impulse
+     	respnse.  For the FF structure, Cc is calculated.
+    
+     tdac	
+        The timing for the feedback DAC(s). If tdac(1)>=1,
+     	direct feedback terms are added to the quantizer.
+    	Multiple timings (1 or more per integrator) for the FB 
+        topology can be specified by making tdac a list of lists,
+        e.g. tdac = [[1, 2], [1, 2], [[0.5, 1], [1, 1.5]], []] 
+    	In this example, the first two integrators have
+    	dacs with [1, 2] timing, the third has a pair of
+     	dacs, one with [0.5, 1] timing and the other with
+    	[1, 1.5] timing, and there is no direct feedback
+     	DAC to the quantizer
+    
+     ordering
+    	A vector specifying which NTF zero-pair to use in each resonator
+     	Default is for the zero-pairs to be used in the order specified 
+        in the NTF.
+
+     bp	A vector specifying which resonator sections are bandpass.
+    	The default (zeros(...)) is for all sections to be lowpass.
+
+     ABCDc The loop filter structure, in state-space form.
+    	If this argument is omitted, ABCDc is constructed according 
+           to "form."
+    """
+    ntf_p, ntf_z, _ = ntf
+    order = max(ntf_p.shape)
+    order2 = np.floor(order/2)
+    odd = order - 2*order2
+    # compensate for limited accuracy of zero calculation
+    ntf_z[np.abs(ntf_z - 1) < eps**(1 / (1 + order))] = 1
+    # check if multiple timings mode
+    if (type(tdac) == list or type(tdac) == tuple) and len(tdac) and \
+       (type(tdac[0]) == list or type(tdac[0]) == tuple):
+        if len(tdac) != order + 1:
+            msg = 'For multi-timing tdac, len(tdac) ' + \
+                  ' must be order+1.'
+            raise ValueError(msg)
+        if form != 'FB':
+            msg = "Currently only supporting form='FB' " + \
+                  'for multi-timing tdac'
+            ValueError(msg)
+        multi_timing = True
+    else: # single timing
+        tdac = carray(tdac)
+        if tdac.shape != (1, 2):
+            msg = 'For single-timing tdac, len(tdac) must be 2.'
+            ValueError(msg)
+        multi_timing = False
+    if ordering is None:
+        ordering = np.arange(order2)
+    if bp is None:
+        bp = np.zeros((1, order2))
+    if not multi_timing:
+        # Need direct terms for every interval of memory in the DAC
+        n_direct = np.ceil(tdac[1]) - 1
+        if tdac[0] > 0 and tdac[0] < 1 and tdac[1] > 1 and tdac[1] < 2:
+            n_extra = n_direct - 1 #  tdac pulse spans a sample point
+        else:
+            n_extra = n_direct
+        tdac2 = np.vstack(
+                          (np.array((-1, -1)), 
+                           np.array(tdac).reshape((1, 2)), 
+                           0.5*np.dot(np.ones((n_extra, 1)), np.array([-1, 1]).reshape(1, -1)) 
+                           + np.cumsum(np.ones(n_extra, 2), 0) + (n_direct - n_extra)
+                          )
+                         )
+    else:
+        n_direct = 0
+        n_extra = 0
+    if ABCDc is None:
+        ABCDc = np.zeros((order + 1, order + 2))
+        # Stuff the A portion
+        if odd:
+            ABCDc[0, 0] = np.real(np.log(ntf_z[0]))
+            ABCDc[1, 0] = 1
+        dline = np.array([0, 1, 2])
+        for i in range(order2):
+            n = bp[i]
+            i1 = 2*i + odd
+            zi = 2*ordering[i] + odd
+            w = np.abs(np.angle(ntf_z[zi]))
+            ABCDc[i1 + dline, i1] = np.array([0, 1, n])
+            ABCDc[i1 + dline, i1 + 1] = np.array([-w**2, 0, 1 - n])
+        ABCDc[0, order] = 1
+        # 2006.10.02 Changed to -1 to make FF STF have +ve gain at DC
+        ABCDc[0, order + 1] = -1
+    Ac = ABCDc[:order, :order]
+    if form == 'FB':
+        Cc = ABCDc[order, :order]
+        if not multi_timing:
+            Bc = np.hstack((np.eye(order), np.zeros((order, 1))))
+            Dc = np.hstack((np.zeros((1, order)), n.array([[1]])))
+            tp = np.tile(np.array(tdac).reshape((1, 2)), (order + 1, 1))
+        else: #Assemble tdac2, Bc and Dc
+            tdac2 = np.array([[-1, -1]])
+            Bc = None
+            Dc = None
+            Bci = np.hstack((np.eye(order), np.zeros((order, 1))))
+            Dci = np.hstack((np.zeros((1,order)), np.array([[1]])))
+            for i in range(len(tdac)):
+                tdi = tdac[i]
+                if type(tdi) is tuple or type(tdi) is list:
+                    for j in range(len(tdi)):
+                        tdj = tdi[j]
+                        tdac2 = np.vstack((tdac2, 
+                                           np.array(tdj).reshape(1,-1)))
+                        Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
+                        Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
+                else: # we got tdac[i] = [a, b] where a, b are scalars
+                    tdac2=np.vstack((tdac2,
+                                     np.array(tdi).reshape(1,-1)))
+                    Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
+                    Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
+            tp = tdac2[1:, :]
+    elif form == 'FF':
+        Cc = np.vstack((np.eye(order), np.zeros((1,order))))
+        Bc = np.vstack((np.array([[-1]]), np.zeros((order-1, 1))))
+        Dc = np.array([np.zeros(order,1),1]).reshape(1,-1)
+        tp = tdac #  2008-03-24 fix from Ayman Shabra
+    else:
+        ValueError('Sorry, no code for form "%s".', form)
+
+    # Sample the L1 impulse response
+    n_imp = np.ceil(2*order + np.max(tdac2[:, 1]) + 1)
+    y = impL1(ntf,n_imp)
+    sys_c = ss(Ac, Bc, Cc, Dc)
+    yy = pulse(sys_c, tp, 1, n_imp, 1)
+    yy = np.squeeze(yy)
+    # Endow yy with n_extra extra impulses.
+    # These will need to be implemented with n_extra extra DACs.
+    # !! Note: if t1=int, matlab says pulse(sys) @t1 ~=0
+    # !! This code corrects this problem.
+    if n_extra > 0:
+        y_right = padb(np.vstack((np.zeros((1, n_direct)), 
+                                  np.eye(n_direct))),
+                       n_imp + 1)
+        # Replace the last column in yy with an ordered set of impulses
+        if (n_direct > n_extra):
+            yy = np.hstack((yy, y_right[:, 1:]))
+        else:
+            yy = np.hstack((yy[:, :-1], y_right))
+
+    # Solve for the coefficients
+    x = linalg.solve(yy, y)
+    if norm(yy*x - y) > 0.0001:
+        warn('Pulse response fit is poor.')
+    if form == 'FB':
+        if not multi_timing:
+            Bc2 = np.hstack((x[:order], np.zeros((order, n_extra))))
+            if n_extra > 0:
+                Dc2 = np.array([0,x[(order + 1-1):end].T]).reshape(1,-1)
+            else:
+                Dc2=x[(order + 1-1):end].T
+        else:
+            BcDc=np.array([Bc,Dc]).reshape(1,-1)
+            i=np.flatnonzero(BcDc)
+            BcDc[(i-1)]=x
+            Bc2=BcDc[(1-1):end - 1,:]
+            Dc2=BcDc[(end-1),:]
+    elif form == 'FF':
+            Bc2=np.array([Bc,np.zeros(order,n_extra)]).reshape(1,-1)
+            Cc=x[(1-1):order].T
+            if (n_extra > 0):
+                Dc2=np.array([0,x[(order + 1-1):end].T]).reshape(1,-1)
+            else:
+                Dc2=x[(order + 1-1):end].T
+
+    Dc1 = 0
+    Dc=np.array([Dc1,Dc2]).reshape(1,-1)
+    Bc1=np.array([1,np.zeros(order - 1,1)]).reshape(1,-1)
+    Bc=np.array([Bc1,Bc2]).reshape(1,-1)
+    # Scale Bc1 for unity STF magnitude at f0
+    fz=angle(ntf.z[0]) / (2 * pi)
+    f1=fz[0]
+    ibz=abs(fz - f1) <= abs(fz + f1)
+    fz=fz[(ibz-1)]
+    f0=mean(fz)
+    if np.min(abs(fz)) < 3 * np.min(abs(fz - f0)):
+        f0=0
+    L0c=zpk(ss(Ac,Bc1,Cc,Dc1))
+    G0=evalTFP(L0c,ntf,f0)
+    if f0 == 0:
+        Bc[:,0]=Bc[:,0] * abs(Bc[0,(2-1):end] * (tdac2[(2-1):end,1] - tdac2[(2-1):end,0]) / Bc[0,0])
+    else:
+        Bc[:,0]=Bc[:,0] / abs(G0)
+    ABCDc=np.array([Ac,Bc,Cc,Dc]).reshape(1,-1)
+    ABCDc=ABCDc.dot((abs(ABCDc) > eps ** (1 / 2)))
+    return ABCDc, tdac2
