@@ -27,10 +27,19 @@ def impL1(arg1, n=10):
 	""" y = impL1(ntf, n=10) 
 	Compute the impulse response from the comparator
 	output to the comparator input for the given NTF.
-	n is the (optional) number of points (10).
+	n is the (optional) number of time steps (default: 10), resulting in
+	an impulse response with n+1 (default: 11) samples.
 	 
 	This function is useful when verifying the realization
 	of a NTF with a specified topology.
+
+	Note: in the original implementation of impL1 in delsig, there is a
+	bug: impL1 calls MATLAB's impulse with tfinal=n, which means that
+	the function will return the impulse response evaluated on the times
+	[0, 1, 2 ... n], ie n+1 points. 
+
+	We keep the same behavior here, but we state clearly that n is the 
+	number of time steps. 
 	"""
 	if not hasattr(arg1, '__len__'):
 		raise ValueError, 'LTI and TF objects support not added yet.'
@@ -43,12 +52,12 @@ def impL1(arg1, n=10):
 		den = np.poly(p)
 
 	num = np.asarray(num)
-	den = np.asarray(num)
-	p = np.asarray(num)
+	den = np.asarray(den)
+	p = np.asarray(p)
 
 	lf_den = padr(num, len(p)+1)
 	lf_num = lf_den - den
-	ts = np.arange(n)
+	ts = np.arange(n + 1) # be coherent with the original toolbox
 	all_lf = np.concatenate((lf_num, lf_den), axis=1)
 	lf_num, lf_den = lf_num.squeeze(), lf_den.squeeze()
 	if not np.allclose(np.imag(all_lf), np.zeros(all_lf.shape), atol=1e-9):
@@ -64,10 +73,11 @@ def impL1(arg1, n=10):
 
 def test_impL1():
 	"""Test function for impL1()"""
-	sys1 = ([1], [1, 2, 1])
+	sys1 = (np.array([-.4]), np.array([0, 0]), 1) # zpk
+	r2 = np.array([0., 0.400000000000000, -0.160000000000000, 0.064000000000000,
+	               -0.025600000000000, 0.010240000000000, -0.004096000000000,
+	               0.001638400000000, -0.000655360000000, 0.000262144000000,
+	               -0.000104857600000])
 	r1 = impL1(sys1, n=10)
-	r2 = np.array([[0.00000000e+00, -1.00000000e+00, 2.41009246e-16, 1.95887461e-17, 
-		    -8.67469990e-33, -3.83718972e-34, 2.47373167e-49, 7.51657350e-51, 
-		    -6.36281335e-66, -1.47240249e-67]])
-	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-5)
+	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-4)
 
