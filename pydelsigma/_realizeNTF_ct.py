@@ -17,10 +17,11 @@
 """
 
 from __future__ import division
-from warning import warn
+from warnings import warn
 
 import numpy as np
 import numpy.linalg as linalg
+from scipy.signal import ss2zpk
 
 from ._evalTFP import evalTFP
 from ._impL1 import impL1
@@ -71,12 +72,12 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     	If this argument is omitted, ABCDc is constructed according 
            to "form."
     """
-    ntf_p, ntf_z, _ = ntf
+    ntf_z, ntf_p, _ = ntf
     order = max(ntf_p.shape)
-    order2 = np.floor(order/2)
+    order2 = int(np.floor(order/2.))
     odd = order - 2*order2
     # compensate for limited accuracy of zero calculation
-    ntf_z[np.abs(ntf_z - 1) < eps**(1 / (1 + order))] = 1
+    ntf_z[np.abs(ntf_z - 1) < eps**(1./(1. + order))] = 1.
     # check if multiple timings mode
     if (type(tdac) == list or type(tdac) == tuple) and len(tdac) and \
        (type(tdac[0]) == list or type(tdac[0]) == tuple):
@@ -87,18 +88,19 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         if form != 'FB':
             msg = "Currently only supporting form='FB' " + \
                   'for multi-timing tdac'
-            ValueError(msg)
+            raise ValueError(msg)
         multi_timing = True
     else: # single timing
         tdac = carray(tdac)
-        if tdac.shape != (1, 2):
+        if np.prod(tdac.shape) != 2:
             msg = 'For single-timing tdac, len(tdac) must be 2.'
-            ValueError(msg)
+            raise ValueError(msg)
+        tdac.reshape((2,))
         multi_timing = False
     if ordering is None:
         ordering = np.arange(order2)
     if bp is None:
-        bp = np.zeros((1, order2))
+        bp = np.zeros((order2,))
     if not multi_timing:
         # Need direct terms for every interval of memory in the DAC
         n_direct = np.ceil(tdac[1]) - 1
@@ -107,12 +109,11 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         else:
             n_extra = n_direct
         tdac2 = np.vstack(
-                          (np.array((-1, -1)), 
-                           np.array(tdac).reshape((1, 2)), 
-                           0.5*np.dot(np.ones((n_extra, 1)), np.array([-1, 1]).reshape(1, -1)) 
-                           + np.cumsum(np.ones(n_extra, 2), 0) + (n_direct - n_extra)
-                          )
-                         )
+                 (np.array((-1, -1)), 
+                  np.array(tdac).reshape((1, 2)), 
+                  0.5*np.dot(np.ones((n_extra, 1)), np.array([[-1, 1]])) 
+                  + np.cumsum(np.ones((n_extra, 2)), 0) + (n_direct - n_extra)
+                 ))
     else:
         n_direct = 0
         n_extra = 0
@@ -135,17 +136,17 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         ABCDc[0, order + 1] = -1
     Ac = ABCDc[:order, :order]
     if form == 'FB':
-        Cc = ABCDc[order, :order]
+        Cc = ABCDc[order, :order].reshape((1, -1))
         if not multi_timing:
             Bc = np.hstack((np.eye(order), np.zeros((order, 1))))
-            Dc = np.hstack((np.zeros((1, order)), n.array([[1]])))
+            Dc = np.hstack((np.zeros((1, order)), np.array([[1]])))
             tp = np.tile(np.array(tdac).reshape((1, 2)), (order + 1, 1))
         else: #Assemble tdac2, Bc and Dc
             tdac2 = np.array([[-1, -1]])
             Bc = None
             Dc = None
             Bci = np.hstack((np.eye(order), np.zeros((order, 1))))
-            Dci = np.hstack((np.zeros((1,order)), np.array([[1]])))
+            Dci = np.hstack((np.zeros((1, order)), np.array([[1]])))
             for i in range(len(tdac)):
                 tdi = tdac[i]
                 if type(tdi) is tuple or type(tdi) is list:
@@ -156,23 +157,25 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
                         Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
                         Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
                 else: # we got tdac[i] = [a, b] where a, b are scalars
-                    tdac2=np.vstack((tdac2,
-                                     np.array(tdi).reshape(1,-1)))
+                    tdac2 = np.vstack((tdac2,
+                                       np.array(tdi).reshape(1,-1)))
                     Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
                     Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
             tp = tdac2[1:, :]
     elif form == 'FF':
-        Cc = np.vstack((np.eye(order), np.zeros((1,order))))
+        Cc = np.vstack((np.eye(order), np.zeros((1, order))))
         Bc = np.vstack((np.array([[-1]]), np.zeros((order-1, 1))))
-        Dc = np.array([np.zeros(order,1),1]).reshape(1,-1)
+        Dc = np.vstack((np.zeros((order, 1)), np.array([[1]])))
         tp = tdac #  2008-03-24 fix from Ayman Shabra
     else:
         ValueError('Sorry, no code for form "%s".', form)
 
     # Sample the L1 impulse response
     n_imp = np.ceil(2*order + np.max(tdac2[:, 1]) + 1)
-    y = impL1(ntf,n_imp)
-    sys_c = ss(Ac, Bc, Cc, Dc)
+    y = impL1(ntf, n_imp)
+    sys_c = []
+    for i in range(Bc.shape[1]): # number of inputs
+        sys_c.append(ss2zpk(Ac, Bc, Cc, Dc, input=i))
     yy = pulse(sys_c, tp, 1, n_imp, 1)
     yy = np.squeeze(yy)
     # Endow yy with n_extra extra impulses.
@@ -190,48 +193,64 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
             yy = np.hstack((yy[:, :-1], y_right))
 
     # Solve for the coefficients
-    x = linalg.solve(yy, y)
-    if norm(yy*x - y) > 0.0001:
+    x = linalg.lstsq(yy, y)[0]
+    if linalg.norm(np.dot(yy, x) - y) > 0.0001:
         warn('Pulse response fit is poor.')
     if form == 'FB':
         if not multi_timing:
-            Bc2 = np.hstack((x[:order], np.zeros((order, n_extra))))
+            Bc2 = np.hstack((x[:order].reshape((-1, 1)), 
+                             np.zeros((order, n_extra))))
             if n_extra > 0:
-                Dc2 = np.array([0,x[(order + 1-1):end].T]).reshape(1,-1)
+                Dc2 = np.hstack((np.array([[0]]), 
+                                 x[order:].reshape((-1, 1))))
             else:
-                Dc2=x[(order + 1-1):end].T
+                Dc2 = x[order:].reshape((-1, 1))
         else:
-            BcDc=np.array([Bc,Dc]).reshape(1,-1)
-            i=np.flatnonzero(BcDc)
-            BcDc[(i-1)]=x
-            Bc2=BcDc[(1-1):end - 1,:]
-            Dc2=BcDc[(end-1),:]
+            BcDc = np.vstack((Bc, Dc))
+            i = np.nonzero(BcDc)
+            BcDc[i] = x
+            Bc2 = BcDc[:-1, :]
+            Dc2 = BcDc[-1, :]
     elif form == 'FF':
-            Bc2=np.array([Bc,np.zeros(order,n_extra)]).reshape(1,-1)
-            Cc=x[(1-1):order].T
-            if (n_extra > 0):
-                Dc2=np.array([0,x[(order + 1-1):end].T]).reshape(1,-1)
-            else:
-                Dc2=x[(order + 1-1):end].T
+        Bc2 = np.hstack((Bc, np.zeros((order, n_extra))))
+        Cc = x[:order].T
+        if n_extra > 0:
+            Dc2 = np.hstack((np.array([[0]]), x[order:].T))
+        else:
+            Dc2 = x[order:].T
 
-    Dc1 = 0
-    Dc=np.array([Dc1,Dc2]).reshape(1,-1)
-    Bc1=np.array([1,np.zeros(order - 1,1)]).reshape(1,-1)
-    Bc=np.array([Bc1,Bc2]).reshape(1,-1)
+    Dc1 = np.zeros((1, 1))
+    Dc = np.hstack((Dc1, Dc2))
+    Bc1 = np.vstack((np.ones((1, 1)), np.zeros((order - 1, 1))))
+    Bc = np.hstack((Bc1, Bc2))
     # Scale Bc1 for unity STF magnitude at f0
-    fz=angle(ntf.z[0]) / (2 * pi)
-    f1=fz[0]
-    ibz=abs(fz - f1) <= abs(fz + f1)
-    fz=fz[(ibz-1)]
-    f0=mean(fz)
-    if np.min(abs(fz)) < 3 * np.min(abs(fz - f0)):
-        f0=0
-    L0c=zpk(ss(Ac,Bc1,Cc,Dc1))
-    G0=evalTFP(L0c,ntf,f0)
+    fz = np.angle(ntf_z)/(2*np.pi)
+    f1 = fz[0]
+    ibz = np.abs(fz - f1) <= np.abs(fz + f1)
+    fz = fz[ibz]
+    f0 = np.mean(fz)
+    if np.min(np.abs(fz)) < 3*np.min(np.abs(fz - f0)):
+        f0 = 0
+    L0c = ss2zpk(Ac, Bc1, Cc, Dc1)
+    G0 = evalTFP(L0c, ntf, f0)
     if f0 == 0:
-        Bc[:,0]=Bc[:,0] * abs(Bc[0,(2-1):end] * (tdac2[(2-1):end,1] - tdac2[(2-1):end,0]) / Bc[0,0])
+        Bc[:, 0] = np.dot(Bc[:, 0], 
+                          np.abs(np.dot(Bc[0, 1:], 
+                                        (tdac2[1:, 1] - tdac2[1:, 0]))
+                                 /Bc[0, 0]))
     else:
-        Bc[:,0]=Bc[:,0] / abs(G0)
-    ABCDc=np.array([Ac,Bc,Cc,Dc]).reshape(1,-1)
-    ABCDc=ABCDc.dot((abs(ABCDc) > eps ** (1 / 2)))
+        Bc[:, 0] = Bc[:, 0]/np.abs(G0)
+    ABCDc = np.vstack((
+                      np.hstack((Ac, Bc)),
+                      np.hstack((Cc, Dc))
+                     ))
+    #ABCDc = np.dot(ABCDc, np.abs(ABCDc) > eps**(1./2.))
+    ABCDc[np.nonzero(np.abs(ABCDc) < eps**(1./2))] = 0.
     return ABCDc, tdac2
+
+def test_realizeNTF_ct():
+    """Test function for realizeNTF_ct()"""
+    ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
+    ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB')
+    print ABCDc
+    print tdac2

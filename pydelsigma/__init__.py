@@ -130,6 +130,7 @@ from ._plotPZ import plotPZ
 from ._predictSNR import predictSNR
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
+from ._realizeNTF_ct import realizeNTF_ct
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._scaleABCD import scaleABCD
