@@ -245,6 +245,34 @@ def circshift(a, shift):
 		a = np.roll(a, ashift, axis=axis)
 	return a
 
+def save_input_form(a):
+	"""Save the form of `a` so that it can be restored later on
+
+	Returns: an object representing the form of `a`, to be passed to 
+                 restore_input_form(a, form)
+	"""
+	if np.isscalar(a):
+		ret = 'scalar'
+        elif hasattr(a, 'shape'):
+		ret = a.shape
+	else:
+		raise TypeError("Unsupported input %s" % repr(a))
+	return ret
+
+def restore_input_form(a, form):
+	"""Restore the form of `a` according to `form`.
+
+	Returns: the object `a`, in the correct `form`.
+
+        Note: use `save_input_form(a)` to get the object `form`
+	"""
+	if form == 'scalar':
+		if not np.isscalar(a):
+			a = a.reshape((1, ))[0]
+        else:
+		a = a.reshape(form)
+	return a
+
 def test_rat():
 	"""Test function for rat()"""
 	import numpy.random as rnd
@@ -310,7 +338,7 @@ def test_cplxpair():
 	                   atol=100*eps)
 
 def test_diagonal_indices():
-	"""Unit test for diagonal_indices()
+	"""Test function for diagonal_indices()
 	"""
 	a = np.arange(1, 26)
 	a = a.reshape((5, 5))
@@ -337,8 +365,24 @@ def test_diagonal_indices():
 	assert np.allclose(dm1, (5, 10, 15, 20))
 	
 def test_circshift():
+	"""Test function for circshift()
+	"""
 	A = np.arange(1, 10).reshape((3, 3))
 	shift = np.array((1, -1))
 	Ashifted = circshift(A, shift)
 	Ares = np.array(((8, 9, 7), (2, 3, 1), (5, 6, 4)))
 	assert np.allclose(Ashifted, Ares)
+
+def test_save_input_form():
+	"""Test function for save_input_form() and restore_input_form()"""
+	a1 = np.arange(1, 26)
+	a2 = a1.reshape((1, -1))
+	form_a1 = save_input_form(a1)
+	assert a1.shape == restore_input_form(a2, form_a1).shape
+	assert np.allclose(a1, restore_input_form(a2, form_a1))
+	b1 = 5
+	b2 = carray(b1)
+	form_b1 = save_input_form(b1)
+	assert np.isscalar(restore_input_form(b2, form_b1))
+	assert b1 == restore_input_form(b2, form_b1)
+
