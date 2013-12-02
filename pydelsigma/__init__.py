@@ -109,6 +109,7 @@ from ._evalRPoly import evalRPoly
 from ._evalF0 import evalF0
 from ._evalF1 import evalF1
 from ._evalTF import evalTF
+from ._evalTFP import evalTFP
 from ._figureMagic import figureMagic
 from ._frespF1 import frespF1
 from ._impL1 import impL1
