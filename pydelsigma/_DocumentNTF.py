@@ -53,7 +53,7 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	H = dbv(evalTF(ntf, z))
 	plt.plot(f, H, 'b')
 	
-	if 'stf' is not None:
+	if stf is not None:
 		fig.suptitle('NTF and STF', fontsize=14)
 		G = dbv(evalTF(stf, z))
 		plt.hold(True)
