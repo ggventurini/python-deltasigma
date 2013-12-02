@@ -19,7 +19,7 @@ def evalTFP(Hs, Hz, f):
     """
 
     szeros, spoles, sk = Hs
-    zzeros, zzeros, zk = Hz
+    zzeros, zpoles, zk = Hz
     # sanitize f
     form_f = save_input_form(f)
     f = carray(f)
@@ -31,8 +31,8 @@ def evalTFP(Hs, Hz, f):
     szeros, spoles = carray(szeros).squeeze(), carray(spoles).squeeze()
     zzeros, zzeros = carray(zzeros).squeeze(), carray(zzeros).squeeze()
     # back to business
-    slim = np.min(0.001, np.max(1e-05, eps**(1./(1 + max(spoles.shape)))))
-    zlim = np.min(0.001, np.max(1e-05, eps**(1./(1 + max(zzeros.shape)))))
+    slim = min(0.001, max(1e-05, eps**(1./(1 + max(spoles.shape)))))
+    zlim = min(0.001, max(1e-05, eps**(1./(1 + max(zzeros.shape)))))
     H = np.zeros(f.shape, dtype=np.complex128)
     w = 2*np.pi*f
     s = 1j*w
@@ -58,8 +58,8 @@ def evalTFP(Hs, Hz, f):
                     H[i] = np.Inf
                 else:
                     H[i] = evalRPoly(szeros, si, sk)*zi**np.sum(cancel) \
-                           * evalRPoly(zzeros[not cancelz], zi, zk) \
-                           / (evalRPoly(spoles[not cancel], si, 1.)  \
+                           * evalRPoly(zzeros[~cancelz], zi, zk) \
+                           / (evalRPoly(spoles[~cancel], si, 1.)  \
                               * evalRPoly(zpoles, zi, 1.))
     # return H matching the shape of f
     H = restore_input_form(H, form_f)
