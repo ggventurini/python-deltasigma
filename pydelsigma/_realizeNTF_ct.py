@@ -168,7 +168,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         Dc = np.vstack((np.zeros((order, 1)), np.array([[1]])))
         tp = tdac #  2008-03-24 fix from Ayman Shabra
     else:
-        ValueError('Sorry, no code for form "%s".', form)
+        raise ValueError('Sorry, no code for form "%s".', form)
 
     # Sample the L1 impulse response
     n_imp = np.ceil(2*order + np.max(tdac2[:, 1]) + 1)
