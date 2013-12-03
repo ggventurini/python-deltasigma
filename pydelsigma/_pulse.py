@@ -92,9 +92,6 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	else:
 		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, 1, ni))
 
-	if len(y1.shape) == 1:
-		y1 = y1.reshape((y1.shape[0], 1, 1))
-	#y1_columns = y1.shape[1] if len(y1.shape) > 1 else 1
 	for i in range(ndac):
 		n1 = int(np.round(tp[i, 0]/delta_t, 0))
 		n2 = int(np.round(tp[i, 1]/delta_t, 0))
