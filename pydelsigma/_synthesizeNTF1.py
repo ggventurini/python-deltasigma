@@ -65,7 +65,7 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
         else:
             z = dw*ds_optzeros(order, 1 + np.fmod(opt-1, 2))
         if z.size == 0:
-            raise PyDsmError('Cannot synthesize NTF zeros')
+            raise ValueError('Cannot synthesize NTF zeros')
         if f0 != 0:
             # Bandpass design-- shift and replicate the zeros.
             order = order*2
@@ -101,8 +101,7 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
             # !!! The limit is actually lower for opt=1 and low OSR
             if H_inf >= HinfLimit:
                 warn('Unable to achieve specified Hinf.\n'
-                    'Setting all NTF poles to zero.',
-                    PyDsmWarning)
+                    'Setting all NTF poles to zero.')
                 p = np.zeros(order)
             else:
                 x = 0.3**(order-1)   # starting guess
@@ -133,12 +132,11 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
                         break
                     if x > 1e6:
                         warn('Unable to achieve specified Hinf.\n'
-                             'Setting all NTF poles to zero.', PyDsmWarning)
+                             'Setting all NTF poles to zero.')
                         p = np.zeros(order)
                         break
                     if itn == Hinf_itn_limit:
-                        warn('Danger! Iteration limit exceeded.',
-                             PyDsmWarning)
+                        warn('Danger! Iteration limit exceeded.')
         else:
             # Bandpass design
             x = 0.3**(order/2-1)   # starting guess (not very good for f0~0)
@@ -172,11 +170,11 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
                     break
                 if x > 1e6:
                     warn('Unable to achieve specified Hinf.\n'
-                        'Setting all NTF poles to zero.', PyDsmWarning)
+                        'Setting all NTF poles to zero.')
                     p = np.zeros(order)
                     break
                 if itn == Hinf_itn_limit:
-                    warn('Danger! Iteration limit exceeded.', PyDsmWarning)
+                    warn('Danger! Iteration limit exceeded.')
 
         # ---- Zero optimization part
         if (opt.size == 1 and opt < 3) or opt.size > 1:
