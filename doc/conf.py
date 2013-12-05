@@ -241,11 +241,12 @@ texinfo_documents = [
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
 
-def is_test_function(app, what, name, obj, skip, options):
+def is_skip_function(app, what, name, obj, skip, options):
 	rg = re.compile('(test)', re.IGNORECASE|re.DOTALL)
 	m = rg.match(name)
 	ret = True if m else False
+	ret = ret or (name[0] == '_')
 	return ret
 
 def setup(app):
-	app.connect('autodoc-skip-member', is_test_function)
+	app.connect('autodoc-skip-member', is_skip_function)
