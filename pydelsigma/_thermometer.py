@@ -36,6 +36,3 @@ def test():
 		rm[:i, i] = np.ones(rm[:i, i].shape)
 	assert np.allclose(thermometer(tv, 70), rm, rtol=1e-05, atol=1e-08)
 
-if __name__ == '__main__':
-	test()
-
