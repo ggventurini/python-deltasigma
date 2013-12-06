@@ -14,60 +14,53 @@
 # LICENSE file for the licensing terms.
 
 """
-python-deltasigma
-=================
-
 The **python-deltasigma** project aims to provide a 1:1 Python
 replacement of Richard Schreier's MATLAB `delta sigma
 toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`_.
 
-**python-deltasigma** requires:
-------------
+Getting started
+---------------
 
-Note: using virtualenv could be very useful to have an up-to-date setup without 
-touching the packages installed by your OS.
+Dependencies
+^^^^^^^^^^^^
 
-1. **numpy** and **scipy**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+This toolbox requires `numpy <http://www.numpy.org/>`_, 
+`scipy <http://www.scipy.org/>`_ and 
+`matplotlib <http://matplotlib.org/>`_ to be available on your system.
 
-On a generic platform, they can be installed with:
+Extras
+^^^^^^
+
+Building the documentation requires the
+`sphinx <http://sphinx-doc.org/>`_ package.
+
+If you plan to run the provided unit tests, then you should install
+`setuptools <https://pypi.python.org/pypi/setuptools>`_, used to
+access the reference function outputs. 
+
+Testing can be automated with
+`nose <https://pypi.python.org/pypi/nose/>`_, issuing:
 
 ::
 
-    # pip install numpy scipy
+    $ nosetests -v pydelsigma/*.py
 
-More information on the `scipy install
-page <http://www.scipy.org/install.html>`_.
-
-2. matplotlib
-^^^^^^^^^^^^^
-
-**`matplotlib <http://matplotlib.org/>`_** is used for plotting and it
-is also very useful for visually inspecting your data.
-
-3. Extras
-^^^^^^^^^
-
-Building the documentation requires the
-**`sphinx <http://sphinx-doc.org/>`_** package.
-
-If you plan to run the provided unit tests, then you should install
-**`setuptools <https://pypi.python.org/pypi/setuptools>`_**, used to
-access the reference function outputs. Testing *can* be automated with
-**`nose <https://pypi.python.org/pypi/nose/>`_**, issuing
-``$ nosetests -v pydelsigma/*.py``.
+:note: using `virtualenv` could be very useful to have an up-to-date setup without affecting the packages installed by your OS.
 
 Licensing and copyright notice
 ------------------------------
 
-All original MATLAB code is Copyright (c) 2009, Richard Schreier. See
-the LICENSE file for the licensing terms.
+The MATLAB Delta-Sigma Toolbox and all original MATLAB code is 
+copyright (c) 2009, Richard Schreier. See the LICENSE file for the licensing terms.
 
-The Python here provided is a derivative work from the above toolkit and
+The Python code here provided is a derivative work from the above toolkit and
 subject to the same license terms.
 
-The Python code is Copyright 2013, Giuseppe Venturini and the
-python-deltasigma contributors.
+The Python code in this package is Copyright 2013, Giuseppe Venturini and the
+python-deltasigma contributors, unless otherwise noted.
+
+This package contains some source code from pydsm, a previous Python port of 
+the MATLAB Delta Sigma Toolbox. Pydsm is copyright (c) 2012, Sergio Callegari.
 """
 
 __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
