@@ -22,10 +22,30 @@ from ._partitionABCD import partitionABCD
 from ._utils import diagonal_indices
 
 def stuffABCD(a, g, b, c, form='CRFB'):
-    """Compute the ABCD matrix for the specified structure.
-    See realizeNTF.m for a list of supported structures.
+    """
+    Calculate the ABCD matrix given the parameters of a speciﬁed modulator topology.
+
+    Parameters
+    ----------
+    a : array_like
+        Feedback/feedforward coefﬁcients from/to the quantizer. Length :math:`n`.
+    g : array_like
+        Resonator coefﬁcients. Length :math:`floor(n/2)`.
+    b : array_like
+        Feed-in coefﬁcients from the modulator input to each integrator. Length :math:`n + 1`.
+    c : array_like
+        Integrator inter-stage coefﬁcients. Length :math:`n`.        
+    form : str, optional
+        See `._realizeNTF.realizeNTF` for a list of supported structures.
+
+    Returns
+    -------
+    ABCD : ndarray
+        A state-space description of the modulator loop ﬁlter.
     
-    mapABCD is the inverse function.
+    Note
+    ----
+    :func:`mapABCD` is the inverse function.
     """
     # Code common to all structures.
     order = max(a.shape)
