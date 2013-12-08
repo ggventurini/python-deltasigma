@@ -1,3 +1,17 @@
+== Versions ==
+
+The feature support, split by release, is expected as follows:
+
+**V. 0.1** Support for all base band Delta-Sigma topologies. Continuous time and discrete time.
+
+**V. 0.2** Support for Quadrature modulators.
+
+**V. 0.3** PIS set calculation.
+
+**V. 0.4** HBF and LC topologies.  
+
+== Porting ==
+
 The conversion will be performed according to the following steps:
 
 1. **MATLAB/Python conversion**
