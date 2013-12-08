@@ -111,6 +111,8 @@ from ._lollipop import lollipop
 from ._mapABCD import mapABCD
 from ._mapQtoR import mapQtoR
 from ._mapRtoQ import mapRtoQ
+from ._mod1 import mod1
+from ._mod2 import mod2
 from ._nabsH import nabsH
 from ._padb import padb
 from ._padl import padl
