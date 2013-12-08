@@ -53,13 +53,13 @@ def logsmooth(X, inBin, nbin=8, n=3):
     m = startbin[-1] + nbin
     while m < N2:
         startbin = np.concatenate((startbin, np.array((m,))))
-        nbin = np.min(nbin*1.1, 2**10)
+        nbin = np.min((nbin*1.1, 2**10))
         m = int(np.round(m + nbin, 0))
 
     stopbin = np.concatenate((startbin[1:] - 1, np.array((N2,))))
     f = ((startbin + stopbin)/2 - 1)/N
     p = np.zeros(f.shape)
     for i in range(max(f.shape) + 1):
-        p[i] = dbp(norm(X[(startbin[i]-1):stopbin[i]])**2/(stopbin[i] - startbin[i] + 1))
+        p[i] = dbp(norm(X[startbin[i]:stopbin[i]])**2/(stopbin[i] - startbin[i] + 1))
     return f, p
 
