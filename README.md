@@ -28,27 +28,27 @@ There are only a few *guidelines*, which can be overridden every time it is reas
 
 Using **python-deltasigma** requires:
 
-#### 1. **numpy** and **scipy** 
+#### **numpy**, **scipy** and **matplotlib**
 
-**numpy** and **scipy** can be installed through the steps described below.
+They are packaged by virtually all the major Linux distributions. 
 
-On a Debian Linux system:
+On a Debian Linux system, you may install them issueing:
 
 ```
  # aptitude install python-numpy python-scipy python-matplotlib
 ```
 
-Or, on a generic platform:
+Refer to your system documentation for more information. 
 
-```
-# pip install numpy scipy
-```
+On Windows, I hear good things about 
+[Enthought Canopy](https://www.enthought.com/store/), a Python distribution 
+that carries both free and commercial versions. I do not run Windows, so I 
+can't really provide more info (sorry), except that people manage to have
+a working setup. 
 
-More information on the [scipy install page](http://www.scipy.org/install.html).
-
-#### 2. matplotlib
-
-**[matplotlib](http://matplotlib.org/)** is used for plotting and it is also very useful for visually inspecting your data.
+More information can be found on the 
+[scipy install page](http://www.scipy.org/install.html) and on the 
+[matplotlib homepage](http://matplotlib.org/).
 
 
 #### 3. Extras
