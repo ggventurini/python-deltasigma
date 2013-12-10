@@ -51,18 +51,28 @@ More information can be found on the
 [matplotlib homepage](http://matplotlib.org/).
 
 
-#### 3. Extras
+#### Extras
 
 Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package.
 
-If you plan to run the provided unit tests, then you should install **[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the reference function outputs. Testing *can* be automated with **[nose](https://pypi.python.org/pypi/nose/)**, issuing `$ nosetests -v pydelsigma/*.py`.
+If you plan to run the provided unit tests, then you should install 
+**[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the 
+reference function outputs. Testing *can* be automated with 
+**[nose](https://pypi.python.org/pypi/nose/)**, issuing 
+`$ nosetests -v pydelsigma/*.py`.
 
 ## Licensing and copyright notice
 
-All original MATLAB code is Copyright (c) 2009, Richard Schreier. See the LICENSE file for the licensing terms.
+All original MATLAB code is Copyright (c) 2009, Richard Schreier. 
+See the LICENSE file for the licensing terms.
 
-The Python here provided is a derivative work from the above toolkit and subject to the same license terms.
+The Python code here provided is a derivative work from the above toolkit and 
+subject to the same license terms.
 
-The Python code is Copyright 2013, Giuseppe Venturini and the python-deltasigma contributors.
+This package contains some source code from `pydsm`, also based on the same 
+MATLAB toolbox. The `pydsm` package is copyright (c) 2012, Sergio Callegari.
+
+When not otherwise specified, the Python code is Copyright 2013, Giuseppe 
+Venturini and the python-deltasigma contributors.
 
 MATLAB is a registered trademark of The MathWorks, Inc.
