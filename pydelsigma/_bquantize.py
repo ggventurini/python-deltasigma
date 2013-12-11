@@ -22,16 +22,34 @@ from ._constants import eps
 from ._utils import empty, mfloor
 
 def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
-	"""y = bquantize(x, nsd=3, abstol=eps, reltol=10*eps)
-	Bidirectionally quantize a n by 1 vector x to nsd signed digits, 
-	Terminate early if the error is less than the specified tolerances.
+	"""Bidirectionally quantize a n by 1 vector x to nsd signed digits, 
+	terminate early if the error is less than the specified tolerances.
+
+	**Parameters:**
+
+	x : array_like
+           the data to be quantized.
+
+	nsd : int, optional
+              The number of signed digits.
+
+        abstol and reltol : floats, optional
+              If not supplied, the absolute tolerance and the relative 
+              tolerance default to ``eps`` and ``10*eps``, resp.
+
+	**Returns:**
+
+	y : list 
+            List of objects described below.
+
 	y is a list of instances with the same length as x and the 
 	following attributes:
-	* y[i].val is the quantized value in floating-point form,
-	* y[i].csd is a 2-by-nsd (or less) matrix containing
+
+	* ``y[i].val`` is the quantized value in floating-point form,
+	* ``y[i].csd`` is a 2-by-nsd (or less) matrix containing
 	  the powers of two (first row) and their signs (second row).
 	
-	See also bunquantize.m.
+	See also ``bunquantize()``.
 	"""
 
 	n = x.shape[0] if hasattr(x, 'shape') else len(x)
