@@ -249,6 +249,14 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_evalTFP` Module
+----------------------
+
+.. automodule:: pydelsigma._evalTFP
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_figureMagic` Module
 --------------------------
 
@@ -289,6 +297,14 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_logsmooth` Module
+------------------------
+
+.. automodule:: pydelsigma._logsmooth
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_lollipop` Module
 -----------------------
 
@@ -305,6 +321,14 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_mapCtoD` Module
+----------------------
+
+.. automodule:: pydelsigma._mapCtoD
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_mapQtoR` Module
 ----------------------
 
@@ -317,6 +341,22 @@ pydelsigma Package
 ----------------------
 
 .. automodule:: pydelsigma._mapRtoQ
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_mod1` Module
+-------------------
+
+.. automodule:: pydelsigma._mod1
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_mod2` Module
+-------------------
+
+.. automodule:: pydelsigma._mod2
     :members:
     :undoc-members:
     :show-inheritance:
@@ -385,6 +425,14 @@ pydelsigma Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`_plotSpectrum` Module
+---------------------------
+
+.. automodule:: pydelsigma._plotSpectrum
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`_predictSNR` Module
 -------------------------
 
@@ -405,6 +453,14 @@ pydelsigma Package
 -------------------------
 
 .. automodule:: pydelsigma._realizeNTF
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`_realizeNTF_ct` Module
+----------------------------
+
+.. automodule:: pydelsigma._realizeNTF_ct
     :members:
     :undoc-members:
     :show-inheritance:
