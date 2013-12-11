@@ -26,10 +26,17 @@ def calculateTF(ABCD, k=1.):
 	"""Calculate the NTF and STF of a delta-sigma modulator whose loop filter
 	is described by the ABCD matrix, assuming a quantizer gain of k.
 
-	Returns:
-	--------
+	**Parameters:**
 
-	The NTF and STF, a tuple of two lti objects.
+	ABCD : array_like,
+               The ABCD matrix that describes the system.
+
+	k : float, optional
+            The quantizer gain. If not specified, a default value of 1 is used.
+
+	**Returns:**
+
+	(NTF, STF) : a tuple of two LTI objects.
 	"""
 	A, B, C, D = partitionABCD(ABCD)
 	if B.shape[1] > 1:
