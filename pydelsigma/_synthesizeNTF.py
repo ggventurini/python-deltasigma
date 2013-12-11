@@ -26,8 +26,7 @@
 # See the LICENSE file for details.
 
 """
-Entry point for Delta-Sigma NTF synthesis function
-==================================================
+Module providing the main NTF synthesis function.
 """
 
 import numpy as np
@@ -40,8 +39,8 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 	"""
 	Synthesize a noise transfer function for a delta-sigma modulator.
 
-	Parameters
-	----------
+	**Parameters:**
+
 	order : int, optional
 	    the order of the modulator, defaults to 3
 	osr : float, optional
@@ -64,48 +63,47 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 	    1 corresponds to the sampling frequency, so that 0.5 is the
 	    maximum value. Value 0 specifies an LP modulator.
 
-	Returns
-	-------
+	**Returns:**
+
 	ntf : tuple
 	    noise transfer function in zpk form.
 
-	Raises
-	------
+	**Raises:**
+
 	ValueError
-	    'Error. f0 must be less than 0.5' if f0 is out of range
+	    * 'Error. f0 must be less than 0.5' if f0 is out of range
 
-	    'Order must be even for a bandpass modulator.' if the order is
-	    incompatible with the modulator type.
+	    * 'Order must be even for a bandpass modulator.' if the order is
+	      incompatible with the modulator type.
 
-	    'The opt vector must be of length xxx' if opt is used to explicitly
-	    pass the NTF zeros and these are in the wrong number.
+	    * 'The opt vector must be of length xxx' if opt is used to explicitly
+	      pass the NTF zeros and these are in the wrong number.
 
-	Warns
-	-----
-	    'Creating a lowpass ntf.' if the center frequency is different
-	    from zero, but so low that a low pass modulator must be designed.
+	**Warns:**
+	    * 'Creating a lowpass ntf.' if the center frequency is different
+	      from zero, but so low that a low pass modulator must be designed.
 
-	    'Unable to achieve specified H_inf ...' if the desired H_inf
-	    cannot be achieved.
+	    * 'Unable to achieve specified H_inf ...' if the desired H_inf
+	      cannot be achieved.
 
-	    'Iteration limit exceeded' if the routine converges too slowly.
+	    * 'Iteration limit exceeded' if the routine converges too slowly.
 
-	Notes
-	-----
+	**Notes**
+
 	This is actually a wrapper function which calls the appropriate version
 	of synthesizeNTF, based on the module control flag `optimize_NTF` which
 	determines whether to use optimization tools.
 
-	Parameter H_inf is used to enforce the Lee stability criterion.
+	Parameter ``H_inf`` is used to enforce the Lee stability criterion.
 
 	See also:
-	   clans()   "Closed-loop analysis of noise-shaper." An alternative
-	             method for selecting NTFs based on the 1-norm of the 
-	             impulse response of the NTF
+	   clans() : Closed-Loop Analysis of Noise-Shaper. 
+               An alternative method for selecting NTFs based on the 1-norm of the 
+               impulse response of the NTF
 
-	   synthesizeChebyshevNTF()    Select a type-2 highpass Chebyshev NTF.
-	             This function does a better job than synthesizeNTF if osr
-	             or H_inf is low.
+	   synthesizeChebyshevNTF() : Select a type-2 highpass Chebyshev NTF.
+	       This function does a better job than synthesizeNTF if osr
+	       or H_inf is low.
 	"""
 	if f0 > 0.5:
 		raise ValueError, 'Error. f0 must be less than 0.5.'
