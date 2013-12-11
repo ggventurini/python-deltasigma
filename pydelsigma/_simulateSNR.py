@@ -71,7 +71,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                 quadrature = True
                 quadrature_ntf = True
     else: # ABCD matrix
-        if not all(np.imag(arg1) == 0):
+        if not np.all(np.imag(arg1) == 0):
             quadrature = True
 
     if amp is None:
