@@ -25,8 +25,8 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     """
     Calculate the ABCD matrix given the parameters of a speciﬁed modulator topology.
 
-    Parameters
-    ----------
+    **Parameters:**
+
     a : array_like
         Feedback/feedforward coefﬁcients from/to the quantizer. Length :math:`n`.
     g : array_like
@@ -38,14 +38,12 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     form : str, optional
         See `._realizeNTF.realizeNTF` for a list of supported structures.
 
-    Returns
-    -------
+    **Returns:**
+
     ABCD : ndarray
         A state-space description of the modulator loop ﬁlter.
     
-    Note
-    ----
-    :func:`mapABCD` is the inverse function.
+    .. note:: :func:`mapABCD` is the inverse function.
     """
     # Code common to all structures.
     order = max(a.shape)
