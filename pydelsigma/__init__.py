@@ -109,6 +109,7 @@ from ._infnorm import infnorm
 from ._l1norm import l1norm
 from ._lollipop import lollipop
 from ._mapABCD import mapABCD
+from ._mapCtoD import mapCtoD
 from ._mapQtoR import mapQtoR
 from ._mapRtoQ import mapRtoQ
 from ._mod1 import mod1
