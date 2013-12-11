@@ -19,13 +19,15 @@
 """
 
 from warnings import warn
-import fractions
+import collections, fractions
 from fractions import Fraction as Fr
 import numpy as np
 from scipy.signal import lti
 from ._dbp import dbp
 from ._dbv import dbv
 from._constants import eps
+
+from ._partitionABCD import partitionABCD
 
 def rat(x, tol):
 	"""num, den = rat(x, tol)
@@ -272,6 +274,105 @@ def restore_input_form(a, form):
         else:
 		a = a.reshape(form)
 	return a
+
+def _getABCD(arg):
+    """Utility method to convert the input arg to an A, B, C, D representation.
+
+    **Parameters:**
+
+    arg, which may be:
+
+    * ZPK tuple,
+    * num, den tuple,
+    * A, B, C, D tuple,
+    * a scipy LTI object,
+    * a sequence of the tuples of any of the above types.
+
+    **Returns:**
+
+    The sequence of ndarrays A, B, C, D
+
+    **Raises:**
+
+    TypeError, ValueError
+    """
+    if isinstance(arg, np.ndarray):
+        # ABCD matrix
+        A, B, C, D = partitionABCD(arg)
+    elif _is_zpk(arg) or _is_num_den(arg) or _is_A_B_C_D(arg):
+       sys = lti(*arg)
+       A, B, C, D = sys.A, sys.B, sys.C, sys.D
+    elif isinstance(arg, collections.Iterable):
+        A, B, C, D = None, None, None, None
+        for i in arg:
+            # Note we do not check if the user has assembled a list with
+            # mismatched lti representations.
+            sys = lti(*i) if not hasattr(i, 'A') else i
+            if A is None:
+                A = sys.A
+            elif not np.allclose(sys.A, A, atol=1e-8, rtol=1e-5):
+                raise ValueError("Mismatched lti list, A matrix disagreement.")
+            else:
+                pass
+            if B is None:
+                B = sys.B
+            else:
+                B = np.hstack((B, sys.B))
+            if C is None:
+                C = sys.C
+            elif not np.allclose(sys.C, C, atol=1e-8, rtol=1e-5):
+                raise ValueError("Mismatched lti list, C matrix disagreement.")
+            if D is None:
+                D = sys.D
+            else:
+                D = np.hstack((D, sys.D))
+    else:
+        raise TypeError("Unknown LTI representation: %s" % arg)
+    return A, B, C, D
+
+def _is_zpk(arg):
+    """Can the argument be safely assumed to be a zpk tuple?"""
+    return isinstance(arg, collections.Iterable) and len(arg) == 3 and \
+       isinstance(arg[0], collections.Iterable) and \
+       isinstance(arg[1], collections.Iterable) and np.isscalar(arg[2])
+
+def _is_num_den(arg):
+    """Can the argument be safely assumed to be a num, den tuple?"""
+    return isinstance(arg, collections.Iterable) and len(arg) == 2 and \
+           isinstance(arg[0], collections.Iterable) and \
+           isinstance(arg[1], collections.Iterable)
+
+def _is_A_B_C_D(arg):
+    """Can the argument be safely assumed to be an (A, B, C, D) tuple?"""
+    return isinstance(arg, collections.Iterable) and len(arg) == 4 and \
+           isinstance(arg[0], collections.Iterable) and \
+           isinstance(arg[1], collections.Iterable) and \
+           isinstance(arg[2], collections.Iterable) and \
+           isinstance(arg[3], collections.Iterable)
+
+def _cell_like_list(shape, init=None):
+    """Returns a list of lists (possibly of lists... etc...),
+    with all values initialized to `init`.
+
+    **Parameters:**
+
+    shape: tuple of ints,
+           the dimensions of the desidered object
+
+    init: object, optional,
+          the initialization value for every element in the object
+
+    **Returns:**
+
+    cell, a list of lists (...)
+    """
+    a = []
+    for i in range(shape[0]):
+        if len(shape) == 1:
+            a.append(init)
+        else:
+            a.append(_cell_like_list(shape[1:], init))
+    return a
 
 def test_rat():
 	"""Test function for rat()"""
