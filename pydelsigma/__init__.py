@@ -97,6 +97,7 @@ from ._ds_optzeros import ds_optzeros
 from ._ds_quantize import ds_quantize
 from ._ds_synNTFobj1 import ds_synNTFobj1
 from ._dsclansNTF import dsclansNTF
+from ._evalMixedTF import evalMixedTF
 from ._evalRPoly import evalRPoly
 from ._evalF0 import evalF0
 from ._evalF1 import evalF1
