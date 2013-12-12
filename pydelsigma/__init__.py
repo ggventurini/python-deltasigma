@@ -86,6 +86,7 @@ from ._changeFig import changeFig
 from ._circ_smooth import circ_smooth
 from ._clans import clans
 from ._constants import eps
+from ._db import db
 from ._dbm import dbm
 from ._dbp import dbp
 from ._dbv import dbv
@@ -139,5 +140,5 @@ from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
 from ._undbv import undbv
-from ._utils import cplxpair, mfloor, rat, gcd, lcm, db
+from ._utils import cplxpair, mfloor, rat, gcd, lcm
 from ._zinc import zinc
