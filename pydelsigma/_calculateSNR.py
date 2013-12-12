@@ -23,14 +23,33 @@ from numpy.linalg import norm
 from ._dbv import dbv
 
 def calculateSNR(hwfft, f, nsig=1):
-	"""Estimate the signal-to-noise ratio, given the in-band bins of
-	a (Hann-windowed) fft and the location of the input signal (f>0).
-	For nsig=1, the input tone is contained in hwfft(f:f+2); this range
-	is appropriate for a Hann-windowed fft.
+	"""Estimate the Signal-to-Noise Ratio (SNR), given the in-band bins of
+	a Hann-windowed FFT and the location ``f0`` of the input signal (f>0).
+	For ``nsig = 1``, the input tone is contained in ``hwfft(f:f+2)``,
+	this range is appropriate for a Hann-windowed FFT.
 
-	Each increment in nsig adds a bin to either side.
+	Each increment in ``nsig`` adds a bin to either side.
 
 	The SNR is expressed in dB.
+
+	**Parameters:**
+
+	hwfft : sequence
+	        the FFT
+
+	f : integer
+	    Location of the input signal. Normalized.
+
+	.. note:: f = 0 corresponds to DC, as Python indexing starts from 0.
+
+	nsig : integer, optional
+	       Extra bins added to either side. Defaults to 1.
+
+	**Returns:**
+
+	SNR : scalar
+	      The computed SNR value in dB.
+
 	"""
 	hwfft = hwfft.squeeze()
 	signalBins = np.arange(f - nsig + 1, f + nsig + 2, dtype='int64')
@@ -43,7 +62,7 @@ def calculateSNR(hwfft, f, nsig=1):
 	if n == 0:
 		snr = np.Inf
 	else:
-		snr = dbv(s/n)[0]
+		snr = dbv(s/n)
 	return snr
 
 def test_calculateSNR():
@@ -61,3 +80,9 @@ def test_calculateSNR():
 	hwfft = fft(window*y)
 	snr = calculateSNR(hwfft[:N/2], int(N*f1))
 	assert np.allclose(snr, 40, atol=1e-8, rtol=1e-8)
+	hwfft = np.zeros((N/2, ))
+	hwfft[512] = 1. # specially crafted to have Inf snr
+	snr = calculateSNR(hwfft[:N/2], 512)
+	print snr
+	assert snr == np.Inf
+
