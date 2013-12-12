@@ -18,17 +18,36 @@
 
 import numpy as np
 
+from ._utils import carray, save_input_form, restore_input_form
+
 def undbm(p, z=50):
-	""" v = undbm(p, z=50) = sqrt(z*10^(p/10-3))
-	RMS voltage equivalent to a power p in dBm
-	z is the normalization resistance (defaults to 50ohm)
+	"""The calculate the RMS voltage equivalent to a power ``p`` in dBm.
+
+	.. math::
+
+	    V_{\\mathrm{RMS}} = \\sqrt{z\\ 10^{p/10 - 3}}
+
+	**Parameters:**
+
+	p : scalar or sequence
+	    The power to be converted.
+
+	z : scalar, optional
+	    The normalization resistance value, defaults to 50 ohm.
+
+	**Returns:**
+
+	Vrms : scalar or sequence
+	       The RMS voltage corresponding to p
 	"""
-	return np.sqrt(z*10.**(p/10.-3))
+	iform = save_input_form(p)
+	p = carray(p)
+	up = np.sqrt(z*10.**(p/10.-3))
+	return restore_input_form(up, iform)
 
 def test():
 	"""Test function for undbm()"""
 	assert np.allclose([undbm(53.015)], [100.054125892], rtol=1e-05, atol=1e-08)
 	assert np.allclose([undbm(3, 100)], [0.44668359215], rtol=1e-05, atol=1e-08)
+	assert np.isscalar(undbm(3, 100))
 
-if __name__ == '__main__':
-	test()

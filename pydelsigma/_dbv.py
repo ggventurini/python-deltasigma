@@ -18,21 +18,33 @@
 
 import numpy as np
 from ._undbv import undbv
+import numpy as np
 
+from ._utils import carray, save_input_form, restore_input_form
 
 def dbv(x):
-	""" dbv(x) = 20*log10(abs(x)); the dB equivalent of the voltage x"""
-	if not hasattr(x, 'shape'):
-		if not hasattr(x, '__len__'):
-			x = np.array((x,))
-		else:
-			x = np.array(x)
-	elif x.shape == ():
-		x = np.array((x,))
+	"""The calculate the dB equivalent of the voltage ratio ``x``.
+
+	.. math::
+
+	    G_{dB} = 20 \\mathrm{log}_{10}(|x|)
+
+	**Parameters:**
+
+	x : scalar or sequence
+	    The voltage (ratio) to be converted.
+
+	**Returns:**
+
+	GdB : scalar or sequence
+	       The input voltage (ratio) expressed in dB.
+	"""
+	iform = save_input_form(x)
+	x = carray(x)
 	y = -np.inf*np.ones(x.shape)
 	nonzero = (x != 0)
 	y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))
-	return y
+	return restore_input_form(y, iform)
 
 def test_dbv():
 	"""Test function for dbv()"""

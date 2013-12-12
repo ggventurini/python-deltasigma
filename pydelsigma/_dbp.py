@@ -18,19 +18,31 @@
 
 import numpy as np
 
+from ._utils import carray, save_input_form, restore_input_form
+
 def dbp(x):
-	""" dbp(x) = 10*log10(x): the dB equivalent of the power x"""
-	if not hasattr(x, 'shape'):
-		if not hasattr(x, '__len__'):
-			x = np.array((x,))
-		else:
-			x = np.array(x)
-	elif x.shape == ():
-		x = np.array((x,))
-	y = -np.inf*np.ones(x.shape)
+	"""The calculate the dB equivalent of the power ``x``.
+
+	.. math::
+
+	    P_{dB} = 10 \\mathrm{log}_{10}(x)
+
+	**Parameters:**
+
+	x : scalar or sequence
+	    The power to be converted.
+
+	**Returns:**
+
+	PdB : scalar or sequence
+	       The input expressed in dB.
+	"""
+	iform = save_input_form(x)
+	x = carray(x)
+	y = -np.Inf*np.ones(x.shape)
 	nonzero = (x != 0)
 	y[nonzero] = 10.*np.log10(np.abs(x[nonzero]))
-	return y
+	return restore_input_form(y, iform)
 
 def test_dbp():
 	"""Test function for dbp()
@@ -43,10 +55,8 @@ def test_dbp():
 	r = 3.01029996
 	res = dbp(tv)
 	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+	assert np.isscalar(res) # check for type coherence
 	tv = 2, 2
 	r = 3.01029996, 3.01029996
 	res = dbp(tv)
 	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-
-if __name__ == '__main__':
-	test_dbp()

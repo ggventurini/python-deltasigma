@@ -19,21 +19,35 @@
 from __future__ import division
 import numpy as np
 
+from ._utils import carray, save_input_form, restore_input_form
+
 def dbm(v, R=50):
-	""" dbm(v, R=50) = 10*log10(v^2/50*1000)  
-	The equivalent in dBm of an rms voltage v
 	"""
-	if not hasattr(v, 'shape'):
-		if not hasattr(v, '__len__'):
-			v = np.array((v,))
-		else:
-			v = np.array(v)
-	elif v.shape == ():
-		v = np.array((v,))
+	The calculate the equivalent in dBm of an RMS voltage ``v``.
+
+	.. math::
+
+	    P_{dBm} = 10 \\mathrm{log}_{10}(1000 \\frac{v^2}{R} )
+
+	**Parameters:**
+
+	v : scalar or sequence
+	    The voltages to be converted.
+
+	R : scalar, optional
+	    The resistor value the power is calculated upon, defaults to 50 ohm.
+
+	**Returns:**
+
+	PdBm : scalar or sequence
+	       The input in dBm.
+	"""
+	iform = save_input_form(v)
+	v = carray(v)
 	y = -np.Inf*np.ones(np.size(v))
 	nonzero = (v != 0)
 	y[nonzero] = 10.*np.log10(np.abs(v[nonzero]**2.)/R) + 30
-	return y
+	return restore_input_form(y, iform)
 
 def test_dbm():
 	"""Test function for dbm()
@@ -42,4 +56,7 @@ def test_dbm():
 	r = [-np.inf, -46.98970004, -40.96910013, -37.44727495, -34.94850022,
 	     -33.01029996, -31.42667504, -30.08773924, -28.9279003, -27.90484985]
 	assert np.allclose(dbm(v), r, atol=1e-8, rtol=1e-5)
-
+	v = 9e-3 # test scalars.
+	r = -27.90484985
+	assert np.allclose(dbm(v), r, atol=1e-8, rtol=1e-5)
+	assert np.isscalar(dbm(v))

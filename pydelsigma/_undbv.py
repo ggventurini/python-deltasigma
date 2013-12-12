@@ -15,20 +15,35 @@
 
 """This module provides the undbv() function.
 """
-
+from __future__ import division
 import numpy as np
 
-def undbv(x):
-	""" y = undbv(x)	
-	Convert x from dB to a voltage
-	"""
-	return 10.**(x/20.)
+from ._utils import carray, save_input_form, restore_input_form
 
+def undbv(x):
+	"""Convert ``x`` from dB to a voltage, according to the relationship:
+
+	.. math::
+
+	    V_{\\mathrm{RMS}} = 10^{x/20}
+
+	**Parameters:**
+
+	x : scalar or sequence
+	    The signal in dB to be converted.
+
+	**Returns:**
+
+	Vrms : scalar or sequence
+	       The RMS voltage corresponding to x.
+	"""
+	iform = save_input_form(x)
+	x = carray(x)
+	up = 10.**(x/20.)
+	return restore_input_form(up, iform)
 	
-def test():
+def test_undbv():
 	"""Test function for undbv()"""
 	assert np.allclose([undbv(53.05)], [449.26232467], rtol=1e-05, atol=1e-08)
 	assert np.allclose([undbv(3)], [1.41253754462], rtol=1e-05, atol=1e-08)
 
-if __name__ == '__main__':
-	test()
