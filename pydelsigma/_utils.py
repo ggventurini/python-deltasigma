@@ -23,10 +23,8 @@ import collections, fractions
 from fractions import Fraction as Fr
 import numpy as np
 from scipy.signal import lti
-from ._dbp import dbp
-from ._dbv import dbv
-from._constants import eps
 
+from._constants import eps
 from ._partitionABCD import partitionABCD
 
 def rat(x, tol):
@@ -63,25 +61,6 @@ def zpk(z, p, k):
 	t.zeros, t.poles, t.k = carray(z), carray(p), k
 	return t
 	
-def db(x, input_type='voltage', R=1.):
-	"""The return value is defined as:
-	y = dbv(x) - 20*log10(R) if input_type == 'voltage'
-	y = dbp(x) if input type
-	
-	MATLAB provides a function with this exact signature.
-    """
-	if input_type.lower().strip() == 'voltage':
-		y = dbv(x) - 10.*np.log10(R)
-	elif input_type.lower().strip() == 'power':
-		y = dbp(x)
-		if R != 1.:
-			warn("db called with a non default R value, " + 
-			     "but R is going to be ignored since input_type is power",
-				 RuntimeWarning)
-	else:
-		raise ValueError, "db got input_type %s, instead of voltage or power" % input_type
-	return y
-
 def carray(x):
 	"""Check that x is an ndarray. If not, try to convert it to ndarray.
 	"""
@@ -257,6 +236,10 @@ def save_input_form(a):
 		ret = 'scalar'
         elif hasattr(a, 'shape'):
 		ret = a.shape
+	elif type(a) == tuple:
+		ret = 'tuple'
+	elif type(a) == list:
+		ret = 'list'
 	else:
 		raise TypeError("Unsupported input %s" % repr(a))
 	return ret
@@ -271,7 +254,13 @@ def restore_input_form(a, form):
 	if form == 'scalar':
 		if not np.isscalar(a):
 			a = a.reshape((1, ))[0]
-        else:
+        elif form == 'tuple':
+		if not type(a) == tuple:
+			a = tuple(a)
+	elif form == 'list':
+		if not type(a) == list:
+			a = list(a)
+	else:
 		a = a.reshape(form)
 	return a
 
@@ -409,27 +398,7 @@ def test_zpk():
 	assert t.form == 'zp'
 	assert t.zeros.tolist() == z
 	assert t.poles.tolist() == p
-	assert t.k == k	
-
-def test_db():
-	"""Test function for db()
-	"""
-	from ._undbv import undbv
-	tv = np.array([2])
-	r = np.array([3.01029996])
-	res = db(tv, 'power')
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	tv = 2
-	r = 3.01029996
-	res = db(tv, 'power') 
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	tv = 2, 2
-	r = 3.01029996, 3.01029996
-	res = db(tv, 'power')
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	t = np.array([3.0])
-	r1 = undbv(db(t, 'voltage'))
-	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
+	assert t.k == k
 	
 def test_cplxpair():
 	"""Test function for cplxpair()
