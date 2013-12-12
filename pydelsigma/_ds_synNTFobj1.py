@@ -20,8 +20,9 @@ import numpy as np
 
 from ._padt import padt
 from ._padb import padb 
+from ._db import db
 from ._ds_f1f2 import ds_f1f2 
-from ._utils import zpk, db, carray
+from ._utils import zpk, carray
 from ._rmsGain import rmsGain
 
 def ds_synNTFobj1(x, p, osr, f0):
