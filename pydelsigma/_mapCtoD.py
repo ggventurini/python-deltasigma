@@ -26,10 +26,11 @@ from numpy.linalg import cond
 from scipy.linalg import inv, expm, norm
 from scipy.signal import lti, cont2discrete, ss2zpk
 
+from ._constants import eps
+from ._evalMixedTF import evalMixedTF
 from ._padb import padb
 from ._padr import padr
 from ._utils import _getABCD
-from ._constants import eps
 
 def mapCtoD(sys_c, t=(0, 1), f0=0.):
     """Map a MIMO continuous-time system to a SIMO discrete-time equivalent.
@@ -142,9 +143,9 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
             nt = n + n1 + n2
             if n2 > 0:
                 if t2 == 1:
-                    Ap[:n, nt - n2:nt] = Ap[:n, nt - n2:nt] + np.repmat(B2, 1, n2)
+                    Ap[:n, nt - n2:nt] = Ap[:n, nt - n2:nt] + np.tile(B2, (1, n2))
                 else:
-                    Ap[:n, nt - n2:nt - 1]=Ap[:n, nt - n2:nt - 1] + repmat(B2, 1, n2 - 1)
+                    Ap[:n, nt - n2:nt - 1] = Ap[:n, nt - n2:nt - 1] + np.tile(B2, (1, n2 - 1))
                     Ap[:n, (nt-1)] = Ap[:n, (nt-1)] + _B2formula(Ac, 0, t2, B2)
             if n2 > 0: # pulse extends to the next period
                 Btmp = _B2formula(Ac, t1, 1, B2)
@@ -228,7 +229,6 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
     return sys, Gp
 
 def _B2formula(Ac, t1, t2, B2):
-    warn("Untested, not working B2formula function.")
     if t1 == 0 and t2 == 0:
         term = B2
         return term
@@ -247,13 +247,13 @@ def _B2formula(Ac, t1, t2, B2):
         if cond(tmp) < 1/np.sqrt(eps):
             ntry = ntry + 1
             if ntry == 1:
-                term = np.dot(((expm(-Ac*t1) - expm(-Ac*t2))*inv(tmp)), B2)
+                term = np.dot(np.dot(expm(-Ac*t1) - expm(-Ac*t2), inv(tmp)), B2)
             else:
-                term1 = np.dot(((expm(-Ac*t1) - expm(-Ac*t2))*inv(tmp)), B2)
+                term1 = np.dot(np.dot(expm(-Ac*t1) - expm(-Ac*t2), inv(tmp)), B2)
         k = k*np.sqrt(2)
 
     if norm(term1 - term) > 0.001:
-        warn('Warning: Inaccurate calculation in mapCtoD.')
+        warn('Inaccurate calculation in mapCtoD.')
     return term
 
 def test_mapCtoD():
@@ -275,6 +275,7 @@ def test_mapCtoD():
     H = calculateTF(ABCD)
     assert np.allclose(H[0].num, [ 1., -2.,  1.], atol=1e-8, rtol=1e-5)
     assert np.allclose(H[0].den, [1., 0., 0.], atol=1e-8, rtol=1e-5)
+    # zero delay NRZ test
     ABCDc = np.array([[0., 0.,  0., 0.04440879, -0.04440879],
                       [1., 0., -0.00578297, 0., -0.23997611],
                       [0., 1.,  0., 0., -0.67004646],
@@ -289,3 +290,41 @@ def test_mapCtoD():
                         [0.49975909, 0.99903645,  0.99710991, 0.00739932, -0.79673041],
                         [0., 0., 1., 0., 0.]])
     assert np.allclose(ABCD, ABCDref, atol=1e-8, rtol=1e-5)
+    # .1 delay NRZ
+    ABCDc = np.array([[0., 0., 0., 0.0444, -0.0444],
+                      [1., 0., -0.0058, 0., -0.2440],
+                      [0., 1.,  0., 0., -0.6942],
+                      [0., 0.,  1., 0., -0.0682]])
+
+    tdac = np.array([[-1., -1], [0.1, 1.1]])
+    sys_d, Gp = mapCtoD(ABCDc, tdac)
+    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
+                      np.hstack((sys_d[2], sys_d[3]))
+                    ))
+    ABCDref = np.array([[1., 0., 0., -0.0044, 0.0444, -0.0400],
+                        [0.999, 0.9971, -0.0058, -0.0282, 0.0222, -0.2358],
+                        [0.4998, 0.999, 0.9971, -0.0944, 0.0074, -0.7285],
+                        [0., 0., 0., 0., 0., 1.],
+                        [0., 0., 1., -0.0682, 0., 0.]])
+    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
+    # Non-zero f0 test
+    f0 = .2
+    ABCDc = np.array([[0., -1.5791, 0., 0., 0.3362, 0.2928],
+                      [1., 0., 0., 0., 0., 0.1658],
+                      [0., 1., 0., -1.5791, 0., 0.4160],
+                      [0., 0., 1., 0., 0., -0.5262],
+                      [0., 0., 0., 1., 0., -0.0545]])
+    ABCDref = np.array([[0.3090, -1.1951, 0, 0, -0.0086, 0.2401,    0.1156],
+                     [0.7568, 0.3090,  0, 0, 0.0278, 0.1406,    0.2259],
+                     [0.3784, 0.5329,  0.3090, -1.1951, 0.0961,    0.0462,    0.6867],
+                     [0.1418, 0.3784,  0.7568, 0.3090, 0.0209,    0.0123,   -0.2026],
+                     [0.,     0.,      0, 0, 0, 0, 1.],
+                     [0.,     0.,      0, 1., -0.0545, 0, 0.]])
+    tdac = np.array([[-1., -1], [0.1, 1.1]])
+    sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
+    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
+                      np.hstack((sys_d[2], sys_d[3]))
+                    ))
+    print ABCD -  ABCDref
+    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
+
