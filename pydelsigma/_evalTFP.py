@@ -31,8 +31,8 @@ def evalTFP(Hs, Hz, f):
     szeros, spoles = carray(szeros).squeeze(), carray(spoles).squeeze()
     zzeros, zzeros = carray(zzeros).squeeze(), carray(zzeros).squeeze()
     # back to business
-    slim = min(0.001, max(1e-05, eps**(1./(1 + max(spoles.shape)))))
-    zlim = min(0.001, max(1e-05, eps**(1./(1 + max(zzeros.shape)))))
+    slim = min(0.001, max(1e-05, eps**(1./(1 + spoles.size))))
+    zlim = min(0.001, max(1e-05, eps**(1./(1 + zzeros.size))))
     H = np.zeros(f.shape, dtype=np.complex128)
     w = 2*np.pi*f
     s = 1j*w
