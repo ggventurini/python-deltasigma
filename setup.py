@@ -11,8 +11,7 @@ setup(name='pydelsigma',
       packages=['pydelsigma'],
       package_data={
         'pydelsigma': ['test_data/*.mat', 'test_data/*.txt']
-      },
-      install_requires = ['numpy', 'scipy', 'matplotlib']
+      }
      )
 
 print """
