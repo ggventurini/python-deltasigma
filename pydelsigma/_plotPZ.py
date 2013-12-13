@@ -24,6 +24,21 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	"""function plotPZ(H, color='b',markersize=5, list=0)
 	Plot the poles and zeros of a transfer function.
 	If list is non-zero, a list of the poles and zeros is superimposed on the plot.
+
+	.. plot::
+
+	   import pylab as plt
+	   from pydelsigma import synthesizeNTF, plotPZ
+	   order = 5
+	   osr = 32
+	   f0 = 0.
+	   Hinf = 1.5
+	   ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
+	   plt.figure(figsize=(8, 6))
+	   plotPZ(ntf, showlist=True)
+	   plt.title("NTF singularities")
+	   plt.show()
+
 	"""
 
 	# Parts of the code come from 'pydsm'

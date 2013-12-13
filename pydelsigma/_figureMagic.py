@@ -22,9 +22,21 @@ import numpy as np
 import pylab as plt
 
 def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None, 
-				size=None, name=None):
+	        size=None, name=None):
 	"""Utility function to quickly set plot parameters.
 	Any unspecified parameter is left untouched.
+	
+	.. plot::
+
+	   import numpy as np
+	   import pylab as plt
+	   from pydelsigma import figureMagic
+	   t = np.linspace(0, 1e-3)
+	   a = np.sin(2*np.pi*1e3*t + np.pi/4)
+	   plt.plot(t, a)
+	   figureMagic([0, 1e-3], dx=.1e-3, xLab=None, yRange=[-1.2, 1.2],
+	               dy=.1, yLab=None, size=(8, 4), name="Sin wave, f = 1kHz")
+
 	"""
 	fig = plt.gcf()
 	if name is not None:

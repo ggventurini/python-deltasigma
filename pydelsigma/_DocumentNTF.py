@@ -35,6 +35,26 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 
 	The first argument is either the NTF or ABCD matrix. 
 	If the first argument is ABCD, the stf is also plotted.
+
+	.. plot::
+
+	   from pydelsigma import *
+	   import pylab as plt
+	   order = 4
+	   osr = 64
+	   nlev = 2
+	   f0 = 0.
+	   Hinf = 1.5
+	   form = 'CRFB'
+	   ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
+	   a, g, b, c = realizeNTF(ntf, form)
+	   b = np.hstack(( # Use a single feed-in for the input
+	                  np.atleast_2d(b[0, 0]),
+	                  np.zeros((1, max(b.shape)-1))
+	                ))
+	   ABCD = stuffABCD(a, g, b, c, form)
+	   DocumentNTF(ABCD, osr, f0)
+
 	"""
 	if isinstance(arg1, np.ndarray):
 		ABCD = arg1
