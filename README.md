@@ -12,23 +12,9 @@ This project is at **an early stage**. Not all functionality has been ported and
 
 **NEWS!** To have an idea of the currently implemented functionality, take a look at these **[preliminary results](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
 
-### How to contribute
-
-Pull requests are welcome!
-
-There are only a few *guidelines*, which can be overridden every time it is reasonable to do so:
-
-* Please try to follow `PEP8`. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
-
-* Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced with `None`. 
-
-* If a function has a varible number of return values, its Python port should implement the maximum number of return values,
-
 ## Dependencies
 
-Using **python-deltasigma** requires:
-
-#### **numpy**, **scipy** and **matplotlib**
+Using **python-deltasigma** requires **numpy**, **scipy** and **matplotlib**.
 
 They are packaged by virtually all the major Linux distributions. 
 
@@ -60,6 +46,32 @@ If you plan to run the provided unit tests, then you should install
 reference function outputs. Testing *can* be automated with 
 **[nose](https://pypi.python.org/pypi/nose/)**, issuing 
 `$ nosetests -v pydelsigma/*.py`.
+
+## Documentation
+
+1. You can find the [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/pydelsigma.html).
+
+2. The original MATLAB Toolbox provides good documentation, which is very useful to understand what the toolbox is capable of. See [DSToolbox.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true) and [OnePageStory.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true) (*PDF warning*).
+
+3. The book:
+
+Richard Schreier, Gabor C. Temes, *Understanding Delta-Sigma Data Converters*, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press 
+
+is an excellent resource on the topic. Links [on amazon](http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852), [on the Wiley-IEEE press](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html). 
+
+*I am not affiliated with neither the sellers nor the authors.*
+
+## How to contribute
+
+Pull requests are welcome!
+
+There are only a few *guidelines*, which can be overridden every time it is reasonable to do so:
+
+* Please try to follow `PEP8`. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
+
+* Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced with `None`. 
+
+* If a function has a varible number of return values, its Python port should implement the maximum number of return values.
 
 ## Licensing and copyright notice
 
