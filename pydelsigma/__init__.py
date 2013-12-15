@@ -76,6 +76,7 @@ from ._DocumentNTF import DocumentNTF
 from ._PlotExampleSpectrum import PlotExampleSpectrum
 from ._SIunits import SIunits
 from ._axisLabels import axisLabels
+from _bilogplot import bilogplot
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
@@ -135,6 +136,7 @@ from ._simulateDSM import simulateDSM
 from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
+from ._synthesizeChebyshevNTF import synthesizeChebyshevNTF
 from ._synthesizeNTF import synthesizeNTF
 from ._thermometer import thermometer
 from ._undbm import undbm
