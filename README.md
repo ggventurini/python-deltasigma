@@ -8,13 +8,13 @@ Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/m
 
 ### Status
 
-This project is at **an early stage**. Not all functionality has been ported and currently *most of the example files do not run*. Take a look to files.ods for the current status. 
+This project is at **an early stage**. Not all functionality has been ported and currently *most of the example files do not run*. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status. 
 
 **NEWS!** To have an idea of the currently implemented functionality, take a look at these **[preliminary results](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
 
 ## Dependencies
 
-Using **python-deltasigma** requires **numpy**, **scipy** and **matplotlib**.
+Using **python-deltasigma** requires **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
 
 They are packaged by virtually all the major Linux distributions. 
 
