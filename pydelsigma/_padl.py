@@ -28,12 +28,10 @@ def padl(x, n, val=0.):
 		xp = x.reshape((1, x.shape[0]))
 	else:
 		xp = x
-	y = np.concatenate(
-	                   ( 
+	y = np.concatenate(( 
 	                    val*np.ones((xp.shape[0], n - xp.shape[1])),
 	                    xp
-	                   ), axis=1
-	                  )
+	                   ), axis=1)
 	return y
 	                  
 def test_padl():
@@ -43,5 +41,3 @@ def test_padl():
 	res = np.concatenate((2.*np.ones((15, 10)), tv), axis=1)
 	assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_padl()

@@ -42,5 +42,3 @@ def test_padr():
 	res = np.concatenate((tv, 2.*np.ones((15, 10))), axis=1)
 	assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_padr()

@@ -42,5 +42,3 @@ def test_padt():
 	res = np.concatenate((2.*np.ones((10, 15)), tv), axis=0)
 	assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_padt()

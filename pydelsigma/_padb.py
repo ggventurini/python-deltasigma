@@ -28,11 +28,9 @@ def padb(x, n, val=0.):
 		xp = x.reshape((x.shape[0], 1))
 	else:
 		xp = x
-	y = np.concatenate(
-	                   (xp, 
+	y = np.concatenate((xp, 
 	                    val*np.ones((n - xp.shape[0], xp.shape[1]))
-	                   ), axis=0
-	                  )
+	                   ), axis=0)
 	return y
 	                  
 def test_padb():
@@ -42,5 +40,3 @@ def test_padb():
 	res = np.concatenate((tv, 2.*np.ones((10, 15))), axis=0)
 	assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_padb()
