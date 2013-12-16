@@ -26,22 +26,18 @@ from ._dbv import dbv
 def db(x, input_type='voltage', R=1.):
 	"""The calculate the dB equivalent of the rms signal ``x``.
 	
-	The return value is defined as:
+	For input type *'voltage'*, the return value is defined as
 	
 	.. math::
 
-	    P_{dB} = 20 \\mathrm{log}_{10}(\\frac{x}{R})
+	    P_{dB} = 20 \\mathrm{log}_{10}\\left(\\frac{x}{R}\\right)
 
-	if ``input_type == "voltage"``
 
-	Otherwise,
+	Otherwise, for input type *'power'*,
 
 	.. math::
 
 	    P_{dB} = 10 \\mathrm{log}_{10}(x)
-
-
-	if ``input_type == "power"``
 
 
 	**Parameters:**
@@ -50,16 +46,18 @@ def db(x, input_type='voltage', R=1.):
 	    The signal to be converted.
 
 	input_type : string, optional
-                     The input type, either "voltage" or "power"
+            The input type, either "voltage" or "power"
 
 	R : float, optional
 	    The normalization resistor value, used only for voltages. 
 
+
 	**Returns:**
 
 	PdB : scalar or sequence
-	       The input expressed in dB.
+	    The input expressed in dB.
 	
+
 	.. note:: MATLAB provides a function with this exact signature.
 
 	"""
