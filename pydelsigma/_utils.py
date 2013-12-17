@@ -47,11 +47,17 @@ class empty:
 def mfloor(x):
 	"""MATLAB-like floor function.
 	"""
+	iform = save_input_form(x)
+	x = carray(x)
 	def _mfloor(z):
 		"""Base function to generate the ufunc floor"""
+		z = np.real_if_close(z)
+		if np.iscomplex(z):
+			return _mfloor(np.real(z)) + 1j*_mfloor(np.imag(z))
 		return np.floor(z) if np.sign(z) >= 0 else -np.ceil(-z)
 	_internal = np.frompyfunc(_mfloor, 1, 1)
-	return np.array(_internal(x), dtype=x.dtype)
+	xf = np.array(_internal(x), dtype=x.dtype)
+	return restore_input_form(xf, iform)
 
 def zpk(z, p, k):
 	"""Returns a zpk object with the zeros (z), poles (p) and gain (k) provided.
@@ -252,13 +258,16 @@ def restore_input_form(a, form):
         Note: use `save_input_form(a)` to get the object `form`
 	"""
 	if form == 'scalar':
+		a = np.real_if_close(a)
 		if not np.isscalar(a):
 			a = a.reshape((1, ))[0]
         elif form == 'tuple':
 		if not type(a) == tuple:
+			a = [np.real_if_close(i).reshape((1,))[0] for i in a]
 			a = tuple(a)
 	elif form == 'list':
 		if not type(a) == list:
+			a = [np.real_if_close(i).reshape((1,))[0] for i in a]
 			a = list(a)
 	else:
 		a = a.reshape(form)
@@ -387,6 +396,10 @@ def test_mfloor():
 	tres[tv <  0] = -np.ceil(np.abs(tv[tv<0]))
 	tresf = mfloor(tv)
 	assert np.allclose(tres, tresf, atol=1e-8, rtol=1e-5)
+	# w complex values.
+	tv = [-1.9,  -0.2,  3.4,  5.6,  7.0,  2.4+3.6j]
+	tres = [-2.0, -1.0, 3.0, 5.0, 7.0, (2+3j)]
+	assert mfloor(tv) == tres
 
 def test_zpk():
 	"""Test function for zpk.
