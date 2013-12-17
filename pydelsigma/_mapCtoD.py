@@ -209,11 +209,11 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
             # B1 = gains of Gp @f0;
             for h in range(m):
                 for i in range(n):
-                    B1[i, h] = evalMixedTF(Gp[i, h], f0)
+                    B1ih = np.real_if_close(evalMixedTF(Gp[i, h], f0))
                     # abs() used because ss() whines if B has complex entries...
                     # This is clearly incorrect.
                     # I've fudged the complex stuff by including a sign....
-                    B1[i, h] = np.abs(B1[i, h]) * np.sign(np.real(B1[i, h]))
+                    B1[i, h] = np.abs(B1ih) * np.sign(np.real(B1ih))
                     if np.abs(B1[i, h]) < 1e-09:
                         B1[i, h] = 1e-09 # This prevents NaN in "line 174" below
         # Adjust the gains of the pre-filters
@@ -309,22 +309,56 @@ def test_mapCtoD():
     assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
     # Non-zero f0 test
     f0 = .2
-    ABCDc = np.array([[0., -1.5791, 0., 0., 0.3362, 0.2928],
-                      [1., 0., 0., 0., 0., 0.1658],
-                      [0., 1., 0., -1.5791, 0., 0.4160],
-                      [0., 0., 1., 0., 0., -0.5262],
-                      [0., 0., 0., 1., 0., -0.0545]])
-    ABCDref = np.array([[0.3090, -1.1951, 0, 0, -0.0086, 0.2401,    0.1156],
-                     [0.7568, 0.3090,  0, 0, 0.0278, 0.1406,    0.2259],
-                     [0.3784, 0.5329,  0.3090, -1.1951, 0.0961,    0.0462,    0.6867],
-                     [0.1418, 0.3784,  0.7568, 0.3090, 0.0209,    0.0123,   -0.2026],
-                     [0.,     0.,      0, 0, 0, 0, 1.],
-                     [0.,     0.,      0, 1., -0.0545, 0, 0.]])
-    tdac = np.array([[-1., -1], [0.1, 1.1]])
+    ABCDc = np.array([[0, 0, 1, -1],
+                      [1, 0, 0, -1.5],
+                      [0, 1, 0, 0]])
+    tdac = np.array([0.1, 1.1])
     sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
     ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
                       np.hstack((sys_d[2], sys_d[3]))
                     ))
-    print ABCD -  ABCDref
+    ABCDref = np.array([
+    [1.0000,         0,   -0.1000,    0.9355,   -0.9000],
+    [1.0000,    1.0000,   -0.2450,    0.4784,   -1.7550],
+    [     0,         0,         0,         0,    1.0000],
+    [     0,    1.0000,         0,         0,         0]])
     assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
+    # Non-zero f0 test, short DAC pulse
+    f0 = .2
+    ABCDc = np.array([[0, 0, 1, -1],
+                      [1, 0, 0, -1.5],
+                      [0, 1, 0, 0]])
+    tdac = np.array([0.1, 0.4])
+    sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
+    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
+                      np.hstack((sys_d[2], sys_d[3]))
+                    ))
+    print ABCD
+    ABCDref = np.array([
+    [1.0000,         0,    0.9355,   -0.3000],
+    [1.0000,    1.0000,    0.4784,   -0.6750],
+    [     0,    1.0000,         0,         0]])
+    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
+    #
+    # is this ABCD_ref correct??
+    #f0 = .2
+    #ABCDc = np.array([[0., -1.5791, 0., 0., 0.3362, 0.2928],
+    #                  [1., 0., 0., 0., 0., 0.1658],
+    #                  [0., 1., 0., -1.5791, 0., 0.4160],
+    #                  [0., 0., 1., 0., 0., -0.5262],
+    #                  [0., 0., 0., 1., 0., -0.0545]])
+    #ABCDref = np.array([[0.3090, -1.1951, 0, 0, -0.0086, 0.2401,    0.1156],
+    #                 [0.7568, 0.3090,  0, 0, 0.0278, 0.1406,    0.2259],
+    #                 [0.3784, 0.5329,  0.3090, -1.1951, 0.0961,    0.0462,    0.6867],
+    #                 [0.1418, 0.3784,  0.7568, 0.3090, 0.0209,    0.0123,   -0.2026],
+    #                 [0.,     0.,      0, 0, 0, 0, 1.],
+    #                 [0.,     0.,      0, 1., -0.0545, 0, 0.]])
+    #tdac = np.array([[-1., -1], [0.1, 1.1]])
+    #sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
+    #ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
+    #                  np.hstack((sys_d[2], sys_d[3]))
+    #                ))
+    #print ABCD -  ABCDref
+    #print 2.*(ABCD -  ABCDref)/(ABCD + ABCDref+1e-9)
+    #assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
 
