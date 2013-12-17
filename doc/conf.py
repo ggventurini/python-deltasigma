@@ -141,7 +141,7 @@ html_static_path = ['_static']
 #html_additional_pages = {}
 
 # If false, no module index is generated.
-#html_domain_indices = True
+html_domain_indices = False
 
 # If false, no index is generated.
 #html_use_index = True
@@ -174,7 +174,7 @@ htmlhelp_basename = 'python-deltasigmadoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'letterpaper',
+#'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
 #'pointsize': '10pt',
@@ -239,7 +239,7 @@ texinfo_documents = [
 #texinfo_appendices = []
 
 # If false, no module index is generated.
-#texinfo_domain_indices = True
+texinfo_domain_indices = False
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
