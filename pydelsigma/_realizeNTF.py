@@ -29,24 +29,45 @@ from ._stuffABCD import stuffABCD
 from ._utils import cplxpair
 
 def realizeNTF(ntf, form='CRFB', stf=None):
-	""" [a, g, b, c]  =  realizeNTF(ntf, form = 'CRFB', stf = 1)
-	 Convert a noise transfer function into coefficients for the desired structure.
-	 Supported structures are
-		CRFB	Cascade of resonators,  feedback form.
-	 	CRFF	Cascade of resonators,  feedforward form.
-		CIFB	Cascade of integrators,  feedback form. 
-		CIFF	Cascade of integrators,  feedforward form.
-	 	CRFBD	CRFB with delaying quantizer.
-	 	[CRFFD	CRFF with delaying quantizer. Not working.]
-	 	PFF	Parallel feed-forward.
-		Stratos A CIFF-like structure with non-delaying resonator feedbacks, 
-			   contributed in 2007 by Jeff Gealow
+	"""Convert a noise transfer function into coefficients for the desired structure.
+
+	**Parameters:**
+
+	ntf : a zpk transfer function
+	    The modulator ntf
+
+	form : string
+	    A structure identifier.
+
+	Supported structures are:
+	
+	* *"CRFB"*: Cascade of resonators, feedback form.
+
+ 	* *"CRFF"*: Cascade of resonators,  feedforward form.
+
+	* *"CIFB"*: Cascade of integrators,  feedback form. 
+
+	* *"CIFF"*: Cascade of integrators,  feedforward form.
+
+ 	* *"CRFBD"*: CRFB with delaying quantizer.
+
+ 	* *"PFF"*: Parallel feed-forward.
+
+	* *"Stratos"*: A CIFF-like structure with non-delaying resonator feedbacks, contributed in 2007 by Jeff Gealow
+
 	 See the accompanying documentation for block diagrams of each structure
 
-	 The order of the NTF zeros must be (real, complex conj. pairs).
-	 The order of the zeros is used when mapping the NTF onto the chosen topology.
+	.. note:
+	The order of the NTF zeros must be (real, complex conj. pairs).
+	The order of the zeros is used when mapping the NTF onto the chosen topology.
 
-	 stf is a zpk transfer function
+	stf : a zpk transfer function, optional
+	    the Signal Transfer Function
+	
+	**Returns:**
+
+	a, g, b, c : tuple of ndarrays
+	    the coefficients for the desired structure
 	"""
 
 	# The basic idea is to equate the loop filter at a set of

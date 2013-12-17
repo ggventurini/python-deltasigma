@@ -27,11 +27,8 @@ from ._mapQtoR import mapQtoR
 
 def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                 quadrature=False):
-    """[snr,amp] =
-    simulateSNR(ntf or ABCD or function, osr, amp=None, f0=0, nlev=2,
-                f=1/(4*osr), k=13, quadrature=False)
+    """Determine the SNR for a delta-sigma modulator by using simulations.
 
-    Determine the SNR for a delta-sigma modulator by using simulations.
     The modulator is described by a noise transfer function (ntf)
     and the number of quantizer levels (nlev).
 
@@ -42,22 +39,74 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     and the center frequency (f0).
 
     The input signal is characterized by the amp vector and the f variable.
+    A default value for ``amp`` is used if not supplied.
 
-     amp defaults to [-120 -110...-20 -15 -10 -9 -8 ... 0]dB, where 0 dB means
-     a full-scale (peak value = nlev-1) sine wave.
-     f is the input frequency, normalized such that 1 -> fs;
-     f is rounded to an FFT bin.
+    f is the input frequency, normalized such that 1 -> fs;
+    f is rounded to an FFT bin.
 
     Using sine waves located in FFT bins, the SNR is calculated as the ratio
     of the sine wave power to the power in all in-band bins other than those
     associated with the input tone. Due to spectral smearing, the input tone
     is not allowed to lie in bins 0 or 1. The length of the FFT is 2^k.
 
-     If ntf is complex, simulateQDSM (which is slow) is called.
-     If ABCD is complex, simulateDSM is used with the real equivalent of ABCD
-     in order to speed up simulations.
+    If ntf is complex, simulateQDSM (which is slow) is called.
+    If ABCD is complex, simulateDSM is used with the real equivalent of ABCD
+    in order to speed up simulations.
 
-     Future versions may accommodate STFs.
+    Future versions may accommodate STFs.
+
+    **Parameters:**
+
+    arg1 : scipy 'lti' object, or ndarray
+        The first argument may be one of the various supported representations
+        for a (SISO) transfer function or an ABCD matrix.
+
+    osr : int
+        The over-sampling ratio.
+
+    amp : sequence, optional
+        The amplitudes in dB, referred to the FS, for which the SNR is to be 
+        evaluated. ``amp`` defaults to [-120 -110...-20 -15 -10 -9 -8 ... 0]dB,
+        where 0 dB means a full-scale (peak value = nlev-1) sine wave.
+
+    f0 : float, optional
+        The center frequency. Normalized. Defaults to 0.
+
+    nlev : int, optional
+        Number of quantizer levels, defaults to 2.
+
+    f : float, optional
+        Test signal input frequency. Normalized. Rounded to an FFT bin.
+        Defaults to:
+
+    .. math::
+
+        f = \\frac{1}{4\ \mathrm{OSR}}
+
+    k : int, optional
+        The number of samples used to compute the FFT is set by the integer `k`
+        - default value 13 - through:
+
+    .. math::
+
+        N_{samples} = 2^k
+
+    quadrature : boolean, optional
+        Whether the delta sigma modulator is a quadrature modulator or not.
+        Defaults to ``False``.
+
+    .. note:: Setting ``quadrature`` to ``True`` results in a \\
+        ``NotImplementedError`` being raised, as :func:`simulateQDSM` has not been \\
+        implemented yet.
+
+    **Returns:**
+
+    snr : ndarray
+        The SNR, from simulation
+
+    amp : ndarray
+        The amplitudes corresponding to the SNR values.
+
     """
     # Look at arg1 and decide if the system is quadrature
     quadrature_ntf = False

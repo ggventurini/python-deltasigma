@@ -26,54 +26,58 @@ from scipy.interpolate import interp1d
 from ._dbp import dbp
 
 def predictSNR(ntf, R=64, amp=None, f0=0.):
-    """
-    Predict the SNR curve of a binary delta-sigma modulator by using the describing function 
+    """Predict the SNR curve of a binary delta-sigma modulator using the describing function 
     method of Ardalan and Paulos.
     
-    Parameters:
-    ===========
+    **Parameters:**
     
-    ntf: lti or tf object, or zpk or (num, den) tuples
-         The noise transfer function specifying the modulator.
+    ntf : lti or tf object, or zpk or (num, den) tuples
+        The noise transfer function specifying the modulator.
     
-    R: scalar, default 64, oversampling ratio
+    R : scalar, optional
+        oversampling ratio, defaults to 64 
     
-    amp: ndarray-like, default [-120 -110...-20 -15 -10 -9 -8 ... 0], the magnitudes to be used 
-    for the input signal. They are expressed in dB, where 0 dB means a full-scale 
-    (peak value = 1) sine wave. 
+    amp : ndarray-like, optional
+        the magnitudes to be used for the input signal. They are expressed in 
+        dB, where 0 dB means a full-scale (peak value = 1) sine wave. 
+        Defaults to [-120 -110...-20 -15 -10 -9 -8 ... 0].
     
-    f0, scalar, default 0 is the (notmalized) input signal frequency.
+    f0 : scalar, 
+        is the (normalized) input signal frequency. Defaults to 0.
     
-    Notes:
-    ======
+    **Notes:**
     
-    The band of interest is defined by the oversampling ratio (R) and the center frequency (f0).
+    The band of interest is defined by the oversampling ratio (``R``) and the 
+    center frequency (``f0``).
 
-    The algorithm assumes that the amp vector is sorted in increasing order;
-    once instability is detected, the remaining SNR values are set to -Inf.
+    The algorithm assumes that the ``amp`` vector is sorted in increasing order;
+    once instability is detected, the remaining SNR values are set to ``-Inf``.
     
-    Output:
-    =======
+    **Returns:**
 
-    snr: ndarray, a vector of SNR values (in dB)
+    snr : ndarray
+        a vector of SNR values (in dB)
 
-    amp: ndarray, a vector of amplitudes (in dB)
+    amp : ndarray
+        a vector of amplitudes (in dB)
 
-    k0: ndarray, the quantizer signal gain
+    k0 : ndarray
+        the quantizer signal gain
 
-    k1: ndarray, the quantizer noise gain
+    k1: ndarray
+        the quantizer noise gain
 
-    sigma_e2: scalar, the power of the quantizer noise (not in dB)
+    sigma_e2 : scalar
+        the power of the quantizer noise (not in dB)
     
 
-    Implementation details
-    ======================
+    **Implementation details:**
 
     The describing function method of A&P assumes that the quantizer processes
     signal and noise components separately. The quantizer is modelled as two
-    (not necessarily equal) linear gains, k0 and k1, and an additive white
-    gaussian noise source of power sigma_e2. k0, k1 and sigma_e2 are calculated
-    as functions of the input.
+    (not necessarily equal) linear gains, ``k0`` and ``k1``, and an additive 
+    white gaussian noise source of power sigma_e2. ``k0``, ``k1`` and
+    ``sigma_e2`` are calculated as functions of the input.
     
     The modulator's loop filter is assumed to have nearly infinite gain at
     the test frequency.
