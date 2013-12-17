@@ -109,3 +109,58 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
                        np.hstack((np.dot(C, Sinv), D))
                      ))
     return ABCDs, umax, S
+
+def test_scaleABCD():
+    """Test function for scaleABCD"""
+    from ._synthesizeNTF import synthesizeNTF
+    from ._realizeNTF import realizeNTF
+    from ._stuffABCD import stuffABCD
+    order = 8
+    osr = 32
+    nlev = 2
+    f0 = 0.125
+    Hinf = 1.5
+    form = 'CRFB'
+    ntf = synthesizeNTF(order, osr, 2, Hinf, f0)            # Optimized zero placement
+    a, g, b, c = realizeNTF(ntf, form)
+    b = np.hstack(( # Use a single feed-in for the input
+                   np.atleast_2d(b[0, 0]),
+                   np.zeros((1, max(b.shape)-1))
+                 ))
+    ABCD = stuffABCD(a, g, b, c, form)
+    ABCD0 = ABCD.copy()
+    # Values to be tested
+    ABCD, umax, S = scaleABCD(ABCD0, nlev, f0)
+
+    # References
+    Sdiag_ref = np.array([71.9580, 51.9359, 8.2133, 6.5398, 1.9446, 1.2070, 
+                          0.4223, 0.3040])
+    umax_ref = 0.8667
+    ABCD_ref1 = np.array([
+    [    1.0000,   -0.7320,         0,         0,         0,         0],
+    [    0.7218,    0.4717,         0,         0,         0,         0],
+    [         0,    0.1581,    1.0000,   -0.7357,         0,         0],
+    [         0,    0.1259,    0.7962,    0.4142,         0,         0],
+    [         0,         0,         0,    0.2973,    1.0000,   -0.9437],
+    [         0,         0,         0,    0.1846,    0.6207,    0.4142],
+    [         0,         0,         0,         0,         0,    0.3499],
+    [         0,         0,         0,         0,         0,    0.2518],
+    [         0,         0,         0,         0,         0,         0]])
+    ABCD_ref2 = np.array([
+    [         0,         0,    0.0858,   -0.0858],
+    [         0,         0,    0.0619,    0.0428],
+    [         0,         0,         0,    0.0642],
+    [         0,         0,         0,    0.1835],
+    [         0,         0,         0,    0.2447],
+    [         0,         0,         0,    0.0581],
+    [    1.0000,   -0.8971,         0,   -0.0076],
+    [    0.7197,    0.3543,         0,   -0.1746],
+    [         0,    3.2900,         0,         0]])
+    ABCD_ref = np.hstack((ABCD_ref1, ABCD_ref2))
+
+    # mapping the NTF to states, there is not a perfect match between 
+    # the original code and the scipy version. -> rtol approx 20%
+    assert np.allclose(ABCD, ABCD_ref, atol=1e-3, rtol=1e-1)
+    assert np.allclose(umax, umax_ref, atol=1e-4, rtol=1e-3)
+    assert np.allclose(np.diag(S), Sdiag_ref, atol=1e-2, rtol=2e-1)
+
