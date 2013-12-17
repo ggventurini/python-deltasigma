@@ -49,7 +49,7 @@ reference function outputs. Testing *can* be automated with
 
 ## Documentation
 
-1. You can find the [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/pydelsigma.html).
+1. You can find the [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/).
 
 2. The original MATLAB Toolbox provides good documentation, which is very useful to understand what the toolbox is capable of. See [DSToolbox.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true) and [OnePageStory.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true) (*PDF warning*).
 
