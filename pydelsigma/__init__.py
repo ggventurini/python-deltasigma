@@ -162,7 +162,7 @@ from ._DocumentNTF import DocumentNTF
 from ._PlotExampleSpectrum import PlotExampleSpectrum
 from ._SIunits import SIunits
 from ._axisLabels import axisLabels
-from _bilogplot import bilogplot
+from ._bilogplot import bilogplot
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
