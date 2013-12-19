@@ -8,15 +8,22 @@ Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/m
 
 ### Status
 
-This project is at **an early stage**. Not all functionality has been ported and currently *most of the example files do not run*. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status. 
+This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-**NEWS!** To have an idea of the currently implemented functionality, take a look at these **[preliminary results](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
+To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
+
+* **[dsexample1](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
+* **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
+
+If you have some examples you would like to share, [send me a mail](http://tinymailto.com/5310), and I will add them to the above list.
+
+Further functionality is expected to be ported according to [the ROADMAP](https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md).
 
 ## Dependencies
 
 Using **python-deltasigma** requires **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
 
-They are packaged by virtually all the major Linux distributions. 
+They are packaged by virtually all the major *Linux* distributions. 
 
 On a Debian Linux system, you may install them issueing:
 
@@ -24,13 +31,15 @@ On a Debian Linux system, you may install them issueing:
  # aptitude install python-numpy python-scipy python-matplotlib
 ```
 
-Refer to your system documentation for more information. 
+Refer to your system documentation for more information.
 
 On Windows, I hear good things about 
 [Enthought Canopy](https://www.enthought.com/store/), a Python distribution 
 that carries both free and commercial versions. I do not run Windows, so I 
 can't really provide more info (sorry), except that people manage to have
 a working setup. 
+
+*Mac OS X* is also supported by [Enthought Canopy](https://www.enthought.com/store/), which again provides the easiest and fastest solution to have a scientific Python stack up and running.
 
 More information can be found on the 
 [scipy install page](http://www.scipy.org/install.html) and on the 
@@ -57,7 +66,7 @@ reference function outputs. Testing *can* be automated with
 
 Richard Schreier, Gabor C. Temes, *Understanding Delta-Sigma Data Converters*, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press 
 
-is an excellent resource on the topic. Links [on amazon](http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852), [on the Wiley-IEEE press](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html). 
+is *probably the most authoritative resource on the topic*. Chapter 8-9 show how to use the MATLAB toolkit and the observations apply also to this Python port. Links [on amazon](http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852), [on the Wiley-IEEE press](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html). 
 
 *I am not affiliated with neither the sellers nor the authors.*
 
@@ -72,6 +81,25 @@ There are only a few *guidelines*, which can be overridden every time it is reas
 * Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced with `None`. 
 
 * If a function has a varible number of return values, its Python port should implement the maximum number of return values.
+
+### Support python-deltasigma
+
+*I do not want your money.* I develop this software because I enjoy it and because I use it myself.
+
+If you wish to support the development of `python-deltasigma` or you find the package useful or you otherwise wish to contribute monetarily, ***please donate to cancer research instead:*** 
+
+* **[Association for International Cancer Research *(eng)*](http://www.aicr.org.uk/donate.aspx)**, or 
+* **[Fond. IRCCS Istituto Nazionale dei Tumori *(it)*](http://www.istitutotumori.mi.it/modules.php?name=Content&pa=showpage&pid=24)**.
+
+Consider [sending me a mail](http://tinymailto.com/5310) afterwards, ***it makes for great motivation!***
+
+### Why this project was born
+
+I like challenges, Delta-Sigma modulation and I don't have the money for a MATLAB license.
+
+With this Python package you can simulate Delta-Sigma modulators for free, on any PC. 
+
+I hope you find it useful.
 
 ## Licensing and copyright notice
 
