@@ -4,7 +4,7 @@ python-deltasigma
 The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more Python**.
 
 The **python-deltasigma** project aims to provide **a 1:1 Python port** of Richard 
-Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based.[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8 "githalytics.com")](http://githalytics.com/ggventurini/python-deltasigma)
+Schreier's ***excellent*** **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based.[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8 "githalytics.com")](http://githalytics.com/ggventurini/python-deltasigma)
 
 ### Status
 
@@ -34,17 +34,19 @@ On a Debian Linux system, you may install them issueing:
 
 Refer to your system documentation for more information.
 
-On Windows, I hear good things about 
+On *Windows*, I hear good things about 
 [Enthought Canopy](https://www.enthought.com/store/), a Python distribution 
 that carries both free and commercial versions. I do not run Windows, so I 
 can't really provide more info (sorry), except that people manage to have
 a working setup. 
 
-*Mac OS X* is also supported by [Enthought Canopy](https://www.enthought.com/store/), which again provides the easiest and fastest solution to have a scientific Python stack up and running.
+*Mac OS X* is also supported by [Enthought Canopy](https://www.enthought.com/store/), which likely provides the easiest and fastest solution to have a scientific Python stack up and running.
 
 More information can be found on the 
 [scipy install page](http://www.scipy.org/install.html) and on the 
 [matplotlib homepage](http://matplotlib.org/).
+
+I wrote in a different context some directions to [compile numpy and scipy yourself](https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy), which also apply here. Be warned, it can easily get complicated.
 
 
 #### Extras
@@ -61,13 +63,13 @@ reference function outputs. Testing *can* be automated with
 
 1. You can find the [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/).
 
-2. The original MATLAB Toolbox provides good documentation, which is very useful to understand what the toolbox is capable of. See [DSToolbox.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true) and [OnePageStory.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true) (*PDF warning*).
+2. The original MATLAB Toolbox provides in-depth documentation, which is very useful to understand what the toolbox is capable of. See [DSToolbox.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true) and [OnePageStory.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true) (*PDF warning*).
 
 3. The book:
 
 Richard Schreier, Gabor C. Temes, *Understanding Delta-Sigma Data Converters*, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press 
 
-is *probably the most authoritative resource on the topic*. Chapter 8-9 show how to use the MATLAB toolkit and the observations apply also to this Python port. Links [on amazon](http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852), [on the Wiley-IEEE press](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html). 
+is probably *the most authoritative resource on the topic*. Chapter 8-9 show how to use the MATLAB toolkit and the observations apply also to this Python port. Links [on amazon](http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852), [on the Wiley-IEEE press](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html). 
 
 *I am not affiliated with neither the sellers nor the authors.*
 
