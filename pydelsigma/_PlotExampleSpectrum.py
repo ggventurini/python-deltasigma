@@ -37,12 +37,10 @@ from ._undbv import undbv
 # calculateSNR, simulateDSM, simulateQDSM
 
 def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
-    """PlotExampleSpectrum
+    """Plot a spectrum suitable to exemplify the NTF performance.
     
-    Not operational function. FIXME!
-    
-    Requires the following unimplemented functions:
-    simulateQDSM
+    Quadrature modulators require the following unimplemented functions:
+    simulateQDSM (expected v. 0.2).
     """
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2

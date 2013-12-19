@@ -24,7 +24,7 @@ from ._dbp import dbp
 from ._dbv import dbv
 
 def db(x, input_type='voltage', R=1.):
-	"""The calculate the dB equivalent of the rms signal ``x``.
+	"""The dB equivalent of the RMS signal ``x``.
 	
 	For input type *'voltage'*, the return value is defined as
 	

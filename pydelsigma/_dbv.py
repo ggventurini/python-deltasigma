@@ -23,7 +23,7 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def dbv(x):
-	"""The calculate the dB equivalent of the voltage ratio ``x``.
+	"""The dB equivalent of the voltage ratio ``x``.
 
 	.. math::
 

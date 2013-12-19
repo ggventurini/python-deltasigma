@@ -22,8 +22,7 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def dbm(v, R=50):
-	"""
-	The calculate the equivalent in dBm of an RMS voltage ``v``.
+	"""The dBm equivalent of an RMS voltage ``v``.
 
 	.. math::
 
