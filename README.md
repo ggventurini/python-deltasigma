@@ -14,7 +14,7 @@ To have an idea of the currently implemented functionality, take a look at these
 
 * **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
 * **[dsexample1](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
-* **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
+* **[dsdemo2](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
 
 If you have some examples you would like to share, [send me a mail](http://tinymailto.com/5310), and I will add them to the above list.
 
