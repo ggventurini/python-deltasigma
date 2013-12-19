@@ -1,9 +1,9 @@
 python-deltasigma
 ===============
 
-The MATLAB Delta Sigma Toolbox with 0% MATLAB and a lot more Python.
+The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more Python**.
 
-The **python-deltasigma** project aims to provide **a 1:1 Python replacement** of Richard 
+The **python-deltasigma** project aims to provide **a 1:1 Python port** of Richard 
 Schreier's *excellent* **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based.[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8 "githalytics.com")](http://githalytics.com/ggventurini/python-deltasigma)
 
 ### Status
