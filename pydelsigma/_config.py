@@ -17,7 +17,7 @@
 """
 
 # should synthesizeNTF run the optimization routine?
-optimize_NTF = False
+optimize_NTF = True
 # how many iterations should allow to converge on NTF synthesis?
 # see synthesizeNTF
 itn_limit = 500
