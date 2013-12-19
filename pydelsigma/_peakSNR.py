@@ -46,8 +46,8 @@ def peakSNR(snr, amp):
     # Delete garbage data
     for check in (np.isinf, np.isnan):
         i = check(snr)
-        np.delete(snr, snr[i])
-        np.delete(amp, amp[i])
+        snr = np.delete(snr, np.where(i))
+        amp = np.delete(amp, np.where(i))
     # sanitize inputs
     for x in (snr, amp):
         if not hasattr(x, 'ndim'):
