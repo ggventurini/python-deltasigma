@@ -39,13 +39,14 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 
 	"""
 	fig = plt.gcf()
-	if name is not None:
-		fig.suptitle(name, fontsize=14)
-	if size is not None and size != ():
+	if size is not None and len(size):
 		fig.set_size_inches(size)
 	
 	plt.grid(True)
+
 	ax = plt.gca()
+	if name is not None:
+		ax.set_title(name, fontsize=14)
 
 	if xRange is not None or yRange is not None:
 		ax.set_autoscale_on(False)
