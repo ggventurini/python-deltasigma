@@ -22,9 +22,32 @@ import pylab as plt
 import numpy as np
 
 def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
-    """
+    """Quickly change several figure parameters.
+
     Take each axes in the figure, and for each line and text item 
     in the axes, set linewidth, markersize and font size.
+
+    **Parameters:**
+
+    fontsize : scalar, optional
+        the font size, given in points
+
+    linewidth : scalar, optional
+        the line width, given in points
+
+    markersize : scalar, optional
+        the marker size, given in points
+
+    fig : a matplotlib figure object, optional
+        the figure to apply the modifications to, if not given it is assumed
+        to be a the currently active figure.
+
+    **Returns:**
+
+    None.
+
+    .. note:: This function may be useful to enhance the readibility of
+              figures to be used in presentations.
     """
     if fig is None:
         fig = plt.gcf()
