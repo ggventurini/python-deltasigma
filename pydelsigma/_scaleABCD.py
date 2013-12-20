@@ -26,17 +26,41 @@ from ._simulateDSM import simulateDSM
 def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10):
     """Scale the loop filter of a general delta-sigma modulator for dynamic range.
 
-    ABCD	The state-space description of the loop filter.
-    nlev	The number of levels in the quantizer.
-    xlim	A vector or scalar specifying the limit for each state variable.
-    ymax	The stability threshold. Inputs that yield quantizer inputs above ymax
-           are considered to be beyond the stable range of the modulator.
-    umax	The maximum allowable input amplitude. umax is calculated if it
+    **Parameters:**
+
+    ABCD : ndarray
+        The state-space description of the loop filter.
+
+    nlev : int, optional
+        The number of levels in the quantizer.
+
+    xlim : scalar or ndarray
+        A vector or scalar specifying the limit for each state variable.
+
+    ymax : scalar, optional
+        The stability threshold. Inputs that yield quantizer inputs above ymax
+        are considered to be beyond the stable range of the modulator.
+        If not provided, it will be set to :math:`$n_{lev} + 5$`
+
+    umax : scalar
+        The maximum allowable input amplitude. ``umax`` is calculated if it
     	is not supplied.
 
-    ABCDs	The state-space description of the scaled loop filter.
-    S	The diagonal scaling matrix, ABCDs = [S*A*Sinv S*B; C*Sinv D];
-    	xs = S*x;
+    **Returns:**
+
+    ABCDs : ndarray
+        The state-space description of the scaled loop filter.
+
+    S : ndarray
+        The diagonal scaling matrix S.
+
+    `S` is defined such that::
+
+        ABCDs = [[S*A*Sinv, S*B], [C*Sinv, D]]
+    	xs = S*x
+
+    Where the multiplications are *matrix multiplications*.
+
     """
     if ymax is None:
         ymax = nlev + 5

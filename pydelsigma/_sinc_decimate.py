@@ -21,8 +21,7 @@ from __future__ import division
 import numpy as np
 
 def sinc_decimate(x, m, r):
-	""" y = sinc_decimate(x,m,r)	
-	Decimate x by m-th order sinc of length r.
+	"""Decimate ``x`` by an ``m``-th order sinc filter of length ``r``.
 	"""
 	x = x[:]
 	for i in range(m):
