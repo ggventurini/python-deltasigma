@@ -75,8 +75,8 @@ def carray(x):
 			x = np.array((x,))
 		else:
 			x = np.array(x)
-	elif x.shape == ():
-		x = np.array((x,))
+	elif not len(x.shape):
+		x = x.reshape((1,))
 	else:
 		pass #nothing to do here
 	return x
@@ -401,8 +401,29 @@ def test_mfloor():
 	tres = [-2.0, -1.0, 3.0, 5.0, 7.0, (2+3j)]
 	assert mfloor(tv) == tres
 
+def test_carray():
+	"""Test function for carray()"""
+	# don't touch 1d arrays
+	a = np.arange(10)
+	b = a.copy()
+	assert np.all(carray(a) == b)
+	# reshape 0-d arrays
+	a = np.array(1)
+	b = a.reshape((-1,))
+	assert np.all(carray(a) == b)
+	# convert lists and tuples to 1d arrays
+	a = np.arange(10)
+	c = a.tolist()
+	b = tuple(c)
+	assert np.all(a == carray(b))
+	assert np.all(a == carray(c))
+	# convert scalars to 1d arrays
+	a = np.array((1,))
+	b = 1
+	assert np.all(carray(b) == a)
+
 def test_zpk():
-	"""Test function for zpk.
+	"""Test function for zpk()
 	"""
 	z = [2,]
 	p = [1, 3]
