@@ -99,6 +99,8 @@ def _setTextFontsize(ax, fontsize):
 def test_changeFig():
     """Function for changeFig()
     """
+    if not plt.get_backend() == 'Agg':
+        plt.switch_backend('Agg')
     fig = plt.figure()
     xval = np.arange(0, 1, .01)
 
