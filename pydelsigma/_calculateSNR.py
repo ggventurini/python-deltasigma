@@ -23,7 +23,9 @@ from numpy.linalg import norm
 from ._dbv import dbv
 
 def calculateSNR(hwfft, f, nsig=1):
-	"""Estimate the Signal-to-Noise Ratio (SNR), given the in-band bins of
+	"""Estimate the SNR from the FFT.
+
+	Estimate the Signal-to-Noise Ratio (SNR), given the in-band bins of
 	a Hann-windowed FFT and the location ``f0`` of the input signal (f>0).
 	For ``nsig = 1``, the input tone is contained in ``hwfft(f:f+2)``,
 	this range is appropriate for a Hann-windowed FFT.

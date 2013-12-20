@@ -23,7 +23,7 @@ import copy
 from scipy.signal import lti
 
 def cancelPZ(arg1, tol=1e-6):
-    """Cancel zeros/poles in a zpk system.
+    """Cancel zeros/poles in a SISO transfer function.
 
     **Parameters:**
 
