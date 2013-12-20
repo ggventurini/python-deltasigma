@@ -384,8 +384,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 	return a, g, b, c
 	
 def test_realizeNTF():
-	"""Test unit for realizeNTF
-	"""
+	"""Test function for realizeNTF()"""
 	from ._synthesizeNTF import synthesizeNTF
 	orders = (2, 3, 4, 5)
 	osr = 32

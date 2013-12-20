@@ -263,8 +263,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     return ABCD
 
 def test_stuffABCD():
-	"""Test unit for stuffABCD
-	"""
+	"""Test function for stuffABCD()"""
 	# we test for the following values:
 	#orders = (2, 3, 4, 5)
 	#osr = 32

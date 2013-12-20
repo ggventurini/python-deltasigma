@@ -46,7 +46,7 @@ def mapRtoQ(ABCDr):
     return ABCDq, ABCDp
 
 def test_mapRtoQ():
-    """Test unit for mapRtoQ()
+    """Test function for mapRtoQ()
     """
     test_matrix = np.arange(1, 25).reshape((4, 6)).T
     resq, resp = mapRtoQ(test_matrix)

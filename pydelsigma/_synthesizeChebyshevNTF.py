@@ -109,6 +109,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     return ntf
 
 def test_synthesizeChebyshevNTF():
+    """Test function for synthesizeChebyshevNTF()"""
     from ._utils import cplxpair
     z, p, k = synthesizeChebyshevNTF()
     zref = [1., .9991 + 0.0425j, .9991 - 0.0425j]

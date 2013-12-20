@@ -57,8 +57,7 @@ def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
         _setTextFontsize(ax, fontsize)
 
 def _setAxLinewidth(ax, linewidth, markersize, BW=False):
-    """
-    Take each Line2D in the axes, ax, and convert the line style
+    """Take each Line2D in the axes, ax, and convert the line style
     Optionally also convert to BW, from http://tinyurl.com/qylqgoz
     """
     COLORMAP = {
@@ -97,8 +96,7 @@ def _setTextFontsize(ax, fontsize):
             artist.set_size(fontsize)
 
 def test_changeFig():
-    """Function for changeFig()
-    """
+    """Test function for changeFig()"""
     if not plt.get_backend() == 'Agg':
         plt.switch_backend('Agg')
     fig = plt.figure()
