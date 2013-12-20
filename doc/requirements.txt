@@ -2,4 +2,3 @@ sphinx
 numpy
 scipy
 matplotlib
-nose
