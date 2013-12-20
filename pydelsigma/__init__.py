@@ -158,6 +158,18 @@ __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Pre-Pre-Alpha"
 
+# Package testing can be done remotely, without display. This would make
+# matplotlib fail (and consequently, the test itself).
+# We check for $DISPLAY, but this makes us probably lose in portability, 
+# does Windows have this environment variable defined?
+# Then again, who runs the test suit on a head-less windows machine...
+# ... for the time being the following should be OK. If in the future that
+# feature is needed by somebody, we can switch to
+# if not os.system('python -c "import matplotlib.pyplot as plt;plt.figure()"')
+import matplotlib, os
+if not 'DISPLAY' in os.environ:
+    matplotlib.use('Agg')
+
 from ._DocumentNTF import DocumentNTF
 from ._PlotExampleSpectrum import PlotExampleSpectrum
 from ._SIunits import SIunits
