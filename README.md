@@ -10,6 +10,8 @@ Schreier's ***excellent*** **[MATLAB Delta Sigma Toolbox](http://www.mathworks.c
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma)
+
 To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
 
 * **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
@@ -24,7 +26,7 @@ Further functionality is expected to be ported according to [the ROADMAP](https:
 
 Using **python-deltasigma** requires **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
 
-They are packaged by virtually all the major *Linux* distributions. 
+They are packaged by virtually all the major *Linux distributions*. 
 
 On a Debian Linux system, you may install them issueing:
 
@@ -51,7 +53,7 @@ I wrote in a different context some directions to [compile numpy and scipy yours
 
 #### Extras
 
-Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package.
+Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package. It is an optional step, as the [the latest documentation is available online](http://python-deltasigma.readthedocs.org/en/latest/), without need for you to build it.
 
 If you plan to run the provided unit tests, then you should install 
 **[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the 
