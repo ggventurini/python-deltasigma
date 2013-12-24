@@ -12,6 +12,6 @@ install:
  - pip install scipy --use-mirrors
  - pip install nose coveralls --use-mirrors
 # command to run tests, e.g. python setup.py test
-script: nosetests pydelsigma/*.py
+script: nosetests --with-coverage --cover-package=pydelsigma pydelsigma/*.py
 after_success:
  - coveralls
