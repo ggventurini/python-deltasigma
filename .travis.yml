@@ -10,6 +10,8 @@ before_install:
 install: 
  - pip install numpy --use-mirrors
  - pip install scipy --use-mirrors
- - pip install nose --use-mirrors
+ - pip install nose coveralls --use-mirrors
 # command to run tests, e.g. python setup.py test
 script: nosetests pydelsigma/*.py
+after_success:
+ - coveralls
