@@ -10,7 +10,7 @@ Schreier's ***excellent*** **[MATLAB Delta Sigma Toolbox](http://www.mathworks.c
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma)
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma)[![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
 
 To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
 
