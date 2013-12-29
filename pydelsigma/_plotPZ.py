@@ -20,10 +20,25 @@ import numpy as np
 from scipy.signal import tf2zpk
 import pylab as plt
 
+from ._utils import _get_zpk
+
 def plotPZ(H, color='b', markersize=5, showlist=False):
-	"""function plotPZ(H, color='b',markersize=5, list=0)
-	Plot the poles and zeros of a transfer function.
-	If list is non-zero, a list of the poles and zeros is superimposed on the plot.
+	"""Plot the poles and zeros of a transfer function.
+
+	**Parameters:**
+
+	H : transfer function
+	    Any supported transfer function representation, 
+	    eg num/den, zpk, lti...
+
+	color : Any matplotlib-compatible color descr, optional
+	    For example, 'r' for 'red' or '#000080' for 'navy'.
+
+	markersize : scalar, optional
+	    The markers size in points.
+
+	showlist : boolean, optional
+	    Superimpose a list of the poles and zeros on the plot.
 
 	.. plot::
 
@@ -52,35 +67,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	# For Richard Schreier's Delta Sigma toolbox
 	# Copyright (c) 2009, Richard Schreier
 	
-	if (hasattr(H, 'inputs') and not H.inputs == 1) or \
-	   (hasattr(H, 'outputs') and not H.outputs == 1):
-		raise TypeError, "Only SISO transfer functions can be evaluated."
-	if hasattr(H, 'num') and hasattr(H, 'den'):
-		# for now we support both TransferFunction objects (python-control)
-		# and lti objects (scipy).
-		filt = hasattr(H, '__class__') and H.__class__.__name__ == 'TransferFunction'
-		num = H.num[0][0] if filt else H.num
-		den = H.den[0][0] if filt else H.den
-		z, p, _ = tf2zpk(num, den)
-	elif (hasattr(H, 'zeros') and hasattr(H, 'poles')) or \
-	   (hasattr(H, 'zero') and hasattr(H, 'pole')):
-		# LTI objects have poles and zeros, 
-		# TransferFunction-s have pole() and zero()
-		z = H.zeros if hasattr(H, 'zeros') else H.zero()
-		p = H.poles if hasattr(H, 'poles') else H.pole()
-	elif hasattr(H, 'form') and H.form == 'zp':
-		z, p, _ = H.k, H.zeros, H.poles
-	elif hasattr(H, 'form') and H.form == 'coeff':
-		z, p, _ = tf2zpk(H.num, H.den)
-	elif hasattr(H, 'form'):
-		raise ValueError, '%s: Unknown form: %s' % (__name__, H.form)
-	elif hasattr(H, '__len__'):
-		if len(H) == 2:
-			z, p, _ = tf2zpk(H[0], H[1])
-		elif len(H) == 3:
-			z, p = H[0:2]
-	else:
-		raise TypeError, '%s: Unknown transfer function %s' % (__name__, str(H))
+	z, p, _ = _get_zpk(H)
 
 	pole_fmt = {'marker': 'x', 'markersize': markersize}
 	zero_fmt = {'marker': 'o', 'markersize': markersize}
@@ -142,9 +129,9 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	if not hold_status:
 		plt.hold(False)
 
-if __name__ == '__main__':
+def test_plotPZ():
+	"""Test function for plotPZ()"""
 	plt.figure()
 	plotPZ(((1, .2), (1, 0, .10)), showlist=True)
 	plt.figure()
 	plotPZ(((1, .2), (1, 0, .10)), showlist=False)
-	plt.show()

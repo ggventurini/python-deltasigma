@@ -273,6 +273,83 @@ def restore_input_form(a, form):
 		a = a.reshape(form)
 	return a
 
+def _get_zpk(arg, input=0):
+    """Utility method to convert the input arg to a z, p, k representation.
+
+    **Parameters:**
+
+    arg, which may be:
+
+    * ZPK tuple,
+    * num, den tuple,
+    * A, B, C, D tuple,
+    * a scipy LTI object,
+    * a sequence of the tuples of any of the above types.
+
+    input : scalar
+        In case the system has multiple inputs, which input is to be 
+        considered. Input `0` means first input, and so on.
+
+    **Returns:**
+
+    The sequence of ndarrays z, p and a scalar k
+
+    **Raises:**
+
+    TypeError, ValueError
+
+    .. warn: support for MISO transfer functions is experimental.
+    """
+    z, p, k = None, None, None
+    if isinstance(arg, np.ndarray):
+        # ABCD matrix
+        A, B, C, D = partitionABCD(arg)
+        z, p, k = ss2zpk(A, B, C, D, input=input)
+    elif _is_zpk(arg):
+        z, p, k = carray(arg[0]).squeeze(), carray(arg[1]).squeeze(), arg[2]
+    elif _is_num_den(arg):
+        sys = lti(*arg)
+        z, p, k = sys.zeros, sys.poles, sys.gain
+    elif _is_A_B_C_D(arg):
+        z, p, k = ss2zpk(*arg, input=input)
+    elif isinstance(arg, collections.Iterable):
+        ri = 0
+        for i in arg:
+            # Note we do not check if the user has assembled a list with
+            # mismatched lti representations.
+            if hasattr(i, 'B'):
+                iis = i.B.shape[1]
+                if input < ri + iis:
+                    z, p, k = ss2zpk(i.A, i.B, i.C, i.D, input=input-ri)
+                    break
+                else:
+                    ri += iis
+                    continue
+            elif _is_A_B_C_D(arg):
+                iis = arg[1].shape[1]
+                if input < ri + iis:
+                    z, p, k = ss2zpk(*arg, input=input-ri)
+                    break
+                else:
+                    ri += iis
+                    continue
+            else:
+                if ri == input:
+                    sys = lti(*i)
+                    z, p, k = sys.zeros, sys.poles, sys.gain
+                    break
+                else:
+                    ri += 1
+                    continue
+                ri += 1
+        if (z, p, k) == (None, None, None):
+           raise ValueError("The LTI representation does not have enough" + \
+                            "inputs: max %d, looking for input %d" % \
+                            (ri - 1, input))
+    else:
+        raise TypeError("Unknown LTI representation: %s" % arg)
+    return z, p, k
+
 def _getABCD(arg):
     """Utility method to convert the input arg to an A, B, C, D representation.
 
