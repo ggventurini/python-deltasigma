@@ -22,7 +22,7 @@ from warnings import warn
 import collections, fractions
 from fractions import Fraction as Fr
 import numpy as np
-from scipy.signal import lti
+from scipy.signal import lti, ss2zpk
 
 from._constants import eps
 from ._partitionABCD import partitionABCD
@@ -305,6 +305,8 @@ def _get_zpk(arg, input=0):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
         z, p, k = ss2zpk(A, B, C, D, input=input)
+    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+        z, p, k = arg.zeros, arg.poles, arg.gain
     elif _is_zpk(arg):
         z, p, k = carray(arg[0]).squeeze(), carray(arg[1]).squeeze(), arg[2]
     elif _is_num_den(arg):
@@ -567,3 +569,21 @@ def test_save_input_form():
 	assert np.isscalar(restore_input_form(b2, form_b1))
 	assert b1 == restore_input_form(b2, form_b1)
 
+def test_get_zpk():
+	"""Test function for _get_zpk()"""
+	from scipy.signal import zpk2ss, zpk2tf
+	z = (.4,)
+	p = (.9, .1 + .2j, .1 -.2j)
+	k = .4
+	zt, pt, kt = _get_zpk(zpk2ss(z, p, k))
+	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+	zt, pt, kt = _get_zpk(zpk2tf(z, p, k))
+	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+	zt, pt, kt = _get_zpk(lti(z, p, k))
+	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
