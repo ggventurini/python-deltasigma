@@ -3,14 +3,17 @@ python-deltasigma
 
 The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more Python**.
 
-The **python-deltasigma** project aims to provide **a 1:1 Python port** of Richard 
-Schreier's ***excellent*** **[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**, upon which it is very heavily based.[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8 "githalytics.com")](http://githalytics.com/ggventurini/python-deltasigma)
+The **python-deltasigma** project is a Python package to synthesize, simulate, scale and map to implementable structures **delta sigma modulators**.
+
+It aims to provide **a 1:1 Python port** of Richard Schreier's ***excellent*** 
+**[MATLAB Delta Sigma Toolbox](http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox)**,
+the *de facto* standard tool for high-level delta sigma simulation, upon which it is very heavily based.[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8 "githalytics.com")](http://githalytics.com/ggventurini/python-deltasigma)
 
 ### Status
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma)[![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
 
 To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
 
@@ -22,34 +25,51 @@ If you have some examples you would like to share, [send me a mail](http://tinym
 
 Further functionality is expected to be ported according to [the ROADMAP](https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md).
 
-## Dependencies
+## Install
 
-Using **python-deltasigma** requires **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
+### Supported platforms
+
+python-deltasigma runs on every platform and arch. supported by its dependencies:
+
+ * *Platforms*: Linux, Mac OS X, Windows.
+
+ * *Archs*: x86, x86_64 and armf (arm with floating point unit).
+
+### Dependencies
+
+Using python-deltasigma requires Python 2.x, **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
 
 They are packaged by virtually all the major *Linux distributions*. 
 
-On a Debian Linux system, you may install them issueing:
+On a Debian Linux system, you may install them issuing:
 
 ```
- # aptitude install python-numpy python-scipy python-matplotlib
+ # aptitude install python python-numpy python-scipy python-matplotlib
 ```
 
 Refer to your system documentation for more information.
 
-On *Windows*, I hear good things about 
-[Enthought Canopy](https://www.enthought.com/store/), a Python distribution 
-that carries both free and commercial versions. I do not run Windows, so I 
-can't really provide more info (sorry), except that people manage to have
-a working setup. 
+On *Windows*, I hear good things about: 
 
-*Mac OS X* is also supported by [Enthought Canopy](https://www.enthought.com/store/), which likely provides the easiest and fastest solution to have a scientific Python stack up and running.
+ * [Enthought Canopy](https://www.enthought.com/store/), a Python distribution 
+that carries both free and commercial versions, and
+ 
+ * [Anaconda](https://store.continuum.io/cshop/anaconda/), 
+which offers its full version for free. 
+
+I do not run Windows, so I can't really provide more info (sorry), except 
+that people tell me they manage to have a working setup. 
+
+*Mac OS X* is also supported by [Enthought Canopy](https://www.enthought.com/store/)
+and [Anaconda](https://store.continuum.io/cshop/anaconda/), which likely
+provide the easiest and fastest solution to have a scientific Python stack up 
+and running.
 
 More information can be found on the 
 [scipy install page](http://www.scipy.org/install.html) and on the 
 [matplotlib homepage](http://matplotlib.org/).
 
 I wrote in a different context some directions to [compile numpy and scipy yourself](https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy), which also apply here. Be warned, it can easily get complicated.
-
 
 #### Extras
 
@@ -63,7 +83,7 @@ reference function outputs. Testing *can* be automated with
 
 ## Documentation
 
-1. You can find the [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/).
+1. You can find the included [package documentation online](http://python-deltasigma.readthedocs.org/en/latest/).
 
 2. The original MATLAB Toolbox provides in-depth documentation, which is very useful to understand what the toolbox is capable of. See [DSToolbox.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true) and [OnePageStory.pdf](https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true) (*PDF warning*).
 
