@@ -24,7 +24,37 @@ import pylab as plt
 def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None, 
 	        size=None, name=None):
 	"""Utility function to quickly set plot parameters.
-	Any unspecified parameter is left untouched.
+
+	**Parameters:**
+
+	xRange : 2 elements sequence, optional
+	    set the x-axis limits
+
+	dx : scalar, optional
+	    set the ticks spacing on the x-axis
+
+	xLab : any, optional
+	    Ignored variable, only accepted for compatibility with the MATLAB
+	    syntax.
+
+	yRange : 2 elements sequence, optional
+	    set the y-axis limits
+
+	dy : scalar, optional
+	    set the ticks spacing on the x-axis
+
+	yLab : any, optional
+	    Ignored variable, only accepted for compatibility with the MATLAB
+	    syntax.
+
+	size : 2-elements sequence, optional
+	    Figure size, in inches.
+
+	name : string, optional
+	    Title for the current plot (or subplot)
+
+	All parameters are optional and any unspecified figure parameter is 
+	left untouched.
 	
 	.. plot::
 
@@ -72,3 +102,11 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 		warn('figureMagic() got yLab=%s, but xLab is not implemented and will be ignored.' %
 			 yLab)
 	return
+
+def test_figureMagic():
+	"""Test function for figureMagic()"""
+	a = np.arange(10)
+	plt.figure()
+	plt.plot(a)
+	figureMagic(xRange=[1, 10], dx=1, xLab=2, yRange=[2, 8], dy=.5, yLab=2,
+	            size=(10, 6), name="Test plot")
