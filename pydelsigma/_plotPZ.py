@@ -33,6 +33,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 
 	color : Any matplotlib-compatible color descr, optional
 	    For example, 'r' for 'red' or '#000080' for 'navy'.
+	    You can also specify separately poles and zeros, in a tuple.
 
 	markersize : scalar, optional
 	    The markers size in points.
@@ -50,7 +51,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	   Hinf = 1.5
 	   ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
 	   plt.figure(figsize=(8, 6))
-	   plotPZ(ntf, showlist=True)
+	   plotPZ(ntf, color=('r', 'b'), showlist=True)
 	   plt.title("NTF singularities")
 	   plt.show()
 
@@ -132,6 +133,6 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 def test_plotPZ():
 	"""Test function for plotPZ()"""
 	plt.figure()
-	plotPZ(((1, .2), (1, 0, .10)), showlist=True)
+	plotPZ(((1, .2), (1, 0, .10)), color=('r', 'b'), showlist=True)
 	plt.figure()
-	plotPZ(((1, .2), (1, 0, .10)), showlist=False)
+	plotPZ(((1, 0, .10), (1, .2, .01)), showlist=False)
