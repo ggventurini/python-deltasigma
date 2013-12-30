@@ -41,7 +41,7 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 	    set the y-axis limits
 
 	dy : scalar, optional
-	    set the ticks spacing on the x-axis
+	    set the ticks spacing on the y-axis
 
 	yLab : any, optional
 	    Ignored variable, only accepted for compatibility with the MATLAB
