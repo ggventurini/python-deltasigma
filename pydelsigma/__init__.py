@@ -167,7 +167,7 @@ __status__ = "Pre-Pre-Alpha"
 # feature is needed by somebody, we can switch to
 # if not os.system('python -c "import matplotlib.pyplot as plt;plt.figure()"')
 import matplotlib, os
-if not 'DISPLAY' in os.environ:
+if not ('DISPLAY' in os.environ or os.environ.get('READTHEDOCS', None)):
     matplotlib.use('Agg')
 
 from ._DocumentNTF import DocumentNTF
