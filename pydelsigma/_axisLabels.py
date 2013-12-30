@@ -19,15 +19,31 @@
 import numpy as np
 
 def axisLabels(ran, incr):
-	"""function s = axisLabels(ran, incr)
-	ran is an array containing the axis points (floats)
-	incr may be:
+	"""Utility function to quickly generate the alpahnum. labels.
+
+	**Parameters:**
+
+	ran : sequence
+	    Sequence containing the axis points (floats)
+
+	incr : int, or 2-elements sequence
+	    This parameter may be:
+
 	* an int, the function returns an array of strings corresponding to:
-	each element of range[0]:range[-1]:incr formatted as '%g'
+	  each element of ``range[0]:range[-1]:incr`` formatted as ``'%g'``.
+
 	* a list, the function returns an array of strings corresponding to:
-	each element of incr[1]:range[-1]:incr[0] formatted as '%g'
+	  each element of ``incr[1]:range[-1]:incr[0]`` formatted as ``'%g'``.
 	
-	Note: all elements in ran less than 1e-6 are rounded down to 0.
+	.. note:: All elements in `ran` less than 1e-6 are rounded down to 0.
+
+	**Returns:**
+
+	labels : list of strings
+
+	**Raises:**
+
+	ValueError: "Unrecognised incr."
 	"""
 	ran[np.abs(ran)<1e-6] = 0
 	s = []
@@ -38,7 +54,7 @@ def axisLabels(ran, incr):
 		first = incr[1]
 		incr = incr[0]
 	else:
-		raise ValueError, "Unrecognised incr: "+str(incr)
+		raise ValueError("Unrecognised incr: "+str(incr))
 	for i in range(first, len(ran), incr):
 		s += ['%g' % ran[i]]
 	return s
