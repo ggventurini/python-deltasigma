@@ -61,11 +61,11 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 	   import numpy as np
 	   import pylab as plt
 	   from pydelsigma import figureMagic
-	   t = np.linspace(0, 1e-3)
-	   a = np.sin(2*np.pi*1e3*t + np.pi/4)
+	   t = np.linspace(0, 1)
+	   a = np.sin(2*np.pi*t + np.pi/4)
 	   plt.plot(t, a)
-	   figureMagic([0, 1e-3], dx=.1e-3, xLab=None, yRange=[-1.2, 1.2],
-	               dy=.1, yLab=None, size=(8, 4), name="Sin wave, f = 1kHz")
+	   figureMagic([0, 1], dx=.1, xLab=None, yRange=[-1.2, 1.2],
+	               dy=.2, yLab=None, size=(8, 4), name="Sine wave")
 
 	"""
 	fig = plt.gcf()
