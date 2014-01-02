@@ -80,6 +80,7 @@ Functions
     cancelPZ
     changeFig
     circ_smooth
+    circshift
     clans
     eps
     db
@@ -105,6 +106,7 @@ Functions
     impL1
     infnorm
     l1norm
+    logsmooth
     lollipop
     mapABCD
     mapCtoD
@@ -208,6 +210,7 @@ from ._frespF1 import frespF1
 from ._impL1 import impL1
 from ._infnorm import infnorm
 from ._l1norm import l1norm
+from ._logsmooth import logsmooth
 from ._lollipop import lollipop
 from ._mapABCD import mapABCD
 from ._mapCtoD import mapCtoD
@@ -240,5 +243,5 @@ from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
 from ._undbv import undbv
-from ._utils import cplxpair, mfloor, rat, gcd, lcm
+from ._utils import circshift, cplxpair, mfloor, rat, gcd, lcm
 from ._zinc import zinc
