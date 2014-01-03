@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # _utils.py
-# Miscellaneous functions and stdlib wrappers for MATLAB functions 
+# Miscellaneous functions and stdlib wrappers for MATLAB functions
 # that do not find a direct replacement in numpy/scipy.
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -14,7 +14,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-""" Miscellaneous functions and wrappers for MATLAB functions 
+""" Miscellaneous functions and wrappers for MATLAB functions
  that do not find a direct replacement in numpy/scipy.
 """
 
@@ -38,6 +38,7 @@ def rat(x, tol):
 gcd = fractions.gcd
 
 lcm = lambda a, b: int(a*b / float(gcd(a, b)))
+"""Calculate the Least Common Multiple of a and b."""
 
 class empty:
 	"""An empty function used to hold attributes"""
@@ -66,7 +67,7 @@ def zpk(z, p, k):
 	t.form = 'zp'
 	t.zeros, t.poles, t.k = carray(z), carray(p), k
 	return t
-	
+
 def carray(x):
 	"""Check that x is an ndarray. If not, try to convert it to ndarray.
 	"""
@@ -145,8 +146,8 @@ def minreal(tf, tol=None):
 		if hasattr(tf, 'k'):
 			k = tf.k
 		elif hasattr(tf, 'gain'):
-			k = tf.gain  
-		elif hasattr(tf, 'returnScipySignalLti'): 
+			k = tf.gain
+		elif hasattr(tf, 'returnScipySignalLti'):
 			k = np.array(tf.returnScipySignalLti()[0][0].gain)
 	else:
 		raise ValueError, "Unknown transfer function type."
@@ -196,33 +197,37 @@ def diagonal_indices(a, offset=0):
 	return di, dj
 
 def circshift(a, shift):
-	"""Shift array circularly.
-	
-    The circshift(a, shift) function circularly shifts the values in the 
-	array 'a' by 'shift' elements. 
-	
-	Parameters:
-	
-	a, ndarray
-	       the array to be shifted. Notice that a should have a greater or equal 
-		   number of dimensions than 'shift' ('shift' being a scalar is equal to 
-		   'shift' having one dimension.)
-	
-	shift, int or ndarray-like of int.
-	       the N-th element specifies the shift amount for the N-th dimension 
-		   of the input array 'a'. 
-		   If an element in 'shift' is positive, the values of A are
-           shifted to higher-index rows (ie down) or to higher-index columns 
-		   (ie to the right). 
-		   If the element is negative, the values of A are shifted in the opposite 
-		   directions, towards lower-index rows (ie up) or to lower-index columns 
-		   (ie right).
-		   If shift is an int, the shift happens along axis=0.
-		   All dimensions that do not have a corresponding shift value in 'shift' 
-		   are left untouched (ie shift=(1,0,0) is equal to shift=(1,), with the
-		   exception that the former will trigger an IndexError if a.ndim < 3)
+	"""Shift an array circularly.
 
-	Returns:
+	The ``circshift(a, shift)`` function circularly shifts the values in the
+	array ``a`` by ``shift`` elements.
+
+	**Parameters:**
+
+	a : ndarray
+	    the array to be shifted. Notice that a should have a greater or equal
+	    number of dimensions than 'shift' ('shift' being a scalar is equal to
+	    'shift' having one dimension.)
+
+	shift : int or ndarray-like of int.
+	    the N-th element specifies the shift amount for the N-th dimension
+	    of the input array 'a'.
+
+	If an element in 'shift' is positive, the values of A are
+	shifted to higher-index rows (ie down) or to higher-index columns
+	(ie to the right).
+
+	If the element is negative, the values of A are shifted in the opposite
+	directions, towards lower-index rows (ie up) or to lower-index columns
+	(ie right).
+
+	If shift is an int, the shift happens along axis=0.
+
+	All dimensions that do not have a corresponding shift value in 'shift'
+	are left untouched (ie shift=(1,0,0) is equal to shift=(1,), with the
+	exception that the former will trigger an IndexError if a.ndim < 3).
+
+	**Returns:**
 
 	The shifted array.
 	"""
@@ -235,7 +240,7 @@ def circshift(a, shift):
 def save_input_form(a):
 	"""Save the form of `a` so that it can be restored later on
 
-	Returns: an object representing the form of `a`, to be passed to 
+	Returns: an object representing the form of `a`, to be passed to
                  restore_input_form(a, form)
 	"""
 	if np.isscalar(a):
@@ -287,7 +292,7 @@ def _get_zpk(arg, input=0):
     * a sequence of the tuples of any of the above types.
 
     input : scalar
-        In case the system has multiple inputs, which input is to be 
+        In case the system has multiple inputs, which input is to be
         considered. Input `0` means first input, and so on.
 
     **Returns:**
@@ -512,12 +517,12 @@ def test_zpk():
 	assert t.zeros.tolist() == z
 	assert t.poles.tolist() == p
 	assert t.k == k
-	
+
 def test_cplxpair():
 	"""Test function for cplxpair()
 	"""
 	a = np.array([1 + eps*20j, 1.1 + 2j, 1.1 - (2+50*eps)*1j, .1 + (1+99*eps)*.2j, .1 - .2j])
-	assert np.allclose(cplxpair(a), np.array([0.1-0.2j, 0.1+0.2j, 1.1-2.j, 1.1+2.j, 1.0+0.j]), 
+	assert np.allclose(cplxpair(a), np.array([0.1-0.2j, 0.1+0.2j, 1.1-2.j, 1.1+2.j, 1.0+0.j]),
 	                   atol=100*eps)
 
 def test_diagonal_indices():
@@ -546,7 +551,7 @@ def test_diagonal_indices():
 	assert np.allclose(d, (1, 6, 11, 16))
 	assert np.allclose(dp1, (2, 7, 12))
 	assert np.allclose(dm1, (5, 10, 15, 20))
-	
+
 def test_circshift():
 	"""Test function for circshift()
 	"""
