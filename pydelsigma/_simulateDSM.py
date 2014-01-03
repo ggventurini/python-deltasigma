@@ -19,7 +19,7 @@
 import numpy as np
 from scipy.signal import tf2zpk, zpk2ss
 from scipy.linalg import orth, norm, inv
-from ._utils import carray
+from ._utils import carray, _get_zpk
 
 def simulateDSM(u, arg2, nlev=2, x0=0):
 	"""[v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)
@@ -53,39 +53,17 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	if (hasattr(arg2, 'inputs') and not arg2.inputs == 1) or \
 	   (hasattr(arg2, 'outputs') and not arg2.outputs == 1):
 			raise TypeError("The supplied TF isn't a SISO transfer function.")
-	if hasattr(arg2, 'num') and hasattr(arg2, 'den'):
-		filt = hasattr(arg2, 'outputs')
-		num = arg2.num[0][0] if filt else arg2.num
-		den = arg2.den[0][0] if filt else arg2.den
-		zeros, poles, k = tf2zpk(num, den)
-	elif (hasattr(arg2, 'zeros') and hasattr(arg2, 'poles')) or \
-	   (hasattr(arg2, 'zero') and hasattr(arg2, 'pole')):
-		# LTI objects have poles and zeros, 
-		# TransferFunction-s have pole() and zero()
-	   	zeros = arg2.zeros if hasattr(arg2, 'zeros') else arg2.zero()
-	   	poles = arg2.poles if hasattr(arg2, 'poles') else arg2.pole()
-		if hasattr(arg2, 'k'):
-			k = arg2.k
-		elif hasattr(arg2, 'gain'):
-			k = arg2.gain  
-		elif hasattr(arg2, 'returnScipySignalLti'): 
-			k = np.array(arg2.returnScipySignalLti()[0][0].gain)
-	elif hasattr(arg2, 'form') and arg2.form == 'coeff':
-		zeros, poles, k = tf2zpk(arg2.num, arg2.den)
-	elif hasattr(arg2, 'form'):
-		raise ValueError('%s: Unknown form: %s' % (__name__, arg2.form))
-	elif hasattr(arg2, '__len__'):
-		if len(arg2) == 3:
-			zeros, poles, k = arg2
-		else:
-			ABCD = carray(arg2)
-			if ABCD.shape[1] != ABCD.shape[0] + nu:
-				raise ValueError('The ABCD argument does not have proper dimensions.')
+	if isinstance(arg2, np.ndarray):
+		ABCD = carray(arg2)
+		if ABCD.shape[1] != ABCD.shape[0] + nu:
+			raise ValueError('The ABCD argument does not have proper dimensions.')
+		form = 1
 	else:
-		raise TypeError('%s: Unknown transfer function %s' % (__name__, str(arg2)))
+		zeros, poles, k = _get_zpk(arg2)
+		form = 2
+	#raise TypeError('%s: Unknown transfer function %s' % (__name__, str(arg2)))
 		
 	# need to set order and form now.
-	form = 2 - 1*(not 'zeros' in locals())
 	order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
 	
 	if not hasattr(x0 , '__len__'):
