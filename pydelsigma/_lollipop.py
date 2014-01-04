@@ -81,10 +81,11 @@ def lollipop(x, y, color='b', lw=2, ybot=0):
 
 	plt.hold(hold_status)
 
-if __name__ == '__main__':
+def test_lollipop():
+	"""Test function for lollipop()"""
 	t = np.arange(1, 20)*1e-3
 	f = 20.
 	a = np.sin(2*np.pi*f*t)
+	plt.figure()
 	lollipop(t, a)
 	plt.grid(True)
-	plt.show()
