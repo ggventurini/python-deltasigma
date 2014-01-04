@@ -1,7 +1,7 @@
 python-deltasigma
 ===============
 
-The **MATLAB Delta Sigma Toolbox** with **no MATLAB** and **a *lot* more Python**.
+The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more Python**.
 
 The **python-deltasigma** is a Python package to *synthesize, simulate, scale and map to implementable structures* **delta sigma modulators**.
 
