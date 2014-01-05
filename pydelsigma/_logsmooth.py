@@ -35,17 +35,20 @@ def logsmooth(X, inBin, nbin=8, n=3):
     Unfortunately, harmonics above the nth appear smaller than they 
     really are because their energy is averaged over many bins.
     """
+    # preliminary sanitization of the input
     if not np.prod(X.shape) == max(X.shape):
         raise ValueError('Expected a (N,) or (N, 1)-shaped array.')
     if len(X.shape) > 1:
         X = np.squeeze(X)
+    inBin = int(inBin)
+
     N = X.shape[0]
-    N2 = np.floor(N/2)
-    f1 = ((inBin - 1) % nbin) + 1
+    N2 = int(np.floor(N/2))
+    f1 = int((inBin - 1) % nbin)
     startbin = np.concatenate((np.arange(f1, inBin, nbin), 
                                np.arange(inBin, inBin + 3)
                               ))
-    for i in range(n):
+    for i in range(1, n):
         startbin = np.concatenate((startbin, 
                        np.arange(startbin[-1] + 1, (i + 1)*inBin, nbin), 
                        (i + 1)*inBin + np.arange(0, 3)
@@ -56,10 +59,10 @@ def logsmooth(X, inBin, nbin=8, n=3):
         nbin = np.min((nbin*1.1, 2**10))
         m = int(np.round(m + nbin, 0))
 
-    stopbin = np.concatenate((startbin[1:] - 1, np.array((N2,))))
+    stopbin = np.concatenate((startbin[1:], np.array((N2,)) + 1))
     f = ((startbin + stopbin)/2 - 1)/N
     p = np.zeros(f.shape)
-    for i in range(max(f.shape) + 1):
-        p[i] = dbp(norm(X[startbin[i]:stopbin[i]])**2/(stopbin[i] - startbin[i] + 1))
+    for i in range(f.shape[0]):
+        p[i] = dbp(norm(X[startbin[i]:stopbin[i]])**2/(stopbin[i] - startbin[i]))
     return f, p
 
