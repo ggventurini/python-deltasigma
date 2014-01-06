@@ -59,6 +59,38 @@ def logsmooth(X, inBin, nbin=8, n=3):
 
     f, p : tuple of 1d- ndarrays
         The bins and smoothed FFT, expressed in dB.
+
+    .. plot::
+
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from pydelsigma import dbv, ds_hann, figureMagic, logsmooth
+        T = 2 #s
+        Fs = 231e3 #Hz
+        N = int(np.round(T*Fs, 0)) # FFT points
+        freq = .1e3
+        t = np.arange(N)/Fs
+        u0 = np.sin(2*np.pi*t*freq)
+        u0 = u0 + .01*u0**2+.001*u0**3+.005*u0**4
+        U = np.fft.fft(u0 * ds_hann(N))/(N/4)
+        f = np.linspace(0, Fs, N + 1)
+        f = f[:N/2 + 1]
+        plt.subplot(211)
+        plt.semilogx(f, dbv(U[:N/2 + 1]))
+        plt.hold(True)
+        inBin = np.round(freq/Fs*N)
+        fS, US = logsmooth(U, inBin)
+        plt.semilogx(fS*Fs, US, 'r', linewidth=2.5)
+        plt.xlim([f[0]*Fs, Fs/2])
+        plt.ylabel('U(f) [dB]')
+        figureMagic(xRange=[100, 1e4], yRange=[-400, 0], name='Spectrum')
+        plt.subplot(212)
+        plt.loglog(fS[1:]*Fs, np.diff(fS*Fs))
+        plt.xlabel('f [Hz]')
+        plt.ylabel('Averaging interval [Hz]')
+        figureMagic(xRange=[100, 1e4])
+        plt.show()
+
     """
     # preliminary sanitization of the input
     if not np.prod(X.shape) == max(X.shape):
