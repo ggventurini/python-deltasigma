@@ -23,17 +23,42 @@ from scipy.linalg import norm
 from ._dbp import dbp
 
 def logsmooth(X, inBin, nbin=8, n=3):
-    """Smooth the fft, X, and convert it to dB.
+    """Smooth the fft, and convert it to dB.
 
-    Use nbin bins from 0 to 3*inBin, 
-    thereafter increase bin sizes by a factor of 1.1, staying less than 2^10.
+    **Parameters:**
 
-    For the n sets of bins inBin+[0:2], 2*inBin+[0:2], ... 
-    n*inBin+[0:2], don't do averaging. This way, the noise BW
+    X : (N,) ndarray
+        The FFT data.
+
+    inBin : int
+        The bin index of the input sine wave (if any).
+
+    nbin : int, optional
+        The number of bins on which the averaging will be performed,
+        used *before* 3*inBin
+
+    n : int, optional
+        Around the location of the input signal and its harmonics (up to the
+        third harmonic), don't average for n bins.
+
+    The logsmooth algorithm uses nbin bins from 0 to 3*inBin,
+    thereafter the bin sizes is increased by a factor of 1.1,
+    staying less than 2^10.
+
+    For the :math:`n` sets of bins:
+    :math:`inBin + i, 2*inBin + i ... n*inBin+i`, where :math:`i \\in [0,2]`
+    don't do averaging. This way, the noise BW
     and the scaling of the tone and its harmonics are unchanged.
 
-    Unfortunately, harmonics above the nth appear smaller than they 
-    really are because their energy is averaged over many bins.
+    .. note::
+
+        Unfortunately, harmonics above the nth appear smaller than they
+        really are because their energy is averaged over many bins.
+
+    **Returns:**
+
+    f, p : tuple of 1d- ndarrays
+        The bins and smoothed FFT, expressed in dB.
     """
     # preliminary sanitization of the input
     if not np.prod(X.shape) == max(X.shape):
@@ -48,7 +73,7 @@ def logsmooth(X, inBin, nbin=8, n=3):
     startbin = np.concatenate((np.arange(f1, inBin, nbin), 
                                np.arange(inBin, inBin + 3)
                               ))
-    for i in range(1, n):
+    for i in range(1, n + 1):
         startbin = np.concatenate((startbin, 
                        np.arange(startbin[-1] + 1, (i + 1)*inBin, nbin), 
                        (i + 1)*inBin + np.arange(0, 3)
