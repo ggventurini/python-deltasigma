@@ -21,13 +21,31 @@ import numpy as np
 import numpy.linalg as la
 
 def rms(x, no_dc=False):
-	""" y = rms(x, no_dc=False)
-	Calculates the Root Mean Square of the input vector.
-	If no_dc is True (or non-zero), the DC value gets subtracted.
+	"""Calculates the RMS value of x
+
+	The Root Mean Square value of an array :math:`x` of length :math:`n` is defined as:
+
+	.. math::
+
+	    x_{RMS} = \\sqrt{\\frac{1}{n}(x_1^2 + x_2^2 + ...+x_n^2)}
+
+	**Parameters:**
+
+	x : (N,) ndarray
+	    The input vector
+
+	no_dc : boolean, optional
+	    If set to ``True``, the DC value gets subtracted from ``x`` first and the RMS is computed on the result.
+
+	**Returns:**
+
+	xrms : scalar
+	    as defined above
+
 	"""
 	if no_dc:
 	    x = x - np.mean(x)
-	return la.norm(x)/np.sqrt(len(x))
+	return la.norm(x)/np.sqrt(max(x.shape))
 	
 def test_rms():
 	"""Test function for rms()
