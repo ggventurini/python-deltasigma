@@ -18,9 +18,11 @@ This project is a work in progress. Not all functionality has been ported. Take 
 To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
 
 * **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
-* **[dsexample1](http://nbviewer.ipython.org/7251113)**, which showcase `dsexample1.m`.
 * **[dsdemo2](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
 * **[dsdemo4](http://nbviewer.ipython.org/gist/ggventurini/8255785/dsdemo4.ipynb)**, notebook port of `dsdemo4.m`. [Audio file](https://gist.github.com/ggventurini/8255785/raw/8fb7d94236b917e6d557fb538d3f35a3144c038c/sax.wav.b64).
+* **[dsexample1](http://nbviewer.ipython.org/7251113)**, python version of `dsexample1.m`.
+* **[dsexample1](http://nbviewer.ipython.org/8323435)**, python version of `dsexample2.m`.
+* **[dsexample1](http://nbviewer.ipython.org/8323046)**, python version of `dsexample3.m`.
 
 If you have some examples you would like to share, [send me a mail](http://tinymailto.com/5310), and I will add them to the above list.
 
@@ -121,9 +123,9 @@ Consider [sending me a mail](http://tinymailto.com/5310) afterwards, ***it makes
 
 ### Why this project was born
 
-I like challenges, Delta-Sigma modulation and I don't have the money for a MATLAB license.
+I like challenges, Delta Sigma modulation and I don't have the money for my own MATLAB license.
 
-With this Python package you can simulate Delta-Sigma modulators for free, on any PC. 
+With this Python package you can simulate Delta Sigma modulators for free, on any PC. 
 
 I hope you find it useful.
 
