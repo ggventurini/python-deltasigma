@@ -31,8 +31,75 @@ from ._dsclansNTF import dsclansNTF
 def clans(order=4, OSR=64, Q=5, rmax=0.95, opt=0):
     """Optimal NTF design for a multi-bit modulator.
     
+    Synthesize a noise transfer function (NTF) for a lowpass delta-sigma 
+    modulator using the CLANS methodology.
+
     CLANS stands for Closed-Loop Analysis of Noise-Shapers,
-    and it was originally developed by J.G. Kenney and L.R. Carley.
+    and it was originally developed by J.G. Kenney and L.R. Carley [1].
+
+    .. seealso:: [1] J. G. Kenney and L. R. Carley, “Design of multibit
+        noise-shaping data converters,” Analog Integrated Circuits Signal
+        Processing Journal, vol. 3, pp. 259-272, 1993.
+
+    **Parameters:**
+
+    order : int
+        The order of the NTF.
+
+    OSR : int
+        The oversampling ratio.
+
+    Q : int
+        The maximum number of quantization levels used by the fed-back quantization
+        noise. (Mathematically, :math:`Q = \\|h\\|_1 - 1`, i.e. the sum of the 
+        absolute values of the impulse response samples minus one is the 
+        maximum instantaneous noise gain.)
+
+    rmax : float
+        The maximum radius for the NTF poles.
+
+    opt : int
+        A flag used to request optimized NTF zeros. 
+        
+    * `opt=0` puts all NTF zeros at band center (DC for lowpass modulators).
+    * `opt=1` optimizes the NTF zeros.
+    * For even-order modulators, `opt=2` puts two zeros at band-center, 
+      but optimizes the rest.
+
+    **Returns**
+
+    ntf : tuple
+        The modulator NTF, given in ZPK (zero-pole-gain) form.
+
+    Example::
+
+        # Fifth-order lowpass modulator; (time-domain) noise gain of 5, 
+        # zeros optimized for OSR = 32.
+        H = clans(5, 32, 5, .95, 1)
+        print "zeros:\\n", H[0]
+        print "poles:\\n", H[1]
+        print "gain:", H[2]
+
+    Prints::
+
+        zeros:
+        [ 0.99604531-0.08884669j  0.99604531+0.08884669j  0.99860302-0.05283948j
+        0.99860302+0.05283948j  1.00000000+0.j        ]
+        poles:
+        [ 0.41835234+0.j         0.48922229+0.1709716j  0.48922229-0.1709716j
+        0.65244885+0.3817224j  0.65244885-0.3817224j]
+        gain: 1.0
+
+    Which can be plotted through :func:`DocumentNTF`:
+
+    .. plot::
+
+        from pydelsigma import DocumentNTF, clans
+        # Fifth-order lowpass modulator; (time-domain) noise gain of 5, 
+        # zeros optimized for OSR = 32.
+        H = clans(5, 32, 5, .95, 1)
+        DocumentNTF(H)
+
     """
     # Create the initial guess
     Hz, poles, _ = synthesizeNTF(order, OSR, opt, 1 + Q, 0)

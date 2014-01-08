@@ -20,8 +20,7 @@ specified amount of samples.
 import numpy as np
 
 def delay(x, n=1):
-	""" y = delay(x, n=1) 
-	Delay signal x by n samples
+	"""Delay signal ``x`` by ``n`` samples.
 	"""
 	nx = np.size(x)
 	if nx <= n:

@@ -17,11 +17,11 @@
 vector suitable for plotting the frequency response of an NTF.
 """
 
+from __future__ import division
 import numpy as np
 
 def ds_freq(osr=64., f0=0., quadrature=False):
-	"""f = ds_freq(osr=64, f0=0, quadrature=0)    
-	Frequency vector suitable for plotting the frequency response of an NTF
+	"""Frequency vector suitable for plotting the frequency response of an NTF
 	"""
 	if quadrature:
 		f_left = -0.5

@@ -29,11 +29,33 @@ from ._utils import carray
 
 def bilogplot(V, f0, fbin, x, y, **fmt):
     """Plot two side-by-side spectra
-    V    Hann-windowed FFT
-    f0   bin number of center frequency
-    fbin bin number of test tone
-    x    xmin, xmax_left, xmax_right
-    y    ymin, ymax, dy, y_skip
+
+    **Parameters:**
+
+    V : 1d-ndarray
+        Hann-windowed FFT
+
+    f0 : int
+        bin number of center frequency
+
+    fbin : int
+        bin number of test tone
+
+    x : 3-elements sequence-like
+        x is a sequence of `xmin, xmax_left, xmax_right`.
+
+    y : 3-elements sequence-like
+        y is a sequence of `ymin, ymax, dy, y_skip`.
+
+    Additional keyword parameters `**fmt` will be passed to matplotlib's semilogx()
+    
+    The FFT is smoothed before plotting and converted to dB. See
+    :func:`logsmooth` for details regarding the algorithm used. 
+
+    **Returns:**
+
+    *None*
+
     """
     V = carray(V)
     if len(V.shape) > 1:
