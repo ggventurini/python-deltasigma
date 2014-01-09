@@ -18,17 +18,34 @@ point(s) given by the user.
 """
 
 import numpy as np
-from scipy.signal import tf2zpk
+from scipy.signal import lti
 from ._evalRPoly import evalRPoly
+from ._utils import _is_num_den, _is_zpk, _get_zpk
 
 def evalTF(tf, z):
-	"""h = evalTF(tf, z)
-	Evaluates the rational function described by tf at the point(s) given in the z vector.
+	"""Evaluates the rational function described by ``tf`` at the point(s)
+	given in the ``z`` vector.
 	
-	TF must be either a TransferFunction or an LTI object or any object having the attributes:
-	 zeros, poles, k	if form == 'zp'
-	or:
-	 num, den		if form == 'coeff'
+	**Parameters:**
+
+	tf : object 
+	    the LTI description of the CT system, which can be in one of the 
+	    following forms:
+
+	* an LTI object,
+	* a zpk tuple,
+	* a (num, den) tuple,
+	* an ABCD matrix (internally converted to zpk representation),
+	* a list-like containing the A, B, C, D matrices (also internally converted to zpk representation).
+
+	z : scalar or 1d ndarray
+	    The z values for which ``tf`` is to be evaluated.
+
+	**Returns:**
+
+	tf(z) : scalar or 1d-ndarray
+	    The result.
+
 	"""
 	# Original comment in deltasig:
 	# In Matlab 5, the ss/freqresp() function does nearly the same thing.
@@ -37,41 +54,33 @@ def evalTF(tf, z):
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
 		raise TypeError, "Only SISO transfer functions can be evaluated."
+	# for now we support both TransferFunction objects (python-control)
+	# and lti objects (scipy).
+	if hasattr(tf, 'returnScipySignalLti'): 
+		tf = tf.returnScipySignalLti()[0][0]
+
 	if hasattr(tf, 'num') and hasattr(tf, 'den'):
-		# for now we support both TransferFunction objects (python-control)
-		# and lti objects (scipy).
-		filt = hasattr(tf, '__class__') and tf.__class__.__name__ == 'TransferFunction'
-		num = tf.num[0][0] if filt else tf.num
-		den = tf.den[0][0] if filt else tf.den
-		h = np.polyval(num, z) / np.polyval(den, z)
-	elif (hasattr(tf, 'zeros') and hasattr(tf, 'poles')) or \
-	   (hasattr(tf, 'zero') and hasattr(tf, 'pole')):
-		# LTI objects have poles and zeros, 
-		# TransferFunction-s have pole() and zero()
-		zeros = tf.zeros if hasattr(tf, 'zeros') else tf.zero()
-		poles = tf.poles if hasattr(tf, 'poles') else tf.pole()
+		h = np.polyval(tf.num, z) / np.polyval(tf.den, z)
+	elif (hasattr(tf, 'zeros') and hasattr(tf, 'poles')):
+		# LTI objects have poles and zeros 
+		zeros = tf.zeros
+		poles = tf.poles
 		if hasattr(tf, 'k'):
 			k = tf.k
 		elif hasattr(tf, 'gain'):
 			k = tf.gain  
-		elif hasattr(tf, 'returnScipySignalLti'): 
-			k = np.array(tf.returnScipySignalLti()[0][0].gain)
-		h = k * evalRPoly(zeros, z) / evalRPoly(poles, z)
-	elif hasattr(tf, 'form') and tf.form == 'zp':
-		h = tf.k * evalRPoly(tf.zeros, z) / evalRPoly(tf.poles, z)
-	elif hasattr(tf, 'form') and tf.form == 'coeff':
-		h = np.polyval(tf.num, z) / np.polyval(tf.den, z)
-	elif hasattr(tf, 'form'):
-		raise ValueError, '%s: Unknown form: %s' % (__name__, tf.form)
-	elif hasattr(tf, '__len__'):
-		if len(tf) == 2:
-			num, den = tf[0], tf[1]
-			h = np.polyval(num, z) / np.polyval(den, z)
-		elif len(tf) == 3:
-			zeros, poles, k = tf
-			h = k * evalRPoly(zeros, z) / evalRPoly(poles, z)
+		h = k*evalRPoly(zeros, z)/evalRPoly(poles, z)
+	# we try not to convert the given representation to another one
+	elif _is_num_den(tf):
+		num, den = tf[0], tf[1]
+		h = np.polyval(num, z)/np.polyval(den, z)
+	elif _is_zpk(tf):
+		zeros, poles, k = tf
+		h = k*evalRPoly(zeros, z)/evalRPoly(poles, z)
 	else:
-		raise TypeError, '%s: Unknown transfer function %s' % (__name__, str(tf))
+		# ABCD and A, B, C, D will be converted through _utils
+		zeros, poles, k = _get_zpk(tf)
+		h = k*evalRPoly(zeros, z)/evalRPoly(poles, z)
 	return h
 	
 def test_evalTF():
