@@ -60,6 +60,8 @@ def db(x, input_type='voltage', R=1.):
 
 	.. note:: MATLAB provides a function with this exact signature.
 
+	.. seealso:: :func:`undbm`, :func:`undbv`, :func:`undbp`, :func:`dbv`, :func:`dbp`, :func:`dbv`
+
 	"""
 	if input_type.lower().strip() == 'voltage':
 		y = dbv(x) - 10.*np.log10(R)

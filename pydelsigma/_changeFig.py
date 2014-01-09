@@ -46,8 +46,11 @@ def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
 
     None.
 
-    .. note:: This function may be useful to enhance the readibility of
-              figures to be used in presentations.
+    .. note:: 
+
+        This function may be useful to enhance the readibility of
+        figures to be used in presentations.
+
     """
     if fig is None:
         fig = plt.gcf()

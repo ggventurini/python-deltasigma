@@ -35,9 +35,9 @@ def clans(order=4, OSR=64, Q=5, rmax=0.95, opt=0):
     modulator using the CLANS methodology.
 
     CLANS stands for Closed-Loop Analysis of Noise-Shapers,
-    and it was originally developed by J.G. Kenney and L.R. Carley [1].
+    and it was originally developed by J.G. Kenney and L.R. Carley [1]_.
 
-    .. seealso:: [1] J. G. Kenney and L. R. Carley, “Design of multibit
+    .. [1] J. G. Kenney and L. R. Carley, “Design of multibit
         noise-shaping data converters,” Analog Integrated Circuits Signal
         Processing Journal, vol. 3, pp. 259-272, 1993.
 

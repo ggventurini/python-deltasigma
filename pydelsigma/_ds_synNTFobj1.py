@@ -26,8 +26,11 @@ from ._utils import zpk, carray
 from ._rmsGain import rmsGain
 
 def ds_synNTFobj1(x, p, osr, f0):
-	"""y = ds_synNTFobj1(x, p, osr, f0)	
-	Objective function for synthesizeNTF() 
+	"""Objective function for :func:`synthesizeNTF`
+
+	This function is not meant to be used directly but it is provided for compliance with the 
+	MATLAB DS Toolbox.
+
 	"""
 	p = carray(p)
 	z = np.exp(2j*np.pi*(f0 + 0.5/osr*x))

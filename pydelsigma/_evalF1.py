@@ -21,7 +21,7 @@ from __future__ import division
 from ._utils import carray
 
 def evalF1(f1, z, phi=None):
-    """F1 = evalF1(f1,z,phi)	Calculate the values of the F1 filter 
+    """Calculate the values of the F1 filter 
     (tranformed prototype filter) of a Saramaki HBF at the given points.
     """
     if phi is not None:

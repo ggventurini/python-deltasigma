@@ -19,7 +19,7 @@
 import numpy as np
 
 def axisLabels(ran, incr):
-	"""Utility function to quickly generate the alpahnum. labels.
+	"""Utility function to quickly generate the alphanum. axis labels.
 
 	**Parameters:**
 

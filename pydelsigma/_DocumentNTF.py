@@ -34,7 +34,7 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	"""Plot the NTF's poles and zeros as well as its frequency-response
 
 	The first argument is either the NTF or ABCD matrix. 
-	If the first argument is ABCD, the stf is also plotted.
+	If the first argument is ABCD, the STF is also plotted.
 
 	.. plot::
 

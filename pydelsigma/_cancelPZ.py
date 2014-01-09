@@ -49,7 +49,8 @@ def cancelPZ(arg1, tol=1e-6):
 
     (z, p, k) : tuple
         A tuple containing zeros, poles and gain (unchanged) after poles, zeros 
-    cancellation.
+        cancellation.
+
     """
     if not isinstance(arg1, lti):
         arg1 = lti(*arg1)

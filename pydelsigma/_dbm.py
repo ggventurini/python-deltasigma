@@ -40,6 +40,9 @@ def dbm(v, R=50):
 
 	PdBm : scalar or sequence
 	       The input in dBm.
+
+	.. seealso:: :func:`undbm`, :func:`db`, :func:`dbp`, :func:`dbv`
+
 	"""
 	iform = save_input_form(v)
 	v = carray(v)

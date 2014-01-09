@@ -21,14 +21,13 @@ import numpy as np
 from ._calculateTF import calculateTF
 
 def mod2():
-    """
-    Populate a structure describing the second-order modulator.
+    """Populate a structure describing the second-order modulator.
     
     **Returns:**
 
-    The ABCD matrix, ndarray,
-    The NTF, lti object
-    The STF, lti object.
+    ABCD, NTF, STF : a tuple of (ndarray, lti, lti)
+        The elements are the ABCD matrix (ndarray), the NTF (lti object), the STF (lti object).
+
     """
     A = np.array([[1., 0.], [1., 1.]])
     B = np.array([[1., -1.], [1., -2.]])

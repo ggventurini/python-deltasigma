@@ -36,8 +36,7 @@ from ._synthesizeNTF0 import synthesizeNTF0
 from ._synthesizeNTF1 import synthesizeNTF1
 
 def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
-	"""
-	Synthesize a noise transfer function for a delta-sigma modulator.
+	"""Synthesize a noise transfer function for a delta-sigma modulator.
 
 	**Parameters:**
 
@@ -80,6 +79,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 	      pass the NTF zeros and these are in the wrong number.
 
 	**Warns:**
+
 	    * 'Creating a lowpass ntf.' if the center frequency is different
 	      from zero, but so low that a low pass modulator must be designed.
 
@@ -88,7 +88,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
 	    * 'Iteration limit exceeded' if the routine converges too slowly.
 
-	**Notes**
+	**Notes:**
 
 	This is actually a wrapper function which calls the appropriate version
 	of synthesizeNTF, based on the module control flag `optimize_NTF` which
@@ -96,14 +96,16 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
 	Parameter ``H_inf`` is used to enforce the Lee stability criterion.
 
-	See also:
-	   clans() : Closed-Loop Analysis of Noise-Shaper. 
+	.. seealso::
+
+	   :func:`clans` : Closed-Loop Analysis of Noise-Shaper. 
                An alternative method for selecting NTFs based on the 1-norm of the 
                impulse response of the NTF
 
-	   synthesizeChebyshevNTF() : Select a type-2 highpass Chebyshev NTF.
+	   :func:`synthesizeChebyshevNTF()` : Select a type-2 highpass Chebyshev NTF.
 	       This function does a better job than synthesizeNTF if osr
 	       or H_inf is low.
+
 	"""
 	if f0 > 0.5:
 		raise ValueError, 'Error. f0 must be less than 0.5.'

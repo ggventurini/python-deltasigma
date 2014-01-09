@@ -49,7 +49,9 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	* ``y[i].csd`` is a 2-by-nsd (or less) matrix containing
 	  the powers of two (first row) and their signs (second row).
 	
-	See also ``bunquantize()``.
+	.. seealso:: 
+	    :func:`bunquantize`
+
 	"""
 
 	n = x.shape[0] if hasattr(x, 'shape') else len(x)

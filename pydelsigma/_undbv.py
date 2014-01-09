@@ -36,6 +36,9 @@ def undbv(x):
 
 	Vrms : scalar or sequence
 	       The RMS voltage corresponding to x.
+
+	.. seealso:: :func:`undbm`, :func:`undbp`, :func:`dbv`, :func:`db`
+
 	"""
 	iform = save_input_form(x)
 	x = carray(x)

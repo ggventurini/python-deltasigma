@@ -36,6 +36,9 @@ def undbp(x):
 
 	Prms : scalar or sequence
 	       The RMS power corresponding to x.
+
+	.. seealso:: :func:`undbm`, :func:`undbv`, :func:`dbp`, :func:`db`
+
 	"""
 	iform = save_input_form(x)
 	x = carray(x)

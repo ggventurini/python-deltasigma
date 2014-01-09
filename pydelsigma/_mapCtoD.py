@@ -45,11 +45,13 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
     
     **Input:**
 
-    arg1 : object 
+    sys_c : object 
            the LTI description of the CT system, which can be:
-    * the ABCD matrix,
-    * a list-like containing the A, B, C, D matrices,
-    * a list of zpk tuples (internally converted to SS representation).
+
+     * the ABCD matrix,
+     * a list-like containing the A, B, C, D matrices,
+     * a list of zpk tuples (internally converted to SS representation).
+     * a list of LTI objects
 
     t : array_like
         The edge times of the DAC pulse used to make CT waveforms 

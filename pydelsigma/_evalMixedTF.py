@@ -23,10 +23,11 @@ from ._evalTFP import evalTFP
 from ._utils import carray, save_input_form, restore_input_form
 
 def evalMixedTF(tf, f, df=1e-5):
-    """Compute the mixed transfer function tf at a frequency f.
-    tf is a struct array with fields Hs and Hz wich represent 
-    a continuous-time/discrete-time tfs which must be multiplied together
-    and then added up.
+    """Compute the mixed transfer function ``tf`` at a frequency f.
+
+    ``tf`` is a dictionary of lists of 1d arrays, with fields 'Hs' and 'Hz', 
+    which represent continuous-time and discrete-time TFs which will be 
+    evaluated, multiplied together and then added up.
     """
     iform = save_input_form(f)
     f = carray(f)

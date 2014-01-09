@@ -38,6 +38,9 @@ def dbv(x):
 
 	GdB : scalar or sequence
 	       The input voltage (ratio) expressed in dB.
+
+	.. seealso:: :func:`undbv`, :func:`db`, :func:`dbp`, :func:`dbm`
+
 	"""
 	iform = save_input_form(x)
 	x = carray(x)

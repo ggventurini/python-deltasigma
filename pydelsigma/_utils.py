@@ -38,7 +38,7 @@ def rat(x, tol):
 gcd = fractions.gcd
 
 lcm = lambda a, b: int(a*b / float(gcd(a, b)))
-"""Calculate the Least Common Multiple of a and b."""
+lcm.__doc__ = """Calculate the Least Common Multiple of ``a`` and ``b``.\n"""
 
 class empty:
 	"""An empty function used to hold attributes"""

@@ -39,8 +39,21 @@ from ._undbv import undbv
 def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     """Plot a spectrum suitable to exemplify the NTF performance.
     
-    Quadrature modulators require the following unimplemented functions:
-    simulateQDSM (expected v. 0.2).
+    .. note::
+
+        Quadrature modulators require the following unimplemented functions:
+        :func:`simulateQDSM` (expected v. 0.2).
+
+    .. plot::
+
+        from pydelsigma import synthesizeNTF, PlotExampleSpectrum
+        order = 3
+        osr = 32
+        f0 = 0.
+        Hinf = 1.5
+        ntf = synthesizeNTF(order, osr, 0, Hinf, f0)
+        PlotExampleSpectrum(ntf, M=1, osr=osr, f0=f0)
+
     """
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2

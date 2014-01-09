@@ -36,6 +36,9 @@ def dbp(x):
 
 	PdB : scalar or sequence
 	       The input expressed in dB.
+
+	.. seealso:: :func:`undbp`, :func:`db`, :func:`dbm`, :func:`dbv`
+
 	"""
 	iform = save_input_form(x)
 	x = carray(x)

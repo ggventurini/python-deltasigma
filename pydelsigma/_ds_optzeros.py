@@ -51,10 +51,30 @@ _oznopt = {
 	}
 
 def ds_optzeros(n, opt=1):
-	"""optZeros = ds_optzeros(n, opt=1)
-	A helper function for the synthesizeNTF function of the Delta-Sigma Toolbox.
+	"""A helper function for :func:`synthesizeNTF`
+
 	Returns the zeros which minimize the in-band noise power of 
 	a delta-sigma modulator's NTF.
+
+	This function is not intended for direct use, but it is available
+	for compliance with the Matlab Toolbox interface.
+
+	**Parameters:**
+
+	n : int
+	    The order of the modulator
+
+	opt : int
+	    A flag which selects the kind of optimization to be employed
+	    for the zeros. A description of the possible values can be found
+	    in the doc for :func:`synthesizeNTF`.
+
+	**Returns:**
+
+	zeros : 1d-ndarray
+	    An array with the location of the zeros in the z plane, according
+	    to the specified optimization.
+
 	"""
 	opt = int(opt)	
 	if opt == 0:

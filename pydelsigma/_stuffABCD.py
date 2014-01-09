@@ -36,7 +36,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     c : array_like
         Integrator inter-stage coefficients. Length :math:`n`.
     form : str, optional
-        See `._realizeNTF.realizeNTF` for a list of supported structures.
+        See :func:`realizeNTF` for a list of supported structures.
 
     **Returns:**
 

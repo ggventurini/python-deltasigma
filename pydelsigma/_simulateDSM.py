@@ -22,9 +22,12 @@ from scipy.linalg import orth, norm, inv
 from ._utils import carray, _get_zpk
 
 def simulateDSM(u, arg2, nlev=2, x0=0):
-	"""[v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)
-	or
-	[v, xn, xmax, y] = simulateDSM(u, ntf, nlev=2, x0=0)
+	"""Simulate a Delta Sigma modulator
+
+	**Syntax:**
+
+	 * [v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)
+	 * [v, xn, xmax, y] = simulateDSM(u, ntf, nlev=2, x0=0)
 
 	Compute the output of a general delta-sigma modulator with input u,
 	a structure described by ABCD, an initial state x0 (default zero) and
@@ -33,9 +36,9 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	and multiple inputs are implied by the number of rows in u.
 
 	Alternatively, the modulator may be described by an NTF.
-	The NTF is zpk object. (The STF is assumed to be 1.)
-	The structure that is simulated is the block-diagional structure used by
-	zp2ss.m.
+	The NTF is zpk object. (And the STF is assumed to be 1.)
+	The structure that is simulated is the block-diagonal structure used by
+	``zpk2ss()``.
 	"""
 
 	#fprintf(1,'Warning: You are running the non-mex version of simulateDSM.\n');

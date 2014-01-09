@@ -23,8 +23,13 @@ from ._utils import diagonal_indices
 
 def mapABCD(ABCD, form='CRFB'):
     """Compute the coefficients for the specified structure.
-    See realizeNTF.m for a list of supported structures.
-    stuffABCD is the inverse function.
+
+    .. seealso::
+
+        * :func:`realizeNTF` for a list of supported structures.
+
+        * :func:`stuffABCD`, the inverse function.
+
     """
     order = ABCD.shape[0] - 1
     odd = order % 2

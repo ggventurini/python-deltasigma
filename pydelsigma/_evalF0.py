@@ -20,8 +20,7 @@ from __future__ import division
 from ._evalF1 import evalF1
 
 def evalF0(f1, z, phi):
-    """F0 = evalF0(f1,z,phi)	
-    Calculate the values of the F0 (prototype) filter 
+    """Calculate the values of the F0 (prototype) filter 
     of a Saramaki HBF at the given points.
     """
     return evalF1(f1, 0.5*(z + 1./z), phi)

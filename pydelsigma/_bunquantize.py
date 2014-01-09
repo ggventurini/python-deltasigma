@@ -22,10 +22,12 @@ from ._utils import carray
 def bunquantize(q):
 	""" Calculate the value corresponding to a bidirectionally quantized quantity.
 	
-	q is a (2 n, m) ndarray containing the powers of 2 and their signs for each
+	``q`` is a (2n, m) ndarray containing the powers of 2 and their signs for each
 	quantized value.
 	
-	See also bquantize in _bunquantize.py
+	.. seealso:: 
+	    :func:`bquantize`
+
 	"""
 	y = []
 	for qi in q:
