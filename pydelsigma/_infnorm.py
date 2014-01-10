@@ -24,8 +24,7 @@ from ._nabsH import nabsH
 from ._evalTF import evalTF 
 
 def infnorm(H):
-	"""(Hinf, fmax) = infnorm(H)	 
-	Find the infinity norm of a z-domain transfer function.
+	"""Find the infinity norm of a z-domain transfer function.
 	"""
 	# Get a rough idea of the location of the maximum.
 	N = 129
