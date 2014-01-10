@@ -22,34 +22,57 @@ import scipy
 from scipy.signal import convolve, dimpulse
 
 from ._padr import padr
+from ._utils import _get_num_den, _is_num_den, _is_zpk
 
 def impL1(arg1, n=10):
-	""" y = impL1(ntf, n=10) 
+	"""Impulse response evaluation for NTFs.
+
 	Compute the impulse response from the comparator
 	output to the comparator input for the given NTF.
-	n is the (optional) number of time steps (default: 10), resulting in
-	an impulse response with n+1 (default: 11) samples.
-	 
+
+	**Parameters:**
+
+	arg1 : object
+	    The NTF, which may be represented as:
+
+	    * ZPK tuple,
+	    * num, den tuple,
+	    * A, B, C, D tuple,
+	    * ABCD matrix,
+	    * a scipy LTI object,
+	    * a sequence of the tuples of any of the above types (experimental).
+
+	n : int
+	    is the (optional) number of time steps (default: 10), resulting in
+	    an impulse response with n+1 (default: 11) samples.
+
 	This function is useful when verifying the realization
 	of a NTF with a specified topology.
 
-	Note: in the original implementation of impL1 in delsig, there is a
-	bug: impL1 calls MATLAB's impulse with tfinal=n, which means that
-	the function will return the impulse response evaluated on the times
-	[0, 1, 2 ... n], ie n+1 points. 
+	**Returns:**
 
-	We keep the same behavior here, but we state clearly that n is the 
-	number of time steps. 
+	y : ndarray
+	    The NTF impulse response
+
+	.. note::
+
+	    In the original implementation of impL1 in delsig, there is a
+	    bug: impL1 calls MATLAB's impulse with tfinal=n, which means that
+	    the function will return the impulse response evaluated on the times
+	    [0, 1, 2 ... n], ie n+1 points. We keep the same behavior here,
+	    but we state clearly that n is the number of time steps.
+
 	"""
-	if not hasattr(arg1, '__len__'):
-		raise ValueError, 'LTI and TF objects support not added yet.'
-	if len(arg1) == 2:
+	if _is_num_den(arg1):
 		num, den = arg1
 		p = np.roots(den)
-	elif len(arg1) == 3:
+	elif _is_zpk(arg1):
 		z, p, k = arg1
 		num = np.poly(z)
 		den = np.poly(p)
+	else:
+		num, den = _get_num_den(arg1)
+		p = np.roots(den)
 
 	num = np.asarray(num)
 	den = np.asarray(den)
