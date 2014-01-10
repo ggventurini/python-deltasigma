@@ -24,12 +24,18 @@ from ._dbp import dbp
 from ._utils import carray
 
 def bplogsmooth(X, tbin, f0):
-	"""f, p = bplogsmooth(X, tbin, f0)
-	Smooth the fft, X, and convert it to dB.
-	Use 8 bins from the bin corresponding to f0 to tbin and again as far. 
+	"""Smooth the fft, X, and convert it to dB.
+
+	Use 8 bins from the bin corresponding to f0 to tbin and again as far.
 	Thereafter increase bin sizes by a factor of 1.1, staying less than 2^10.
-	For tbin, group the bins together. TBIN IS ASSUMED TO BE IN THE UPPER SIDEBAND!
+	For tbin, group the bins together.
+
 	Use this for nice double-sided log-log plots.
+
+	.. note:: ``tbin`` is assumed to be in the upper sideband!
+
+	.. seealso:: :func:`logsmooth`
+
 	"""
 	X = carray(X)
 	if hasattr(X, 'shape') and len(X.shape) == 2 and \
