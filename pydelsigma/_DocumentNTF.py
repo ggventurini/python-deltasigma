@@ -115,3 +115,23 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	plt.title('Frequency Response')
 	return 
 
+def test_DocumentNTF():
+	"""Test function for DocumentNTF"""
+	from ._synthesizeNTF import synthesizeNTF
+	from ._realizeNTF import realizeNTF
+	from ._stuffABCD import stuffABCD
+	order = 4
+	osr = 64
+	nlev = 2
+	f0 = 0.
+	Hinf = 1.5
+	form = 'CRFB'
+	ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
+	a, g, b, c = realizeNTF(ntf, form)
+	b = np.hstack(( # Use a single feed-in for the input
+	               np.atleast_2d(b[0, 0]),
+	               np.zeros((1, max(b.shape)-1))
+	              ))
+	ABCD = stuffABCD(a, g, b, c, form)
+	DocumentNTF(ABCD, osr, f0)
+

@@ -120,3 +120,14 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         figureMagic((-0.5, 0.5), 0.125, 2, (-140, 0), 10, 2)
     plt.xlabel('frequency')
     return
+
+def test_PlotExampleSpectrum():
+    """Test function for PlotExampleSpectrum"""
+    from ._synthesizeNTF import synthesizeNTF
+    order = 3
+    osr = 32
+    f0 = 0.
+    Hinf = 1.5
+    ntf = synthesizeNTF(order, osr, 0, Hinf, f0)
+    PlotExampleSpectrum(ntf, M=1, osr=osr, f0=f0)
+
