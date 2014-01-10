@@ -48,6 +48,3 @@ def test_ds_freq():
 	tres = (a.mean(), b.mean(), a.std(), b.std())
 	assert np.allclose(res, tres, atol=1e-8, rtol=1e-5)
 	
-if __name__ == '__main__':
-	test_ds_freq()
-	

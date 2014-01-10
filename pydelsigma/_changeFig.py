@@ -110,7 +110,6 @@ def test_changeFig():
     ax.text(.01, -.9, "This is a TEST")
     changeFig(linewidth=3, fontsize=18)
 
-    #if __name__ == '__main__':
     fig = plt.figure()
     xval = np.arange(0, 1, .01)
 

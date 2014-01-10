@@ -102,6 +102,3 @@ def test_evalTF():
 	assert np.allclose(np.abs(h1), np.abs(h2), atol=1e-8, rtol=1e-5)
 	assert np.allclose(h1, h3, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_evalTF()
-	

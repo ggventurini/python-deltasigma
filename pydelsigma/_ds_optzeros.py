@@ -108,5 +108,3 @@ def test_optzeros():
 		for opt in (0, 1, 2):
 			assert np.allclose(res[ns[i]][0][0][:, opt], ds_optzeros(i+1, opt), atol=1e-10, rtol=1e-6)
 	
-if __name__ == '__main__':
-	test_optzeros()

@@ -45,5 +45,3 @@ def test_ds_f1f2():
 	assert (t2f1, t2f2) == (f0 - 0.5/OSR, f0 + 0.5/OSR)
 	assert (t3f1, t3f2) == (0., 0.5/OSR)
 
-if __name__ == '__main__':
-	test_ds_f1f2()

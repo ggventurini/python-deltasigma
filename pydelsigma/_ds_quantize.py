@@ -74,5 +74,3 @@ def test_ds_quantize():
 	               ])
 	np.allclose(re1, re2, atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_ds_quantize()

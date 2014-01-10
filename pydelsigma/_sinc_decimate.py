@@ -37,5 +37,3 @@ def test_sinc_decimate():
 	      4.97311886e-16, -4.57479916e-16, 4.30698504e-16]
 	assert np.allclose(sinc_decimate(tv, 1, 10), r, rtol=1e-5, atol=1e-8)
 
-if __name__ == '__main__':
-	test_sinc_decimate()

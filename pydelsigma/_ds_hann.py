@@ -68,5 +68,3 @@ def test_ds_hann():
 	                -0.03015369, -0.1545085 , -0.24133259, -0.22851372, -0.0954915 ])
 	assert np.allclose(res, np.hanning(10) - ds_hann(10), atol=1e-8, rtol=1e-5)
 
-if __name__ == '__main__':
-	test_ds_hann()

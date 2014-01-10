@@ -49,5 +49,3 @@ def test_delay():
 	assert np.allclose(delay(v2, 5), r2)
 	assert np.allclose(delay(v3, 5), r3)
 
-if __name__ == '__main__':
-	test_delay()

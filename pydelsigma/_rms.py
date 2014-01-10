@@ -57,6 +57,3 @@ def test_rms():
 	assert np.allclose(rms(tv), res1, rtol=1e-05, atol=1e-08)
 	assert np.allclose(rms(tv, no_dc=True), res2, rtol=1e-05, atol=1e-08)
 	
-if __name__ == '__main__':
-	test_rms()
-
