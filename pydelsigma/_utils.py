@@ -22,7 +22,7 @@ from warnings import warn
 import collections, fractions
 from fractions import Fraction as Fr
 import numpy as np
-from scipy.signal import lti, ss2zpk
+from scipy.signal import lti, ss2tf, ss2zpk, zpk2tf
 
 from._constants import eps
 from ._partitionABCD import partitionABCD
@@ -118,11 +118,16 @@ def minreal(tf, tol=None):
 	# then modified considerably
 
 	# recursively handle multiple tfs
-	if isinstance(tf, list) or isinstance(tf, tuple):
+	if not _is_zpk(tf) and not _is_num_den(tf) and not _is_A_B_C_D(tf) \
+	and (isinstance(tf, list) or isinstance(tf, tuple)):
 		ret = []
 		for tfi in tf:
 			ret += [minreal(tfi, tol)]
 		return ret
+
+	# python-control support is there but not tested and not advertised.
+	if hasattr(tf, 'returnScipySignalLti'):
+		tf = tf.returnScipySignalLti()[0][0]
 
 	# default accuracy
 	sqrt_eps = np.sqrt(eps)
@@ -130,27 +135,22 @@ def minreal(tf, tol=None):
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
 		raise TypeError, "Only SISO transfer functions can be evaluated."
-	if hasattr(tf, 'num') and hasattr(tf, 'den'):
-		#filt = hasattr(tf, 'outputs')
-		num = tf.num #[0][0] if filt else tf.num
-		den = tf.den #[0][0] if filt else tf.den
-		k = num[0] / den[0]
-		zeros = np.roots(num)
-		poles = np.roots(den)
-	elif (hasattr(tf, 'zeros') and hasattr(tf, 'poles')) or \
-	   (hasattr(tf, 'zero') and hasattr(tf, 'pole')):
+	if (hasattr(tf, 'zeros') and hasattr(tf, 'poles')):
 		# LTI objects have poles and zeros, 
-		# python-control TransferFunction-s have pole() and zero()
-		zeros = tf.zeros if hasattr(tf, 'zeros') else tf.zero()
-		poles = tf.poles if hasattr(tf, 'poles') else tf.pole()
+		zeros = tf.zeros
+		poles = tf.poles
 		if hasattr(tf, 'k'):
 			k = tf.k
 		elif hasattr(tf, 'gain'):
 			k = tf.gain
-		elif hasattr(tf, 'returnScipySignalLti'):
-			k = np.array(tf.returnScipySignalLti()[0][0].gain)
+	elif hasattr(tf, 'num') and hasattr(tf, 'den'):
+		num = tf.num
+		den = tf.den
+		k = num[0]/den[0]
+		zeros = np.roots(num)
+		poles = np.roots(den)
 	else:
-		raise ValueError, "Unknown transfer function type."
+		zeros, poles, k = _get_zpk(tf)
 	
 	zeros = carray(zeros)
 	poles = carray(poles)
@@ -356,6 +356,93 @@ def _get_zpk(arg, input=0):
     else:
         raise TypeError("Unknown LTI representation: %s" % arg)
     return z, p, k
+
+def _get_num_den(arg, input=0):
+    """Utility method to convert the input arg to a (num, den) representation.
+
+    **Parameters:**
+
+    arg, which may be:
+
+    * ZPK tuple,
+    * num, den tuple,
+    * A, B, C, D tuple,
+    * a scipy LTI object,
+    * a sequence of the tuples of any of the above types.
+
+    input : scalar
+        In case the system has multiple inputs, which input is to be
+        considered. Input `0` means first input, and so on.
+
+    **Returns:**
+
+    The sequence of ndarrays num, den
+
+    **Raises:**
+
+    TypeError, ValueError
+
+    .. warn: support for MISO transfer functions is experimental.
+    """
+    num, den = None, None
+    if isinstance(arg, np.ndarray):
+        # ABCD matrix
+        A, B, C, D = partitionABCD(arg)
+        num, den = ss2tf(A, B, C, D, input=input)
+    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+        num, den = arg.num, arg.den
+    elif _is_num_den(arg):
+        num, den = carray(arg[0]).squeeze(), carray(arg[1]).squeeze()
+    elif _is_zpk(arg):
+        num, den = zpk2tf(*arg)
+    elif _is_A_B_C_D(arg):
+        num, den = ss2tf(*arg, input=input)
+    elif isinstance(arg, collections.Iterable):
+        ri = 0
+        for i in arg:
+            # Note we do not check if the user has assembled a list with
+            # mismatched representations.
+            if hasattr(i, 'B'): #lti
+                iis = i.B.shape[1]
+                if input < ri + iis:
+                    num, den = ss2tf(i.A, i.B, i.C, i.D, input=input-ri)
+                    break
+                else:
+                    ri += iis
+            else:
+                sys = lti(*i)
+                iis = sys.B.shape[1]
+                if input < ri + iis:
+                    num, den = ss2tf(sys.A, sys.B, sys.C, sys.D, input=input-ri)
+                    break
+                else:
+                    ri += iis
+
+        if (num, den) == (None, None):
+           raise ValueError("The LTI representation does not have enough" + \
+                            "inputs: max %d, looking for input %d" % \
+                            (ri - 1, input))
+    else:
+        raise TypeError("Unknown LTI representation: %s" % arg)
+
+    if len(num.shape) > 1:
+        num = num.squeeze()
+    if len(den.shape) > 1:
+        num = den.squeeze()
+
+    # default accuracy: eps
+    while True:
+        if abs(num[0]) < eps:
+            num = num[1:]
+        else:
+            break
+    while True:
+        if abs(den[0]) < eps:
+            den = den[1:]
+        else:
+            break
+
+    return num, den
 
 def _getABCD(arg):
     """Utility method to convert the input arg to an A, B, C, D representation.
@@ -576,19 +663,87 @@ def test_save_input_form():
 
 def test_get_zpk():
 	"""Test function for _get_zpk()"""
-	from scipy.signal import zpk2ss, zpk2tf
+	from scipy.signal import zpk2ss
 	z = (.4,)
 	p = (.9, .1 + .2j, .1 -.2j)
 	k = .4
 	zt, pt, kt = _get_zpk(zpk2ss(z, p, k))
-	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
-	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
-	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+	assert np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	assert np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	assert np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
 	zt, pt, kt = _get_zpk(zpk2tf(z, p, k))
-	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
-	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
-	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+	assert np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	assert np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	assert np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
 	zt, pt, kt = _get_zpk(lti(z, p, k))
-	np.allclose(zt, z, atol=1e-8, rtol=1e-5)
-	np.allclose(pt, p, atol=1e-8, rtol=1e-5)
-	np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+	assert np.allclose(zt, z, atol=1e-8, rtol=1e-5)
+	assert np.allclose(pt, p, atol=1e-8, rtol=1e-5)
+	assert np.allclose((kt, ), (k, ), atol=1e-8, rtol=1e-5)
+
+def test_get_num_den():
+	"""Test function for _get_num_den()"""
+	from scipy.signal import zpk2ss, zpk2tf
+	z = (.4,)
+	p = (.9, .1 + .2j, .1 -.2j)
+	k = .4
+	num, den = zpk2tf(z, p, k)
+	numt, dent = _get_num_den((num, den)) #num, den
+	assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
+	assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+	numt, dent = _get_num_den((z, p, k)) #zpk
+	assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
+	assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+	numt, dent = _get_num_den(lti(z, p, k)) #LTI
+	assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
+	assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+	A, B, C, D = zpk2ss(z, p, k) #A,B,C,D
+	D = np.atleast_2d(D)
+	numt, dent = _get_num_den((A, B, C, D)) #A,B,C,D
+	print numt, dent
+	assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
+	assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+	ABCD = np.vstack((
+	                  np.hstack((A, B)),
+	                  np.hstack((C, D))
+	                ))
+	numt, dent = _get_num_den(ABCD) #A,B,C,D
+	assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
+	assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+
+def test_minreal():
+	"""Test function for minreal()"""
+	from scipy.signal import zpk2ss
+	z = np.array([0, 1])
+	p = np.array([1, .5 + .5j, .5 -.5j])
+	k = 1
+	zt = z[:-1]
+	pt = p[1:]
+	pt.sort()
+	inobj = (z, p, k)
+	ltiobj = minreal(inobj)
+	zeros, poles, gain = _get_zpk(ltiobj)
+	poles.sort()
+	assert np.allclose(zeros, zt, atol=1e-8, rtol=1e-5)
+	assert np.allclose(poles, poles, atol=1e-8, rtol=1e-5)
+	assert np.allclose((k,), (gain,), atol=1e-8, rtol=1e-5)
+	inobj = zpk2tf(z, p, k)
+	ltiobj = minreal(inobj)
+	zeros, poles, gain = _get_zpk(ltiobj)
+	poles.sort()
+	assert np.allclose(zeros, zt, atol=1e-8, rtol=1e-5)
+	assert np.allclose(poles, poles, atol=1e-8, rtol=1e-5)
+	assert np.allclose((k,), (gain,), atol=1e-8, rtol=1e-5)
+	inobj = zpk2ss(z, p, k)
+	ltiobj = minreal(inobj)
+	zeros, poles, gain = _get_zpk(ltiobj)
+	poles.sort()
+	assert np.allclose(zeros, zt, atol=1e-8, rtol=1e-5)
+	assert np.allclose(poles, poles, atol=1e-8, rtol=1e-5)
+	assert np.allclose((k,), (gain,), atol=1e-8, rtol=1e-5)
+	inobj = lti(z, p, k)
+	ltiobj = minreal(inobj)
+	zeros, poles, gain = _get_zpk(ltiobj)
+	poles.sort()
+	assert np.allclose(zeros, zt, atol=1e-8, rtol=1e-5)
+	assert np.allclose(poles, poles, atol=1e-8, rtol=1e-5)
+	assert np.allclose((k,), (gain,), atol=1e-8, rtol=1e-5)
