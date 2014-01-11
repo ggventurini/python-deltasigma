@@ -46,7 +46,13 @@ class empty:
 		pass
 
 def mfloor(x):
-	"""MATLAB-like floor function.
+	"""Round ``x`` towards -Inf.
+
+	This is a MATLAB-compatible floor function, numpy's ``floor()``
+	behaves differently.
+
+	If the elements of ``x`` are complex, real and imaginary parts are
+	rounded separately.
 	"""
 	iform = save_input_form(x)
 	x = carray(x)
