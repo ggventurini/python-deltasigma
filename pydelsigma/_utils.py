@@ -28,9 +28,22 @@ from._constants import eps
 from ._partitionABCD import partitionABCD
 
 def rat(x, tol):
-	"""num, den = rat(x, tol)
-	where num/den == x to the specified tolerance tol
-	Note: num, den are of type 'int'
+	"""Rational fraction approximation.
+
+	Calculate A and B such that:
+
+	.. math::
+
+	  x = \\frac{A}{B} + \\epsilon
+
+	where:
+
+	.. math::
+
+	    |\\epsilon| < tol
+
+
+	.. note:: A, B are of type 'int'
 	"""
 	return Fr(float(x)).limit_denominator(int(1/float(tol))).numerator, \
                 Fr(float(x)).limit_denominator(int(1/float(tol))).denominator

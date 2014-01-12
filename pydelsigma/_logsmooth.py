@@ -60,6 +60,15 @@ def logsmooth(X, inBin, nbin=8, n=3):
     f, p : tuple of 1d- ndarrays
         The bins and smoothed FFT, expressed in dB.
 
+    .. seealso::
+
+         * :func:`plotSpectrum`, convenience function to first call
+           :func:`logsmooth` and then plot on a logarithmic x-axis its return
+           value.
+
+         * :func:`circ_smooth`, smoothing algorithm suitable for linear
+           x-axis plotting.
+
     .. plot::
 
         import matplotlib.pyplot as plt
