@@ -66,6 +66,7 @@ Functions
 ---------
 
 .. autosummary::
+    :nosignatures:
 
     DocumentNTF
     PlotExampleSpectrum
@@ -122,6 +123,7 @@ Functions
     partitionABCD
     peakSNR
     plotPZ
+    plotSpectrum
     predictSNR
     pulse
     realizeNTF
@@ -226,6 +228,7 @@ from ._padt import padt
 from ._partitionABCD import partitionABCD
 from ._peakSNR import peakSNR
 from ._plotPZ import plotPZ
+from ._plotSpectrum import plotSpectrum
 from ._predictSNR import predictSNR
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
