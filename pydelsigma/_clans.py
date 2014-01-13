@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 from scipy.optimize import minimize
 from scipy.signal import dimpulse
@@ -156,6 +156,6 @@ def test_clans():
     poles = np.array((0.41835234+0.j, 0.48922229+0.1709716j, 
                       0.48922229-0.1709716j, 0.65244885+0.3817224j, 
                       0.65244885-0.3817224j))
-    print "Poles:", ntf[1]
+    print("Poles:", ntf[1])
     assert np.allclose(poles, ntf[1], atol=1e-8, rtol=1e-5)
 

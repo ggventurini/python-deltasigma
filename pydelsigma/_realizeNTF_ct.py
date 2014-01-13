@@ -16,7 +16,7 @@
 """Module providing the realizeNTF_ct() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 from warnings import warn
 
 import numpy as np
@@ -252,5 +252,5 @@ def test_realizeNTF_ct():
     """Test function for realizeNTF_ct()"""
     ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
     ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB')
-    print ABCDc
-    print tdac2
+    print(ABCDc)
+    print(tdac2)

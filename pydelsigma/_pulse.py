@@ -40,11 +40,11 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	tp = np.mat(np.array(tp))
 	if len(tp.shape) == 1:
 		if not tp.shape[0] == 2:
-			raise ValueError, "tp is not (n, 2)-shaped"
+			raise ValueError("tp is not (n, 2)-shaped")
 		tp.reshape((1, tp.shape[0]))
 	if len(tp.shape) == 2: 
 		if not tp.shape[1] == 2:
-			raise ValueError, "tp is not (n, 2)-shaped"
+			raise ValueError("tp is not (n, 2)-shaped")
 
 	# Compute the time increment
 	dd = 1;
@@ -76,7 +76,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	ni = len(S) # number of inputs
 	
 	if ni % ndac != 0:
-		raise ValueError, 'The number of inputs must be divisible by the number of dac timings.'
+		raise ValueError('The number of inputs must be divisible by the number of dac timings.')
 		# Original comment from the MATLAB sources:
 		# This requirement comes from the complex case, where the number of inputs
 		# is 2 times the number of dac timings. I think this could be tidied up.

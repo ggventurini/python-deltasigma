@@ -18,6 +18,7 @@ norm of a z-domain transfer function.
 """
 
 from __future__ import division
+from warnings import warn
 import numpy as np
 from scipy.optimize import fminbound
 from ._nabsH import nabsH
@@ -41,8 +42,8 @@ def infnorm(H):
 	                 xtol=1e-08, maxfun=5000, full_output=0)
 
 	if wmax is None:
-		print 'Hinf: Warning. scipy.optimize operation failed.'
-		print ' The result returned may not be very accurate.'
+		warn('Hinf: Warning. scipy.optimize operation failed.'
+		     + ' The result returned may not be very accurate.')
 		wmax = w[wi]
 
 	Hinf = -nabsH(wmax, H);

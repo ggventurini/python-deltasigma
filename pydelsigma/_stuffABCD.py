@@ -16,7 +16,7 @@
 """Module providing the stuffABCD() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 from ._partitionABCD import partitionABCD
 from ._utils import diagonal_indices
@@ -64,9 +64,9 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         ABCD[:order, order + 1] = -a
         diagonal = diagonal_indices(ABCD[:order, :order])
         ABCD[diagonal] = np.ones((order,))
-        subdiag = map(lambda a: a[even:order:2], diagonal_indices(ABCD, -1))
+        subdiag = [a[even:order:2] for a in diagonal_indices(ABCD, -1)]
         ABCD[subdiag] = c[0, even:order:2]
-        supdiag = map(lambda a: a[odd:order:2], diagonal_indices(ABCD[:order, :order], +1))
+        supdiag = [a[odd:order:2] for a in diagonal_indices(ABCD[:order, :order], +1)]
         ABCD[supdiag] = -g.reshape((-1,))
         # row numbers of delaying integrators
         dly = np.arange(odd + 1, order, 2)
@@ -80,7 +80,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         diagonal = diagonal_indices(ABCD[:order, :order])
         ABCD[diagonal] = np.ones((order, ))
         #subdiag = diagonal[:order - 1:2] + 1
-        subdiag = map(lambda a: a[:order - 1:2], diagonal_indices(ABCD, -1))
+        subdiag = [a[:order - 1:2] for a in diagonal_indices(ABCD, -1)]
         ABCD[subdiag] = c[0, 1:order:2]
         if even:
             # rows to have g*(following row) subtracted.
@@ -90,9 +90,8 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         else:
             if order >= 3:
                 #supdiag = diagonal[2:order:2] - 1
-                supdiag = map(lambda a: a[1:order:2], 
-                              diagonal_indices(ABCD[:order, :order], +1)
-                             )
+                supdiag = [a[1:order:2] for a in
+                              diagonal_indices(ABCD[:order, :order], +1)]
                 ABCD[supdiag] = -g.reshape((-1,))
         # rows to have c*(preceding row) added.
         multc = np.arange(2, order, 2)
@@ -111,7 +110,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         ABCD[diagonal] = np.ones((order,))
         subdiag = diagonal_indices(ABCD, -1)
         ABCD[subdiag] = c.reshape((-1,))
-        supdiag = map(lambda a: a[odd:order+odd:2], diagonal_indices(ABCD[:order, :order], +1))
+        supdiag = [a[odd:order+odd:2] for a in diagonal_indices(ABCD[:order, :order], +1)]
         ABCD[supdiag] = -g.reshape((-1,))
     elif form == 'CIFF':
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
@@ -125,8 +124,8 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         # C = (a_1 a_2... a_n)
         ABCD[order, :order] = a[0, :order]
         #supdiag = diagonal[odd + 1:order:2] - 1
-        supdiag = map(lambda a: a[odd:order+odd:2], 
-                      diagonal_indices(ABCD[:order, :order], +1))
+        supdiag = [a[odd:order+odd:2] for a in  
+                      diagonal_indices(ABCD[:order, :order], +1)]
         ABCD[supdiag] = -g.reshape((-1,))
     elif form == 'CRFBD':
         # C=(0 0...c_n)
@@ -139,13 +138,13 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         ABCD[diagonal] = np.ones((order, ))
         # row numbers of delaying integrators
         dly = np.arange(odd, order, 2)
-        print dly, diagonal_indices(ABCD[:order, :order], -1)
-        subdiag = map(lambda a: np.atleast_1d(a)[dly], 
-                      diagonal_indices(ABCD[:order, :order], -1))
+        print(dly, diagonal_indices(ABCD[:order, :order], -1))
+        subdiag = [np.atleast_1d(a)[dly] for a in
+                      diagonal_indices(ABCD[:order, :order], -1)]
         ABCD[subdiag] = c[0, dly]
-        supdiag = map(lambda a: np.atleast_1d(a)[dly], 
-                      diagonal_indices(ABCD[:order, :order], +1))
-        supdiag = map(lambda a: np.atleast_1d(a[odd:]), supdiag)              
+        supdiag = [np.atleast_1d(a)[dly] for a in 
+                      diagonal_indices(ABCD[:order, :order], +1)]
+        supdiag = [np.atleast_1d(a[odd:]) for a in supdiag]
         ABCD[dly, :] = ABCD[dly, :] - np.dot(np.diag(g.reshape((-1))), \
                                              ABCD[dly + 1, :])
         if order > 2:
@@ -659,14 +658,14 @@ def test_stuffABCD():
 		for form in tv[f0]:
 			for order in tv[f0][form]:
 				# Optimized zero placement
-				print "Testing form: %s, order: %d, f0: %f" % \
-				      (form, order, f0)
+				print("Testing form: %s, order: %d, f0: %f" % \
+				      (form, order, f0))
 				a = np.array(tv[f0][form][order]['a']).reshape((1, -1))
 				g = np.array(tv[f0][form][order]['g']).reshape((1, -1))
 				b = np.array(tv[f0][form][order]['b']).reshape((1, -1))
 				c = np.array(tv[f0][form][order]['c']).reshape((1, -1))
 				ABCD = stuffABCD(a, g, b, c, form)
-				print ABCD
+				print(ABCD)
 				assert np.allclose(ABCD, tv[f0][form][order]['ABCD'], 
 				            atol=1e-4, rtol=1e-3)
 	return 

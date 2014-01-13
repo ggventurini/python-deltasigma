@@ -53,7 +53,7 @@ def evalTF(tf, z):
 	# in our case a transfer function is a 'TransferFunction' not a zpk
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
-		raise TypeError, "Only SISO transfer functions can be evaluated."
+		raise TypeError("Only SISO transfer functions can be evaluated.")
 	# for now we support both TransferFunction objects (python-control)
 	# and lti objects (scipy).
 	if hasattr(tf, 'returnScipySignalLti'): 
