@@ -5,14 +5,12 @@ python:
 virtualenv:
   system_site_packages: true
 before_install:
- - sudo apt-get build-dep -qq python-scipy python-numpy
- - sudo apt-get build-dep -qq python3-scipy python3-numpy
-# - sudo apt-get install -qq python-matplotlib python3-matplotlib
+ - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then sudo apt-get build-dep -qq python-scipy python-numpy; sudo apt-get install -qq python-matplotlib; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then sudo apt-get install -qq python3-dev python3-scipy python3-numpy; sudo apt-get build-dep -qq python-matplotlib; fi'
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
- - pip install numpy --use-mirrors
- - pip install scipy --use-mirrors
- - pip install matplotlib --use-mirrors
+ - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then pip install numpy scipy --use-mirrors; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then pip install matplotlib --use-mirrors; fi'
  - pip install nose coveralls --use-mirrors
 # command to run tests, e.g. python setup.py test
 script: nosetests --with-coverage --cover-package=pydelsigma pydelsigma/*.py
