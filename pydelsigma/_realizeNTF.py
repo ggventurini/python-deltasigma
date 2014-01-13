@@ -16,7 +16,7 @@
 """Module providing realizeNTF()
 """
 
-from __future__ import division
+from __future__ import division, print_function
 from warnings import warn
 
 import numpy as np
@@ -76,7 +76,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 	# Code common to all functions\
 	if (hasattr(ntf, 'inputs') and not ntf.inputs == 1) or \
 	   (hasattr(ntf, 'outputs') and not ntf.outputs == 1):
-		raise TypeError, "Only SISO transfer functions can be evaluated."
+		raise TypeError("Only SISO transfer functions can be evaluated.")
 	if hasattr(ntf, 'num') and hasattr(ntf, 'den'):
 		filt = hasattr(ntf, 'outputs')
 		num = ntf.num[0][0] if filt else ntf.num
@@ -93,14 +93,14 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 	elif hasattr(ntf, 'form') and ntf.form == 'coeff':
 		ntf_z, ntf_p, _ = tf2zpk(ntf.num, ntf.den)
 	elif hasattr(ntf, 'form'):
-		raise ValueError, '%s: Unknown form: %s' % (__name__, ntf.form)
+		raise ValueError('%s: Unknown form: %s' % (__name__, ntf.form))
 	elif hasattr(ntf, '__len__'):
 		if len(ntf) == 2:
 			ntf_z, ntf_p, _ = tf2zpk(ntf[0], ntf[1])
 		elif len(ntf) == 3:
 			ntf_z, ntf_p = ntf[0:2]
 	else:
-		raise TypeError, '%s: Unknown transfer function %s' % (__name__, str(ntf))
+		raise TypeError('%s: Unknown transfer function %s' % (__name__, str(ntf)))
 		
 	order = max(ntf_p.shape)
 	order2 = int(np.floor(order/2))
@@ -627,11 +627,11 @@ def test_realizeNTF():
 					# odd-order pass band modulator
 					continue
 				# Optimized zero placement
-				print "Testing form: %s, order: %d, f0: %f" % \
-				      (form, order, f0)
+				print("Testing form: %s, order: %d, f0: %f" % \
+				      (form, order, f0))
 				ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
 				a, g, b, c = realizeNTF(ntf, form)
-				print a, g, b, c
+				print(a, g, b, c)
 				assert np.allclose(a, res[f0][form][order]['a'], 
 				            atol=1e-4, rtol=1e-3)
 				assert np.allclose(g, res[f0][form][order]['g'], 

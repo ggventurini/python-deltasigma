@@ -17,6 +17,7 @@
 quantize a vector to signed digits.
 """
 
+from __future__ import division, print_function
 import numpy as np
 from ._constants import eps
 from ._utils import empty, mfloor
@@ -93,7 +94,7 @@ def test_bquantize():
 		mcsd.append(s[0, i][1])
 	for i in range(len(mval)):
 		assert np.allclose(mval[i], yval[i], atol=1e-8, rtol=1e-5)
-		print mcsd[i].shape, ycsd[i].shape
+		print(mcsd[i].shape, ycsd[i].shape)
 		assert np.prod(mcsd[i].shape) + np.prod(ycsd[i].shape) == 0 or \
 		       mcsd[i].shape == ycsd[i].shape
 

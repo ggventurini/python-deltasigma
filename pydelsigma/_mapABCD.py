@@ -16,7 +16,7 @@
 """Module providing the mapABCD() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 
 from ._utils import diagonal_indices
@@ -36,7 +36,7 @@ def mapABCD(ABCD, form='CRFB'):
     even = 1 - odd
     diagonal = diagonal_indices(ABCD)
     subdiag = diagonal_indices(ABCD, -1)
-    supdiag = map(lambda a: a[odd:order - 1:2], diagonal_indices(ABCD, +1))
+    supdiag = [a[odd:order - 1:2] for a in diagonal_indices(ABCD, +1)]
     if form in ('CRFB', 'CIFB', 'CRFBD'):
         c = ABCD[subdiag]
         g = -ABCD[supdiag]
@@ -76,8 +76,8 @@ def mapABCD(ABCD, form='CRFB'):
         #even=not  odd
         diagonal = diagonal_indices(ABCD[:order, :order])
         subdiag = diagonal_indices(ABCD[:order, :order], -1)
-        supdiag = map(lambda a: a[1+odd:order:2], 
-                      diagonal_indices(ABCD[:order, :order], -1))
+        supdiag = [a[1+odd:order:2] for a in 
+                      diagonal_indices(ABCD[:order, :order], -1)]
         g = -ABCD[supdiag]
         c = np.vstack((-ABCD[0, order + 2], ABCD[subdiag]))
         a = np.zeros((1, order))
@@ -351,8 +351,8 @@ def test_mapABCD():
 					# odd-order pass band modulator
 					continue
 				# Optimized zero placement
-				print "Testing form: %s, order: %d, f0: %f" % \
-				      (form, order, f0)
+				print("Testing form: %s, order: %d, f0: %f" % \
+				      (form, order, f0))
 				ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
 				a1, g1, b1, c1 = realizeNTF(ntf, form)
 				ABCD = stuffABCD(a1, g1, b1, c1, form)

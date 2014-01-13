@@ -123,7 +123,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 		else:
 			z = dw*ds_optzeros(order, opt)
 		if z.size == 0:
-			raise ValueError, 'Cannot synthesize NTF zeros'
+			raise ValueError('Cannot synthesize NTF zeros')
 		if f0 != 0:
 			# Bandpass design-- shift and replicate the zeros.
 			order = order*2

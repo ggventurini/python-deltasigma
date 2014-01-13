@@ -16,7 +16,7 @@
 """Module providing the calculateSNR() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 from numpy.linalg import norm
 
@@ -85,6 +85,6 @@ def test_calculateSNR():
 	hwfft = np.zeros((N/2, ))
 	hwfft[512] = 1. # specially crafted to have Inf snr
 	snr = calculateSNR(hwfft[:N/2], 512)
-	print snr
+	print(snr)
 	assert snr == np.Inf
 

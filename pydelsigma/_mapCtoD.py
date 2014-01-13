@@ -16,7 +16,7 @@
 """Module providing the mapCtoD() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 import collections
 from warnings import warn
 
@@ -335,7 +335,7 @@ def test_mapCtoD():
     ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
                       np.hstack((sys_d[2], sys_d[3]))
                     ))
-    print ABCD
+    print(ABCD)
     ABCDref = np.array([
     [1.0000,         0,    0.9355,   -0.3000],
     [1.0000,    1.0000,    0.4784,   -0.6750],
@@ -360,7 +360,5 @@ def test_mapCtoD():
     #ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
     #                  np.hstack((sys_d[2], sys_d[3]))
     #                ))
-    #print ABCD -  ABCDref
-    #print 2.*(ABCD -  ABCDref)/(ABCD + ABCDref+1e-9)
     #assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
 

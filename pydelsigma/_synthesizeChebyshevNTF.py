@@ -122,7 +122,6 @@ def test_synthesizeChebyshevNTF():
     zref = [-.4513 + .8924j, -.4513 - .8924j, -.5122 + 0.8589j, -.5122 - 0.8589j]
     pref = [-.2249 + .7665j, -.2249 - .7665j, -.5506 + .6314j, -.5506 - .6314j]
     kref = 1.
-    print pref, p
     assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
     assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
     assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)

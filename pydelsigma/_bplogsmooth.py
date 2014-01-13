@@ -40,7 +40,7 @@ def bplogsmooth(X, tbin, f0):
 	X = carray(X)
 	if hasattr(X, 'shape') and len(X.shape) == 2 and \
 	   not X.shape[0]*X.shape[1] == max(X.shape):
-		raise ValueError, "The X vector is not unidimensional: " + str(X.shape)
+		raise ValueError("The X vector is not unidimensional: " + str(X.shape))
 	N = max(X.shape)
 	tbin = int(tbin)
 	n = 8

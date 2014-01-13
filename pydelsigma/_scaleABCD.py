@@ -16,7 +16,7 @@
 """Module providing the scaleABCD() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 import numpy as np
 import numpy.random as npr
 
@@ -187,10 +187,10 @@ def test_scaleABCD():
     if not np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=3e-1):
         aerr = ABCD_ref-ABCD
         rerr = 2*(ABCD_ref-ABCD)/(ABCD_ref+ABCD)
-        print repr(ABCD_ref)
-        print repr(ABCD)
-        print aerr
-        print rerr
+        print(repr(ABCD_ref))
+        print(repr(ABCD))
+        print(aerr)
+        print(rerr)
     # this is a rather high relative error. We get it on Travis-CI
     # MUST BE INVESTIGATED FURTHER.
     assert np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=30e-2)

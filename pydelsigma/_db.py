@@ -72,7 +72,7 @@ def db(x, input_type='voltage', R=1.):
 			     "but R is going to be ignored since input_type is power",
 				 RuntimeWarning)
 	else:
-		raise ValueError, "db got input_type %s, instead of voltage or power" % input_type
+		raise ValueError("db got input_type %s, instead of voltage or power" % input_type)
 	return y
 
 def test_db():

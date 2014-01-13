@@ -108,15 +108,15 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
 	"""
 	if f0 > 0.5:
-		raise ValueError, 'Error. f0 must be less than 0.5.'
+		raise ValueError('Error. f0 must be less than 0.5.')
 	if f0 != 0 and f0 < 0.25/osr:
 		warn('Creating a lowpass ntf.')
 		f0 = 0
 	if f0 != 0 and order % 2 != 0:
-		raise ValueError, 'Order must be even for a bandpass modulator.'
+		raise ValueError('Order must be even for a bandpass modulator.')
 	opt = np.asarray(opt)
 	if opt.ndim > 1 or (opt.ndim == 1 and opt.size != order):
-		raise ValueError, ('The opt vector must be of length %d.' % order)
+		raise ValueError('The opt vector must be of length %d.' % order)
 
 	if optimize_NTF == False:
 		ntf = synthesizeNTF0(order, osr, opt, H_inf, f0)
