@@ -1,11 +1,13 @@
 language: python
 python:
   - "2.7"
+  - "3.3"
 virtualenv:
   system_site_packages: true
 before_install:
  - sudo apt-get build-dep -qq python-scipy python-numpy
- - sudo apt-get install -qq python-matplotlib
+ - sudo apt-get build-dep -qq python3-scipy python3-numpy
+ - sudo apt-get install -qq python-matplotlib python3-matplotlib
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
  - pip install numpy --use-mirrors
