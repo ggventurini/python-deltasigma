@@ -40,7 +40,7 @@ python-deltasigma runs on every platform and arch. supported by its dependencies
 
 ### Dependencies
 
-Using python-deltasigma requires Python 2.x, **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
+Using python-deltasigma requires **Python 2** or **3**, **numpy**, **scipy** (>= 0.11.0) and **matplotlib**.
 
 They are packaged by virtually all the major *Linux distributions*. 
 
@@ -104,7 +104,7 @@ Pull requests are welcome!
 
 There are only a few *guidelines*, which can be overridden every time it is reasonable to do so:
 
-* Please try to follow `PEP8`. Except you are free to indent with tabs or spaces as you please (but please stick with your choice). 
+* Please try to follow `PEP8`.
 
 * Try to keep the functions signature identical. Parameters with `NaN` default values have their default value replaced with `None`. 
 
