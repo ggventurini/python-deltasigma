@@ -73,14 +73,24 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
 
     **Implementation details:**
 
-    The describing function method of A&P assumes that the quantizer processes
+    The describing function method of A&P treats the quantizer processes
     signal and noise components separately. The quantizer is modelled as two
-    (not necessarily equal) linear gains, ``k0`` and ``k1``, and an additive 
-    white gaussian noise source of power sigma_e2. ``k0``, ``k1`` and
-    ``sigma_e2`` are calculated as functions of the input.
-    
+    (not necessarily equal) linear gains, :math:`k_0` (``k0`` in the code) 
+    and :math:`k_1` (``k1``), and an additive white gaussian noise source of
+    power :math:`\\sigma_e^2` (``sigma_e2``), as shown in the figure below. 
+    :math:`k_0`, :math:`k_1` and :math:`\\sigma_e^2` are calculated as
+    functions of the input.
+
+    .. image:: ../doc/_static/predictSNR.png
+        :align: center
+        :alt: modulator model for predictSNR
+
     The modulator's loop filter is assumed to have nearly infinite gain at
     the test frequency.
+
+    **Example:**
+
+    See :func:`simulateSNR` for an example use of this function.
 
     Future versions may accommodate STFs.
     """

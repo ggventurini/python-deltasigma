@@ -71,26 +71,21 @@ def clans(order=4, OSR=64, Q=5, rmax=0.95, opt=0):
     ntf : tuple
         The modulator NTF, given in ZPK (zero-pole-gain) form.
 
-    Example::
+    **Example:**
 
-        # Fifth-order lowpass modulator; (time-domain) noise gain of 5, 
-        # zeros optimized for OSR = 32.
+    Fifth-order lowpass modulator; (time-domain) noise gain of 5, 
+    zeros optimized for OSR = 32.::
+
         H = clans(5, 32, 5, .95, 1)
-        print "zeros:\\n", H[0]
-        print "poles:\\n", H[1]
-        print "gain:", H[2]
+        pretty_lti(H)
 
-    Prints::
+    Returns::
 
-        zeros:
-        [ 0.99604531-0.08884669j  0.99604531+0.08884669j  0.99860302-0.05283948j
-        0.99860302+0.05283948j  1.00000000+0.j        ]
-        poles:
-        [ 0.41835234+0.j         0.48922229+0.1709716j  0.48922229-0.1709716j
-        0.65244885+0.3817224j  0.65244885-0.3817224j]
-        gain: 1.0
+              (z +1) (z^2 +1.997z +1) (z^2 +1.992z +0.9999)      
+        ---------------------------------------------------------
+         (z +0.4184) (z^2 +1.305z +0.5713) (z^2 +0.978z +0.2686) 
 
-    Which can be plotted through :func:`DocumentNTF`:
+    ``H`` can be plotted through :func:`DocumentNTF`:
 
     .. plot::
 

@@ -73,6 +73,39 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
          the mixed CT/DT prefilters which form the samples 
          fed to each state for the CT inputs.
 
+    **Example:**
+
+    Map the standard second order CT modulator shown below to its CT
+    equivalent and verify that its NTF is :math:`(1-z^{-1})^2`.
+
+    .. image:: ../doc/_static/mapCtoD.png
+        :align: center
+        :alt: alternate text
+
+    It can be done as follows::
+
+        from __future__ import print_function
+        import numpy as np
+        from scipy.signal import lti
+        from pydelsigma import *
+        LFc = lti([[0, 0], [1, 0]], [[1, -1], [0, -1.5]], [[0, 1]], [[0, 0]])
+        tdac = [0, 1]
+        LF, Gp = mapCtoD(LFc, tdac)
+        LF = lti(*LF)
+        ABCD = np.vstack((
+                np.hstack((LF.A, LF.B)),
+                np.hstack((LF.C, LF.D))
+               ))
+        NTF, STF = calculateTF(ABCD)
+        print("NTF:") # after rounding to a 1e-6 resolution
+        print("Zeros:", np.real_if_close(np.round(NTF.zeros, 6)))
+        print("Poles:", np.real_if_close(np.round(NTF.poles, 6)))
+
+    Prints::
+
+        Zeros: [ 1.  1.]
+        Poles: [ 0.  0.]
+
     .. seealso:: R. Schreier and B. Zhang, "Delta-sigma modulators employing \
     continuous-time circuitry," IEEE Transactions on Circuits and Systems I, \
     vol. 43, no. 4, pp. 324-332, April 1996.

@@ -29,25 +29,31 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                 quadrature=False):
     """Determine the SNR for a delta-sigma modulator by using simulations.
 
-    The modulator is described by a noise transfer function (ntf)
-    and the number of quantizer levels (nlev).
+    Simulate a delta-sigma modulator with sine wave inputs of various
+    amplitudes and calculate the signal-to-noise ratio (SNR) in dB for each 
+    input.
 
-    Alternatively, the first argument to simulateSNR may be an ABCD matrix or
-    the name of a function taking the input signal as its sole argument.
+    Two alternative descriptions of the modulator can be used:
 
-    The band of interest is defined by the oversampling ratio (osr)
-    and the center frequency (f0).
+     * The modulator is described by a noise transfer function (NTF), provided
+       as ``arg1`` and the number of quantizer levels (``nlev``).
 
-    The input signal is characterized by the amp vector and the f variable.
+     * Alternatively, the first argument to simulateSNR may be an ABCD matrix or
+       the name of a function taking the input signal as its sole argument.
+
+    The band of interest is defined by the oversampling ratio (``osr``)
+    and the center frequency (``f0``).
+
+    The input signal is characterized by the ``amp`` vector and the ``f`` variable.
     A default value for ``amp`` is used if not supplied.
 
-    f is the input frequency, normalized such that 1 -> fs;
-    f is rounded to an FFT bin.
+    ``f`` is the input frequency, normalized such that 1 -> fs;
+    ``f`` is rounded to an FFT bin.
 
     Using sine waves located in FFT bins, the SNR is calculated as the ratio
     of the sine wave power to the power in all in-band bins other than those
     associated with the input tone. Due to spectral smearing, the input tone
-    is not allowed to lie in bins 0 or 1. The length of the FFT is 2^k.
+    is not allowed to lie in bins 0 or 1. The length of the FFT is :math:`2^k`.
 
     If ntf is complex, simulateQDSM (which is slow) is called.
     If ABCD is complex, simulateDSM is used with the real equivalent of ABCD
@@ -106,6 +112,44 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
 
     amp : ndarray
         The amplitudes corresponding to the SNR values.
+
+    **Example:**
+
+    Compare the SNR vs input amplitude curve for a fifth-order modulator, as 
+    determined by the describing function method (:func:`predictSNR`) with
+    that determined by simulation (:func:`simulateSNR`).::
+
+        import pylab as plt
+        from pydelsigma import *
+        OSR = 32
+        H = synthesizeNTF(5, OSR, 1)
+        snr_pred, amp, _, _, _ = predictSNR(H,OSR)
+        snr, amp = simulateSNR(H, OSR)
+        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.grid(True)
+        figureMagic([-100, 0], 10, None,
+                    [0, 100], 10, None)
+        plt.xlabel('Input Level, dB')
+        plt.ylabel('SNR dB')
+        s = 'peak SNR = %4.1fdB\\n' % max(snr)
+        plt.text(-65, 15, s, horizontalalignment='left')
+
+    .. plot::
+
+        import pylab as plt
+        from pydelsigma import *
+        OSR = 32
+        H = synthesizeNTF(5, OSR, 1)
+        snr_pred, amp, _, _, _ = predictSNR(H,OSR)
+        snr, amp = simulateSNR(H, OSR)
+        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.grid(True)
+        figureMagic([-100, 0], 10, None,
+                    [0, 100], 10, None)
+        plt.xlabel('Input Level, dB')
+        plt.ylabel('SNR dB')
+        s = 'peak SNR = %4.1fdB\\n' % max(snr)
+        plt.text(-65, 15, s, horizontalalignment='left')
 
     """
     # Look at arg1 and decide if the system is quadrature

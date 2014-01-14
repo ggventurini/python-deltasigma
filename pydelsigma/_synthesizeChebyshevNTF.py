@@ -30,6 +30,12 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     
     The NTF is a type-2 highpass Chebyshev function.
 
+    func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
+    is approximately constant in the passband. When the OSR or ``H_inf`` are
+    low, this assumption breaks down and synthesizeNTF yields a non-optimal
+    NTF. :func:`synthesizeChebyshevNTF` creates non-optimal NTFs, but fares
+    better than synthesizeNTF in the aforementioned circumstances.
+
     **Parameters:**
 
     order : int, optional

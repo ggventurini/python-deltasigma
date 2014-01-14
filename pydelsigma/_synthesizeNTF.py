@@ -36,90 +36,110 @@ from ._synthesizeNTF0 import synthesizeNTF0
 from ._synthesizeNTF1 import synthesizeNTF1
 
 def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
-	"""Synthesize a noise transfer function for a delta-sigma modulator.
+    """Synthesize a noise transfer function for a delta-sigma modulator.
 
-	**Parameters:**
+    **Parameters:**
 
-	order : int, optional
-	    the order of the modulator, defaults to 3
-	osr : float, optional
-	    the oversamping ratio, defaults to 64
-	opt : int or list of floats, optional
-	    flag for optimized zeros, defaults to 0
+    order : int, optional
+        the order of the modulator, defaults to 3
+    osr : float, optional
+        the oversamping ratio, defaults to 64
+    opt : int or list of floats, optional
+        flag for optimized zeros, defaults to 0
 
-	    * 0 -> not optimized,
-	    * 1 -> optimized,
-	    * 2 -> optimized with at least one zero at band-center,
-	    * 3 -> optimized zeros (with optimizer)
-	    * 4 -> same as 3, but with at least one zero at band-center
-	    * [z] -> zero locations in complex form
+        * 0 -> not optimized,
+        * 1 -> optimized,
+        * 2 -> optimized with at least one zero at band-center,
+        * 3 -> optimized zeros (with optimizer)
+        * 4 -> same as 3, but with at least one zero at band-center
+        * [z] -> zero locations in complex form
 
-	H_inf : real, optional
-	    max allowed peak value of the NTF. Defaults to 1.5
-	f0 : real, optional
-	    center frequency for BP modulators, or 0 for LP modulators.
-	    Defaults to 0.
-	    1 corresponds to the sampling frequency, so that 0.5 is the
-	    maximum value. Value 0 specifies an LP modulator.
+    H_inf : real, optional
+        max allowed peak value of the NTF. Defaults to 1.5
+    f0 : real, optional
+        center frequency for BP modulators, or 0 for LP modulators.
+        Defaults to 0.
+        1 corresponds to the sampling frequency, so that 0.5 is the
+        maximum value. Value 0 specifies an LP modulator.
 
-	**Returns:**
+    **Returns:**
 
-	ntf : tuple
-	    noise transfer function in zpk form.
+    ntf : tuple
+        noise transfer function in zpk form.
 
-	**Raises:**
+    **Raises:**
 
-	ValueError
-	    * 'Error. f0 must be less than 0.5' if f0 is out of range
+    ValueError
+        * 'Error. f0 must be less than 0.5' if f0 is out of range
 
-	    * 'Order must be even for a bandpass modulator.' if the order is
-	      incompatible with the modulator type.
+        * 'Order must be even for a bandpass modulator.' if the order is
+          incompatible with the modulator type.
 
-	    * 'The opt vector must be of length xxx' if opt is used to explicitly
-	      pass the NTF zeros and these are in the wrong number.
+        * 'The opt vector must be of length xxx' if opt is used to explicitly
+          pass the NTF zeros and these are in the wrong number.
 
-	**Warns:**
+    **Warns:**
 
-	    * 'Creating a lowpass ntf.' if the center frequency is different
-	      from zero, but so low that a low pass modulator must be designed.
+        * 'Creating a lowpass ntf.' if the center frequency is different
+          from zero, but so low that a low pass modulator must be designed.
 
-	    * 'Unable to achieve specified H_inf ...' if the desired H_inf
-	      cannot be achieved.
+        * 'Unable to achieve specified H_inf ...' if the desired H_inf
+          cannot be achieved.
 
-	    * 'Iteration limit exceeded' if the routine converges too slowly.
+        * 'Iteration limit exceeded' if the routine converges too slowly.
 
-	**Notes:**
+    **Notes:**
 
-	This is actually a wrapper function which calls the appropriate version
-	of synthesizeNTF, based on the module control flag `optimize_NTF` which
-	determines whether to use optimization tools.
+    This is actually a wrapper function which calls the appropriate version
+    of synthesizeNTF, based on the module control flag `optimize_NTF` which
+    determines whether to use optimization tools.
 
-	Parameter ``H_inf`` is used to enforce the Lee stability criterion.
+    Parameter ``H_inf`` is used to enforce the Lee stability criterion.
 
-	.. seealso::
+    **Example:**
 
-	   :func:`clans` : Closed-Loop Analysis of Noise-Shaper. 
+    Fift-order lowpass modulator; zeros optimized for an oversampling ratio of 32.::
+
+        from pydelsigma import *
+        H = synthesizeNTF(5, 32, 1)
+        pretty_lti(H)
+
+    Returns::
+
+              (z +1) (z^2 +1.997z +1) (z^2 +1.992z +0.9999)      
+        --------------------------------------------------------
+         (z +0.7778) (z^2 +1.796z +0.8549) (z^2 +1.613z +0.665) 
+
+    .. plot::
+
+        from pydelsigma import *
+        H = synthesizeNTF(5, 32, 1)
+        DocumentNTF(H, 32)
+
+    .. seealso::
+
+       :func:`clans` : Closed-Loop Analysis of Noise-Shaper. 
                An alternative method for selecting NTFs based on the 1-norm of the 
                impulse response of the NTF
 
-	   :func:`synthesizeChebyshevNTF()` : Select a type-2 highpass Chebyshev NTF.
-	       This function does a better job than synthesizeNTF if osr
-	       or H_inf is low.
+       :func:`synthesizeChebyshevNTF()` : Select a type-2 highpass Chebyshev NTF.
+           This function does a better job than synthesizeNTF if osr
+           or H_inf is low.
 
-	"""
-	if f0 > 0.5:
-		raise ValueError('Error. f0 must be less than 0.5.')
-	if f0 != 0 and f0 < 0.25/osr:
-		warn('Creating a lowpass ntf.')
-		f0 = 0
-	if f0 != 0 and order % 2 != 0:
-		raise ValueError('Order must be even for a bandpass modulator.')
-	opt = np.asarray(opt)
-	if opt.ndim > 1 or (opt.ndim == 1 and opt.size != order):
-		raise ValueError('The opt vector must be of length %d.' % order)
+    """
+    if f0 > 0.5:
+        raise ValueError('Error. f0 must be less than 0.5.')
+    if f0 != 0 and f0 < 0.25/osr:
+        warn('Creating a lowpass ntf.')
+        f0 = 0
+    if f0 != 0 and order % 2 != 0:
+        raise ValueError('Order must be even for a bandpass modulator.')
+    opt = np.asarray(opt)
+    if opt.ndim > 1 or (opt.ndim == 1 and opt.size != order):
+        raise ValueError('The opt vector must be of length %d.' % order)
 
-	if optimize_NTF == False:
-		ntf = synthesizeNTF0(order, osr, opt, H_inf, f0)
-	else:
-		ntf = synthesizeNTF1(order, osr, opt, H_inf, f0)
-	return ntf
+    if optimize_NTF == False:
+        ntf = synthesizeNTF0(order, osr, opt, H_inf, f0)
+    else:
+        ntf = synthesizeNTF1(order, osr, opt, H_inf, f0)
+    return ntf

@@ -40,7 +40,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     ymax : scalar, optional
         The stability threshold. Inputs that yield quantizer inputs above ymax
         are considered to be beyond the stable range of the modulator.
-        If not provided, it will be set to :math:`$n_{lev} + 5$`
+        If not provided, it will be set to :math:`n_{lev} + 5`
 
     umax : scalar
         The maximum allowable input amplitude. ``umax`` is calculated if it
