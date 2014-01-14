@@ -297,6 +297,33 @@ def restore_input_form(a, form):
         a = a.reshape(form)
     return a
 
+def pretty_lti(arg):
+    """Given the lti object ``arg`` return a *pretty* representation."""
+    z, p, k = _get_zpk(arg)
+    ppstr = ["", "", ""]
+    if k != 1:
+        ppstr[1] = "%g" % k
+    for i, s in zip((0, 2), (z, p)):
+        rz = None
+        for zi in cplxpair(s)[::-1]:
+            zi = np.round(np.real_if_close(zi), 4)
+            if np.isreal(zi):
+                ppstr[i] += "(z %+g) " % zi
+            else:
+                if rz is None:
+                    rz = zi
+                    continue
+                else:
+                    ppstr[i] += "(z^2 %+gz %+g) " % \
+                                (np.round(np.real_if_close(rz + zi), 3), 
+                                 np.round(np.real_if_close(rz*zi), 4))
+                    rz = None
+        ppstr[i] = ppstr[i][:-1]
+    ppstr[1] += "-"*(max(len(ppstr[0]), len(ppstr[2])) + 2)
+    ppstr[0] = ppstr[0].center(len(ppstr[1]))
+    ppstr[2] = ppstr[2].center(len(ppstr[1]))
+    return "\n".join(ppstr)
+
 def _get_zpk(arg, input=0):
     """Utility method to convert the input arg to a z, p, k representation.
 
@@ -488,6 +515,8 @@ def _getABCD(arg):
     if isinstance(arg, np.ndarray):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
+    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+       A, B, C, D = arg.A, arg.B, arg.C, np.atleast_2d(arg.D)
     elif _is_zpk(arg) or _is_num_den(arg) or _is_A_B_C_D(arg):
        sys = lti(*arg)
        A, B, C, D = sys.A, sys.B, sys.C, sys.D
@@ -766,3 +795,13 @@ def test_minreal():
     assert np.allclose(zeros, zt, atol=1e-8, rtol=1e-5)
     assert np.allclose(poles, poles, atol=1e-8, rtol=1e-5)
     assert np.allclose((k,), (gain,), atol=1e-8, rtol=1e-5)
+
+def test_pretty_lti():
+    """Test function for pretty_lti()"""
+    from ._synthesizeNTF import synthesizeNTF
+    H = synthesizeNTF(5, 32, 1)
+    tv = pretty_lti(H)
+    res = '     (z +1) (z^2 +1.997z +1) (z^2 +1.992z +0.9999)      \n' + \
+          '--------------------------------------------------------\n' + \
+          ' (z +0.7778) (z^2 +1.796z +0.8549) (z^2 +1.613z +0.665) '
+    assert res == tv
