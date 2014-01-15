@@ -26,8 +26,10 @@ from scipy.interpolate import interp1d
 from ._dbp import dbp
 
 def predictSNR(ntf, R=64, amp=None, f0=0.):
-    """Predict the SNR curve of a binary delta-sigma modulator using the describing function 
-    method of Ardalan and Paulos.
+    """Predict the SNR curve of a binary delta-sigma modulator.
+
+    The prediction is performed using the describing function method of Ardalan
+    and Paulos.
     
     **Parameters:**
     

@@ -23,8 +23,8 @@ from ._evalRPoly import evalRPoly
 from ._utils import _is_num_den, _is_zpk, _get_zpk
 
 def evalTF(tf, z):
-	"""Evaluates the rational function described by ``tf`` at the point(s)
-	given in the ``z`` vector.
+	"""Evaluates the rational function ``tf`` at the point(s)
+	given in ``z``.
 	
 	**Parameters:**
 

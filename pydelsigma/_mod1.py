@@ -21,7 +21,7 @@ import numpy as np
 from ._calculateTF import calculateTF
 
 def mod1():
-    """Populate a structure describing the first-order modulator
+    """Populate a structure describing the first-order modulator.
     
     **Returns:**
 

@@ -21,7 +21,9 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def undbv(x):
-	"""Convert ``x`` from dB to a voltage, according to the relationship:
+	"""Convert ``x`` from dB to voltage.
+
+	The conversion is carried out according to the relationship:
 
 	.. math::
 

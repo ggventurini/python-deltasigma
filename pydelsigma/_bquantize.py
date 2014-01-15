@@ -23,8 +23,10 @@ from ._constants import eps
 from ._utils import empty, mfloor
 
 def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
-	"""Bidirectionally quantize a n by 1 vector x to nsd signed digits, 
-	terminate early if the error is less than the specified tolerances.
+	"""Bidirectionally quantize a (n by 1) vector ``x`` to ``nsd`` signed digits.
+
+	This method will terminate early if the error is less than the specified
+	tolerances.
 
 	**Parameters:**
 

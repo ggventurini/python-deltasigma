@@ -20,9 +20,9 @@ from __future__ import division
 import numpy as np
 
 def mapRtoQ(ABCDr):
-    """Map a real ABCD to a quadrature ABCD
+    """Map a real ABCD matrix to a quadrature one.
 
-    ABCDr has its states paired (real, imaginary)
+    ABCDr has its states paired (real, imaginary).
 
     Returns:
 

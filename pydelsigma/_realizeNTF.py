@@ -29,12 +29,12 @@ from ._stuffABCD import stuffABCD
 from ._utils import cplxpair
 
 def realizeNTF(ntf, form='CRFB', stf=None):
-	"""Convert a noise transfer function into coefficients for the desired structure.
+	"""Convert an NTF into coefficients for the desired structure.
 
 	**Parameters:**
 
 	ntf : a zpk transfer function
-	    The modulator ntf
+	    The modulator noise transfer function (NTF)
 
 	form : string
 	    A structure identifier.

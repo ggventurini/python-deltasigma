@@ -20,8 +20,9 @@ from __future__ import division
 import numpy as np
 
 def mapQtoR(Z):
-    """Map a quadrature ABCD matrix to non-quadrature one that can be
-    simulated with simulateDSM().
+    """Map a quadrature ABCD matrix to a real one. 
+
+    The non-quadrature topology can be simulated with :func:`simulateDSM`.
     """
     A = np.zeros((2*Z.shape[0], 2*Z.shape[1]))
     A[::2, ::2] = np.real(Z)

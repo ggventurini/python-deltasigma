@@ -22,8 +22,7 @@ from ._partitionABCD import partitionABCD
 from ._utils import diagonal_indices
 
 def stuffABCD(a, g, b, c, form='CRFB'):
-    """
-    Calculate the ABCD matrix given the parameters of a specified modulator topology.
+    """Calculate the ABCD matrix from the parameters of a modulator topology.
 
     **Parameters:**
 

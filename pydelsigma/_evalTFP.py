@@ -8,7 +8,9 @@ from ._utils import carray, restore_input_form, save_input_form
 from ._constants import eps
 
 def evalTFP(Hs, Hz, f):
-    """Compute the value of a transfer function product Hs*Hz at a frequency f,
+    """Evaluate a CT-DT transfer function product.
+
+    Compute the value of a transfer function product Hs*Hz at a frequency f,
     where Hs is a cts-time TF and Hz is a discrete-time TF.
 
     Both Hs and Hz are SISO zpk tuples.
