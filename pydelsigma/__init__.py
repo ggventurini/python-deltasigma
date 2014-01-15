@@ -232,8 +232,11 @@ MATLAB is a registered trademark of The MathWorks, Inc.
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
 
+Package contents
+----------------
+
 Key Functions
--------------
+~~~~~~~~~~~~~
 
 .. autosummary::
     :nosignatures:
@@ -253,7 +256,14 @@ Key Functions
     evalTFP
 
 Functions for quadrature systems
---------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Notice the current version of ``python-deltasigma`` cannot synthesize
+quadrature modulators. This feature is expected in v. 0.2.
+
+Nontheless, the following functions are provided since if you already have
+a synthesized modulator (or know its ABCD matrix), they allow you to simulate
+the modulator with the standard tools for real ABCDs topologies.
 
 .. autosummary::
     :nosignatures:
@@ -262,7 +272,9 @@ Functions for quadrature systems
     mapRtoQ
 
 Other selected functions
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following are auxiliary functions that complement the key functions above.
 
 .. autosummary::
     :nosignatures:
@@ -279,7 +291,11 @@ Other selected functions
     rmsGain
 
 General utilities for data processing
--------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following are generic functions useful for manipulating data,
+conversions, padding and provide speciality functions which are
+not otherwise available in the usual scientific Python stack.
 
 .. autosummary::
     :nosignatures:
@@ -291,7 +307,6 @@ General utilities for data processing
     undbm
     undbp
     undbv
-    ds_hann
     rms
     padb
     padl
@@ -304,7 +319,9 @@ General utilities for data processing
     lcm
 
 Plotting and data display utilitites
-------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Graphic functions:
 
 .. autosummary::
     :nosignatures:
@@ -312,8 +329,6 @@ Plotting and data display utilitites
     plotPZ
     plotSpectrum
     figureMagic
-    circ_smooth
-    logsmooth
     DocumentNTF
     PlotExampleSpectrum
     axisLabels
@@ -321,12 +336,22 @@ Plotting and data display utilitites
     bplogsmooth
     lollipop
     changeFig
+
+Textual and non-graphic functions
+
+.. autosummary::
+    :nosignatures:
+
+    circ_smooth
+    logsmooth
     pretty_lti
     SIunits
 
-
 Utility functions for Delta Sigma simulation
---------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Functions for low-level handling of Delta Sigma modulator representations,
+their evaluation and filtering.
 
 .. autosummary::
     :nosignatures:
@@ -338,6 +363,7 @@ Utility functions for Delta Sigma simulation
     delay
     ds_f1f2
     ds_freq
+    ds_hann
     ds_optzeros
     ds_quantize
     ds_synNTFobj1
@@ -345,14 +371,13 @@ Utility functions for Delta Sigma simulation
     evalMixedTF
     evalRPoly
     evalTF
-    frespF1
     nabsH
     peakSNR
     sinc_decimate
     zinc
 
-Detailed documentation
-----------------------
+All functions in alphabetical order
+-----------------------------------
 
 """
 
