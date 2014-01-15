@@ -26,7 +26,7 @@ from ._calculateTF import calculateTF
 from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._stuffABCD import stuffABCD
-from ._utils import cplxpair
+from ._utils import carray, cplxpair, _get_zpk
 
 def realizeNTF(ntf, form='CRFB', stf=None):
 	"""Convert an NTF into coefficients for the desired structure.
@@ -94,31 +94,10 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 	if (hasattr(ntf, 'inputs') and not ntf.inputs == 1) or \
 	   (hasattr(ntf, 'outputs') and not ntf.outputs == 1):
 		raise TypeError("Only SISO transfer functions can be evaluated.")
-	if hasattr(ntf, 'num') and hasattr(ntf, 'den'):
-		filt = hasattr(ntf, 'outputs')
-		num = ntf.num[0][0] if filt else ntf.num
-		den = ntf.den[0][0] if filt else ntf.den
-		ntf_z, ntf_p, _ = tf2zpk(num, den)
-	elif (hasattr(ntf, 'zeros') and hasattr(ntf, 'poles')) or \
-	   (hasattr(ntf, 'zero') and hasattr(ntf, 'pole')):
-		# LTI objects have poles and zeros, 
-		# TransferFunction-s have pole() and zero()
-		ntf_z = ntf.zeros if hasattr(ntf, 'zeros') else ntf.zero()
-		ntf_p = ntf.poles if hasattr(ntf, 'poles') else ntf.pole()
-	elif hasattr(ntf, 'form') and ntf.form == 'zp':
-		ntf_z, ntf_p, _ = ntf.k, ntf.zeros, ntf.poles
-	elif hasattr(ntf, 'form') and ntf.form == 'coeff':
-		ntf_z, ntf_p, _ = tf2zpk(ntf.num, ntf.den)
-	elif hasattr(ntf, 'form'):
-		raise ValueError('%s: Unknown form: %s' % (__name__, ntf.form))
-	elif hasattr(ntf, '__len__'):
-		if len(ntf) == 2:
-			ntf_z, ntf_p, _ = tf2zpk(ntf[0], ntf[1])
-		elif len(ntf) == 3:
-			ntf_z, ntf_p = ntf[0:2]
-	else:
-		raise TypeError('%s: Unknown transfer function %s' % (__name__, str(ntf)))
-		
+
+	ntf_z, ntf_p, _k = _get_zpk(ntf)
+	ntf_z = carray(ntf_z)
+	ntf_p = carray(ntf_p)
 	order = max(ntf_p.shape)
 	order2 = int(np.floor(order/2))
 	odd = (order - 2*order2 == 1)

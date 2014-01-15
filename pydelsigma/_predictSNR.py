@@ -24,6 +24,7 @@ from scipy.special import erfinv
 from scipy.interpolate import interp1d
 
 from ._dbp import dbp
+from ._utils import _get_num_den
 
 def predictSNR(ntf, R=64, amp=None, f0=0.):
     """Predict the SNR curve of a binary delta-sigma modulator.
@@ -101,32 +102,8 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
     if (hasattr(ntf, 'inputs') and not ntf.inputs == 1) or \
        (hasattr(ntf, 'outputs') and not ntf.outputs == 1):
         raise TypeError("The supplied TF isn't a SISO transfer function.")
-    if hasattr(ntf, 'num') and hasattr(ntf, 'den'):
-        filt = hasattr(ntf, '__class__') and ntf.__class__.__name__ == 'TransferFunction'
-        num = ntf.num[0][0] if filt else ntf.num
-        den = ntf.den[0][0] if filt else ntf.den
-    elif (hasattr(ntf, 'zeros') and hasattr(ntf, 'poles')) or \
-         (hasattr(ntf, 'zero') and hasattr(ntf, 'pole')):
-        # LTI objects have poles and zeros, 
-        # TransferFunction-s have pole() and zero()
-        zeros = ntf.zeros if hasattr(ntf, 'zeros') else ntf.zero()
-        poles = ntf.poles if hasattr(ntf, 'poles') else ntf.pole()
-        num, den = zpk2tf(zeros, poles, 1)
-    elif hasattr(ntf, 'form') and ntf.form == 'coeff':
-        num, den = ntf.num, ntf.den
-    elif hasattr(ntf, 'form'):
-        raise ValueError('%s: Unknown form: %s' % (__name__, ntf.form))
-    elif hasattr(ntf, '__len__'):
-        if len(ntf) == 3: # z, p, k
-            zeros, poles, _ = ntf
-            num, den = zpk2tf(zeros, poles, 1)
-        elif len(ntf) == 2: # num, den
-            num, den = ntf[0], ntf[1]
-        else:
-            raise TypeError('%s: Unknown transfer function %s' % (__name__, str(ntf)))
-    else:
-        raise TypeError('%s: Unknown transfer function %s' % (__name__, str(ntf)))
 
+    num, den = _get_num_den(ntf)
     Nb = 100
     if f0 == 0:
         band_of_interest = np.linspace(0, np.pi/R, Nb)
