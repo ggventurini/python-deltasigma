@@ -177,7 +177,7 @@ latex_elements = {
 'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
-'pointsize': '11pt',
+'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
 #'preamble': '',
@@ -186,7 +186,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'python-deltasigma.tex', u'python-deltasigma Documentation',
+  ('index', 'python-deltasigma.tex', u'python-deltasigma documentation',
    u'Giuseppe Venturini', 'howto'),
 ]
 
