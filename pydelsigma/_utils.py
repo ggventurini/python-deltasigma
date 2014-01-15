@@ -306,7 +306,7 @@ def pretty_lti(arg):
         return "%g" % k
     ppstr = ["", "", ""]
     if k != 1:
-        ppstr[1] = "%g" % k
+        ppstr[1] = "%g " % k
     for i, s in zip((0, 2), (z, p)):
         rz = None
         for zi in cplxpair(s)[::-1]:
@@ -322,11 +322,17 @@ def pretty_lti(arg):
                                 (np.round(np.real_if_close(-rz - zi), 3), 
                                  np.round(np.real_if_close(rz*zi), 4))
                     rz = None
-        ppstr[i] = ppstr[i][:-1] if len(ppstr) else "1"
-    ppstr[1] += "-"*(max(len(ppstr[0]), len(ppstr[2])) + 2)
-    ppstr[0] = ppstr[0].center(len(ppstr[1]))
-    ppstr[2] = ppstr[2].center(len(ppstr[1]))
-    return "\n".join(ppstr)
+        ppstr[i] = ppstr[i][:-1] if len(ppstr[i]) else "1"
+    if ppstr[2] == '1':
+        return ppstr[1] + ppstr[0]
+    else:
+        if ppstr[0] == '1' and len(ppstr[1]) and float(ppstr[1]) != 1.:
+            ppstr[0] = ppstr[1][:-1]
+            ppstr[1] = ""
+        ppstr[1] += "-"*(max(len(ppstr[0]), len(ppstr[2])) + 2)
+        ppstr[0] = ppstr[0].center(len(ppstr[1]))
+        ppstr[2] = ppstr[2].center(len(ppstr[1]))
+        return "\n".join(ppstr)
 
 def _get_zpk(arg, input=0):
     """Utility method to convert the input arg to a z, p, k representation.
@@ -810,3 +816,6 @@ def test_pretty_lti():
           ' (z -0.7778) (z^2 -1.796z +0.8549) (z^2 -1.613z +0.665) '
     assert res == tv
     assert int(pretty_lti(([], [], 2))) == 2
+    assert pretty_lti([[1], [], 2]) == '2 (z -1)'
+    assert pretty_lti([[], [.22222222], 2]) == \
+           '      2      \n-------------\n (z -0.2222) '
