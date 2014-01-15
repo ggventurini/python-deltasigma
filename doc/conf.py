@@ -174,10 +174,10 @@ htmlhelp_basename = 'python-deltasigmadoc'
 
 latex_elements = {
 # The paper size ('letterpaper' or 'a4paper').
-#'papersize': 'a4paper',
+'papersize': 'a4paper',
 
 # The font size ('10pt', '11pt' or '12pt').
-#'pointsize': '10pt',
+'pointsize': '11pt',
 
 # Additional stuff for the LaTeX preamble.
 #'preamble': '',
@@ -187,7 +187,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'python-deltasigma.tex', u'python-deltasigma Documentation',
-   u'Giuseppe Venturini', 'manual'),
+   u'Giuseppe Venturini', 'howto'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
