@@ -42,7 +42,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     ABCD : ndarray
         A state-space description of the modulator loop filter.
     
-    .. note:: :func:`mapABCD` is the inverse function.
+    .. seealso:: :func:`mapABCD`, the inverse function.
     """
     # Code common to all structures.
     order = max(a.shape)

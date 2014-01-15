@@ -27,52 +27,90 @@ from ._evalTFP import evalTFP
 from ._impL1 import impL1
 from ._padb import padb
 from ._pulse import pulse
-from ._utils import carray, eps
+from ._utils import carray, eps, _get_zpk
 
 def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
                   ABCDc=None):
     """Realize an NTF with a continuous-time loop filter.
     
-     Output
-     ABCDc      A state-space description of the CT loop filter
+    **Parameters:**
 
-     tdac2      A matrix with the DAC timings, including ones
-    	     	that were automatically added.
+    ntf : object
+        A noise transfer function (NTF).
+    
+    form : str, optional
+        A string specifying the topology of the loop filter.
 
-     Input Arguments
-     ntf	A noise transfer function in pole-zero form.
+         * 'FB': Feedback form,
+         * 'FF': Feedforward form
+
+        For the FB structure, the elements of ``Bc`` are calculated
+        so that the sampled pulse response matches the L1 impulse
+        response.  For the FF structure, ``Cc`` is calculated.
     
-     form = {'FB','FF'}	
-           A string specifying the topology of the loop filter.
-    	For the FB structure, the elements of Bc are calculated
-     	so that the sampled pulse response matches the L1 impulse
-     	respnse.  For the FF structure, Cc is calculated.
-    
-     tdac	
-        The timing for the feedback DAC(s). If tdac(1)>=1,
-     	direct feedback terms are added to the quantizer.
-    	Multiple timings (1 or more per integrator) for the FB 
+    tdac : sequence, optional
+        The timing for the feedback DAC(s). If ``tdac[0] >= 1``,
+        direct feedback terms are added to the quantizer.
+
+        Multiple timings (one or more per integrator) for the FB 
         topology can be specified by making tdac a list of lists,
-        e.g. tdac = [[1, 2], [1, 2], [[0.5, 1], [1, 1.5]], []] 
-    	In this example, the first two integrators have
-    	dacs with [1, 2] timing, the third has a pair of
-     	dacs, one with [0.5, 1] timing and the other with
-    	[1, 1.5] timing, and there is no direct feedback
-     	DAC to the quantizer
+        e.g. ``tdac = [[1, 2], [1, 2], [[0.5, 1], [1, 1.5]], []]``
+
+        In this example, the first two integrators have
+        DACs with ``[1, 2]`` timing, the third has a pair of
+        DACs, one with ``[0.5, 1]`` timing and the other with
+        ``[1, 1.5]`` timing, and there is no direct feedback
+        DAC to the quantizer.
     
-     ordering
-    	A vector specifying which NTF zero-pair to use in each resonator
-     	Default is for the zero-pairs to be used in the order specified 
+    ordering : sequence, optional
+        A vector specifying which NTF zero-pair to use in each resonator
+        Default is for the zero-pairs to be used in the order specified 
         in the NTF.
 
-     bp	A vector specifying which resonator sections are bandpass.
-    	The default (zeros(...)) is for all sections to be lowpass.
+    bp : sequence, optional
+        A vector specifying which resonator sections are bandpass.
+        The default (``zeros(...)``) is for all sections to be lowpass.
 
-     ABCDc The loop filter structure, in state-space form.
-    	If this argument is omitted, ABCDc is constructed according 
-           to "form."
+    ABCDc : ndarray, optional
+        The loop filter structure, in state-space form.
+        If this argument is omitted, ABCDc is constructed according 
+        to "form."
+
+    **Returns:**
+
+    ABCDc : ndarray
+        A state-space description of the CT loop filter
+
+    tdac2 : ndarray
+        A matrix with the DAC timings, including ones
+        that were automatically added.
+
+    **Example:**
+
+    Realize the NTF :math:`(1 - z^{-1})^2` with a CT system (cf with the
+    example at :func:`mapCtoD`).::
+
+        from pydelsigma import *
+        ntf = ([1, 1], [0, 0], 1)
+        ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB') 
+
+    Returns:
+
+    ABCDc::
+
+        [[ 0.          0.          1.         -1.        ]
+         [ 1.          0.          0.         -1.49999999]
+         [ 0.          1.          0.          0.        ]]
+
+    tdac2::
+
+        [[-1. -1.]
+         [ 0.  1.]]
+
     """
-    ntf_z, ntf_p, _ = ntf
+    ntf_z, ntf_p, _ = _get_zpk(ntf)
+    ntf_z = carray(ntf_z)
+    ntf_p = carray(ntf_p)
     order = max(ntf_p.shape)
     order2 = int(np.floor(order/2.))
     odd = order - 2*order2

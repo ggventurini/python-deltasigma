@@ -106,6 +106,12 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
         Zeros: [ 1.  1.]
         Poles: [ 0.  0.]
 
+    Equivalent to::
+
+               (z -1)^2 
+        NTF = ----------
+                 z^2 
+
     .. seealso:: R. Schreier and B. Zhang, "Delta-sigma modulators employing \
     continuous-time circuitry," IEEE Transactions on Circuits and Systems I, \
     vol. 43, no. 4, pp. 324-332, April 1996.

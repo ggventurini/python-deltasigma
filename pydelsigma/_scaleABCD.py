@@ -26,6 +26,10 @@ from ._simulateDSM import simulateDSM
 def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10):
     """Scale the loop filter of a general delta-sigma modulator for dynamic range.
 
+    The ABCD matrix is scaled so that the state maxima are less than the
+    specified limits (``xlim``). As a side effect, the maximum stable input is
+    determined in the process.
+
     **Parameters:**
 
     ABCD : ndarray
@@ -33,6 +37,9 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
 
     nlev : int, optional
         The number of levels in the quantizer.
+
+    f : scalar
+        The normalized frequency of the test sinusoid.
 
     xlim : scalar or ndarray
         A vector or scalar specifying the limit for each state variable.
@@ -42,7 +49,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
         are considered to be beyond the stable range of the modulator.
         If not provided, it will be set to :math:`n_{lev} + 5`
 
-    umax : scalar
+    umax : scalar, optional
         The maximum allowable input amplitude. ``umax`` is calculated if it
     	is not supplied.
 
@@ -50,6 +57,11 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
 
     ABCDs : ndarray
         The state-space description of the scaled loop filter.
+
+    umax : scalar
+        The maximum stable input amplitude. Input sinusoids with amplitudes
+        below this value should not cause the modulator states to exceed their
+        specified limits.
 
     S : ndarray
         The diagonal scaling matrix S.

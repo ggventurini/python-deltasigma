@@ -24,6 +24,26 @@ from ._utils import diagonal_indices
 def mapABCD(ABCD, form='CRFB'):
     """Compute the coefficients for the specified structure.
 
+    It is assumed that the ABCD matrix fits the topology.
+
+    **Parameters:**
+
+    ABCD : ndarray
+        A state-space description of the modulator loop filter.
+    form : str, optional
+        See :func:`realizeNTF` for a list of supported structures.
+
+    **Returns:**
+    
+    a : ndarray
+        Feedback/feedforward coefficients from/to the quantizer. Length :math:`n`.
+    g : ndarray
+        Resonator coefficients. Length :math:`floor(n/2)`.
+    b : ndarray
+        Feed-in coefficients from the modulator input to each integrator. Length :math:`n + 1`.
+    c : ndarray
+        Integrator inter-stage coefficients. Length :math:`n`.
+
     .. seealso::
 
         * :func:`realizeNTF` for a list of supported structures.

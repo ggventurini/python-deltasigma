@@ -68,6 +68,23 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 
 	a, g, b, c : tuple of ndarrays
 	    the coefficients for the desired structure
+
+	**Example:**
+
+	Determine the coefficients for a 5th-order modulator with the
+	cascade-of-resonators structure, feedback (CRFB) form.::
+
+	    from pydelsigma import synthesizeNTF, realizeNTF
+	    H = synthesizeNTF(5, 32, 1)
+	    a, g, b, c = realizeNTF(H,'CRFB')
+
+	Returns the values::
+
+	    a: 0.0007, 0.0084, 0.055, 0.2443, 0.5579
+	    g: 0.0028, 0.0079
+	    b: 0.0007, 0.0084, 0.055, 0.2443, 0.5579, 1.0
+	    c: 1.0, 1.0, 1.0, 1.0, 1.0
+
 	"""
 
 	# The basic idea is to equate the loop filter at a set of

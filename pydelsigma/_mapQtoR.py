@@ -19,16 +19,53 @@
 from __future__ import division
 import numpy as np
 
-def mapQtoR(Z):
+def mapQtoR(ABCD):
     """Map a quadrature ABCD matrix to a real one. 
 
-    The non-quadrature topology can be simulated with :func:`simulateDSM`.
+    Each element z in ABCD is replaced by a 2x2 matrix in ``ABCDr``, the
+    return value.
+
+    Specifically:
+
+    .. math::
+
+        z \\rightarrow 
+         \\begin{bmatrix}
+          x & -y \\\\
+          y & x \\\\
+         \\end{bmatrix}
+        \\mathrm{where}\\ x = Re(z)\\ \\mathrm{and}\\ y = Im(z)
+
+    The non-quadrature topology can be simulated with :func:`simulateDSM`.::
+
+	import numpy as np
+        from pydelsigma import *
+        nlev = 9
+        f0 = 1./16.
+        osr = 32
+        M = nlev - 1
+        ntf = synthesizeQNTF(4, osr, f0, -50, -10)
+        N = 64*osr 
+        f = int(np.round((f0 + 0.3*0.5/osr)*N)/N)
+        u = 0.5*M*np.exp(2j*np.pi*f*np.arange(N))
+        # Instead of calling simulateQDSM
+        # v = simulateQDSM(u, ntf, nlev)
+        # it's faster to run:
+        ABCD = realizeQNTF(ntf, 'FF')
+        ABCDr = mapQtoR(ABCD)
+        ur = np.vstack((np.real(u), np.imag(u)))
+        vr = simulateDSM(ur, ABCDr, nlev*np.array([[1],[1]]))
+        v = vr[0,:] + 1j*vr[1, :]
+
+    Notice the example above requires the function :func:`synthesizeQNTF`,
+    which is not part of the current release of python-deltasigma.
+
     """
-    A = np.zeros((2*Z.shape[0], 2*Z.shape[1]))
-    A[::2, ::2] = np.real(Z)
-    A[1::2, 1::2] = np.real(Z)
-    A[::2, 1::2] = -np.imag(Z)
-    A[1::2, ::2] = +np.imag(Z)
+    A = np.zeros((2*ABCD.shape[0], 2*ABCD.shape[1]))
+    A[::2, ::2] = np.real(ABCD)
+    A[1::2, 1::2] = np.real(ABCD)
+    A[::2, 1::2] = -np.imag(ABCD)
+    A[1::2, ::2] = +np.imag(ABCD)
     return A
 
 def test_mapQtoR():

@@ -22,18 +22,25 @@ import numpy as np
 def mapRtoQ(ABCDr):
     """Map a real ABCD matrix to a quadrature one.
 
-    ABCDr has its states paired (real, imaginary).
+    **Parameters:**
 
-    Returns:
+    ABCDr : ndarray
+        A real matrix describing a quadrature system.
 
-    (ABCDq, ABCDp)
+    ``ABCDr`` has its states paired (real, imaginary).
+
+    **Returns:**
+
+    (ABCDq, ABCDp) : tuple
 
     Where:
 
-    ABCDq is the quadrature (complex) version of ABCDr
-    ABCDp is the mirror-image system matrix 
+    ABCDq : ndarray
+        is the quadrature (complex) version of ABCDr.
+    ABCDp : ndarray
+        is the mirror-image system matrix.
 
-    Note: ABCDp is zero if ABCDr has no quadrature errors
+    .. note:: ``ABCDp`` is zero if ``ABCDr`` has no quadrature errors.
     """
     ABCD11 = ABCDr[::2,   ::2]
     ABCD12 = ABCDr[::2,  1::2]
