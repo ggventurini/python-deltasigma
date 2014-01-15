@@ -300,6 +300,10 @@ def restore_input_form(a, form):
 def pretty_lti(arg):
     """Given the lti object ``arg`` return a *pretty* representation."""
     z, p, k = _get_zpk(arg)
+    z = np.atleast_1d(z)
+    p = np.atleast_1d(p)
+    if not len(z) and not len(p):
+        return "%g" % k
     ppstr = ["", "", ""]
     if k != 1:
         ppstr[1] = "%g" % k
@@ -308,17 +312,17 @@ def pretty_lti(arg):
         for zi in cplxpair(s)[::-1]:
             zi = np.round(np.real_if_close(zi), 4)
             if np.isreal(zi):
-                ppstr[i] += "(z %+g) " % zi
+                ppstr[i] += "(z %+g) " % -zi
             else:
                 if rz is None:
                     rz = zi
                     continue
                 else:
                     ppstr[i] += "(z^2 %+gz %+g) " % \
-                                (np.round(np.real_if_close(rz + zi), 3), 
+                                (np.round(np.real_if_close(-rz - zi), 3), 
                                  np.round(np.real_if_close(rz*zi), 4))
                     rz = None
-        ppstr[i] = ppstr[i][:-1]
+        ppstr[i] = ppstr[i][:-1] if len(ppstr) else "1"
     ppstr[1] += "-"*(max(len(ppstr[0]), len(ppstr[2])) + 2)
     ppstr[0] = ppstr[0].center(len(ppstr[1]))
     ppstr[2] = ppstr[2].center(len(ppstr[1]))
@@ -801,7 +805,8 @@ def test_pretty_lti():
     from ._synthesizeNTF import synthesizeNTF
     H = synthesizeNTF(5, 32, 1)
     tv = pretty_lti(H)
-    res = '     (z +1) (z^2 +1.997z +1) (z^2 +1.992z +0.9999)      \n' + \
+    res = '     (z -1) (z^2 -1.997z +1) (z^2 -1.992z +0.9999)      \n' + \
           '--------------------------------------------------------\n' + \
-          ' (z +0.7778) (z^2 +1.796z +0.8549) (z^2 +1.613z +0.665) '
+          ' (z -0.7778) (z^2 -1.796z +0.8549) (z^2 -1.613z +0.665) '
     assert res == tv
+    assert int(pretty_lti(([], [], 2))) == 2
