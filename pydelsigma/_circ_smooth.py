@@ -76,6 +76,7 @@ def circ_smooth(x, n=16):
         spec0 = fft(v * window)/(N/4)
         freq = np.linspace(0, 0.5, N/2 + 1)
         # plotting
+        plt.figure(figsize=(12, 7))
         plt.subplot(211)
         plt.plot(freq, dbv(spec0[:N/2 + 1]), 'c', linewidth=1, label='$S$')
         plt.hold(True)

@@ -49,7 +49,8 @@ def ds_hann(n):
 	  import pylab as plt
 	  from pydelsigma import ds_hann
 	  x = ds_hann(100)
-	  plt.plot(x)
+	  plt.figure(figsize=(12, 5))
+	  plt.plot(x, 'o-')
 	  ax = plt.gca()
 	  ax.set_ylim(0, 1.02)
 	  plt.grid(True)

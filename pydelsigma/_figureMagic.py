@@ -63,9 +63,14 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 	   from pydelsigma import figureMagic
 	   t = np.linspace(0, 1)
 	   a = np.sin(2*np.pi*t + np.pi/4)
+	   plt.subplot(121)
 	   plt.plot(t, a)
+	   plt.title("Before")
+	   plt.subplot(122)
+	   plt.plot(t, a)
+	   plt.title("After")
 	   figureMagic([0, 1], dx=.1, xLab=None, yRange=[-1.2, 1.2],
-	               dy=.2, yLab=None, size=(8, 4), name="Sine wave")
+	               dy=.2, yLab=None, size=(8, 4), name="After")
 
 	"""
 	fig = plt.gcf()
@@ -108,5 +113,5 @@ def test_figureMagic():
 	a = np.arange(10)
 	plt.figure()
 	plt.plot(a)
-	figureMagic(xRange=[1, 10], dx=1, xLab=2, yRange=[2, 8], dy=.5, yLab=2,
+	figureMagic(xRange=[1, 10], dx=1, xLab=None, yRange=[2, 8], dy=.5, yLab=None,
 	            size=(10, 6), name="Test plot")

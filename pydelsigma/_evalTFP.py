@@ -72,6 +72,7 @@ def evalTFP(Hs, Hz, f):
         # Yields H=(1-z^-1)^2
         f = np.linspace(0, 2, 300);
         STF = evalTFP(L0c, _get_zpk(H), f)
+        plt.figure(figsize=(12, 5))
         plt.plot(f, dbv(STF))
         plt.ylabel("|STF| [dB]")
         plt.xlabel("frequency ($1 \\\\rightarrow f_s$)")
@@ -100,6 +101,7 @@ def evalTFP(Hs, Hz, f):
         # Yields H=(1-z^-1)^2
         f = np.linspace(0, 2, 300);
         STF = evalTFP(L0c, _get_zpk(H), f)
+        plt.figure(figsize=(12, 5))
         plt.plot(f, dbv(STF))
         plt.ylabel("|STF| [dB]")
         plt.xlabel("frequency ($1 \\\\rightarrow f_s$)")

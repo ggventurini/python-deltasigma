@@ -46,12 +46,14 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
 
     .. plot::
 
+        import pylab as plt
         from pydelsigma import synthesizeNTF, PlotExampleSpectrum
         order = 3
         osr = 32
         f0 = 0.
         Hinf = 1.5
         ntf = synthesizeNTF(order, osr, 0, Hinf, f0)
+        plt.figure(figsize=(12, 5))
         PlotExampleSpectrum(ntf, M=1, osr=osr, f0=f0)
 
     """
@@ -95,7 +97,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
                      verticalalignment='center')
         plt.text(0.5, - 135, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='bottom')
-        figureMagic((0, 0.5), 1./16, 4, (-140, 0), 10, 2)
+        figureMagic((0, 0.5), 1./16, None, (-140, 0), 10, None)
     else:
         spec0 = fftshift(spec0 / 2)
         freq = np.linspace(-0.5, 0.5, N + 1)
@@ -117,7 +119,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
                      verticalalignment='bottom')
         plt.text(- 0.5, - 135, ' NBW = %.1e' % NBW, horizontalalignment='left',
                      verticalalignment='bottom')
-        figureMagic((-0.5, 0.5), 0.125, 2, (-140, 0), 10, 2)
+        figureMagic((-0.5, 0.5), 0.125, None, (-140, 0), 10, None)
     plt.xlabel('frequency')
     return
 
