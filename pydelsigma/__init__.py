@@ -17,6 +17,9 @@
 python-deltasigma
 =================
 
+Introduction
+------------
+
 The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more
 Python**.
 
@@ -29,11 +32,9 @@ Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-tool
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based.\ |githalytics.com alpha|
 
-Status
-------
-
-This project is a work in progress. Not all functionality has been
-ported. 
+This project is a *work in progress*, not all functionality has been
+ported, yet. The next figure shows the relationship between the main functions
+and the avaliable functionality at a glance.
 
 .. image:: ../doc/_static/functionality.png
 
