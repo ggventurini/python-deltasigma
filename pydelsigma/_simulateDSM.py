@@ -92,7 +92,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	    plt.text(0.25, -90, s)
 	    s =  'NBW = %7.5f' % (1.5/N)
 	    plt.text(0.25, -110, s)
-	    plt.xlabel("frequency $f \\\\rightarrow f_s$")
+	    plt.xlabel("frequency $1 \\\\rightarrow f_s$")
 
 	Click on "Source" above to see the source code.
 	"""
@@ -157,7 +157,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	N = u.shape[1]
 	v = np.empty((nq, N))
 	y = np.empty((nq, N)) 	# to store the quantizer input
-	xn = np.empty((order, N), dtype=np.complex64) # to store the state information 
+	xn = np.empty((order, N)) # to store the state information
 	xmax = np.abs(x0) # to keep track of the state maxima
 
 	for i in range(N):
@@ -195,12 +195,28 @@ def ds_quantize(y, n):
 
 def test_simulateDSM():
 	"""Test unit for simulateDSM()"""
+	import numpy as np
 	import pkg_resources
 	import scipy.io
+	from ._synthesizeNTF import synthesizeNTF
+	from ._realizeNTF import realizeNTF
+	from ._stuffABCD import stuffABCD
 	fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-	v = scipy.io.loadmat(fname)['v']
-	xn = scipy.io.loadmat(fname)['xn']
-	xmax = scipy.io.loadmat(fname)['xmax']
-	y = scipy.io.loadmat(fname)['y']
-	
-	#assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
+	v_ref = scipy.io.loadmat(fname)['v']
+	xn_ref = scipy.io.loadmat(fname)['xn']
+	xmax_ref = scipy.io.loadmat(fname)['xmax']
+	y_ref = scipy.io.loadmat(fname)['y']
+	OSR = 32
+	H = synthesizeNTF(5, OSR, 1)
+	N = 8192
+	fB = np.ceil(N/(2.*OSR))
+	f = 85
+	u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
+	v, xn, xmax, y = simulateDSM(u,H);
+	assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
+	assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
+	a, g, b, c = realizeNTF(H, 'CRFB')
+	ABCD = stuffABCD(a, g, b, c, form='CRFB')
+	v, xn, xmax, y = simulateDSM(u, ABCD)
+	assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
+	assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
