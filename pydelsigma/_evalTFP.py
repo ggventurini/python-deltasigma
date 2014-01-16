@@ -74,7 +74,7 @@ def evalTFP(Hs, Hz, f):
         STF = evalTFP(L0c, _get_zpk(H), f)
         plt.plot(f, dbv(STF))
         plt.ylabel("|STF| [dB]")
-        plt.xlabel("frequency ($f \\\\rightarrow f_s$)")
+        plt.xlabel("frequency ($1 \\\\rightarrow f_s$)")
         figureMagic((0, 2), .5, None, (-60, 0), 20, None)
 
     .. plot::
@@ -102,7 +102,7 @@ def evalTFP(Hs, Hz, f):
         STF = evalTFP(L0c, _get_zpk(H), f)
         plt.plot(f, dbv(STF))
         plt.ylabel("|STF| [dB]")
-        plt.xlabel("frequency ($f \\\\rightarrow f_s$)")
+        plt.xlabel("frequency ($1 \\\\rightarrow f_s$)")
         figureMagic((0, 2), .5, None, (-60, 0), 20, None)
 
     """
