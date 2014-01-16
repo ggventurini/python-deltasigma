@@ -192,3 +192,15 @@ def ds_quantize(y, n):
 		L = n[qi] - 1
 		v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
 	return v
+
+def test_simulateDSM():
+	"""Test unit for simulateDSM()"""
+	import pkg_resources
+	import scipy.io
+	fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
+	v = scipy.io.loadmat(fname)['v']
+	xn = scipy.io.loadmat(fname)['xn']
+	xmax = scipy.io.loadmat(fname)['xmax']
+	y = scipy.io.loadmat(fname)['y']
+	
+	#assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
