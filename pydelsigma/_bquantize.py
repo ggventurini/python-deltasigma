@@ -28,6 +28,17 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10*eps):
 	This method will terminate early if the error is less than the specified
 	tolerances.
 
+	The quantizer details are repeted here for the user's convenience:
+
+	    The quantizer is ideal, producing integer outputs centered about zero. Quantizers with an even
+	    number of levels are of the mid-rise type and produce outputs which are odd integers. Quantizers
+	    with an odd number of levels are of the mid-tread type and produce outputs which are even inte-
+	    gers.
+
+	    .. image:: ../doc/_static/quantizer_model.png
+	        :align: center
+	        :alt: Quantizer model
+
 	**Parameters:**
 
 	x : array_like

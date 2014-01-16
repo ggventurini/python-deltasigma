@@ -53,9 +53,10 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 
  	* *"PFF"*: Parallel feed-forward.
 
-	* *"Stratos"*: A CIFF-like structure with non-delaying resonator feedbacks, contributed in 2007 by Jeff Gealow
+	* *"Stratos"*: A CIFF-like structure with non-delaying resonator feedbacks, contributed to the MATLAB delta sigma toolbox in 2007 by Jeff Gealow
 
-	 See the accompanying documentation for block diagrams of each structure
+	See the accompanying documentation (:ref:`topologies-diagrams`) for
+	block diagrams of each structure.
 
 	.. note:
 	The order of the NTF zeros must be (real, complex conj. pairs).

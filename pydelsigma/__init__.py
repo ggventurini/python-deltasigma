@@ -33,13 +33,11 @@ Status
 ------
 
 This project is a work in progress. Not all functionality has been
-ported. Take a look at
-`files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__
-for the current status.
+ported. 
 
-|Build Status| |Coverage Status|
+.. image:: ../doc/_static/functionality.png
 
-To have an idea of the currently implemented functionality, take a look
+To see the currently implemented functionality in action, take a look
 at the following ipython notebooks:
 
 -  `dsdemo1 <http://nbviewer.ipython.org/gist/ggventurini/8040189>`__,
@@ -56,11 +54,18 @@ at the following ipython notebooks:
 -  `dsexample3 <http://nbviewer.ipython.org/8323046>`__, python
    version of ``dsexample3.m``.
 
+They are also good for getting started quickly.
+
 If you have some examples you would like to share, `send me a
 mail <http://tinymailto.com/5310>`__, and I will add them to the above
 list.
 
-Further functionality is expected to be ported according to `the
+|Build Status| |Coverage Status|
+
+For more detailed information about the development status take a look at 
+`files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
+
+The further functionality is expected to be ported according to `the
 ROADMAP <https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md>`__.
 
 Install
@@ -165,6 +170,11 @@ How to contribute
 -----------------
 
 Pull requests are welcome!
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to port some code, fix a bug, add a cool example or implement new
+functionality (in this case it may be a good idea to get in touch early on),
+*that's awesome!*
 
 There are only a few *guidelines*, which can be overridden every time it
 is reasonable to do so:
@@ -177,6 +187,13 @@ is reasonable to do so:
 
 -  If a function has a varible number of return values, its Python port
    should implement the maximum number of return values.
+
+Reporting bugs
+~~~~~~~~~~~~~~
+
+What bugs, *there are no bugs!*
+
+Jokes aside, please report all bugs on `on the Github issue tracker <https://github.com/ggventurini/python-deltasigma/issues>`__.
 
 Support python-deltasigma
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -196,6 +213,9 @@ find the package useful or you otherwise wish to contribute monetarily,
 Consider `sending me a mail <http://tinymailto.com/5310>`__ afterwards,
 ***it makes for great motivation!***
 
+License, copyright, rationale and credits
+-----------------------------------------
+
 Why this project was born
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -208,7 +228,7 @@ free, on any PC.
 I hope you find it useful.
 
 Licensing and copyright notice
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All original MATLAB code is Copyright (c) 2009, Richard Schreier. See
 the LICENSE file for the licensing terms.
@@ -227,10 +247,171 @@ MATLAB is a registered trademark of The MathWorks, Inc.
 
 .. |githalytics.com alpha| image:: https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8
    :target: http://githalytics.com/ggventurini/python-deltasigma
+   :width: 1
 .. |Build Status| image:: https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master
    :target: https://travis-ci.org/ggventurini/python-deltasigma
+   :width: 86
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
+   :width: 86
+
+Credits
+~~~~~~~
+
+The ``python-deltasigma`` package was written by 
+`Giuseppe Venturini <https://github.com/ggventurini>`__, as a derivative work
+of Richard Schreier's MATLAB Delta Sigma toolbox. It contains code from 
+``pydsm``, also based on the same MATLAB toolbox and written by Sergio
+Callegari.
+
+Contributors: *future contributors will be added here.*
+
+Implementation model
+--------------------
+
+The internal implementation of delta sigma modulators follows closely the one in
+Richard Schreier's `MATLAB Delta Sigma
+Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
+upon which the following documentation is very heavily based.
+
+
+Modulator model
+~~~~~~~~~~~~~~~
+
+A delta-sigma modulator with a single quantizer is assumed to consist of 
+quantizer connected to a loop filter as shown in the diagram below.
+
+.. image:: ../doc/_static/modulator_model.png
+    :align: center
+    :alt: Modulator model
+
+The loop filter
+:::::::::::::::
+
+The loop filter is described by an :math:`ABCD` matrix. For single-quantizer 
+systems, the loop filter is a two-input, one-output linear system and 
+:math:`ABCD` is an :math:`(n+1, n+2)` matrix, partitioned into
+:math:`A` :math:`(n, n)`, :math:`B` :math:`(n, 2)`, :math:`C` :math:`(1, n)`
+and :math:`D` :math:`(1, 2)` sub-matrices as shown below:
+
+.. math::
+
+    ABCD = 
+        \\left[
+        \\begin{array}{c|c}
+          A & B \\\\ \\hline
+          C & D 
+        \\end{array}
+        \\right].
+
+The equations for updating the state and computing the output of the loop filter are:
+
+.. math::
+
+    x(n + 1) = Ax(n) + B
+        \\left[
+        \\begin{array}{c}
+          u(n) \\\\
+          v(n)
+        \\end{array}
+        \\right]
+
+.. math::
+
+    y(n + 1) = Cx(n) + D
+        \\left[
+        \\begin{array}{c}
+          u(n) \\\\
+          v(n)
+        \\end{array}
+        \\right].
+
+Where :math:`u(n)` is the input sequence and :math:`v(n)` is the modulator output sequence. 
+
+This formulation is sufficiently general to encompass all single-quantizer modulators which
+employ linear loop filters. The toolbox currently supports translation to/from an ABCD descrip-
+tion and coefficients for the following topologies:
+
+ * CIFB : Cascade-of-integrators, feedback form.
+ * CIFF : Cascade-of-integrators, feedforward form.
+ * CRFB : Cascade-of-resonators, feedback form.
+ * CRFF : Cascade-of-resonators, feedforward form.
+ * CRFBD : Cascade-of-resonators, feedback form, delaying quantizer.
+ * CRFFD : Cascade-of-resonators, feedforward form, delaying quantizer
+ * PFF : Parallel feed-forward
+ * Stratos : A CIFF-like structure with non-delaying resonator feedbacks [*]_
+
+.. [*] Contributed to the MATLAB delta sigma toolbox in 2007 by Jeff Gealow.
+
+See :ref:`topologies-diagrams` for a block-level view of the different modulator structures.
+
+Multi-input and multi-quantizer systems can also be described with an
+ABCD matrix and the previous equation
+will still apply. For an :math:`n_i`-input, :math:`n_o`-output modulator,
+the dimensions of the sub-matrices are 
+:math:`A`: :math:`(n, n)`, :math:`B`: :math:`(n, n_i + n_o)`,
+:math:`C`: :math:`(n_o, n)` and :math:`D`: :math:`(n_o, n_i+n_o)`.
+
+Quantizer model
+:::::::::::::::
+
+The quantizer is ideal, producing integer outputs centered about zero. Quantizers with an even
+number of levels are of the mid-rise type and produce outputs which are odd integers. Quantizers
+with an odd number of levels are of the mid-tread type and produce outputs which are even inte-
+gers.
+
+.. image:: ../doc/_static/quantizer_model.png
+    :align: center
+    :alt: Quantizer model
+
+.. seealso:: :func:`bquantize`, :func:`bunquantize`
+
+.. _topologies-diagrams:
+
+Topologies diagrams
+~~~~~~~~~~~~~~~~~~~
+
+CIFB
+::::
+
+.. image:: ../doc/_static/CIFB.png
+    :align: center
+    :alt: CIFB topology
+
+CIFF
+::::
+
+.. image:: ../doc/_static/CIFF.png
+    :align: center
+    :alt: CIFF topology
+
+CRFB
+::::
+
+.. image:: ../doc/_static/CRFB.png
+    :align: center
+    :alt: CRFB topology
+
+CRFF
+::::
+
+.. image:: ../doc/_static/CRFF.png
+    :align: center
+    :alt: CRFF topology
+
+CRFBD
+:::::
+
+.. image:: ../doc/_static/CRFBD.png
+    :align: center
+    :alt: CRFBD topology
+
+CRFFD
+:::::
+
+.. image:: ../doc/_static/CRFFD.png
+    :align: center
+    :alt: CRFFD topology
 
 Package contents
 ----------------

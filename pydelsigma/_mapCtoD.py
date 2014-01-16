@@ -80,7 +80,7 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
 
     .. image:: ../doc/_static/mapCtoD.png
         :align: center
-        :alt: alternate text
+        :alt: mapCtoD block diagram
 
     It can be done as follows::
 
