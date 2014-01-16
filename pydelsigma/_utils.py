@@ -573,10 +573,10 @@ def _is_num_den(arg):
 def _is_A_B_C_D(arg):
     """Can the argument be safely assumed to be an (A, B, C, D) tuple?"""
     return isinstance(arg, collections.Iterable) and len(arg) == 4 and \
-           isinstance(arg[0], collections.Iterable) and \
-           isinstance(arg[1], collections.Iterable) and \
-           isinstance(arg[2], collections.Iterable) and \
-           isinstance(arg[3], collections.Iterable)
+       (isinstance(arg[0], collections.Iterable) or np.is_scalar(arg[0])) and \
+       (isinstance(arg[1], collections.Iterable) or np.is_scalar(arg[1])) and \
+       (isinstance(arg[2], collections.Iterable) or np.is_scalar(arg[2])) and \
+       (isinstance(arg[3], collections.Iterable) or np.is_scalar(arg[3]))
 
 def _cell_like_list(shape, init=None):
     """Returns a list of lists (possibly of lists... etc...),
