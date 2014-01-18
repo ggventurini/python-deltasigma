@@ -47,7 +47,7 @@ def ds_hann(n):
 	.. plot::
 
 	  import pylab as plt
-	  from pydelsigma import ds_hann
+	  from deltasigma import ds_hann
 	  x = ds_hann(100)
 	  plt.figure(figsize=(12, 5))
 	  plt.plot(x, 'o-')

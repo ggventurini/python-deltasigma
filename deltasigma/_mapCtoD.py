@@ -87,7 +87,7 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
         from __future__ import print_function
         import numpy as np
         from scipy.signal import lti
-        from pydelsigma import *
+        from deltasigma import *
         LFc = lti([[0, 0], [1, 0]], [[1, -1], [0, -1.5]], [[0, 1]], [[0, 0]])
         tdac = [0, 1]
         LF, Gp = mapCtoD(LFc, tdac)

@@ -73,7 +73,7 @@ def logsmooth(X, inBin, nbin=8, n=3):
 
         import matplotlib.pyplot as plt
         import numpy as np
-        from pydelsigma import dbv, ds_hann, figureMagic, logsmooth
+        from deltasigma import dbv, ds_hann, figureMagic, logsmooth
         T = 2 #s
         Fs = 231e3 #Hz
         N = int(np.round(T*Fs, 0)) # FFT points

@@ -120,7 +120,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     that determined by simulation (:func:`simulateSNR`).::
 
         import pylab as plt
-        from pydelsigma import *
+        from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)
@@ -137,7 +137,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     .. plot::
 
         import pylab as plt
-        from pydelsigma import *
+        from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)

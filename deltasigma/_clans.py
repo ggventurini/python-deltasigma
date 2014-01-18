@@ -89,7 +89,7 @@ def clans(order=4, OSR=64, Q=5, rmax=0.95, opt=0):
 
     .. plot::
 
-        from pydelsigma import DocumentNTF, clans
+        from deltasigma import DocumentNTF, clans
         # Fifth-order lowpass modulator; (time-domain) noise gain of 5, 
         # zeros optimized for OSR = 32.
         H = clans(5, 32, 5, .95, 1)

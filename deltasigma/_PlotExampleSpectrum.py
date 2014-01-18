@@ -47,7 +47,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     .. plot::
 
         import pylab as plt
-        from pydelsigma import synthesizeNTF, PlotExampleSpectrum
+        from deltasigma import synthesizeNTF, PlotExampleSpectrum
         order = 3
         osr = 32
         f0 = 0.

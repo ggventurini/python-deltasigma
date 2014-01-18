@@ -39,7 +39,7 @@ def mapQtoR(ABCD):
     The non-quadrature topology can be simulated with :func:`simulateDSM`.::
 
 	import numpy as np
-        from pydelsigma import *
+        from deltasigma import *
         nlev = 9
         f0 = 1./16.
         osr = 32

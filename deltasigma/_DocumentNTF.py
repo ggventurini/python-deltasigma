@@ -38,7 +38,7 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 
 	.. plot::
 
-	   from pydelsigma import *
+	   from deltasigma import *
 	   import pylab as plt
 	   order = 4
 	   osr = 64

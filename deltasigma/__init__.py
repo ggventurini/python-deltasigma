@@ -124,6 +124,28 @@ scipy
 yourself <https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy>`__,
 which also apply here. Be warned, it can easily get complicated.
 
+Install python-deltasigma
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can install the latest stable version directly from the `Python Package
+Index (PYPI) <http://pypi.python.org>`__, running::
+
+    pip install deltasigma
+
+The above command will also attempt to compile and install the dependencies -
+for this to work you should already have the required libraries in place.
+
+Otherwise, you can head over to `the Github repository 
+<http://github.com/ggventurini/python-deltasigma>`__ and download the code
+from there.
+
+Then run::
+
+    python setup.py install
+
+The flag ``--local`` may be an interesting option to install the package for
+the current user only, and it doesn't require root privileges.
+
 Extras
 ~~~~~~
 
@@ -138,7 +160,7 @@ If you plan to run the provided unit tests, then you should install
 access the reference function outputs. Testing *can* be automated with
 `nose <https://pypi.python.org/pypi/nose/>`__, issuing::
 
-    $ nosetests -v pydelsigma/*.py
+    $ nosetests -v deltasigma/*.py
 
 Documentation
 -------------
@@ -567,10 +589,10 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 3-Clause License"
-__version__ = '0.0001alpha'
+__version__ = '0.1rc2'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
-__status__ = "Pre-Pre-Alpha"
+__status__ = "Stable"
 
 # Package testing can be done remotely, without display. This would make
 # matplotlib fail (and consequently, the test itself).

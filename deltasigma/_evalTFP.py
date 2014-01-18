@@ -54,8 +54,8 @@ def evalTFP(Hs, Hz, f):
         import numpy as np
         import pylab as plt
         from scipy.signal import lti
-        from pydelsigma import *
-        from pydelsigma._utils import _get_zpk
+        from deltasigma import *
+        from deltasigma._utils import _get_zpk
         Ac = np.array([[0, 0], [1, 0]])
         Bc = np.array([[1, -1], [0, -1.5]])
         Cc = np.array([[0, 1]])
@@ -83,8 +83,8 @@ def evalTFP(Hs, Hz, f):
         import numpy as np
         import pylab as plt
         from scipy.signal import lti
-        from pydelsigma import *
-        from pydelsigma._utils import _get_zpk
+        from deltasigma import *
+        from deltasigma._utils import _get_zpk
         Ac = np.array([[0, 0], [1, 0]])
         Bc = np.array([[1, -1], [0, -1.5]])
         Cc = np.array([[0, 1]])

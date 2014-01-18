@@ -75,7 +75,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 	Determine the coefficients for a 5th-order modulator with the
 	cascade-of-resonators structure, feedback (CRFB) form.::
 
-	    from pydelsigma import synthesizeNTF, realizeNTF
+	    from deltasigma import synthesizeNTF, realizeNTF
 	    H = synthesizeNTF(5, 32, 1)
 	    a, g, b, c = realizeNTF(H,'CRFB')
 
