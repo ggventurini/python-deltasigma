@@ -10,3 +10,8 @@ Initial release
 ------
 
 Fix travis and coveralls.io support.
+
+0.1rc3
+------
+
+Fix file-not-found issue with setup.py
