@@ -20,7 +20,7 @@ setup(
     author="Giuseppe Venturini and others",
     author_email="giuseppe.g.venturini@ieee.org",
     description="a Python package to synthesize, simulate, scale and map to implementable topologies delta sigma modulators.",
-    long_description=''.join([read('pypi_description.rst')]),
+    long_description=''.join([read('pypi_description.rst'), '\n\n', read('CHANGES.rst')]),
     license="BSD",
     keywords="delta sigma modulator simulator",
     url="http://github.com/ggventurini/python-deltasigma",

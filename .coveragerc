@@ -1,7 +1,7 @@
 [run]
 branch = True
-source = pydelsigma
-include = pydelsigma/*
+source = deltasigma
+include = deltasigma/*
 omit =
     */python?.?/*
     */lib-python/?.?/*.py
