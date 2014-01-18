@@ -1,33 +1,42 @@
 #!/usr/bin/env python
-from distutils.core import setup
-from pydelsigma import __version__
 
-setup(name='pydelsigma',
-      version=__version__,
-      description='A Python translation of Richard Schreier\'s delta sigma toolbox',
-      author='Giuseppe Venturini and others',
-      author_email='ggventurini+GITHUB@gmail.com',
-      url='http://github.com/ggventurini/python-deltasigma/',
-      packages=['pydelsigma'],
-      package_data={
-        'pydelsigma': ['test_data/*.mat', 'test_data/*.txt']
-      }
-     )
+import os
+from setuptools import setup, find_packages
+from deltasigma import __version__
 
-print """
-+---------------------------------------------------+
-The following dependencies are needed for pydelsigma
-to work on your system:
-- numpy: http://numpy.scipy.org/
-- scipy: http://www.scipy.org/
-- matplotlib: http://matplotlib.sourceforge.net/
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-Recommended:
-- setuptools: https://pypi.python.org/pypi/setuptools
-- nose: https://pypi.python.org/pypi/nose/
-- shinx: http://sphinx-doc.org/
-- patience and stubbornness.
+setup(
+    name='deltasigma',
+    version=__version__,
+    packages=find_packages(),
+    package_data={
+      'deltasigma': ['test_data/*.mat', 'test_data/*.txt']
+    },
+    install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib'],
+    zip_safe=False,
+    include_package_data=True,
+    author="Giuseppe Venturini and others",
+    author_email="giuseppe.g.venturini@ieee.org",
+    description="a Python package to synthesize, simulate, scale and map to implementable topologies delta sigma modulators.",
+    long_description=''.join([read('pypi_description.rst')]),
+    license="BSD",
+    keywords="delta sigma modulator simulator",
+    url="http://github.com/ggventurini/python-deltasigma",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Education",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: POSIX",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: Microsoft :: Windows",
+        "Operating System :: MacOS",
+        "Natural Language :: English",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.3"]
+)
 
-Available through PyPi. See Install.md for more.
-+---------------------------------------------------+
-"""

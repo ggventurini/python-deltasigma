@@ -60,7 +60,7 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None, yLab=None
 
 	   import numpy as np
 	   import pylab as plt
-	   from pydelsigma import figureMagic
+	   from deltasigma import figureMagic
 	   t = np.linspace(0, 1)
 	   a = np.sin(2*np.pi*t + np.pi/4)
 	   plt.subplot(121)

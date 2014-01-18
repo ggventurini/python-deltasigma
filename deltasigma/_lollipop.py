@@ -55,7 +55,7 @@ def lollipop(x, y, color='b', lw=2, ybot=0):
 
 	    import matplotlib.pyplot as plt
 	    import numpy as np
-	    from pydelsigma import lollipop
+	    from deltasigma import lollipop
 	    t = np.arange(1, 20)*1e-3
 	    f = 20.
 	    a = np.sin(2*np.pi*f*t)

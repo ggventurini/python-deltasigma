@@ -15,7 +15,7 @@ This project is a work in progress. Not all functionality has been ported. Take 
 
 [![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
 
-To have an idea of the currently implemented functionality, take a look at these **preliminary results**:
+To have an idea of the currently implemented functionality, take a look at these [IPython](http://ipython.org/) notebooks:
 
 * **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
 * **[dsdemo2](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
@@ -74,7 +74,29 @@ More information can be found on the
 
 I wrote in a different context some directions to [compile numpy and scipy yourself](https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy), which also apply here. Be warned, it can easily get complicated.
 
-#### Extras
+### Install python-deltasigma
+
+You can install the latest stable version directly from the [Python
+Package Index (PYPI)](http://pypi.python.org), running:
+
+    pip install deltasigma
+
+The above command will also attempt to compile and install the
+dependencies -for this to work you should already have the required
+libraries in place.
+
+Otherwise, you can download the code from [the Github
+repository](http://github.com/ggventurini/python-deltasigma).
+
+Then run:
+
+    python setup.py install
+
+The flag `--local` may be an interesting option to install the package
+for the current user only, and it doesn't require root privileges.
+
+
+### Extras
 
 Building the documentation requires the **[sphinx](http://sphinx-doc.org/)** package. It is an optional step, as the [the latest documentation is available online](http://python-deltasigma.readthedocs.org/en/latest/), without need for you to build it.
 
@@ -82,7 +104,7 @@ If you plan to run the provided unit tests, then you should install
 **[setuptools](https://pypi.python.org/pypi/setuptools)**, used to access the 
 reference function outputs. Testing *can* be automated with 
 **[nose](https://pypi.python.org/pypi/nose/)**, issuing 
-`$ nosetests -v pydelsigma/*.py`.
+`$ nosetests -v deltasigma/*.py`.
 
 ## Documentation
 

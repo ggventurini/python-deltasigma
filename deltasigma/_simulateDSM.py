@@ -46,7 +46,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	plot its output in the time and frequency domains.::
 
 	    import numpy as np
-	    from pydelsigma import *
+	    from deltasigma import *
 	    OSR = 32
 	    H = synthesizeNTF(5, OSR, 1)
 	    N = 8192 
@@ -62,7 +62,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	    import numpy as np
 	    import pylab as plt
 	    from numpy.fft import fft
-	    from pydelsigma import *
+	    from deltasigma import *
 	    OSR = 32
 	    H = synthesizeNTF(5, OSR, 1)
 	    N = 8192 

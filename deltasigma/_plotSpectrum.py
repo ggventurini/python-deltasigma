@@ -48,7 +48,7 @@ def plotSpectrum(X, fin, fmt='-', **xargs):
     .. plot::
 
         import numpy as np
-        from pydelsigma import *
+        from deltasigma import *
         from numpy.fft import fft
         f0 = 0
         osr = 32

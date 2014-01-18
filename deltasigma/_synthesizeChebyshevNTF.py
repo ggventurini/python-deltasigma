@@ -81,7 +81,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
 
         import pylab as plt
         import numpy as np
-        from pydelsigma import *
+        from deltasigma import *
         OSR = 4
         order = 8
         H_inf = 3
@@ -146,7 +146,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
 
         import pylab as plt
         import numpy as np
-        from pydelsigma import *
+        from deltasigma import *
         OSR = 32
         order = 5
         H_inf = 1.2

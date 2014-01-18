@@ -46,7 +46,7 @@ def calculateTF(ABCD, k=1.):
 
 	.. code-block:: python
 
-	    from pydelsigma import *
+	    from deltasigma import *
 	    H = synthesizeNTF(5, 32, 1)
 	    a, g, b, c = realizeNTF(H)
 	    ABCD = stuffABCD(a,g,b,c)

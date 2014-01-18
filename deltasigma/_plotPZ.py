@@ -44,7 +44,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 	.. plot::
 
 	   import pylab as plt
-	   from pydelsigma import synthesizeNTF, plotPZ
+	   from deltasigma import synthesizeNTF, plotPZ
 	   order = 5
 	   osr = 32
 	   f0 = 0.

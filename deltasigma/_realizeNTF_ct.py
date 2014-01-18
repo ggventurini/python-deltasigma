@@ -90,7 +90,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     Realize the NTF :math:`(1 - z^{-1})^2` with a CT system (cf with the
     example at :func:`mapCtoD`).::
 
-        from pydelsigma import *
+        from deltasigma import *
         ntf = ([1, 1], [0, 0], 1)
         ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB') 
 

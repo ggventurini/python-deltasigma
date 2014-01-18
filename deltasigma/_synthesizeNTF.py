@@ -100,7 +100,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
     Fift-order lowpass modulator; zeros optimized for an oversampling ratio of 32.::
 
-        from pydelsigma import *
+        from deltasigma import *
         H = synthesizeNTF(5, 32, 1)
         pretty_lti(H)
 
@@ -112,7 +112,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
     .. plot::
 
-        from pydelsigma import *
+        from deltasigma import *
         H = synthesizeNTF(5, 32, 1)
         DocumentNTF(H, 32)
 
