@@ -2,10 +2,14 @@
 
 import os
 from setuptools import setup, find_packages
-from deltasigma import __version__
+__version__ = "1.0rc3"
 
 def read(fname):
-    return open(os.path.join(os.path.dirname(__file__), fname)).read()
+    try:
+        with open(os.path.join(os.path.dirname(__file__), fname)) as fp:
+            return fp.read()
+    except IOError:
+        return ""
 
 setup(
     name='deltasigma',
@@ -14,13 +18,15 @@ setup(
     package_data={
       'deltasigma': ['test_data/*.mat', 'test_data/*.txt']
     },
-    install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib'],
+    install_requires=['numpy>=1.8.0', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
     zip_safe=False,
     include_package_data=True,
     author="Giuseppe Venturini and others",
     author_email="giuseppe.g.venturini@ieee.org",
-    description="a Python package to synthesize, simulate, scale and map to implementable topologies delta sigma modulators.",
-    long_description=''.join([read('pypi_description.rst'), '\n\n', read('CHANGES.rst')]),
+    description="a Python package to synthesize, simulate, scale and map " + \
+                "to implementable topologies delta sigma modulators.",
+    long_description=''.join([read('pypi_description.rst'), '\n\n',
+                              read('CHANGES.rst')]),
     license="BSD",
     keywords="delta sigma modulator simulator",
     url="http://github.com/ggventurini/python-deltasigma",
