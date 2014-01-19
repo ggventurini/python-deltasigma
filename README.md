@@ -13,7 +13,8 @@ the *de facto* standard tool for high-level delta sigma simulation, upon which i
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master) [![PyPi version](https://pypip.in/v/deltasigma/badge.png)](https://crate.io/packages/deltasigma/)
+[![PyPi downloads](https://pypip.in/d/deltasigma/badge.png)](https://crate.io/packages/deltasigma/)
 
 To have an idea of the currently implemented functionality, take a look at these [IPython](http://ipython.org/) notebooks:
 
