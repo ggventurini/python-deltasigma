@@ -108,6 +108,7 @@ def cplxpair(x, tol=100):
     This function replaces MATLAB's cplxpair for vectors.
     """
     x = carray(x)
+    x = np.atleast_1d(x.squeeze())
     x = x.tolist()
     x = [np.real_if_close(i, tol) for i in x]
     xreal = np.array(list(filter(np.isreal, x)))
