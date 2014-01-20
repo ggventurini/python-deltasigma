@@ -134,4 +134,4 @@ def test_DocumentNTF():
 	              ))
 	ABCD = stuffABCD(a, g, b, c, form)
 	DocumentNTF(ABCD, osr, f0)
-
+	assert True # we check that DocumentNTF plots with no errors.

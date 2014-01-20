@@ -53,5 +53,5 @@ def test_ds_synNTFobj1():
 	"""
 	res = -27.167735573627283
 	tv =  ds_synNTFobj1(.5, (.9, 2), 64, .1)
-	np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5)
+	assert np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5)
 

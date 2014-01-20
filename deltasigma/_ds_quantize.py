@@ -72,5 +72,5 @@ def test_ds_quantize():
 	                 -1., -1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.,  3.,
 	                  3.,  3.,  3.,  3.]
 	               ])
-	np.allclose(re1, re2, atol=1e-8, rtol=1e-5)
+	assert np.allclose(re1, re2, atol=1e-8, rtol=1e-5)
 

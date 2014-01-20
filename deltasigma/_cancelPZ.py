@@ -72,6 +72,6 @@ def test_cancelPZ():
     kt = 2
     zpkt = (zt, pt, kt)
     zr, pr, kr = cancelPZ(zpkt, tol=1e-5)
-    np.allclose(zr, (1., ), atol=1e-8, rtol=1e-6)
-    np.allclose(pr, (1. + 2e-5, ), atol=1e-8, rtol=1e-6)
-    np.allclose(kr, 2., atol=1e-8, rtol=1e-6)
+    assert np.allclose(zr, (1., ), atol=1e-8, rtol=1e-6)
+    assert np.allclose(pr, (1. + 2e-5, ), atol=1e-8, rtol=1e-6)
+    assert np.allclose(kr, 2., atol=1e-8, rtol=1e-6)

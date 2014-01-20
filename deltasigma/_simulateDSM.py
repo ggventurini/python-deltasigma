@@ -16,6 +16,7 @@
 """Module providing the simulateDSM() function
 """
 
+from warnings import warn
 import numpy as np
 from scipy.signal import tf2zpk, zpk2ss
 from scipy.linalg import orth, norm, inv
@@ -103,7 +104,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 	nlev = carray(nlev)
 	u = np.array(u) if not hasattr(u, 'ndim') else u
 	if not max(u.shape) == np.prod(u.shape):
-		raise ValueErrror("The u vector has shape %s" % u.shape)
+		warn("Multiple input delta sigma structures have had little testing.")
 	if u.ndim == 1:
 		u = u.reshape((1, -1))
 	nu = u.shape[0]
