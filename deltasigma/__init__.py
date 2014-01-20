@@ -130,7 +130,7 @@ Install python-deltasigma
 You can install the latest stable version directly from the `Python Package
 Index (PYPI) <http://pypi.python.org>`__, running::
 
-    pip install deltasigma
+    pip install --pre deltasigma
 
 The above command will also attempt to compile and install the dependencies -
 for this to work you should already have the required libraries in place.
