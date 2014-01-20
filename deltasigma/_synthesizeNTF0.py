@@ -144,7 +144,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 			p = np.zeros(order)
 		else:
 			x = 0.3**(order-1)   # starting guess
-			for itn in xrange(1, itn_limit + 1):
+			for itn in range(1, itn_limit + 1):
 				me2 = -0.5*(x**(2./order))
 				w = (2*np.arange(1, order + 1) + 1)*np.pi/order
 				mb2 = 1 + me2*np.exp(1j*w)
@@ -183,7 +183,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 		else:
 			z_inf = -1.
 		c2pif0 = np.cos(2*np.pi*f0)
-		for itn in xrange(1, itn_limit+1):
+		for itn in range(1, itn_limit+1):
 			e2 = 0.5*x**(2./order)
 			w = (2*np.arange(order)+1)*np.pi/order
 			mb2 = c2pif0 + e2*np.exp(1j*w)
