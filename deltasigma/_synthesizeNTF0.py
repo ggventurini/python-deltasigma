@@ -38,11 +38,10 @@ from ._ds_optzeros import ds_optzeros
 from ._config import itn_limit
 
 def synthesizeNTF0(order, osr, opt, H_inf, f0):
-	"""
-	Synthesize a noise transfer function for a delta-sigma modulator.
+	"""Synthesize a noise transfer function for a delta-sigma modulator.
 	
-	::warn This function is not meant to be used directly, instead, set optimize_NTF to False 
-	and call synthesizeNTF(...).
+	::warn This function is not meant to be used directly, instead, set
+	optimize_NTF to False and call synthesizeNTF(...).
 
 	Parameters
 	----------
@@ -56,8 +55,6 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 	    * 0 -> not optimized,
 	    * 1 -> optimized,
 	    * 2 -> optimized with at least one zero at band-center,
-	    * 3 -> optimized zeros (with optimizer)
-	    * 4 -> same as 3, but with at least one zero at band-center
 	    * [z] -> zero locations in complex form
 
 	H_inf : real
@@ -116,7 +113,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 	else:
 		dw = np.pi/osr
 
-	if opt.ndim == 0:
+	if np.isscalar(opt):
 		# opt is a number
 		if opt == 0:
 			z = np.zeros(order)
@@ -219,3 +216,61 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 
 	z = cplxpair(z)
 	return z, p, k
+
+def test_synthesizeNTF0():
+    """Test unit for synthesizeNTF0"""
+    from ._utils import cplxpair
+    from ._config import optimize_NTF
+    z, p, k = synthesizeNTF0(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0)
+    zref = [1., 1., 1.]
+    pref = [.6694, .7654 + .2793j, .7654 - .2793j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+    # Up next: even order bandpass test
+    z, p, k = synthesizeNTF0(order=4, osr=32, opt=0, H_inf=1.3, f0=.33)
+    zref = [-0.4818 + 0.8763j, -0.4818 - 0.8763j, -0.4818 + 0.8763j,
+            -0.4818 - 0.8763j]
+    pref = [-0.5125 - 0.7018j, -0.5125 + 0.7018j, -0.3233 - 0.8240j,
+            -0.3233 + 0.8240j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+    # repeat with zeros optimization
+    z, p, k = synthesizeNTF0(order=3, osr=64, opt=1, H_inf=1.5, f0=0.0)
+    zref = [1.0000 + 0.0000j, 0.9993 + 0.0380j, 0.9993 - 0.0380j]
+    pref = [0.7652 - 0.2795j, 0.7652 + 0.2795j, 0.6692 + 0.0000j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+    # Up next: even order bandpass test
+    z, p, k = synthesizeNTF0(order=4, osr=32, opt=1, H_inf=1.3, f0=.33)
+    zref = [-0.4567 + 0.8896j, -0.4567 - 0.8896j, -0.5064 + 0.8623j,
+            -0.5064 - 0.8623j]
+    pref = [-0.5125 - 0.7014j, -0.5125 + 0.7014j, -0.3230 - 0.8239j,
+            -0.3230 + 0.8239j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+    z, p, k = synthesizeNTF0(order=3, osr=64, opt=2, H_inf=1.5, f0=0.0)
+    zref = [1.0000 + 0.0000j, 0.9993 + 0.0380j, 0.9993 - 0.0380j]
+    pref = [0.7652 - 0.2795j, 0.7652 + 0.2795j, 0.6692 + 0.0000j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+    # Up next: even order bandpass test
+    z, p, k = synthesizeNTF0(order=4, osr=32, opt=2, H_inf=1.3, f0=.33)
+    zref = [-0.4818 + 0.8763j, -0.4818 - 0.8763j, -0.4818 + 0.8763j,
+            -0.4818 - 0.8763j]
+    pref = [-0.5125 - 0.7018j, -0.5125 + 0.7018j, -0.3233 - 0.8240j,
+            -0.3233 + 0.8240j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
+
