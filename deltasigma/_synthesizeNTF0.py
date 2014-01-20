@@ -273,4 +273,15 @@ def test_synthesizeNTF0():
     assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
     assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
     assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
-
+    # zeros passed explicitly
+    opt = [1.0000 + 0.0000j, 0.9986 + 0.06j, 0.9986 - 0.06j,
+            0.9960 + 0.0892j, 0.9960 - 0.0892j]
+    z, p, k = synthesizeNTF0(order=5, osr=32, opt=opt, H_inf=1.3, f0=0.0)
+    zref = [1.0000 + 0.0000j, 0.9986 + 0.06j, 0.9986 - 0.06j,
+            0.9960 + 0.0892j, 0.9960 - 0.0892j]
+    pref = [0.8718 - 0.0840j, 0.8718 + 0.0840j, 0.9390 - 0.1475j,
+            0.9390 + 0.1475j, 0.8491 + 0.0000j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-3)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-3)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
