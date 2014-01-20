@@ -15,3 +15,8 @@ Fix travis and coveralls.io support.
 ------
 
 Fix file-not-found issue with setup.py
+
+0.1rc4
+------
+
+General bugfixes. Py3k fixes. Test coverage up to 85%.
