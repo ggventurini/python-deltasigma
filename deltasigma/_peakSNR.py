@@ -89,9 +89,9 @@ def test_peakSNR():
     """Test function for peakSNR().
     """
     import scipy.io, pkg_resources
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_snr_amp.mat")
-    snr = scipy.io.loadmat(fname)['snr'].reshape(-1)
-    amp = scipy.io.loadmat(fname)['amp'].reshape(-1)
+    fname = pkg_resources.resource_filename(__name__, "test_data/test_peak_snr.mat")
+    snr = scipy.io.loadmat(fname)['snr'].reshape((-1,))
+    amp = scipy.io.loadmat(fname)['amp'].reshape((-1,))
     peak_snr, peak_amp = 76.612340603949761, -3.220409771005124
     ps, pa = peakSNR(snr, amp)
     assert np.allclose(ps, peak_snr, atol=1e-8, rtol=1e-5)
