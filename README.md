@@ -80,7 +80,7 @@ I wrote in a different context some directions to [compile numpy and scipy yours
 You can install the latest stable version directly from the [Python
 Package Index (PYPI)](http://pypi.python.org), running:
 
-    pip install --pre deltasigma
+    pip install deltasigma
 
 The above command will also attempt to compile and install the
 dependencies -for this to work you should already have the required
