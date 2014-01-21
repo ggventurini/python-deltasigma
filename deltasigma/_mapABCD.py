@@ -51,6 +51,7 @@ def mapABCD(ABCD, form='CRFB'):
         * :func:`stuffABCD`, the inverse function.
 
     """
+    ABCD = np.copy(ABCD)
     order = ABCD.shape[0] - 1
     odd = order % 2
     even = 1 - odd
