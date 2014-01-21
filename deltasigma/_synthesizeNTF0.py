@@ -144,7 +144,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 			p = np.zeros(order)
 		else:
 			x = 0.3**(order-1)   # starting guess
-			for itn in xrange(1, itn_limit + 1):
+			for itn in range(1, itn_limit + 1):
 				me2 = -0.5*(x**(2./order))
 				w = (2*np.arange(1, order + 1) + 1)*np.pi/order
 				mb2 = 1 + me2*np.exp(1j*w)
@@ -183,7 +183,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 		else:
 			z_inf = -1.
 		c2pif0 = np.cos(2*np.pi*f0)
-		for itn in xrange(1, itn_limit+1):
+		for itn in range(1, itn_limit+1):
 			e2 = 0.5*x**(2./order)
 			w = (2*np.arange(order)+1)*np.pi/order
 			mb2 = c2pif0 + e2*np.exp(1j*w)
@@ -273,4 +273,15 @@ def test_synthesizeNTF0():
     assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
     assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
     assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
-
+    # zeros passed explicitly
+    opt = [1.0000 + 0.0000j, 0.9986 + 0.06j, 0.9986 - 0.06j,
+            0.9960 + 0.0892j, 0.9960 - 0.0892j]
+    z, p, k = synthesizeNTF0(order=5, osr=32, opt=opt, H_inf=1.3, f0=0.0)
+    zref = [1.0000 + 0.0000j, 0.9986 + 0.06j, 0.9986 - 0.06j,
+            0.9960 + 0.0892j, 0.9960 - 0.0892j]
+    pref = [0.8718 - 0.0840j, 0.8718 + 0.0840j, 0.9390 - 0.1475j,
+            0.9390 + 0.1475j, 0.8491 + 0.0000j]
+    kref = 1.
+    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-3)
+    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-3)
+    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
