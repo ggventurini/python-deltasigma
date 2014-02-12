@@ -16,77 +16,74 @@
 """Lollipop plotting function.
 """
 
+from warnings import warn
 import numpy as np
 import pylab as plt
 from numpy.matlib import repmat
 
 # Plot lollipops (o's and sticks)
 # 
-#	   ^
-#	   | o     o     o         o o o   o o 
-#	   | |   o | o o | o     o | | | o | | 
-#	   | | o | | | | | | o o | | | | | | | 
+#       ^
+#       | o     o     o         o o o   o o 
+#       | |   o | o o | o     o | | | o | | 
+#       | | o | | | | | | o o | | | | | | | 
 #          +----------------------------------->
 
-def lollipop(x, y, color='b', lw=2, ybot=0):
-	"""Plot lollipops (o's and sticks)
-	
-	**Parameters:**
+def lollipop(x, y, color=None, lw=2, ybot=0):
+    """Plot lollipops (o's and sticks)
+    
+    **Parameters:**
 
-	x, y : ndarray
-	       data to be plotted
+    x, y : ndarray
+           data to be plotted
 
-	color : any matplotlib color
-	        plotting color
+    color : any matplotlib color, optional
+            plotting color
 
-	lw : float
+    lw : float, optional
              line width value in points
 
-	ybot : float
-               ground level for the sticks.
+    ybot : float, optional
+               Dummy parameter available for compatiblity
 
-	**Returns:**
+    **Returns:**
 
-	None
-	
-	**Example:**
+    None
+    
+    **Example:**
 
-	.. plot::
+    .. plot::
 
-	    import matplotlib.pyplot as plt
-	    import numpy as np
-	    from deltasigma import lollipop
-	    t = np.arange(1, 20)*1e-3
-	    f = 20.
-	    a = np.sin(2*np.pi*f*t)
-	    lollipop(t, a)
-	    plt.gcf().set_size_inches((8, 4))
-	    plt.grid(True)
-	    plt.show()
-	"""
+        import matplotlib.pyplot as plt
+        import numpy as np
+        from deltasigma import lollipop
+        t = np.arange(1, 20)*1e-3
+        f = 20.
+        a = np.sin(2*np.pi*f*t)
+        lollipop(t, a)
+        plt.gcf().set_size_inches((8, 4))
+        plt.grid(True)
+        plt.show()
+    """
 
-	hold_status = plt.ishold()
-	plt.hold(True)
-	lolli_fmt = {'linewidth': lw, 'color': color}
-	pop_fmt = {'markeredgecolor': color, 'markerfacecolor':'None', 'linestyle': 'None', \
-	                'marker': 'o', 'markersize':10, 'markeredgewidth': lw*1.1}
-	# Plot the circles
-	plt.plot(x, y, **pop_fmt)
-
-	# Make x and y row vectors, then plot as sticks
-	x = x.transpose()
-	y = y.transpose()
-	x = np.vstack((x, x, float('NaN')*np.ones(x.shape)))
-	y = np.vstack((y, repmat(ybot, 2, y.shape[0])))
-	plt.plot(x, y, **lolli_fmt)
-
-	plt.hold(hold_status)
+    if ybot:
+        warn('lollipop() got a non-zero ybot, but only ybot=0 is ' + \
+             'supported. Setting ybot to 0.')
+    markerline, stemlines, baseline = plt.stem(x, y, '-')
+    if not color:
+        color = stemlines[0].get_color()
+    lolli_fmt = {'linewidth': lw, 'color': color}
+    pop_fmt = {'mec': color, 'markerfacecolor':'None',  \
+               'markersize':10, 'markeredgewidth': lw*1.1}
+    plt.setp(markerline, **pop_fmt)
+    plt.setp(stemlines, **lolli_fmt)
+    plt.setp(baseline, 'color','k')
 
 def test_lollipop():
-	"""Test function for lollipop()"""
-	t = np.arange(1, 20)*1e-3
-	f = 20.
-	a = np.sin(2*np.pi*f*t)
-	plt.figure()
-	lollipop(t, a)
-	plt.grid(True)
+    """Test function for lollipop()"""
+    t = np.arange(1, 20)*1e-3
+    f = 20.
+    a = np.sin(2*np.pi*f*t)
+    plt.figure()
+    lollipop(t, a, color='y', lw=1.5, ybot=0.1)
+    plt.grid(True)
