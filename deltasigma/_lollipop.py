@@ -70,7 +70,7 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
         warn('lollipop() got a non-zero ybot, but only ybot=0 is ' + \
              'supported. Setting ybot to 0.')
     markerline, stemlines, baseline = plt.stem(x, y, '-')
-    if not color:
+    if not color or color == 'None':
         color = stemlines[0].get_color()
     lolli_fmt = {'linewidth': lw, 'color': color}
     pop_fmt = {'mec': color, 'markerfacecolor':'None',  \
@@ -85,5 +85,5 @@ def test_lollipop():
     f = 20.
     a = np.sin(2*np.pi*f*t)
     plt.figure()
-    lollipop(t, a, color='y', lw=1.5, ybot=0.1)
+    lollipop(t, a, color=None, lw=1.5, ybot=0.1)
     plt.grid(True)
