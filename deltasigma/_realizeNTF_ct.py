@@ -22,6 +22,7 @@ from warnings import warn
 import numpy as np
 import numpy.linalg as linalg
 from scipy.signal import ss2zpk
+#from ._ltisys import ss2zpk
 
 from ._evalTFP import evalTFP
 from ._impL1 import impL1
@@ -187,18 +188,31 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
             Dci = np.hstack((np.zeros((1, order)), np.array([[1]])))
             for i in range(len(tdac)):
                 tdi = tdac[i]
-                if type(tdi) is tuple or type(tdi) is list:
+                if (type(tdi) in (tuple, list)) and len(tdi) and \
+                   (type(tdi[0]) in (list, tuple)):
                     for j in range(len(tdi)):
                         tdj = tdi[j]
                         tdac2 = np.vstack((tdac2, 
                                            np.array(tdj).reshape(1,-1)))
-                        Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
-                        Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
-                else: # we got tdac[i] = [a, b] where a, b are scalars
+                        if Bc is not None:
+                            Bc = np.hstack((Bc, Bci[:, i].reshape((-1, 1))))
+                        else:
+                            Bc = Bci[:, i].reshape((-1, 1))
+                        if Dc is not None:
+                            Dc = np.hstack((Dc, Dci[:, i].reshape((-1, 1))))
+                        else:
+                            Dc = Dci[:, i].reshape((-1, 1))
+                elif len(tdi): # we got tdac[i] = [a, b] where a, b are scalars
                     tdac2 = np.vstack((tdac2,
                                        np.array(tdi).reshape(1,-1)))
-                    Bc = np.hstack((Bc, Bci[:, i])) if Bc is not None else Bci[:, i]
-                    Dc = np.hstack((Dc, Dci[:, i])) if Dc is not None else Dci[:, i]
+                    if Bc is not None:
+                        Bc = np.hstack((Bc, Bci[:, i].reshape((-1, 1))))
+                    else:
+                        Bc = Bci[:, i].reshape((-1, 1))
+                    if Dc is not None:
+                        Dc = np.hstack((Dc, Dci[:, i].reshape((-1, 1))))
+                    else:
+                        Dc = Dci[:, i].reshape((-1, 1))
             tp = tdac2[1:, :]
     elif form == 'FF':
         Cc = np.vstack((np.eye(order), np.zeros((1, order))))
@@ -258,7 +272,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
             Dc2 = x[order:].T
 
     Dc1 = np.zeros((1, 1))
-    Dc = np.hstack((Dc1, Dc2))
+    Dc = np.hstack((Dc1, np.atleast_2d(Dc2)))
     Bc1 = np.vstack((np.ones((1, 1)), np.zeros((order - 1, 1))))
     Bc = np.hstack((Bc1, Bc2))
     # Scale Bc1 for unity STF magnitude at f0
@@ -290,5 +304,36 @@ def test_realizeNTF_ct():
     """Test function for realizeNTF_ct()"""
     ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
     ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB')
-    print(ABCDc)
-    print(tdac2)
+    ABCDc_ref = np.array(((0, 0, 1, -1),
+                          (1, 0, 0, -1.5),
+                          (0, 1, 0, 0)), dtype=np.float)
+    tdac2_ref = np.array(((-1, -1),
+                        ( 0,  1)))
+    assert np.allclose(ABCDc, ABCDc_ref, atol=1e-8, rtol=1e-5)
+    assert np.allclose(tdac2, tdac2_ref, atol=1e-8, rtol=1e-5)
+
+    ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
+    ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB', tdac=[0, 1])
+    ABCDc_ref = np.array(((0, 0, 1, -1),
+                          (1, 0, 0, -1.5),
+                          (0, 1, 0, 0)), dtype=np.float)
+    tdac2_ref = np.array(((-1, -1),
+                        ( 0,  1)))
+    assert np.allclose(ABCDc, ABCDc_ref, atol=1e-8, rtol=1e-5)
+    assert np.allclose(tdac2, tdac2_ref, atol=1e-8, rtol=1e-5)
+
+    ntf = (np.array([1., 1., 1]), np.array([0., 0., 0]), 1)
+    tdac = [[1, 2], [1, 2], [[0.5, 1], [1, 1.5]], []]
+    ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB', tdac)
+    ABCDc_ref = np.array((
+              (     0,      0,      0, 1.0000,-1.0000,      0,      0,      0),
+              (1.0000,      0,      0,      0,      0,-3.0000,      0,      0),
+              (     0, 1.0000,      0,      0,      0,      0,-6.0000,-2.6667),
+              (     0,      0, 1.0000,      0,      0,      0,      0,      0)))
+    tdac2_ref = np.array(((-1.0000,  -1.0000),
+                          ( 1.0000,   2.0000),
+                          ( 1.0000,   2.0000),
+                          ( 0.5000,   1.0000),
+                          ( 1.0000,   1.5000)))
+    assert np.allclose(ABCDc, ABCDc_ref, atol=1e-8, rtol=1e-4)
+    assert np.allclose(tdac2, tdac2_ref, atol=1e-8, rtol=1e-4)
