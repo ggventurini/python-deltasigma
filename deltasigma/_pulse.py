@@ -21,27 +21,41 @@ from __future__ import division
 import numpy as np
 from scipy.signal import step2, lti
 
-from ._utils import lcm, rat
+from ._utils import lcm, rat, carray
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
-	""" y = pulse(S, tp=[0 1], dt=1, tfinal=10, nosum=0)
-	Calculate the sampled pulse response of a CT system. 
-	tp may be an array of pulse timings, one for each input.
-	Outputs:
-	y	The pulse response
+	"""Calculate the sampled pulse response of a CT system. 
+
+	``tp`` may be an array of pulse timings, one for each input, or even a
+	simple 2-elements tuple.
 	
-	Inputs
-	S	A **list** of LTI objects specifying the system.
-	tp	An (n, 2) array of pulse timings
-	dt	The time increment
-	tfinal	The time of the last desired sample
-	nosum	A flag indicating that the responses are not to be summed
+	**Parameters:**
+
+	S : sequence
+	    A sequence of LTI objects specifying the system.
+
+	tp : array-like	
+	    An (n, 2) array of pulse timings
+
+	dt : scalar
+	    The time increment
+
+	tfinal : scalar
+	    The time of the last desired sample
+
+	nosum : bool
+	    A flag indicating that the responses are not to be summed
+
+	**Returns:**
+
+	y : ndarray
+	    The pulse response
 	"""
-	tp = np.mat(np.array(tp))
+	tp = carray(tp)
 	if len(tp.shape) == 1:
 		if not tp.shape[0] == 2:
 			raise ValueError("tp is not (n, 2)-shaped")
-		tp.reshape((1, tp.shape[0]))
+		tp = tp.reshape((1, tp.shape[0]))
 	if len(tp.shape) == 2: 
 		if not tp.shape[1] == 2:
 			raise ValueError("tp is not (n, 2)-shaped")
@@ -54,7 +68,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 
 	x, ddt = rat(dt, 1e-3)
 	x, df = rat(tfinal, 1e-3)
-	delta_t = 1. / lcm(dd, lcm(ddt, df))
+	delta_t = 1./lcm(dd, lcm(ddt, df))
 	delta_t = max(1e-3, delta_t)	# Put a lower limit on delta_t
 	y1 = None
 	for Si in S:
@@ -64,7 +78,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 		else:
 			y1 = np.concatenate((y1, 
                                              y1i.reshape((y1i.shape[0], 1, 1))), 
-                                            axis=2)
+                                             axis=2)
 
 	nd = int(np.round(dt/delta_t, 0))
 	nf = int(np.round(tfinal/delta_t, 0))
@@ -112,7 +126,7 @@ def test_pulse():
 	import scipy.io
 	H = ([1], [1, 2, 10])
 	pp = pulse([H], tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
-	pp = pp.reshape((pp.shape[0],1))
+	pp = pp.reshape((pp.shape[0], 1))
 	fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
 	pp2 = scipy.io.loadmat(fname)['pp']
 	assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
