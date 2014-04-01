@@ -84,7 +84,7 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
     .. plot::
 
         from __future__ import division
-        from deltasigma import synthesizeNTF, simulateDSM, 
+        from deltasigma import synthesizeNTF, simulateDSM
         from deltasigma import calculateSNR, ds_hann, bilogplot
         import pylab as plt
         import numpy as np
