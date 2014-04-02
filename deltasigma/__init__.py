@@ -17,6 +17,7 @@
 python-deltasigma
 =================
 
+:Author: Giuseppe Venturini
 :Release: |release|
 :Date: |today|
 
@@ -592,7 +593,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 3-Clause License"
-__version__ = '0.1'
+__version__ = '0.1-1'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
