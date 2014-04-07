@@ -49,6 +49,8 @@ at the following ipython notebooks:
    notebook port of the interactive ``dsdemo1.m``.
 -  `dsdemo2 <http://nbviewer.ipython.org/gist/ggventurini/8044644>`__,
    notebook port of the interactive ``dsdemo2.m``.
+-  `dsdemo3 <http://nbviewer.ipython.org/gist/ggventurini/10016971>`__,
+   notebook port of the interactive ``dsdemo3.m``.
 -  `dsdemo4 <http://nbviewer.ipython.org/gist/ggventurini/8255785/dsdemo4.ipynb>`__,
    notebook port of ``dsdemo4.m``. `Audio
    file <https://gist.github.com/ggventurini/8255785/raw/8fb7d94236b917e6d557fb538d3f35a3144c038c/sax.wav.b64>`__.
