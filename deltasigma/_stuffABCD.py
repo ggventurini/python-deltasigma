@@ -51,7 +51,7 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     ABCD = np.zeros((order + 1, order + 2))
     if np.isscalar(b) or max(b.shape) == 1:
         b = np.atleast_2d(b)
-        b = np.vstack((b, np.zeros(1, order)))
+        b = np.hstack((b, np.zeros((1, order))))
 
     # mutually exclusive matrix stuffing
     if form == 'CRFB':
