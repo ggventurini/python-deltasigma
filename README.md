@@ -20,6 +20,7 @@ To have an idea of the currently implemented functionality, take a look at these
 
 * **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
 * **[dsdemo2](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
+* **[dsdemo3](http://nbviewer.ipython.org/gist/ggventurini/10016971)**, notebook port of the interactive `dsdemo3.m`.
 * **[dsdemo4](http://nbviewer.ipython.org/gist/ggventurini/8255785/dsdemo4.ipynb)**, notebook port of `dsdemo4.m`. [Audio file](https://gist.github.com/ggventurini/8255785/raw/8fb7d94236b917e6d557fb538d3f35a3144c038c/sax.wav.b64).
 * **[dsexample1](http://nbviewer.ipython.org/7251113)**, python version of `dsexample1.m`.
 * **[dsexample2](http://nbviewer.ipython.org/8323435)**, python version of `dsexample2.m`.
