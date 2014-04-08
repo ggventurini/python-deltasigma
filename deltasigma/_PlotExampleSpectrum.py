@@ -59,8 +59,9 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     """
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2
-    Amp = undbv(-3)
-    f = 0.3
+    Amp = undbv(-3) # Test tone amplitude, relative to full-scale.
+    f = 0.3         # Test tone frequency offset from f0, relative to bw.
+                    # (Will be adjusted to be an fft bin) 
     N = 2**12
     f1_bin = np.round(f1*N)
     f2_bin = np.round(f2*N)

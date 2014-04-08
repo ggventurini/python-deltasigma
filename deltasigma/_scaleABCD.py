@@ -159,10 +159,10 @@ def test_scaleABCD():
     form = 'CRFB'
     ntf = synthesizeNTF(order, osr, 2, Hinf, f0)            # Optimized zero placement
     a, g, b, c = realizeNTF(ntf, form)
-    b = np.hstack(( # Use a single feed-in for the input
-                   np.atleast_2d(b[0, 0]),
-                   np.zeros((1, max(b.shape)-1))
-                 ))
+    b = np.concatenate(( # Use a single feed-in for the input
+                        np.atleast_1d(b[0]),
+                        np.zeros((max(b.shape) - 1,))
+                      ))
     ABCD = stuffABCD(a, g, b, c, form)
     ABCD0 = ABCD.copy()
     # Values to be tested

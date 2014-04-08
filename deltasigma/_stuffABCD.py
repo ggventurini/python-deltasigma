@@ -19,7 +19,7 @@
 from __future__ import division, print_function
 import numpy as np
 from ._partitionABCD import partitionABCD
-from ._utils import diagonal_indices
+from ._utils import carray, diagonal_indices
 
 def stuffABCD(a, g, b, c, form='CRFB'):
     """Calculate the ABCD matrix from the parameters of a modulator topology.
@@ -45,6 +45,11 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     .. seealso:: :func:`mapABCD`, the inverse function.
     """
     # Code common to all structures.
+    # a, g, b, and c are internally row vectors
+    a = carray(a).reshape((1, -1))
+    g = carray(g).reshape((1, -1))
+    b = carray(b).reshape((1, -1))
+    c = carray(c).reshape((1, -1))
     order = max(a.shape)
     odd = order % 2
     even = 1 - odd # OMG

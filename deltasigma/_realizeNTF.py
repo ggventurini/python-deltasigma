@@ -378,7 +378,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 		x = evalTF(stf, zSet)
 		x = x[:].T
 		b = np.real(x/A)
-	return a, g, b, c
+	return a.squeeze(), g.squeeze(), b.squeeze(), c.squeeze()
 	
 def test_realizeNTF():
 	"""Test function for realizeNTF()"""
