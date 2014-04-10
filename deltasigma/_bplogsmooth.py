@@ -17,6 +17,7 @@
 converts it to dB.
 """
 
+from __future__ import division
 import numpy as np
 from numpy.linalg import norm
 
@@ -24,9 +25,9 @@ from ._dbp import dbp
 from ._utils import carray
 
 def bplogsmooth(X, tbin, f0):
-	"""Smooth the fft, X, and convert it to dB.
+	"""Smooth the FFT and convert it to dB.
 
-	Use 8 bins from the bin corresponding to f0 to tbin and again as far.
+	Use 8 bins from the bin corresponding to ``f0`` to ``tbin`` and again as far.
 	Thereafter increase bin sizes by a factor of 1.1, staying less than 2^10.
 	For tbin, group the bins together.
 
@@ -41,11 +42,13 @@ def bplogsmooth(X, tbin, f0):
 	if hasattr(X, 'shape') and len(X.shape) == 2 and \
 	   not X.shape[0]*X.shape[1] == max(X.shape):
 		raise ValueError("The X vector is not unidimensional: " + str(X.shape))
+
 	N = max(X.shape)
 	tbin = int(tbin)
 	n = 8
 
-	bin0 = np.round(f0*N, 0)
+	bin0 = int(np.round(f0*N, 0))
+	assert tbin > bin0 # we said upper sideband!
 	bin1 = ((tbin - bin0) % n) + bin0
 	bind = bin1 - bin0
 	usb1 = np.concatenate((np.arange(bin1, tbin+1, n), 
@@ -70,19 +73,42 @@ def bplogsmooth(X, tbin, f0):
 	startbin = np.concatenate((lsb1[::-1], usb1)) - 1
 	stopbin = np.concatenate((lsb2[::-1], usb2)) - 1
 
-	f = ((startbin + stopbin)/2. - 1.)/N - f0
+	f = ((startbin + stopbin)/2.)/N - f0
 	p = np.zeros(f.shape)
 	for i in range(f.shape[0]):
+		print dbp(
+                           norm(X[np.round(startbin[i]):np.ceil(stopbin[i]) + 1]**2.)),
 		p[i] = dbp(
-		           norm(X[startbin[i]:stopbin[i]+1]**2. /
-		                (stopbin[i] - startbin[i] + 1.)
-		               )
+		           norm(X[startbin[i]:stopbin[i] + 1]**2. /
+		                (stopbin[i] - startbin[i] + 1.),
+		               ord=1)
 		          )
 	return f, p
 
 def test_bplogsmooth():
 	"""Test function for bplogsmooth()
 	"""
-	# FIXME WRITE PROPER TEST
-	bplogsmooth(np.arange(200), 10, 0)
+	import scipy.io
+	import pkg_resources
+	from ._ds_hann import ds_hann
+	from ._simulateDSM import simulateDSM
+	from ._synthesizeNTF import synthesizeNTF
+	f0 = 1./8
+	OSR = 64
+	order = 8
+	N = 8192
+	H = synthesizeNTF(order, OSR, 1, 1.5, f0)
+	fB = int(np.ceil(N/(2. * OSR)))
+	ftest = int(np.round(f0*N + 1./3*fB))
+	u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
+	v, xn, xmax, y = simulateDSM(u, H)
+	spec = np.fft.fft(v*ds_hann(N))/(N/4)
+	X = spec[:N/2 + 1]
+	f, p = bplogsmooth(X, ftest, f0)
 
+	fname = pkg_resources.resource_filename(__name__, "test_data/test_bplogsmooth.mat")
+	data = scipy.io.loadmat(fname)
+
+	assert np.allclose(f, data['f'], atol=1e-9, rtol=1e-5)
+	print p - data['p']
+	assert np.allclose(p, data['p'], atol=1e-9, rtol=1e-5)
