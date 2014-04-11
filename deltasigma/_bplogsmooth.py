@@ -109,5 +109,4 @@ def test_bplogsmooth():
 	data = scipy.io.loadmat(fname)
 
 	assert np.allclose(f, data['f'], atol=1e-9, rtol=1e-5)
-	print p - data['p']
 	assert np.allclose(p, data['p'], atol=1e-9, rtol=1e-5)
