@@ -864,9 +864,6 @@ def test_mround():
     tres[:6] = -1
     tres[-6:] = 1
     tresm = mround(tv)
-    print tv
-    print tres
-    print tresm
     assert np.allclose(tres, tresm, atol=1e-8, rtol=1e-5)
     # w complex values.
     tv = [-1.9, -0.5, -0.2, 3.4, 4.5, 5.6, 7.0, 2.4+3.6j]
