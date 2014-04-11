@@ -603,6 +603,42 @@ def _cell_like_list(shape, init=None):
             a.append(_cell_like_list(shape[1:], init))
     return a
 
+def mround(x):
+    """Round ``x`` to the nearest integers.
+
+    This is a MATLAB-compatible round function, numpy's ``round()``
+    behaves differently.
+
+    **Behaviour with a fractional part of 0.5:**
+
+    * Positive elements with a fractional part of 0.5 round up to the nearest
+    positive integer. 
+    
+    * Negative elements with a fractional part of -0.5 round down to the nearest negative integer.
+
+    If the elements of ``x`` are complex, real and imaginary parts are
+    rounded separately.
+
+    .. example::
+    
+       >>> mround([-1.9, -0.5, -0.2, 3.4, 4.5, 5.6, 7.0, 2.4+3.6j])
+       [-2.0, -1.0, 0.0, 3.0, 5.0, 6.0, 7.0, 2.0+4.0j]
+
+    """
+    iform = save_input_form(x)
+    x = carray(x)
+    def _mround(z):
+        """Base function to generate the ufunc round"""
+        z = np.real_if_close(z)
+        if np.iscomplex(z):
+            return _mround(np.real(z)) + 1j*_mround(np.imag(z))
+        s = 1 if z >=0 else -1
+        res = z - s*(abs(z)%1) if abs(z)%1 < .5 else z + s*(1 - (abs(z)%1))
+        return res
+    _internal = np.frompyfunc(_mround, 1, 1)
+    xf = np.array(_internal(x), dtype=x.dtype)
+    return restore_input_form(xf, iform)
+
 def test_rat():
     """Test function for rat()"""
     import numpy.random as rnd
@@ -820,3 +856,19 @@ def test_pretty_lti():
     assert pretty_lti([[1], [], 2]) == '2 (z -1)'
     assert pretty_lti([[], [.22222222], 2]) == \
            '      2      \n-------------\n (z -0.2222) '
+
+def test_mround():
+    """Test function for mfloor()"""
+    tv = np.linspace(-1, 1, 21)
+    tres = np.zeros(tv.shape)
+    tres[:6] = -1
+    tres[-6:] = 1
+    tresm = mround(tv)
+    print tv
+    print tres
+    print tresm
+    assert np.allclose(tres, tresm, atol=1e-8, rtol=1e-5)
+    # w complex values.
+    tv = [-1.9, -0.5, -0.2, 3.4, 4.5, 5.6, 7.0, 2.4+3.6j]
+    tres = [-2.0, -1.0,  0.0, 3.0, 5.0, 6.0, 7.0, 2.0+4.0j]
+    assert mround(tv) == tres
