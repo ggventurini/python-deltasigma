@@ -22,7 +22,7 @@ import numpy as np
 from numpy.linalg import norm
 
 from ._dbp import dbp
-from ._utils import carray
+from ._utils import carray, mround
 
 def bplogsmooth(X, tbin, f0):
 	"""Smooth the FFT and convert it to dB.
@@ -44,10 +44,11 @@ def bplogsmooth(X, tbin, f0):
 		raise ValueError("The X vector is not unidimensional: " + str(X.shape))
 
 	N = max(X.shape)
+	N2 = int(np.floor(N/2))
 	tbin = int(tbin)
 	n = 8
 
-	bin0 = int(np.round(f0*N, 0))
+	bin0 = int(mround(f0*N))
 	assert tbin > bin0 # we said upper sideband!
 	bin1 = ((tbin - bin0) % n) + bin0
 	bind = bin1 - bin0
@@ -57,17 +58,17 @@ def bplogsmooth(X, tbin, f0):
 	m = usb1[-1] + n
 	while m + n/2. < N/2.:
 		usb1 = np.concatenate((usb1, np.array((m,))))
-		n = min(n*1.1, 2**10)
-		m = m + n
-	usb2 = np.concatenate((usb1[1:]-1, np.array((N/2.,))))
+		n = mround(min(n*1.1, 2**10))
+		m = m + int(n)
+	usb2 = np.concatenate((usb1[1:]-1, np.array((N2,))))
 
 	n = 8
 	lsb2 = np.arange(bin1, bin1 - 2*bind + 1, -n) - 1
 	m = lsb2[-1] - n
 	while m - n/2. > 1:
 		lsb2 = np.concatenate((lsb2, np.array((m,))))
-		n = min(n*1.1, 2**10)
-		m = m - n
+		n = mround(min(n*1.1, 2**10))
+		m = m - int(n)
 	lsb1 = np.concatenate((lsb2[1:] + 1, np.ones((1,))))
 
 	startbin = np.concatenate((lsb1[::-1], usb1)) - 1
@@ -76,8 +77,6 @@ def bplogsmooth(X, tbin, f0):
 	f = ((startbin + stopbin)/2.)/N - f0
 	p = np.zeros(f.shape)
 	for i in range(f.shape[0]):
-		print dbp(
-                           norm(X[np.round(startbin[i]):np.ceil(stopbin[i]) + 1]**2.)),
 		p[i] = dbp(
 		           norm(X[startbin[i]:stopbin[i] + 1]**2. /
 		                (stopbin[i] - startbin[i] + 1.),
@@ -99,7 +98,7 @@ def test_bplogsmooth():
 	N = 8192
 	H = synthesizeNTF(order, OSR, 1, 1.5, f0)
 	fB = int(np.ceil(N/(2. * OSR)))
-	ftest = int(np.round(f0*N + 1./3*fB))
+	ftest = int(mround(f0*N + 1./3*fB))
 	u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
 	v, xn, xmax, y = simulateDSM(u, H)
 	spec = np.fft.fft(v*ds_hann(N))/(N/4)
