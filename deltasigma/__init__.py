@@ -248,10 +248,10 @@ License, copyright, rationale and credits
 Why this project was born
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I like challenges, Delta Sigma modulation and I don't have the money for
+I like challenges, delta-sigma modulation and I don't have the money for
 my own MATLAB license.
 
-With this Python package you can simulate Delta Sigma modulators for
+With this Python package you can simulate delta-sigma modulators for
 free, on any PC.
 
 I hope you find it useful.
@@ -500,67 +500,10 @@ The following are auxiliary functions that complement the key functions above.
     pulse
     rmsGain
 
-General utilities for data processing
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Utility functions for simulation of delta-sigma modulators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following are generic functions useful for manipulating data,
-conversions, padding and provide speciality functions which are
-not otherwise available in the usual scientific Python stack.
-
-.. autosummary::
-    :nosignatures:
-
-    db
-    dbm
-    dbp
-    dbv
-    undbm
-    undbp
-    undbv
-    rms
-    padb
-    padl
-    padr
-    padt
-    cplxpair
-    mfloor
-    rat
-    gcd
-    lcm
-
-Plotting and data display utilitites
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Graphic functions:
-
-.. autosummary::
-    :nosignatures:
-
-    plotPZ
-    plotSpectrum
-    figureMagic
-    DocumentNTF
-    PlotExampleSpectrum
-    axisLabels
-    bilogplot
-    bplogsmooth
-    lollipop
-    changeFig
-
-Textual and non-graphic functions
-
-.. autosummary::
-    :nosignatures:
-
-    circ_smooth
-    logsmooth
-    pretty_lti
-    SIunits
-
-Utility functions for Delta Sigma simulation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Functions for low-level handling of Delta Sigma modulator representations,
+Functions for low-level handling of delta-sigma modulator representations,
 their evaluation and filtering.
 
 .. autosummary::
@@ -585,6 +528,64 @@ their evaluation and filtering.
     peakSNR
     sinc_decimate
     zinc
+
+General utilities for data processing
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following are generic functions useful for manipulating data,
+conversions, padding and provide speciality functions which are
+not otherwise available in the usual scientific Python stack.
+
+.. autosummary::
+    :nosignatures:
+
+    db
+    dbm
+    dbp
+    dbv
+    undbm
+    undbp
+    undbv
+    rms
+    padb
+    padl
+    padr
+    padt
+    cplxpair
+    mfloor
+    mround
+    rat
+    gcd
+    lcm
+
+Plotting and data display utilitites
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Graphic functions:
+
+.. autosummary::
+    :nosignatures:
+
+    plotPZ
+    plotSpectrum
+    figureMagic
+    DocumentNTF
+    PlotExampleSpectrum
+    axisLabels
+    bilogplot
+    lollipop
+    changeFig
+
+Textual and non-graphic display-related functions
+
+.. autosummary::
+    :nosignatures:
+
+    circ_smooth
+    bplogsmooth
+    logsmooth
+    pretty_lti
+    SIunits
 
 All functions in alphabetical order
 -----------------------------------

@@ -21,7 +21,7 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def dbp(x):
-	"""The dB equivalent of the power ratio ``x``.
+	"""Calculate the dB equivalent of the power ratio ``x``.
 
 	.. math::
 

@@ -33,7 +33,7 @@ from ._padr import padr
 from ._utils import _getABCD
 
 def mapCtoD(sys_c, t=(0, 1), f0=0.):
-    """Map a MIMO continuous-time system to a SIMO discrete-time equivalent.
+    """Map a MIMO continuous-time to an equiv. SIMO discrete-time system.
 
     The criterion for equivalence is that the sampled pulse response
     of the CT system must be identical to the impulse response of the DT system.
