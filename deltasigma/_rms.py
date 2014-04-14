@@ -21,7 +21,7 @@ import numpy as np
 import numpy.linalg as la
 
 def rms(x, no_dc=False):
-	"""Calculates the RMS value of x
+	"""Calculate the RMS value of ``x``.
 
 	The Root Mean Square value of an array :math:`x` of length :math:`n` is defined as:
 
