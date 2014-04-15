@@ -314,6 +314,8 @@ quantizer connected to a loop filter as shown in the diagram below.
     :align: center
     :alt: Modulator model
 
+.. _loop-filter-label:
+
 The loop filter
 :::::::::::::::
 
@@ -347,7 +349,7 @@ The equations for updating the state and computing the output of the loop filter
 
 .. math::
 
-    y(n + 1) = Cx(n) + D
+    y(n) = Cx(n) + D
         \\left[
         \\begin{array}{c}
           u(n) \\\\
