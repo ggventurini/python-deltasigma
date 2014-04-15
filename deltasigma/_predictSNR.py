@@ -99,10 +99,6 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
     """
 
     # extract num, den
-    if (hasattr(ntf, 'inputs') and not ntf.inputs == 1) or \
-       (hasattr(ntf, 'outputs') and not ntf.outputs == 1):
-        raise TypeError("The supplied TF isn't a SISO transfer function.")
-
     num, den = _get_num_den(ntf)
     Nb = 100
     if f0 == 0:
