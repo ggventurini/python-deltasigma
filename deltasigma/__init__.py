@@ -532,9 +532,10 @@ their evaluation and filtering.
 General utilities for data processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following are generic functions useful for manipulating data,
-conversions, padding and provide speciality functions which are
-not otherwise available in the usual scientific Python stack.
+The following are generic functions, useful for misc. tasks, like
+manipulating data, conversions or padding, for example.
+They provide speciality functions which are not otherwise available
+in the usual scientific Python stack.
 
 .. autosummary::
     :nosignatures:
@@ -685,5 +686,5 @@ from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
 from ._undbv import undbv
-from ._utils import circshift, cplxpair, mfloor, pretty_lti, rat, gcd, lcm
+from ._utils import circshift, cplxpair, mfloor, mround, pretty_lti, rat, gcd, lcm
 from ._zinc import zinc
