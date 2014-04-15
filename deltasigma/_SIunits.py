@@ -81,27 +81,24 @@ def SIunits(x):
     for i in range(len(x)):
         if x[i] != 0:
             p = int(np.floor(np.log10(abs(x[i]))/3 + eps))
+            if p >= 0:
+                p = min(p, len(prefixes_p))
+                prefix[i] = prefixes_p[p]
+                factor[i] = 10**(3*p)
+            elif p < 0:
+                p = min(-p, len(prefixes_n)-1)
+                prefix[i] = prefixes_n[p]
+                factor[i] = 10**(-3*p)
         else:
-            p = 0
-        if p >= 0:
-            p = min(p, len(prefixes_p))
-            prefix[i] = prefixes_p[p]
-            factor[i] = 10**(3*p)
-        elif p < 0:
-            p = min(-p, len(prefixes_n)-1)
-            prefix[i] = prefixes_n[p]
-            factor[i] = 10**(-3*p)
-        #else:
-        #    prefix[i] = ''
-        #    factor[i] = 1
+            factor[i], prefix[i] = 0, ''
     if scalar_input:
         factor, prefix = factor[0], prefix[0]
     return factor, prefix
 
 def test():
     """Test function for SIunits()"""
-    tv = (1e3, 2100312.24, .32545, 21e-9, 34e-12, 9569300e-12)
-    correct = (1e3, 'k'), (1e6, 'M'), (1e-3, 'm'), (1e-9, 'n'), (1e-12, 'p'), (1e-6, 'u')
+    tv = (0, 1, 1e3, 2100312.24, .32545, 21e-9, 34e-12, 9569300e-12)
+    correct = (0, ''), (1, ''), (1e3, 'k'), (1e6, 'M'), (1e-3, 'm'), (1e-9, 'n'), (1e-12, 'p'), (1e-6, 'u')
     f, p = SIunits(tv)
     res = zip(f,p)
     for r, c in zip(res, correct):
