@@ -55,9 +55,9 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
 
     t : array_like
         The edge times of the DAC pulse used to make CT waveforms 
-    	 from DT inputs. Each row corresponds to one of the system
-         inputs; [-1 -1] denotes a CT input. The default is [0 1],
-         for all inputs except the first.
+        from DT inputs. Each row corresponds to one of the system
+        inputs; [-1 -1] denotes a CT input. The default is [0 1],
+        for all inputs except the first.
 
     f0 : float
          The (normalized) frequency at which the Gp filters' gains are
