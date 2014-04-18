@@ -24,6 +24,7 @@ from numpy.fft import fft, fftshift
 from ._simulateDSM import simulateDSM
 from ._calculateSNR import calculateSNR
 from ._mapQtoR import mapQtoR
+from ._utils import _get_zpk
 
 def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                 quadrature=False):
@@ -157,10 +158,9 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     if callable(arg1):
         pass
     elif hasattr(arg1, '__class__') and arg1.__class__.__name__ == 'lti':
-        # FIXME lti/tf object
-        pz = np.vstack((arg1.p[0], arg1.z[0]))
-        for i in range(1, 3):
-            if np.any(np.abs(np.imag(np.poly(pz[:, i-1]))) > 0.0001):
+        # scipy LTI object
+        for roots in _get_zpk(arg1)[:2]:
+            if np.any(np.abs(np.imag(np.poly(roots))) > 0.0001):
                 quadrature = True
                 quadrature_ntf = True
     else: # ABCD matrix
