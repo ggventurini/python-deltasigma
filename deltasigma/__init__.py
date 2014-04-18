@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -69,7 +69,7 @@ list.
 
 |Build Status| |Coverage Status|
 
-For more detailed information about the development status take a look at 
+For more detailed information about the development status take a look at
 `files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
 
 The further functionality is expected to be ported according to `the
@@ -141,7 +141,7 @@ Index (PYPI) <http://pypi.python.org>`__, running::
 The above command will also attempt to compile and install the dependencies -
 for this to work you should already have the required libraries in place.
 
-Otherwise, you can head over to `the Github repository 
+Otherwise, you can head over to `the Github repository
 <http://github.com/ggventurini/python-deltasigma>`__ and download the code
 from there.
 
@@ -287,9 +287,9 @@ MATLAB is a registered trademark of The MathWorks, Inc.
 Credits
 ~~~~~~~
 
-The ``python-deltasigma`` package was written by 
+The ``python-deltasigma`` package was written by
 `Giuseppe Venturini <https://github.com/ggventurini>`__, as a derivative work
-of Richard Schreier's MATLAB Delta Sigma toolbox. It contains code from 
+of Richard Schreier's MATLAB Delta Sigma toolbox. It contains code from
 ``pydsm``, also based on the same MATLAB toolbox and written by Sergio
 Callegari.
 
@@ -307,7 +307,7 @@ upon which the following documentation is very heavily based.
 Modulator model
 ~~~~~~~~~~~~~~~
 
-A delta-sigma modulator with a single quantizer is assumed to consist of 
+A delta-sigma modulator with a single quantizer is assumed to consist of
 quantizer connected to a loop filter as shown in the diagram below.
 
 .. image:: ../doc/_static/modulator_model.png
@@ -319,19 +319,19 @@ quantizer connected to a loop filter as shown in the diagram below.
 The loop filter
 :::::::::::::::
 
-The loop filter is described by an :math:`ABCD` matrix. For single-quantizer 
-systems, the loop filter is a two-input, one-output linear system and 
+The loop filter is described by an :math:`ABCD` matrix. For single-quantizer
+systems, the loop filter is a two-input, one-output linear system and
 :math:`ABCD` is an :math:`(n+1, n+2)` matrix, partitioned into
 :math:`A` :math:`(n, n)`, :math:`B` :math:`(n, 2)`, :math:`C` :math:`(1, n)`
 and :math:`D` :math:`(1, 2)` sub-matrices as shown below:
 
 .. math::
 
-    ABCD = 
+    ABCD =
         \\left[
         \\begin{array}{c|c}
           A & B \\\\ \\hline
-          C & D 
+          C & D
         \\end{array}
         \\right].
 
@@ -357,7 +357,7 @@ The equations for updating the state and computing the output of the loop filter
         \\end{array}
         \\right].
 
-Where :math:`u(n)` is the input sequence and :math:`v(n)` is the modulator output sequence. 
+Where :math:`u(n)` is the input sequence and :math:`v(n)` is the modulator output sequence.
 
 This formulation is sufficiently general to encompass all single-quantizer modulators which
 employ linear loop filters. The toolbox currently supports translation to/from an ABCD descrip-
@@ -379,7 +379,7 @@ See :ref:`topologies-diagrams` for a block-level view of the different modulator
 Multi-input and multi-quantizer systems can also be described with an
 ABCD matrix and the previous equation
 will still apply. For an :math:`n_i`-input, :math:`n_o`-output modulator,
-the dimensions of the sub-matrices are 
+the dimensions of the sub-matrices are
 :math:`A`: :math:`(n, n)`, :math:`B`: :math:`(n, n_i + n_o)`,
 :math:`C`: :math:`(n_o, n)` and :math:`D`: :math:`(n_o, n_i+n_o)`.
 
@@ -606,13 +606,14 @@ __status__ = "Stable"
 
 # Package testing can be done remotely, without display. This would make
 # matplotlib fail (and consequently, the test itself).
-# We check for $DISPLAY, but this makes us probably lose in portability, 
+# We check for $DISPLAY, but this makes us probably lose in portability,
 # does Windows have this environment variable defined?
 # Then again, who runs the test suit on a head-less windows machine...
 # ... for the time being the following should be OK. If in the future that
 # feature is needed by somebody, we can switch to
 # if not os.system('python -c "import matplotlib.pyplot as plt;plt.figure()"')
-import matplotlib, os
+import matplotlib
+import os
 if not ('DISPLAY' in os.environ or os.environ.get('READTHEDOCS', None)):
     matplotlib.use('Agg')
 
