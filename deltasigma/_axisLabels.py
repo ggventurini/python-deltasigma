@@ -36,7 +36,7 @@ def axisLabels(ran, incr):
     * a list, the function returns an array of strings corresponding to:
       each element of ``incr[1]:range[-1]:incr[0]`` formatted as ``'%g'``.
 
-    .. note:: All elements in `ran` less than 1e-6 are rounded down to 0.
+    .. note:: All elements in ``ran`` less than 1e-6 are rounded down to 0.
 
     **Returns:**
 
