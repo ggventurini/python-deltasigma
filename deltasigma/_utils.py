@@ -322,6 +322,9 @@ def pretty_lti(arg):
     z, p, k = _get_zpk(arg)
     z = np.atleast_1d(z)
     p = np.atleast_1d(p)
+    z = np.round(np.real_if_close(z), 4)
+    p = np.round(np.real_if_close(p), 4)
+    signs = {1:'+', -1:'-'}
     if not len(z) and not len(p):
         return "%g" % k
     ppstr = ["", "", ""]
@@ -329,19 +332,43 @@ def pretty_lti(arg):
         ppstr[1] = "%g " % k
     for i, s in zip((0, 2), (z, p)):
         rz = None
-        for zi in cplxpair(s)[::-1]:
+        m = 1
+        sorted_singularities = cplxpair(s)
+        for zindex, zi in enumerate(sorted_singularities):
             zi = np.round(np.real_if_close(zi), 4)
             if np.isreal(zi):
-                ppstr[i] += "(z %+g) " % -zi
+                if len(sorted_singularities) > zindex + 1 and \
+                    sorted_singularities[zindex + 1] == zi:
+                    m += 1
+                    continue
+                if zi == 0.:
+                    ppstr[i] += "z"
+                else:
+                    ppstr[i] += "(z %s %g)" % (signs[np.sign(-zi)], np.abs(zi))
+                if m == 1:
+                    ppstr[i] += " "
+                else:
+                    ppstr[i] += "^%d " % m
+                m = 1
             else:
+                if len(sorted_singularities) > zindex + 2 and \
+                    sorted_singularities[zindex + 2] == zi:
+                    m += .5
+                    continue
                 if rz is None:
                     rz = zi
                     continue
+                ppstr[i] += "(z^2 %s %gz %s %g)" % \
+                            (signs[np.sign(np.real_if_close(np.round(-rz - zi, 3)))],
+                             np.abs(np.real_if_close(np.round(-rz - zi, 3))),
+                             signs[np.sign(np.real_if_close(np.round(rz * zi, 4)))],
+                             np.abs(np.real_if_close(np.round(rz * zi, 4))))
+                if m == 1:
+                    ppstr[i] += " "
                 else:
-                    ppstr[i] += "(z^2 %+gz %+g) " % \
-                                (np.round(np.real_if_close(-rz - zi), 3),
-                                 np.round(np.real_if_close(rz * zi), 4))
-                    rz = None
+                    ppstr[i] += "^%d " % m
+                rz = None
+                m = 1
         ppstr[i] = ppstr[i][:-1] if len(ppstr[i]) else "1"
     if ppstr[2] == '1':
         return ppstr[1] + ppstr[0]
@@ -352,7 +379,7 @@ def pretty_lti(arg):
         ppstr[1] += "-" * (max(len(ppstr[0]), len(ppstr[2])) + 2)
         ppstr[0] = ppstr[0].center(len(ppstr[1]))
         ppstr[2] = ppstr[2].center(len(ppstr[1]))
-        return "\n".join(ppstr)
+    return "\n".join(ppstr)
 
 
 def _get_zpk(arg, input=0):
@@ -894,14 +921,18 @@ def test_pretty_lti():
     from ._synthesizeNTF import synthesizeNTF
     H = synthesizeNTF(5, 32, 1)
     tv = pretty_lti(H)
-    res = '     (z -1) (z^2 -1.997z +1) (z^2 -1.992z +0.9999)      \n' + \
-          '--------------------------------------------------------\n' + \
-          ' (z -0.7778) (z^2 -1.796z +0.8549) (z^2 -1.613z +0.665) '
+    res = '      (z^2 - 1.992z + 0.9999) (z^2 - 1.997z + 1) (z - 1)     \n' + \
+          '-------------------------------------------------------------\n' + \
+          ' (z^2 - 1.613z + 0.665) (z^2 - 1.796z + 0.8549) (z - 0.7778) '
     assert res == tv
     assert int(pretty_lti(([], [], 2))) == 2
-    assert pretty_lti([[1], [], 2]) == '2 (z -1)'
+    assert pretty_lti([[1], [], 2]) == '2 (z - 1)'
     assert pretty_lti([[], [.22222222], 2]) == \
-        '      2      \n-------------\n (z -0.2222) '
+        '      2       \n--------------\n (z - 0.2222) '
+    assert pretty_lti(((0, 0, 1), (1, 2-1j, 2+1j, 2-1j, 2+1j), 5)) == \
+        '        z^2 (z - 1)         \n' + \
+        '5 --------------------------\n' + \
+        '  (z^2 - 4z + 5)^2 (z - 1)  '
 
 
 def test_mround():
