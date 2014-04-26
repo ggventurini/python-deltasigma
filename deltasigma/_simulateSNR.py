@@ -248,7 +248,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     return snr, amp
 
 def test_simulateSNR():
-    """Test unit for simulateSNR()"""
+    """Test function for simulateSNR()"""
     import numpy as np
     import pkg_resources
     import scipy.io

@@ -298,7 +298,7 @@ def _B2formula(Ac, t1, t2, B2):
     return term
 
 def test_mapCtoD():
-    """Unit test for mapCtoD"""
+    """Test function for mapCtoD()"""
     from ._calculateTF import calculateTF
     # The first test comes straight from the DSToolbox doc
     # We map the standard continuous time DS modulator to its DT counterpart

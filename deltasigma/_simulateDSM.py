@@ -195,7 +195,7 @@ def ds_quantize(y, n):
 	return v
 
 def test_simulateDSM():
-	"""Test unit for simulateDSM()"""
+	"""Test function for simulateDSM()"""
 	import numpy as np
 	import pkg_resources
 	import scipy.io

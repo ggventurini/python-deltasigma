@@ -218,7 +218,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 	return z, p, k
 
 def test_synthesizeNTF0():
-    """Test unit for synthesizeNTF0"""
+    """Test function for synthesizeNTF0()"""
     from ._utils import cplxpair
     from ._config import optimize_NTF
     z, p, k = synthesizeNTF0(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0)

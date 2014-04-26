@@ -126,8 +126,7 @@ def mapABCD(ABCD, form='CRFB'):
     return a.squeeze(), g.squeeze(), b.squeeze(), c.squeeze()
 
 def test_mapABCD():
-	"""Test unit for mapABCD
-	"""
+	"""Test function for mapABCD()"""
 	from ._realizeNTF import realizeNTF
 	from ._synthesizeNTF import synthesizeNTF
 	from ._stuffABCD import stuffABCD

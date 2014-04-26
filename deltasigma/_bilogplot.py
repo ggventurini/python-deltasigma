@@ -172,6 +172,7 @@ def _logsmooth2(X, inBin, nbin=8):
 
 
 def test_bilogplot():
+    """Test function for bilogplot()"""
     from ._synthesizeNTF import synthesizeNTF
     from ._simulateDSM import simulateDSM
     from ._calculateSNR import calculateSNR
@@ -189,3 +190,4 @@ def test_bilogplot():
     X = spec[:N/2 + 1]
     plt.figure()
     bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10))
+    # graphical function: we check it doesn't fail
