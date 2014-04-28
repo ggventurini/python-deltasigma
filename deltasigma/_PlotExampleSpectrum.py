@@ -124,7 +124,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     return
 
 def test_PlotExampleSpectrum():
-    """Test function for PlotExampleSpectrum"""
+    """Test function for PlotExampleSpectrum()"""
     from ._synthesizeNTF import synthesizeNTF
     order = 3
     osr = 32

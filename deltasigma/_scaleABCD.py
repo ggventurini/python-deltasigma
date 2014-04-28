@@ -147,7 +147,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     return ABCDs, umax, S
 
 def test_scaleABCD():
-    """Test function for scaleABCD"""
+    """Test function for scaleABCD()"""
     from ._synthesizeNTF import synthesizeNTF
     from ._realizeNTF import realizeNTF
     from ._stuffABCD import stuffABCD
