@@ -158,10 +158,6 @@ def minreal(tf, tol=None):
             ret += [minreal(tfi, tol)]
         return ret
 
-    # python-control support is there but not tested and not advertised.
-    if hasattr(tf, 'returnScipySignalLti'):
-        tf = tf.returnScipySignalLti()[0][0]
-
     # default accuracy
     sqrt_eps = np.sqrt(eps)
 
@@ -176,13 +172,8 @@ def minreal(tf, tol=None):
             k = tf.k
         elif hasattr(tf, 'gain'):
             k = tf.gain
-    elif hasattr(tf, 'num') and hasattr(tf, 'den'):
-        num = tf.num
-        den = tf.den
-        k = num[0] / den[0]
-        zeros = np.roots(num)
-        poles = np.roots(den)
     else:
+        # k = num[0] / den[0]
         zeros, poles, k = _get_zpk(tf)
 
     zeros = carray(zeros)
@@ -839,6 +830,8 @@ def test_circshift():
     Ashifted = circshift(A, shift)
     Ares = np.array(((8, 9, 7), (2, 3, 1), (5, 6, 4)))
     assert np.allclose(Ashifted, Ares)
+    a = np.array([1, 2, 3, 4, 5]) # test for shift being a scalar
+    assert np.allclose(circshift(a, 1), a[np.array((4, 0, 1, 2, 3), )])
 
 
 def test_save_input_form():
