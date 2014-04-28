@@ -127,6 +127,8 @@ def cplxpair(x, tol=100):
     xcomplex = np.sort_complex(xcomplex)
     xcomplex_ipos = xcomplex[xcomplex.imag > 0.]
     xcomplex_ineg = xcomplex[xcomplex.imag <= 0.]
+    if len(xcomplex_ipos) != len(xcomplex_ineg):
+        raise ValueError("Complex numbers can't be paired.")
     res = []
     for i, j in zip(xcomplex_ipos, xcomplex_ineg):
         if not abs(i - np.conj(j)) < tol * eps:
@@ -648,6 +650,9 @@ def _cell_like_list(shape, init=None):
     **Returns:**
 
     cell, a list of lists (...)
+
+    .. deprecated:: 0.1-3
+
     """
     a = []
     for i in range(shape[0]):
@@ -773,7 +778,30 @@ def test_cplxpair():
         cplxpair(a), np.array(
             [0.1 - 0.2j, 0.1 + 0.2j, 1.1 - 2.j, 1.1 + 2.j, 1.0 + 0.j]),
         atol=100 * eps)
-
+    # Mismatched imaginary part with correct sign
+    a = (1, 1+2j, 1-2.4j) # this should fail. The complex sing. are not conj.
+    try:
+        cplxpair(a)
+        # ValueError should be raised!
+        assert False
+    except ValueError:
+        assert True
+    # Mismatched real part with correct imaginary part
+    a = (1, 1+2j, 2-2j) # this should fail. The complex sing. are not conj.
+    try:
+        cplxpair(a)
+        # ValueError should be raised!
+        assert False
+    except ValueError:
+        assert True
+    # Mismatched real part with mismatched sign imaginary part
+    a = (1, 1+2j, 2+2j) # this should fail. The complex sing. are not conj.
+    try:
+        cplxpair(a)
+        # ValueError should be raised!
+        assert False
+    except ValueError:
+        assert True
 
 def test_diagonal_indices():
     """Test function for diagonal_indices()
@@ -933,6 +961,14 @@ def test_pretty_lti():
         '        z^2 (z - 1)         \n' + \
         '5 --------------------------\n' + \
         '  (z^2 - 4z + 5)^2 (z - 1)  '
+
+
+def test_cell_like_list():
+    """Test function for _cell_like_list()"""
+    res = [[[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+           [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
+           [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]]
+    assert _cell_like_list((3, 4, 5), 1) == res
 
 
 def test_mround():
