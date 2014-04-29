@@ -50,14 +50,10 @@ def evalTF(tf, z):
 	# Original comment in deltasig:
 	# In Matlab 5, the ss/freqresp() function does nearly the same thing.
 	
-	# in our case a transfer function is a 'TransferFunction' not a zpk
+	# in our case a transfer function is a scipy LTI object
 	if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
 	   (hasattr(tf, 'outputs') and not tf.outputs == 1):
 		raise TypeError("Only SISO transfer functions can be evaluated.")
-	# for now we support both TransferFunction objects (python-control)
-	# and lti objects (scipy).
-	if hasattr(tf, 'returnScipySignalLti'): 
-		tf = tf.returnScipySignalLti()[0][0]
 
 	if hasattr(tf, 'num') and hasattr(tf, 'den'):
 		h = np.polyval(tf.num, z) / np.polyval(tf.den, z)
@@ -65,10 +61,7 @@ def evalTF(tf, z):
 		# LTI objects have poles and zeros 
 		zeros = tf.zeros
 		poles = tf.poles
-		if hasattr(tf, 'k'):
-			k = tf.k
-		elif hasattr(tf, 'gain'):
-			k = tf.gain  
+		k = tf.gain
 		h = k*evalRPoly(zeros, z)/evalRPoly(poles, z)
 	# we try not to convert the given representation to another one
 	elif _is_num_den(tf):
@@ -94,7 +87,7 @@ def test_evalTF():
 	tstr1.form, tstr1.num, tstr1.den = 'coeff', num, den
 	tstr2 = empty()
 	tstr2.form = 'zp'
-	tstr2.zeros, tstr2.poles, tstr2.k = tf2zpk(num, den)
+	tstr2.zeros, tstr2.poles, tstr2.gain = tf2zpk(num, den)
 	z = np.exp(1j*np.linspace(0, 2*np.pi, num=129, endpoint=True))
 	h1 = evalTF(tstr1, z)
 	h2 = evalTF(tstr2, z)
