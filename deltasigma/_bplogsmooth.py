@@ -39,6 +39,9 @@ def bplogsmooth(X, tbin, f0):
 
 	"""
 	X = carray(X).squeeze()
+	if len(X.shape) > 1:
+		raise ValueError("The X vector is not unidimensional: " + str(X.shape))
+
 	N = X.shape[0]
 	N2 = int(np.floor(N/2))
 	tbin = int(tbin)

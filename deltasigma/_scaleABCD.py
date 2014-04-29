@@ -159,11 +159,13 @@ def test_scaleABCD():
     form = 'CRFB'
     ntf = synthesizeNTF(order, osr, 2, Hinf, f0)            # Optimized zero placement
     a, g, b, c = realizeNTF(ntf, form)
-    b = np.hstack(( # Use a single feed-in for the input
-                   np.atleast_2d(b[0, 0]),
-                   np.zeros((1, max(b.shape)-1))
-                 ))
-    ABCD = stuffABCD(a, g, b, c, form)
+    # we pass b = b[0] bc if you use a single feed-in for the input, b may be scalar too
+    ABCD = stuffABCD(a, g, b[0], c, form)
+    # now we correct b for the assert
+    b = np.concatenate(( # Use a single feed-in for the input
+                        np.atleast_1d(b[0]),
+                        np.zeros((max(b.shape) - 1,))
+                      ))
     ABCD0 = ABCD.copy()
     # Values to be tested
     ABCD, umax, S = scaleABCD(ABCD0, nlev, f0)
@@ -196,15 +198,15 @@ def test_scaleABCD():
 
     # mapping the NTF to states, there is not a perfect match between 
     # the original code and the scipy version. -> rtol approx 20%
-    if not np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=3e-1):
-        aerr = ABCD_ref-ABCD
-        rerr = 2*(ABCD_ref-ABCD)/(ABCD_ref+ABCD)
-        print(repr(ABCD_ref))
-        print(repr(ABCD))
-        print(aerr)
-        print(rerr)
+    #if not np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=3e-1):
+    #    aerr = ABCD_ref-ABCD
+    #    rerr = 2*(ABCD_ref-ABCD)/(ABCD_ref+ABCD)
+    #    print(repr(ABCD_ref))
+    #    print(repr(ABCD))
+    #    print(aerr)
+    #    print(rerr)
     # this is a rather high relative error. We get it on Travis-CI
-    # MUST BE INVESTIGATED FURTHER.
+    # Probably linked to the libs used?
     assert np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=30e-2)
     assert np.allclose(umax, umax_ref, atol=1e-4, rtol=1e-3)
     assert np.allclose(np.diag(S), Sdiag_ref, atol=1e-2, rtol=25e-1)

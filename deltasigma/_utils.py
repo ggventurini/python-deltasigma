@@ -673,10 +673,10 @@ def mround(x):
         """Base function to generate the ufunc round"""
         z = np.real_if_close(z)
         if np.iscomplex(z):
-            return _mround(np.real(z)) + 1j * _mround(np.imag(z))
+            return _mround(np.real(z)) + 1j*_mround(np.imag(z))
         s = 1 if z >= 0 else -1
-        res = z - s * (abs(z) % 1) if abs(
-            z) % 1 < .5 else z + s * (1 - (abs(z) % 1))
+        res = z - s*(abs(z) % 1) if abs(z) % 1 < .5 \
+              else z + s*(1 - (abs(z)%1))
         return res
     _internal = np.frompyfunc(_mround, 1, 1)
     xf = np.array(_internal(x), dtype=x.dtype)

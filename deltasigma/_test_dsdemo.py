@@ -36,9 +36,10 @@ def test_dsdemo3():
 
     # Use a single feed-in for the input
     # Lets check that stuffABCD understands that if b is scalar it means 1 feed-in.
-    ABCD = stuffABCD(a, g, b[0, 0], c)
+    ABCD = stuffABCD(a, g, b[0], c)
     # for passing the assertion below, we need b to have the trailing zeros
-    b = np.concatenate((b[0, 0].reshape((1, 1)), np.zeros((1, b.shape[1] - 1))), axis=1)
+    b = np.concatenate((np.atleast_1d(b[0]), 
+                        np.zeros((b.shape[0] - 1,))))
     u = np.linspace(0, 0.6, 30)
     N = 1e4
     T = np.ones((1, N))
