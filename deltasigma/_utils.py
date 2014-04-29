@@ -87,15 +87,6 @@ def mfloor(x):
     return restore_input_form(xf, iform)
 
 
-def zpk(z, p, k):
-    """Returns a zpk object with the zeros (z), poles (p) and gain (k) provided.
-    """
-    t = empty()
-    t.form = 'zp'
-    t.zeros, t.poles, t.k = carray(z), carray(p), k
-    return t
-
-
 def carray(x):
     """Check that x is an ndarray. If not, try to convert it to ndarray.
     """
@@ -745,19 +736,6 @@ def test_carray():
     a = np.array((1,))
     b = 1
     assert np.all(carray(b) == a)
-
-
-def test_zpk():
-    """Test function for zpk()
-    """
-    z = [2, ]
-    p = [1, 3]
-    k = 1
-    t = zpk(z, p, k)
-    assert t.form == 'zp'
-    assert t.zeros.tolist() == z
-    assert t.poles.tolist() == p
-    assert t.k == k
 
 
 def test_cplxpair():

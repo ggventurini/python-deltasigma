@@ -33,7 +33,7 @@ optimizing the result.
 import numpy as np
 from warnings import warn
 from ._evalTF import evalTF
-from ._utils import cplxpair, zpk
+from ._utils import cplxpair
 from ._ds_optzeros import ds_optzeros
 from ._config import itn_limit
 
@@ -155,7 +155,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 				# The following is not exactly what delsig does.
 				# We do not have an identical cplxpair
 				p = cplxpair(p)
-				f = np.real(evalTF(zpk(z, p, k), -1))-H_inf
+				f = np.real(evalTF((z, p, k), -1))-H_inf
 				if itn == 1:
 					delta_x = -f/100.
 				else:

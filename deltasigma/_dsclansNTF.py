@@ -17,7 +17,7 @@
 """
 
 import numpy as np
-from ._utils import carray, zpk
+from ._utils import carray
 
 def dsclansNTF(x, order, rmax, Hz):
 	""" Conversion of clans parameters into a NTF.
@@ -26,7 +26,7 @@ def dsclansNTF(x, order, rmax, Hz):
 	I've changed the relationships between (zeta, wn) and x
 	in order to guarantee LHP roots of the s-polynomial.
 	
-	Returns the NTF, a (simplified) zpk object.
+	Returns the NTF, a zpk tuple.
 	"""
 	x = x.squeeze()
 	Hz = carray(Hz)

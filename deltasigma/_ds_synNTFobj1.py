@@ -22,7 +22,7 @@ from ._padt import padt
 from ._padb import padb 
 from ._db import db
 from ._ds_f1f2 import ds_f1f2 
-from ._utils import zpk, carray
+from ._utils import carray
 from ._rmsGain import rmsGain
 
 def ds_synNTFobj1(x, p, osr, f0):
@@ -44,7 +44,7 @@ def ds_synNTFobj1(x, p, osr, f0):
 		z = padb(z, p.shape[0], 1)
 
 	f1, f2 = ds_f1f2(osr, f0)
-	ntf = zpk(z, p, 1)
+	ntf = (z, p, 1)
 	y = db(rmsGain(ntf, f1, f2))
 	return y
 
