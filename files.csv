@@ -30,7 +30,7 @@ dsclansNTF.m,M-file,x,,0.1
 dsclansObj.m,M-file,x,,0.1
 dsdemo1.m,M-file,x,demo,NA
 dsdemo2.m,M-file,x,demo,NA
-dsdemo3.m,M-file,,demo,NA
+dsdemo3.m,M-file,x,demo,NA
 dsdemo4fig.m,M-file,x,demo,NA
 dsdemo4.m,M-file,x,demo,NA
 dsdemo4.mat,MAT-file,,binary,NA
@@ -124,4 +124,4 @@ undbp.m,M-file,x,,0.1
 undbv.m,M-file,x,,0.1
 zinc.m,M-file,x,,0.1
 ,,,,
-COMPLETED,74.36,%,,
+COMPLETED,75.21,%,,
