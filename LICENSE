@@ -1,10 +1,22 @@
-The python-delsigma project aims to provide a 1:1 python version fully 
-compatible with Richard Schreier's delsigm Matlab(R) toolkit.
+The python-deltasigma project aims to provide a python package fully
+compatible with Richard Schreier's MATLAB Delta Sigma Toolbox
+(aka delsigma), a specialized Matlab(R) toolkit.
 
 All original MATLAB code is Copyright (c) 2009, Richard Schreier.
 
-The Python code is a derivative work from the above toolkit, which 
-has the following license terms:
+The Python code here provided is a derivative work from the above toolkit
+and subject to the same license terms.
+
+This package contains some source code from pydsm, also based on the
+same MATLAB toolbox. The pydsm package is copyright (c) 2012, Sergio Callegari.
+
+When not otherwise specified, the source code is Copyright 2013,
+Giuseppe Venturini and the python-deltasigma contributors.
+
+The Python code here distribued is a derivative work from the MATLAB Delta
+Sigma Toolbox and it is distributed under the same license terms.
+
+MATLAB is a registered trademark of The MathWorks, Inc.
 
 Original license follows.
 
