@@ -13,18 +13,19 @@ the *de facto* standard tool for high-level delta sigma simulation, upon which i
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master) [![PyPi version](https://pypip.in/v/deltasigma/badge.png)](https://crate.io/packages/deltasigma/)
-[![PyPi downloads](https://pypip.in/d/deltasigma/badge.png)](https://crate.io/packages/deltasigma/)
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)[![PyPi version](https://pypip.in/version/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
+[![PyPi downloads](https://pypip.in/download/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
+[![BSD 2 clause license](http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
 
 To have an idea of the currently implemented functionality, take a look at these [IPython](http://ipython.org/) notebooks:
 
-* **[dsdemo1](http://nbviewer.ipython.org/gist/ggventurini/8040189)**, notebook port of the interactive `dsdemo1.m`.
-* **[dsdemo2](http://nbviewer.ipython.org/gist/ggventurini/8044644)**, notebook port of the interactive `dsdemo2.m`.
-* **[dsdemo3](http://nbviewer.ipython.org/gist/ggventurini/10016971)**, notebook port of the interactive `dsdemo3.m`.
-* **[dsdemo4](http://nbviewer.ipython.org/gist/ggventurini/8255785/dsdemo4.ipynb)**, notebook port of `dsdemo4.m`. [Audio file](https://gist.github.com/ggventurini/8255785/raw/8fb7d94236b917e6d557fb538d3f35a3144c038c/sax.wav.b64).
-* **[dsexample1](http://nbviewer.ipython.org/7251113)**, python version of `dsexample1.m`.
-* **[dsexample2](http://nbviewer.ipython.org/8323435)**, python version of `dsexample2.m`.
-* **[dsexample3](http://nbviewer.ipython.org/8323046)**, python version of `dsexample3.m`.
+* **[dsdemo1](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo1.ipynb)**, notebook port of the interactive `dsdemo1.m`.
+* **[dsdemo2](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo2.ipynb)**, notebook port of the interactive `dsdemo2.m`.
+* **[dsdemo3](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo3.ipynb)**, notebook port of the interactive `dsdemo3.m`.
+* **[dsdemo4](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb)**, notebook port of `dsdemo4.m`. [Audio file, right click to download](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64).
+* **[dsexample1](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb)**, python version of `dsexample1.m`.
+* **[dsexample2](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb)**, python version of `dsexample2.m`.
+* **[dsexample3](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb)**, python version of `dsexample3.m`.
 
 If you have some examples you would like to share, [send me a mail](http://tinymailto.com/5310), and I will add them to the above list.
 
