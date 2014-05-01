@@ -10,18 +10,20 @@ Getting started
 To have an idea of the currently implemented functionality, take a look
 at these IPython notebooks: 
 
--  `dsdemo1 <http://nbviewer.ipython.org/gist/ggventurini/8040189>`__,
+-  `dsdemo1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo1.ipynb>`__,
    notebook port of the interactive ``dsdemo1.m``.
--  `dsdemo2 <http://nbviewer.ipython.org/gist/ggventurini/8044644>`__,
+-  `dsdemo2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo2.ipynb>`__,
    notebook port of the interactive ``dsdemo2.m``.
--  `dsdemo4 <http://nbviewer.ipython.org/gist/ggventurini/8255785/dsdemo4.ipynb>`__,
+-  `dsdemo3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo3.ipynb>`__, 
+   notebook port of the interactive `dsdemo3.m`.
+-  `dsdemo4 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb>`__,
    notebook port of ``dsdemo4.m``. `Audio
-   file <https://gist.github.com/ggventurini/8255785/raw/8fb7d94236b917e6d557fb538d3f35a3144c038c/sax.wav.b64>`__.
--  `dsexample1 <http://nbviewer.ipython.org/7251113>`__, python
+   file, right click to download <https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64>`__.
+-  `dsexample1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb>`__, python
    version of ``dsexample1.m``.
--  `dsexample2 <http://nbviewer.ipython.org/8323435>`__, python
+-  `dsexample2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb>`__, python
    version of ``dsexample2.m``.
--  `dsexample3 <http://nbviewer.ipython.org/8323046>`__, python
+-  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, python
    version of ``dsexample3.m``.
 
 If you have some examples you would like to share, `send me a
