@@ -13,7 +13,8 @@ the *de facto* standard tool for high-level delta sigma simulation, upon which i
 
 This project is a work in progress. Not all functionality has been ported. Take a look at [files.csv](https://github.com/ggventurini/python-deltasigma/blob/master/files.csv) for the current status.
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)[![PyPi version](https://pypip.in/version/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
+[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
+[![PyPi version](https://pypip.in/version/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
 [![PyPi downloads](https://pypip.in/download/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
 
