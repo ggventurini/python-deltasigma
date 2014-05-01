@@ -7,7 +7,15 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
-**0.1-1**: Bugfix: most importantly fix ``realizeNTF_ct()``.
+**0.1-2**: Bugfixes, PEP8, DOC and most importantly a, g, b, c reshape.
+ * The a, g, b, c coefficients are now 1-dimensional.
+ * ``deltasigma/_stuffABCD.py``: scalar ``b`` bugfix.
+ * ``deltasigma/_logsmooth.py``: fix bin width.
+ * ``deltasigma/_utils.py``: add ``mround()``, round compatibly with MATLAB.
+ * ``deltasigma/_utils.py``: add root multiplicity support in ``pretty_lti()``.
+ * ``deltasigma/_utils.py``: bugfix in cplxpair for incoherent complex values.
+
+0.1-1: Bugfix: most importantly fix ``realizeNTF_ct()``.
 
  * ``deltasigma/_realizeNTF_ct.py``: Fixes for multi-timing, add unit tests for FB.
  * ``deltasigma/_pulse.py``: Bugfix (reshape missing assignment), fix documentation formatting.
