@@ -598,8 +598,8 @@ All functions in alphabetical order
 __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
-__license__ = "BSD 3-Clause License"
-__version__ = '0.1-1'
+__license__ = "BSD 2-Clause License"
+__version__ = '0.1-2'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
