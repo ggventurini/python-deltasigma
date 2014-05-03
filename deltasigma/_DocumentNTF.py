@@ -39,6 +39,7 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	.. plot::
 
 	   from deltasigma import *
+	   import numpy as np
 	   import pylab as plt
 	   order = 4
 	   osr = 64
@@ -48,10 +49,10 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
 	   form = 'CRFB'
 	   ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
 	   a, g, b, c = realizeNTF(ntf, form)
-	   b = np.hstack(( # Use a single feed-in for the input
-	                  np.atleast_2d(b[0, 0]),
-	                  np.zeros((1, max(b.shape)-1))
-	                ))
+	   b = np.concatenate(( # Use a single feed-in for the input
+	                       np.atleast_1d(b[0]),
+	                       np.zeros((b.shape[0] - 1,))
+	                     ))
 	   ABCD = stuffABCD(a, g, b, c, form)
 	   DocumentNTF(ABCD, osr, f0)
 
