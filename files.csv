@@ -107,7 +107,7 @@ simulateESL.c,C,,,0.3
 simulateESL.m,M-file,,,0.3
 simulateHBF.m,M-file,,,0.4
 simulateQDSM.m,M-file,,,0.2
-simulateQESL.m,M-file,,,0.2
+simulateQESL.m,M-file,,,0.3
 simulateQSNR.m,M-file,,,0.2
 simulateSNR.m,M-file,x,,0.1
 sinc_decimate.m,M-file,x,,0.1
