@@ -360,9 +360,11 @@ def pretty_lti(arg):
         if ppstr[0] == '1' and len(ppstr[1]) and float(ppstr[1]) != 1.:
             ppstr[0] = ppstr[1][:-1]
             ppstr[1] = ""
-        ppstr[1] += "-" * (max(len(ppstr[0]), len(ppstr[2])) + 2)
-        ppstr[0] = ppstr[0].center(len(ppstr[1]))
-        ppstr[2] = ppstr[2].center(len(ppstr[1]))
+        space_pad_ln = len(ppstr[1])
+        fraction_line = "-" * (max(len(ppstr[0]), len(ppstr[2])) + 2)
+        ppstr[1] += fraction_line
+        ppstr[0] = " "*space_pad_ln + ppstr[0].center(len(fraction_line))
+        ppstr[2] = " "*space_pad_ln + ppstr[2].center(len(fraction_line))
     return "\n".join(ppstr)
 
 
@@ -929,9 +931,9 @@ def test_pretty_lti():
     assert pretty_lti([[], [.22222222], 2]) == \
         '      2       \n--------------\n (z - 0.2222) '
     assert pretty_lti(((0, 0, 1), (1, 2-1j, 2+1j, 2-1j, 2+1j), 5)) == \
-        '        z^2 (z - 1)         \n' + \
+        '         z^2 (z - 1)        \n' + \
         '5 --------------------------\n' + \
-        '  (z^2 - 4z + 5)^2 (z - 1)  '
+        '   (z^2 - 4z + 5)^2 (z - 1) '
 
 
 def test_cell_like_list():
