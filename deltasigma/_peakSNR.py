@@ -22,6 +22,7 @@ from numpy.linalg import lstsq
 
 from ._dbv import dbv
 from ._config import _debug
+from ._utils import carray
 
 def peakSNR(snr, amp):
     """Find the snr peak by fitting a smooth curve to the top end of the SNR 
@@ -49,13 +50,12 @@ def peakSNR(snr, amp):
         snr = np.delete(snr, np.where(i))
         amp = np.delete(amp, np.where(i))
     # sanitize inputs
+    snr = carray(snr).squeeze()
+    amp = carray(amp).squeeze()
     for x in (snr, amp):
-        if not hasattr(x, 'ndim'):
-            x = np.array(x)
         if len(x.shape) > 1 and np.prod(x.shape) != max(x.shape):
             raise ValueError("snr and amp should be vectors (ndim=1)" +
                              "snr.shape: %s, amp.shape: %s" % (snr.shape, amp.shape))
-        x = x.squeeze
     # All good
     max_snr = np.max(snr)
     i = np.flatnonzero(snr > max_snr - 10)
