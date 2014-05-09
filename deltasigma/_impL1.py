@@ -96,6 +96,7 @@ def impL1(arg1, n=10):
 
 def test_impL1():
 	"""Test function for impL1()"""
+	from scipy.signal import lti
 	sys1 = (np.array([-.4]), np.array([0, 0]), 1) # zpk
 	r2 = np.array([0., 0.400000000000000, -0.160000000000000, 0.064000000000000,
 	               -0.025600000000000, 0.010240000000000, -0.004096000000000,
@@ -103,4 +104,13 @@ def test_impL1():
 	               -0.000104857600000])
 	r1 = impL1(sys1, n=10)
 	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-4)
+	num = np.poly(sys1[0])
+	den = np.poly(sys1[1])
+	num[0] *= sys1[2]
+	tf = (num, den)
+	r3 = impL1(tf, n=10)
+	assert np.allclose(r1, r3, atol=1e-8, rtol=1e-4)
+	tf = lti(*sys1)
+	r4 = impL1(tf, n=10)
+	assert np.allclose(r1, r4, atol=1e-8, rtol=1e-4)
 
