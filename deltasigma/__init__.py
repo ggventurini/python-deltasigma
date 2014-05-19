@@ -475,16 +475,13 @@ Key Functions
 Functions for quadrature systems
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Notice the current version of ``python-deltasigma`` cannot synthesize
-quadrature modulators. This feature is expected in v. 0.2.
-
-Nontheless, the following functions are provided since if you already have
-a synthesized modulator (or know its ABCD matrix), they allow you to simulate
-the modulator with the standard tools for real ABCDs topologies.
+The following functions are available for quadrature modulators.
+Completion of these features is expected in v. 0.2.
 
 .. autosummary::
     :nosignatures:
 
+    calculateQTF
     mapQtoR
     mapRtoQ
 
@@ -632,6 +629,7 @@ from ._bquantize import bquantize
 from ._bunquantize import bunquantize
 from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
+from ._calculateQTF import calculateQTF
 from ._cancelPZ import cancelPZ
 from ._changeFig import changeFig
 from ._circ_smooth import circ_smooth
