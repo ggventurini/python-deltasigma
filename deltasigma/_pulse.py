@@ -84,7 +84,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
                 or _is_A_B_C_D(S[0][0])):
 		pass
 	else:
-		S = map(list, zip(S)) #S[input][output]
+		S = list(zip(S)) #S[input][output]
 	y1 = None
 	for Si in S:
 		y2 = None
@@ -104,10 +104,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	nd = int(np.round(dt/delta_t, 0))
 	nf = int(np.round(tfinal/delta_t, 0))
 	ndac = tp.shape[0]
-	# This could be a way to check that we got a list of zpk/tf/lti objects 
-	# instead of a single object. Right now, we do not check. 
-	#if type(S) == tuple and type(S[0]) == tuple and np.isscalar(S[0][0]):
-	#	S = [[lti(S)]]
+
 	ni = len(S) # number of inputs
 	
 	if ni % ndac != 0:
