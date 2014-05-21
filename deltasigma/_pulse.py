@@ -18,10 +18,12 @@ pulse response of a CT system.
 """
 
 from __future__ import division
+import collections
 import numpy as np
 from scipy.signal import step2, lti
 
 from ._utils import lcm, rat, carray
+from ._utils import _is_zpk, _is_num_den, _is_A_B_C_D
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	"""Calculate the sampled pulse response of a CT system. 
@@ -33,6 +35,12 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 
 	S : sequence
 	    A sequence of LTI objects specifying the system.
+
+	The sequence S should be assembled so that ``S[i][j] returns the
+	LTI system description from input ``i`` to the output ``j``.
+
+	In the case of a MISO system, a unidimensional sequence ``S[i]``
+	is also acceptable.
 
 	tp : array-like	
 	    An (n, 2) array of pulse timings
@@ -70,15 +78,28 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	x, df = rat(tfinal, 1e-3)
 	delta_t = 1./lcm(dd, lcm(ddt, df))
 	delta_t = max(1e-3, delta_t)	# Put a lower limit on delta_t
+	if isinstance(S, collections.Iterable) and len(S) \
+	   and isinstance(S[0], collections.Iterable) and len(S[0]) \
+           and (isinstance(S[0][0], lti) or _is_zpk(S[0][0]) or _is_num_den(S[0][0]) \
+                or _is_A_B_C_D(S[0][0])):
+		pass
+	else:
+		S = map(list, zip(S)) #S[input][output]
 	y1 = None
 	for Si in S:
-		T1, y1i= step2(Si, T=np.arange(0., tfinal + delta_t, delta_t))
+		y2 = None
+		for So in Si:
+			T1, y2i = step2(So, T=np.arange(0., tfinal + delta_t, delta_t))
+			if y2 is None:
+				y2 = y2i.reshape((y2i.shape[0], 1, 1))
+			else:
+				y2 = np.concatenate((y2,
+                                                     y2i.reshape((y2i.shape[0], 1, 1))),
+                                                     axis=1)
 		if y1 is None:
-			y1 = y1i.reshape((y1i.shape[0], 1, 1))
+			y1 = y2
 		else:
-			y1 = np.concatenate((y1, 
-                                             y1i.reshape((y1i.shape[0], 1, 1))), 
-                                             axis=2)
+			y1 = np.concatenate((y1, y2), axis=2)
 
 	nd = int(np.round(dt/delta_t, 0))
 	nf = int(np.round(tfinal/delta_t, 0))
@@ -97,14 +118,11 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 
 	nis = int(ni/ndac) # Number of inputs grouped together with a common DAC timing
 	                   # (2 for the complex case)
-	# Notice the number of outputs is hard-coded to one in the following
-	# delsigma actually allows for supplying pulse() objects that have 
-	# a variable number of outputs. As we have no MIMO description available,
-	# we consider only 1-output systems
+	# notice len(S[0]) is the number of outputs for us
 	if not nosum: # Sum the responses due to each input set
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, 1, nis))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), nis))
 	else:
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, 1, ni))
+		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), ni))
 
 	for i in range(ndac):
 		n1 = int(np.round(tp[i, 0]/delta_t, 0))
