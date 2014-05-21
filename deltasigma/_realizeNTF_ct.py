@@ -22,7 +22,6 @@ from warnings import warn
 import numpy as np
 import numpy.linalg as linalg
 from scipy.signal import ss2zpk
-#from ._ltisys import ss2zpk
 
 from ._evalTFP import evalTFP
 from ._impL1 import impL1
@@ -227,7 +226,10 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     y = impL1(ntf, n_imp)
     sys_c = []
     for i in range(Bc.shape[1]): # number of inputs
-        sys_c.append(ss2zpk(Ac, Bc, Cc, Dc, input=i))
+        sys_tmp = []
+        for j in range(Cc.shape[0]): # number of outputs
+            sys_tmp.append(ss2zpk(Ac, Bc, Cc[j, :], Dc[j, :], input=i))
+        sys_c.append(sys_tmp)
     yy = pulse(sys_c, tp, 1, n_imp, 1)
     yy = np.squeeze(yy)
     # Endow yy with n_extra extra impulses.
@@ -265,7 +267,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
             Dc2 = BcDc[-1, :]
     elif form == 'FF':
         Bc2 = np.hstack((Bc, np.zeros((order, n_extra))))
-        Cc = x[:order].T
+        Cc = x[:order].reshape((1, -1))
         if n_extra > 0:
             Dc2 = np.hstack((np.array([[0]]), x[order:].T))
         else:
