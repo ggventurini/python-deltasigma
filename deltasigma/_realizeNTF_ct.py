@@ -339,3 +339,13 @@ def test_realizeNTF_ct():
                           ( 1.0000,   1.5000)))
     assert np.allclose(ABCDc, ABCDc_ref, atol=1e-8, rtol=1e-4)
     assert np.allclose(tdac2, tdac2_ref, atol=1e-8, rtol=1e-4)
+
+    # test for FF
+    ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
+    ABCDc, tdac2 = realizeNTF_ct(ntf, 'FF')
+    ABCDc_ref = np.array([[0., 0., 1., -1.],
+                          [1., 0., 0.,  0.],
+                          [ 1.5, 1., 0., 0.]])
+    tdac2_ref = np.array([[-1., -1.], [ 0., 1.]])
+    assert np.allclose(ABCDc, ABCDc_ref, atol=1e-8, rtol=1e-4)
+    assert np.allclose(tdac2, tdac2_ref, atol=1e-8, rtol=1e-4)
