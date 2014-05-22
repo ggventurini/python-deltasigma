@@ -36,7 +36,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 	S : sequence
 	    A sequence of LTI objects specifying the system.
 
-	The sequence S should be assembled so that ``S[i][j] returns the
+	The sequence S should be assembled so that ``S[i][j]`` returns the
 	LTI system description from input ``i`` to the output ``j``.
 
 	In the case of a MISO system, a unidimensional sequence ``S[i]``
