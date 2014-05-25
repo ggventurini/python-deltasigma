@@ -23,13 +23,27 @@ import numpy as np
 def ds_quantize(y, n=2):
     """Quantize ``y``
 
-    Quantize y to:
+    Quantize a vector :math:`y` to:
 
-     * an odd integer in [-n+1, n-1], if n is even, or
-     * an even integer in [-n+1, n-1], if n is odd.
+     * an odd integer in :math:`[-n+1, n-1]`, if :math:`n` is even, or
+     * an even integer in :math:`[-n+1, n-1]`, if :math:`n` is odd.
+
+    The quantizer implementation details are repeated here from its
+    documentation for the user's convenience:
+
+       The quantizer is ideal, producing integer outputs centered
+       about zero. Quantizers with an even number of levels are of
+       the mid-rise type and produce outputs which are odd integers.
+       Quantizers with an odd number of levels are of the mid-tread
+       type and produce outputs which are even integers.
 
     This definition gives the same step height for both mid-rise
     and mid-tread quantizers.
+
+    .. image:: ../doc/_static/quantizer_model.png
+        :align: center
+        :alt: Quantizer model
+
 
     **Parameters:**
 
@@ -43,6 +57,10 @@ def ds_quantize(y, n=2):
 
     v : ndarray
         The quantized vector.
+
+    .. seealso::
+        :func:`bquantize`, :func:`bunquantize`
+
     """
     assert (np.round(n, 0) == n).all()  # did we get an int or an array of int?
     if not hasattr(n, 'shape'):
