@@ -30,7 +30,7 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
     """Predict the SNR curve of a binary delta-sigma modulator.
 
     The prediction is performed using the describing function method of Ardalan
-    and Paulos [1]_.
+    and Paulos [1]_ .
 
     **Parameters:**
     
