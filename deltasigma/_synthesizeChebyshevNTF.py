@@ -216,6 +216,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     ftol = 1e-06
     xtol = 1e-06
     x = 60
+    f_p = None # will be redefined later
     itn_limit = 10
     converged = False
     for itn in range(itn_limit):
@@ -236,8 +237,6 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
                 converged = True
                 break
             dx = -f*dx/df
-        if converged:
-            break
         x_p = x
         f_p = f
         x = max(x_min, min(x + dx, x_max))
