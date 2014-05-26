@@ -85,8 +85,8 @@ def impL1(arg1, n=10):
 	lf_num, lf_den = lf_num.squeeze(), lf_den.squeeze()
 	if not np.allclose(np.imag(all_lf), np.zeros(all_lf.shape), atol=1e-9):
 		# Complex loop filter
-		lfr_den = np.real(conv(lf_den, np.conj(lf_den))).squeeze()
-		lfr_num = conv(lf_num, np.conj(lf_den)).squeeze()
+		lfr_den = np.real(convolve(lf_den, np.conj(lf_den))).squeeze()
+		lfr_num = convolve(lf_num, np.conj(lf_den)).squeeze()
 		lf_i = (np.real(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
 		lf_q = (np.imag(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
 		_, y = dimpulse(lf_i, t=ts) + 1j*dimpulse(lf_q, t=ts)
