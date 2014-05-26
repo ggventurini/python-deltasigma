@@ -86,7 +86,7 @@ def test_lollipop():
     f = 20.
     a = np.sin(2*np.pi*f*t)
     plt.figure()
-    with catch_warnings(True) as w:
+    with catch_warnings(record=True) as w:
         lollipop(t, a, color=None, lw=1.5, ybot=0.1)
         assert len(w) > 0
     plt.grid(True)
