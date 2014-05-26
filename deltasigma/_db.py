@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -18,79 +18,82 @@ expressed in Volt, or a power, expressed in Watt, to dBm.
 """
 
 from __future__ import division
+from warnings import warn
 import numpy as np
 
 from ._dbp import dbp
 from ._dbv import dbv
 
+
 def db(x, input_type='voltage', R=1.):
-	"""Calculate the dB equivalent of the RMS signal ``x``.
-	
-	For input type *'voltage'*, the return value is defined as
-	
-	.. math::
+    """Calculate the dB equivalent of the RMS signal ``x``.
 
-	    P_{dB} = 20 \\mathrm{log}_{10}\\left(\\frac{x}{R}\\right)
+    For input type ``"voltage"``, the return value is defined as
 
+    .. math::
 
-	Otherwise, for input type *'power'*,
-
-	.. math::
-
-	    P_{dB} = 10 \\mathrm{log}_{10}(x)
+        P_{dB} = 20 \\mathrm{log}_{10}\\left(\\frac{x}{R}\\right)
 
 
-	**Parameters:**
+    Otherwise, for input type ``"power"``,
 
-	x : scalar or sequence
-	    The signal to be converted.
+    .. math::
 
-	input_type : string, optional
-            The input type, either "voltage" or "power"
-
-	R : float, optional
-	    The normalization resistor value, used only for voltages. 
+        P_{dB} = 10 \\mathrm{log}_{10}(x)
 
 
-	**Returns:**
+    **Parameters:**
 
-	PdB : scalar or sequence
-	    The input expressed in dB.
-	
+    x : scalar or sequence
+        The signal to be converted.
 
-	.. note:: MATLAB provides a function with this exact signature.
+    input_type : string, optional
+        The input type, either ``"voltage"`` or ``"power"``.
 
-	.. seealso:: :func:`undbm`, :func:`undbv`, :func:`undbp`, :func:`dbv`, :func:`dbp`, :func:`dbv`
+    R : float, optional
+        The normalization resistor value, used only for voltage inputs.
 
-	"""
-	if input_type.lower().strip() == 'voltage':
-		y = dbv(x) - 10.*np.log10(R)
-	elif input_type.lower().strip() == 'power':
-		y = dbp(x)
-		if R != 1.:
-			warn("db called with a non default R value, " + 
-			     "but R is going to be ignored since input_type is power",
-				 RuntimeWarning)
-	else:
-		raise ValueError("db got input_type %s, instead of voltage or power" % input_type)
-	return y
+
+    **Returns:**
+
+    PdB : scalar or sequence
+        The input expressed in dB.
+
+
+    .. note:: MATLAB provides a function with this exact signature.
+
+    .. seealso:: :func:`undbm`, :func:`undbv`, :func:`undbp`, :func:`dbv`, :func:`dbp`, :func:`dbv`
+
+    """
+    if input_type.lower().strip() == 'voltage':
+        y = dbv(x) - 10. * np.log10(R)
+    elif input_type.lower().strip() == 'power':
+        y = dbp(x)
+        if R != 1.:
+            warn("db called with a non default R value, " +
+                 "but R is going to be ignored since input_type is power",
+                 RuntimeWarning)
+    else:
+        raise ValueError("db got input_type %s, instead of voltage or power" % input_type)
+    return y
+
 
 def test_db():
-	"""Test function for db()
-	"""
-	from ._undbv import undbv
-	tv = np.array([2])
-	r = np.array([3.01029996])
-	res = db(tv, 'power')
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	tv = 2
-	r = 3.01029996
-	res = db(tv, 'power') 
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	tv = 2, 2
-	r = 3.01029996, 3.01029996
-	res = db(tv, 'power')
-	assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-	t = np.array([3.0])
-	r1 = undbv(db(t, 'voltage'))
-	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
+    """Test function for db()
+    """
+    from ._undbv import undbv
+    tv = np.array([2])
+    r = np.array([3.01029996])
+    res = db(tv, 'power')
+    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+    tv = 2
+    r = 3.01029996
+    res = db(tv, 'power')
+    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+    tv = 2, 2
+    r = 3.01029996, 3.01029996
+    res = db(tv, 'power')
+    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
+    t = np.array([3.0])
+    r1 = undbv(db(t, 'voltage'))
+    assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
