@@ -257,7 +257,7 @@ def test_synthesizeChebyshevNTF():
     assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
     assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
     assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
-    with catch_warnings(True) as w:
+    with catch_warnings(record=True) as w:
         z, p, k = synthesizeChebyshevNTF(order=4, OSR=32, opt=1, H_inf=1.5, f0=.33)
         assert len(w) > 0
     zref = [-.4513 + .8924j, -.4513 - .8924j, -.5122 + 0.8589j, -.5122 - 0.8589j]
