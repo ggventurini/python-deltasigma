@@ -34,13 +34,15 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     amplitudes and calculate the signal-to-noise ratio (SNR) in dB for each 
     input.
 
-    Two alternative descriptions of the modulator can be used:
+    Three alternative descriptions of the modulator can be used:
 
      * The modulator is described by a noise transfer function (NTF), provided
        as ``arg1`` and the number of quantizer levels (``nlev``).
 
-     * Alternatively, the first argument to simulateSNR may be an ABCD matrix or
-       the name of a function taking the input signal as its sole argument.
+     * Alternatively, the first argument to simulateSNR may be an ABCD matrix. 
+
+     * Lastly, ``arg1`` may be a function taking the input signal as its
+       sole argument.
 
     The band of interest is defined by the oversampling ratio (``osr``)
     and the center frequency (``f0``).
@@ -56,9 +58,11 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     associated with the input tone. Due to spectral smearing, the input tone
     is not allowed to lie in bins 0 or 1. The length of the FFT is :math:`2^k`.
 
-    If ntf is complex, simulateQDSM (which is slow) is called.
-    If ABCD is complex, simulateDSM is used with the real equivalent of ABCD
-    in order to speed up simulations.
+    If the NTF is complex, :func:`simulateQDSM` (which is slow, also [1]_ )
+    is called.
+
+    If ABCD is complex, :func:`simulateDSM` is used with the real equivalent
+    of ABCD in order to speed up simulations.
 
     Future versions may accommodate STFs.
 
@@ -109,12 +113,16 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     **Returns:**
 
     snr : ndarray
-        The SNR, from simulation
+        The SNR, from simulation.
 
     amp : ndarray
         The amplitudes corresponding to the SNR values.
 
-    **Example:**
+    .. rubric:: Footnotes:
+
+    .. [1] :func:`simulateQDSM` will be available in a future release.
+
+    .. rubric:: Example:
 
     Compare the SNR vs input amplitude curve for a fifth-order modulator, as 
     determined by the describing function method (:func:`predictSNR`) with
@@ -126,14 +134,17 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)
         snr, amp = simulateSNR(H, OSR)
-        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.plot(amp, snr_pred, 'b', label='Predicted')
+        plt.hold(True)
+        plt.plot(amp, snr, 'go', label='Simulated')
         plt.grid(True)
         figureMagic([-100, 0], 10, None,
                     [0, 100], 10, None)
         plt.xlabel('Input Level, dB')
-        plt.ylabel('SNR dB')
+        plt.ylabel('SNR, dB')
         s = 'peak SNR = %4.1fdB\\n' % max(snr)
         plt.text(-65, 15, s, horizontalalignment='left')
+        plt.legend(loc='best')
 
     .. plot::
 
@@ -143,14 +154,17 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)
         snr, amp = simulateSNR(H, OSR)
-        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.plot(amp, snr_pred, 'b', label='Predicted')
+        plt.hold(True)
+        plt.plot(amp, snr, 'go', label='Simulated')
         plt.grid(True)
         figureMagic([-100, 0], 10, None,
                     [0, 100], 10, None)
         plt.xlabel('Input Level, dB')
-        plt.ylabel('SNR dB')
+        plt.ylabel('SNR, dB')
         s = 'peak SNR = %4.1fdB\\n' % max(snr)
         plt.text(-65, 15, s, horizontalalignment='left')
+        plt.legend(loc='best')
 
     """
     # Look at arg1 and decide if the system is quadrature
