@@ -58,8 +58,8 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     associated with the input tone. Due to spectral smearing, the input tone
     is not allowed to lie in bins 0 or 1. The length of the FFT is :math:`2^k`.
 
-    If the NTF is complex, :func:`simulateQDSM` (which is slow, also [1]_ )
-    is called.
+    If the NTF is complex, :func:`simulateQDSM` (which is slow, also available
+    in a future release) is called.
 
     If ABCD is complex, :func:`simulateDSM` is used with the real equivalent
     of ABCD in order to speed up simulations.
@@ -117,10 +117,6 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
 
     amp : ndarray
         The amplitudes corresponding to the SNR values.
-
-    .. rubric:: Footnotes:
-
-    .. [1] :func:`simulateQDSM` will be available in a future release.
 
     .. rubric:: Example:
 

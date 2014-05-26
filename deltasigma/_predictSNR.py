@@ -30,7 +30,7 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
     """Predict the SNR curve of a binary delta-sigma modulator.
 
     The prediction is performed using the describing function method of Ardalan
-    and Paulos [1]_ .
+    and Paulos [2]_ .
 
     **Parameters:**
     
@@ -101,7 +101,7 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
 
     .. rubric:: References
 
-    .. [1] Ardalan, S.H.; Paulos, J.J., "An analysis of nonlinear behavior in
+    .. [2] Ardalan, S.H.; Paulos, J.J., "An analysis of nonlinear behavior in
            delta - sigma modulators," Circuits and Systems, IEEE Transactions
            on, vol.34, no.6, pp.593,603, Jun 1987
     
