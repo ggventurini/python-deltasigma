@@ -145,7 +145,7 @@ def predictSNR(ntf, R=64, amp=None, f0=0.):
     if amp is None:
         amp = np.concatenate((np.arange(- 120, -20 + 1, 10),
                               np.array((-15,)),
-                             np.arange(-10, 1)
+                              np.arange(-10, 1)
                             ))
     num = np.real_if_close(num)
     den = np.real_if_close(den)
