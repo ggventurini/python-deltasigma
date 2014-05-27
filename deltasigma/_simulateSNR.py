@@ -262,10 +262,13 @@ def test_simulateSNR():
     import numpy as np
     import pkg_resources
     import scipy.io
+    from scipy.signal import lti
     from ._mapABCD import mapABCD
     from ._realizeNTF import realizeNTF
     from ._stuffABCD import stuffABCD
     from ._synthesizeNTF import synthesizeNTF
+
+    # first test: f0 = 0
     # Load test references
     fname = pkg_resources.resource_filename(__name__, "test_data/test_snr_amp.mat")
     amp_ref = scipy.io.loadmat(fname)['amp'].reshape((-1,))
@@ -302,8 +305,7 @@ def test_simulateSNR():
     # We do three tests:
     # SNR from ABCD matrix
     # SNR from NTF
-    # SNR from ABCD matrix with user specified amplitudes
-    assert np.allclose(ABCD, ABCD_ref, atol=9e-5, rtol=1e-4)
+    # SNR from LTI obj with user specified amplitudes
     snr, amp = simulateSNR(ABCD, osr, None, f0, nlev);
     assert np.allclose(snr, snr_ref, atol=1, rtol=5e-2)
     assert np.allclose(amp, amp_ref, atol=5e-1, rtol=1e-2)
@@ -311,6 +313,40 @@ def test_simulateSNR():
     assert np.allclose(snr2, snr_ref, atol=1e-5, rtol=1e-5)
     assert np.allclose(amp2, amp_ref, atol=1e-5, rtol=1e-5)
     amp_user = np.linspace(-100, 0, 200)[::10]
-    snr_user, amp_user = simulateSNR(ABCD, osr, amp_user, f0, nlev)
+    snr_user, amp_user = simulateSNR(lti(*ntf), osr=osr, amp=amp_user, f0=f0,
+                                     nlev=nlev)
     assert np.allclose(snr_user, snr_user_ref[::10], atol=1e-5, rtol=1e-5)
     assert np.allclose(amp_user, amp_user_ref[::10], atol=1e-5, rtol=1e-5)
+
+    # next test: f0 = 0
+    # Load test references
+    fname = pkg_resources.resource_filename(__name__, "test_data/test_snr_amp2.mat")
+    amp_ref = scipy.io.loadmat(fname)['amp'].reshape((-1,))
+    snr_ref = scipy.io.loadmat(fname)['snr'].reshape((-1,))
+    ABCD_ref = scipy.io.loadmat(fname)['ABCD'].reshape((4, 5))
+
+    order = 3;
+    osr = 256;
+    nlev = 2;
+    f0 = 0.;
+    Hinf = 1.25;
+    form = 'CIFB';
+
+    ntf = synthesizeNTF(order, osr, 2, Hinf, f0);
+
+    a1, g1, b1, c1 = realizeNTF(ntf, form);
+    a1_ref = [0.008863535715733, 0.093216950269955, 0.444473912607388]
+    g1_ref = [9.035620546615189e-05]
+    b1_ref = [0.008863535715733, 0.093216950269955, 0.444473912607388, 1.]
+    c1_ref = [1., 1., 1.]
+    assert np.allclose(a1, a1_ref, atol=1e-9, rtol=5e-5)
+    assert np.allclose(g1, g1_ref, atol=1e-9, rtol=5e-5)
+    assert np.allclose(b1, b1_ref, atol=1e-9, rtol=1e-4)
+    assert np.allclose(c1, c1_ref, atol=1e-9, rtol=2e-5)
+
+    ABCD = stuffABCD(a1, g1, b1, c1, form);
+    assert np.allclose(ABCD, ABCD_ref, atol=9e-5, rtol=1e-4)
+    snr, amp = simulateSNR(ABCD, osr, None, f0, nlev)
+    assert np.allclose(snr, snr_ref, atol=1e-5, rtol=1e-5)
+    assert np.allclose(amp, amp_ref, atol=1e-5, rtol=1e-5)
+    
