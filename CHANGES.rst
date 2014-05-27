@@ -7,6 +7,13 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-3**: Bugfixes, PEP8, more test coverage
+ * ``deltasigma/_realizeNT_ct.py`` now supports ``FF`` topologies.
+ * ``deltasigma/_pulse.py`` now supports MIMO systems.
+ * ``pretty_lti()`` has been improved to provide the prettiest printing of LTIs
+   to date.
+ * Many documentation improvements and PEP8-related fixes.
+
 **0.1-2**: Bugfixes, PEP8, DOC and most importantly a, g, b, c reshape.
  * The a, g, b, c coefficients are now 1-dimensional.
  * ``deltasigma/_stuffABCD.py``: scalar ``b`` bugfix.
