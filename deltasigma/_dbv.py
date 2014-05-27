@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -18,40 +18,39 @@
 
 import numpy as np
 from ._undbv import undbv
-import numpy as np
 
 from ._utils import carray, save_input_form, restore_input_form
 
 def dbv(x):
-	"""Calculate the dB equivalent of the voltage ratio ``x``.
+    """Calculate the dB equivalent of the voltage ratio ``x``.
 
-	.. math::
+    .. math::
 
-	    G_{dB} = 20 \\mathrm{log}_{10}(|x|)
+        G_{dB} = 20 \\mathrm{log}_{10}(|x|)
 
-	**Parameters:**
+    **Parameters:**
 
-	x : scalar or sequence
-	    The voltage (ratio) to be converted.
+    x : scalar or sequence
+        The voltage (ratio) to be converted.
 
-	**Returns:**
+    **Returns:**
 
-	GdB : scalar or sequence
-	       The input voltage (ratio) expressed in dB.
+    GdB : scalar or sequence
+        The input voltage (ratio) expressed in dB.
 
-	.. seealso:: :func:`undbv`, :func:`db`, :func:`dbp`, :func:`dbm`
+    .. seealso:: :func:`undbv`, :func:`db`, :func:`dbp`, :func:`dbm`
 
-	"""
-	iform = save_input_form(x)
-	x = carray(x)
-	y = -np.inf*np.ones(x.shape)
-	nonzero = (x != 0)
-	y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))
-	return restore_input_form(y, iform)
+    """
+    iform = save_input_form(x)
+    x = carray(x)
+    y = -np.inf*np.ones(x.shape)
+    nonzero = (x != 0)
+    y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))
+    return restore_input_form(y, iform)
 
 def test_dbv():
-	"""Test function for dbv()"""
-	t = np.array([3.0])
-	r1 = undbv(dbv(t))
-	assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
+    """Test function for dbv()"""
+    t = np.array([3.0])
+    r1 = undbv(dbv(t))
+    assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
 
