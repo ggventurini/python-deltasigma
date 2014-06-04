@@ -63,7 +63,7 @@ def ds_quantize(y, n=2):
 
     """
     assert (np.round(n, 0) == n).all()  # did we get an int or an array of int?
-    if not hasattr(n, 'shape'):
+    if not isinstance(n, np.ndarray):
         n = n * np.ones(y.shape)  # we got an int
     else:
         assert len(n.shape) == 1 or 1 in n.shape

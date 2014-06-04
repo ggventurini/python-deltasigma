@@ -70,7 +70,7 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10 * eps):
 
     """
 
-    n = x.shape[0] if hasattr(x, 'shape') else len(x)
+    n = x.shape[0] if isinstance(x, np.ndarray) else len(x)
     #q = np.zeros((2*n, nsd)) in the original source #rep?
     y = [empty() for i in range(n)]
     offset = -np.log2(0.75)
