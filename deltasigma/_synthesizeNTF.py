@@ -147,8 +147,6 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 def test_synthesizeNTF():
     """Test function for synthesizeNTF()"""
     from ._utils import cplxpair
-    from ._config import optimize_NTF
-    optimize_NTF = True
     # synthesizeNTF should have as default values:
     # order=3, osr=64, opt=0, H_inf=1.5, f0=0.0
     z, p, k = synthesizeNTF()
