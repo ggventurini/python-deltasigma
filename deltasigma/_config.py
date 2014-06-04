@@ -18,8 +18,9 @@
 
 # should synthesizeNTF run the optimization routine?
 optimize_NTF = True
-# how many iterations should allow to converge on NTF synthesis?
-# see synthesizeNTF
+
+# how many iterations should be allowed in NTF synthesis?
+# see synthesizeNTF() for more
 itn_limit = 500
 
 # debug
