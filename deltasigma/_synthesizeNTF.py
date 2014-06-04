@@ -138,7 +138,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     if opt.ndim > 1 or (opt.ndim == 1 and opt.size != order):
         raise ValueError('The opt vector must be of length %d.' % order)
 
-    if optimize_NTF == False:
+    if not optimize_NTF:
         ntf = synthesizeNTF0(order, osr, opt, H_inf, f0)
     else:
         ntf = synthesizeNTF1(order, osr, opt, H_inf, f0)
