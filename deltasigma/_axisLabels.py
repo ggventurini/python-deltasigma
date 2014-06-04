@@ -16,6 +16,8 @@
 """Module providing the axisLabel() function
 """
 
+import collections
+
 import numpy as np
 
 
@@ -48,7 +50,7 @@ def axisLabels(ran, incr):
     """
     ran[np.abs(ran) < 1e-6] = 0
     s = []
-    if not hasattr(incr, '__len__'):
+    if not isinstance(incr, collections.Iterable):
         incr = int(incr)
         first = 0
     elif len(incr) == 2:

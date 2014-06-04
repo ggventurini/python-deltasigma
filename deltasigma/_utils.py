@@ -89,8 +89,8 @@ def mfloor(x):
 def carray(x):
     """Check that x is an ndarray. If not, try to convert it to ndarray.
     """
-    if not hasattr(x, 'shape'):
-        if not hasattr(x, '__len__'):
+    if not isinstance(x, np.ndarray):
+        if not isinstance(x, collections.Iterable):
             x = np.array((x,))
         else:
             x = np.array(x)
@@ -265,7 +265,7 @@ def save_input_form(a):
     """
     if np.isscalar(a):
         ret = 'scalar'
-    elif hasattr(a, 'shape'):
+    elif isinstance(a, np.ndarray):
         ret = a.shape
     elif type(a) == tuple:
         ret = 'tuple'

@@ -17,6 +17,7 @@
 """
 
 from __future__ import division
+import collections
 from warnings import warn
 import numpy as np
 from numpy.fft import fft, fftshift
@@ -183,7 +184,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                               np.array((-15,)),
                               np.arange(-10, 1)
                             ))
-    elif not hasattr(amp, '__len__'):
+    elif not isinstance(amp, collections.Iterable):
         amp = np.array((amp, ))
     else:
         amp = np.asarray(amp)
