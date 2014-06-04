@@ -358,7 +358,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 			               np.zeros((1, order - 1)), 
 			               np.atleast_2d(1)
 			             ))
-	if not stf is None:
+	if stf is not None:
 		# Compute the TF from each feed-in to the output 
 		# and solve for coefficients which yield the best match
 		# THIS CODE IS NOT OPTIMAL,  in terms of computational efficiency.
