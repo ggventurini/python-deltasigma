@@ -55,7 +55,7 @@ lcm = lambda a, b: int(a * b / float(gcd(a, b)))
 lcm.__doc__ = """Calculate the Least Common Multiple of ``a`` and ``b``.\n"""
 
 
-class empty:
+class empty(object):
 
     """An empty function used to hold attributes"""
 
