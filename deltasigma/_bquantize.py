@@ -115,5 +115,5 @@ def test_bquantize():
         assert np.prod(mcsd[i].shape) + np.prod(ycsd[i].shape) == 0 or \
                mcsd[i].shape == ycsd[i].shape
 
-        if not 0 in ycsd[i].shape:
+        if 0 not in ycsd[i].shape:
             assert np.allclose(mcsd[i], ycsd[i], atol=1e-8, rtol=1e-5)
