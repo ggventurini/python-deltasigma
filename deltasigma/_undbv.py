@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,34 +21,34 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def undbv(x):
-	"""Convert ``x`` from dB to voltage.
+    """Convert ``x`` from dB to voltage.
 
-	The conversion is carried out according to the relationship:
+    The conversion is carried out according to the relationship:
 
-	.. math::
+    .. math::
 
-	    V_{\\mathrm{RMS}} = 10^{x/20}
+        V_{\\mathrm{RMS}} = 10^{x/20}
 
-	**Parameters:**
+    **Parameters:**
 
-	x : scalar or sequence
-	    The signal in dB to be converted.
+    x : scalar or sequence
+        The signal in dB to be converted.
 
-	**Returns:**
+    **Returns:**
 
-	Vrms : scalar or sequence
-	       The RMS voltage corresponding to x.
+    Vrms : scalar or sequence
+           The RMS voltage corresponding to x.
 
-	.. seealso:: :func:`undbm`, :func:`undbp`, :func:`dbv`, :func:`db`
+    .. seealso:: :func:`undbm`, :func:`undbp`, :func:`dbv`, :func:`db`
 
-	"""
-	iform = save_input_form(x)
-	x = carray(x)
-	up = 10.**(x/20.)
-	return restore_input_form(up, iform)
-	
+    """
+    iform = save_input_form(x)
+    x = carray(x)
+    up = 10.**(x/20.)
+    return restore_input_form(up, iform)
+    
 def test_undbv():
-	"""Test function for undbv()"""
-	assert np.allclose([undbv(53.05)], [449.26232467], rtol=1e-05, atol=1e-08)
-	assert np.allclose([undbv(3)], [1.41253754462], rtol=1e-05, atol=1e-08)
+    """Test function for undbv()"""
+    assert np.allclose([undbv(53.05)], [449.26232467], rtol=1e-05, atol=1e-08)
+    assert np.allclose([undbv(3)], [1.41253754462], rtol=1e-05, atol=1e-08)
 

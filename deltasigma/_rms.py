@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,38 +21,38 @@ import numpy as np
 import numpy.linalg as la
 
 def rms(x, no_dc=False):
-	"""Calculate the RMS value of ``x``.
+    """Calculate the RMS value of ``x``.
 
-	The Root Mean Square value of an array :math:`x` of length :math:`n` is defined as:
+    The Root Mean Square value of an array :math:`x` of length :math:`n` is defined as:
 
-	.. math::
+    .. math::
 
-	    x_{RMS} = \\sqrt{\\frac{1}{n}(x_1^2 + x_2^2 + ...+x_n^2)}
+        x_{RMS} = \\sqrt{\\frac{1}{n}(x_1^2 + x_2^2 + ...+x_n^2)}
 
-	**Parameters:**
+    **Parameters:**
 
-	x : (N,) ndarray
-	    The input vector
+    x : (N,) ndarray
+        The input vector
 
-	no_dc : boolean, optional
-	    If set to ``True``, the DC value gets subtracted from ``x`` first and the RMS is computed on the result.
+    no_dc : boolean, optional
+        If set to ``True``, the DC value gets subtracted from ``x`` first and the RMS is computed on the result.
 
-	**Returns:**
+    **Returns:**
 
-	xrms : scalar
-	    as defined above
+    xrms : scalar
+        as defined above
 
-	"""
-	if no_dc:
-	    x = x - np.mean(x)
-	return la.norm(x)/np.sqrt(max(x.shape))
-	
+    """
+    if no_dc:
+        x = x - np.mean(x)
+    return la.norm(x)/np.sqrt(max(x.shape))
+    
 def test_rms():
-	"""Test function for rms()
-	"""
-	tv = np.arange(100)
-	res1 = np.sqrt(np.sum(tv**2.)/float(tv.shape[0]))
-	res2 = np.sqrt((np.sum((tv - tv.mean())**2.))/tv.shape[0])
-	assert np.allclose(rms(tv), res1, rtol=1e-05, atol=1e-08)
-	assert np.allclose(rms(tv, no_dc=True), res2, rtol=1e-05, atol=1e-08)
-	
+    """Test function for rms()
+    """
+    tv = np.arange(100)
+    res1 = np.sqrt(np.sum(tv**2.)/float(tv.shape[0]))
+    res2 = np.sqrt((np.sum((tv - tv.mean())**2.))/tv.shape[0])
+    assert np.allclose(rms(tv), res1, rtol=1e-05, atol=1e-08)
+    assert np.allclose(rms(tv, no_dc=True), res2, rtol=1e-05, atol=1e-08)
+
