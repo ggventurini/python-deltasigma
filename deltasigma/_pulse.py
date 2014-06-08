@@ -26,124 +26,134 @@ from ._utils import lcm, rat, carray
 from ._utils import _is_zpk, _is_num_den, _is_A_B_C_D
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
-	"""Calculate the sampled pulse response of a CT system. 
+    """Calculate the sampled pulse response of a CT system. 
 
-	``tp`` may be an array of pulse timings, one for each input, or even a
-	simple 2-elements tuple.
-	
-	**Parameters:**
+    ``tp`` may be an array of pulse timings, one for each input, or even a
+    simple 2-elements tuple.
+    
+    **Parameters:**
 
-	S : sequence
-	    A sequence of LTI objects specifying the system.
+    S : sequence
+        A sequence of LTI objects specifying the system.
 
-	The sequence S should be assembled so that ``S[i][j]`` returns the
-	LTI system description from input ``i`` to the output ``j``.
+    The sequence S should be assembled so that ``S[i][j]`` returns the
+    LTI system description from input ``i`` to the output ``j``.
 
-	In the case of a MISO system, a unidimensional sequence ``S[i]``
-	is also acceptable.
+    In the case of a MISO system, a unidimensional sequence ``S[i]``
+    is also acceptable.
 
-	tp : array-like	
-	    An (n, 2) array of pulse timings
+    tp : array-like    
+        An (n, 2) array of pulse timings
 
-	dt : scalar
-	    The time increment
+    dt : scalar
+        The time increment
 
-	tfinal : scalar
-	    The time of the last desired sample
+    tfinal : scalar
+        The time of the last desired sample
 
-	nosum : bool
-	    A flag indicating that the responses are not to be summed
+    nosum : bool
+        A flag indicating that the responses are not to be summed
 
-	**Returns:**
+    **Returns:**
 
-	y : ndarray
-	    The pulse response
-	"""
-	tp = carray(tp)
-	if len(tp.shape) == 1:
-		if not tp.shape[0] == 2:
-			raise ValueError("tp is not (n, 2)-shaped")
-		tp = tp.reshape((1, tp.shape[0]))
-	if len(tp.shape) == 2: 
-		if not tp.shape[1] == 2:
-			raise ValueError("tp is not (n, 2)-shaped")
+    y : ndarray
+        The pulse response
+    """
+    tp = carray(tp)
+    if len(tp.shape) == 1:
+        if not tp.shape[0] == 2:
+            raise ValueError("tp is not (n, 2)-shaped")
+        tp = tp.reshape((1, tp.shape[0]))
+    if len(tp.shape) == 2: 
+        if not tp.shape[1] == 2:
+            raise ValueError("tp is not (n, 2)-shaped")
 
-	# Compute the time increment
-	dd = 1;
-	for tpi in np.nditer(tp.T.copy(order='C')):
-		x, di = rat(tpi, 1e-3)
-		dd = lcm(di, dd)
+    # Compute the time increment
+    dd = 1;
+    for tpi in np.nditer(tp.T.copy(order='C')):
+        _, di = rat(tpi, 1e-3)
+        dd = lcm(di, dd)
 
-	x, ddt = rat(dt, 1e-3)
-	x, df = rat(tfinal, 1e-3)
-	delta_t = 1./lcm(dd, lcm(ddt, df))
-	delta_t = max(1e-3, delta_t)	# Put a lower limit on delta_t
-	if isinstance(S, collections.Iterable) and len(S) \
-	   and isinstance(S[0], collections.Iterable) and len(S[0]) \
+    _, ddt = rat(dt, 1e-3)
+    _, df = rat(tfinal, 1e-3)
+    delta_t = 1./lcm(dd, lcm(ddt, df))
+    delta_t = max(1e-3, delta_t)    # Put a lower limit on delta_t
+    if isinstance(S, collections.Iterable) and len(S) \
+       and isinstance(S[0], collections.Iterable) and len(S[0]) \
            and (isinstance(S[0][0], lti) or _is_zpk(S[0][0]) or _is_num_den(S[0][0]) \
                 or _is_A_B_C_D(S[0][0])):
-		pass
-	else:
-		S = list(zip(S)) #S[input][output]
-	y1 = None
-	for Si in S:
-		y2 = None
-		for So in Si:
-			T1, y2i = step2(So, T=np.arange(0., tfinal + delta_t, delta_t))
-			if y2 is None:
-				y2 = y2i.reshape((y2i.shape[0], 1, 1))
-			else:
-				y2 = np.concatenate((y2,
+        pass
+    else:
+        S = list(zip(S)) #S[input][output]
+    y1 = None
+    for Si in S:
+        y2 = None
+        for So in Si:
+            _, y2i = step2(So, T=np.arange(0., tfinal + delta_t, delta_t))
+            if y2 is None:
+                y2 = y2i.reshape((y2i.shape[0], 1, 1))
+            else:
+                y2 = np.concatenate((y2,
                                                      y2i.reshape((y2i.shape[0], 1, 1))),
                                                      axis=1)
-		if y1 is None:
-			y1 = y2
-		else:
-			y1 = np.concatenate((y1, y2), axis=2)
+        if y1 is None:
+            y1 = y2
+        else:
+            y1 = np.concatenate((y1, y2), axis=2)
 
-	nd = int(np.round(dt/delta_t, 0))
-	nf = int(np.round(tfinal/delta_t, 0))
-	ndac = tp.shape[0]
+    nd = int(np.round(dt/delta_t, 0))
+    nf = int(np.round(tfinal/delta_t, 0))
+    ndac = tp.shape[0]
 
-	ni = len(S) # number of inputs
-	
-	if ni % ndac != 0:
-		raise ValueError('The number of inputs must be divisible by the number of dac timings.')
-		# Original comment from the MATLAB sources:
-		# This requirement comes from the complex case, where the number of inputs
-		# is 2 times the number of dac timings. I think this could be tidied up.
+    ni = len(S) # number of inputs
+    
+    if ni % ndac != 0:
+        raise ValueError('The number of inputs must be divisible by the number of dac timings.')
+        # Original comment from the MATLAB sources:
+        # This requirement comes from the complex case, where the number of inputs
+        # is 2 times the number of dac timings. I think this could be tidied up.
 
-	nis = int(ni/ndac) # Number of inputs grouped together with a common DAC timing
-	                   # (2 for the complex case)
-	# notice len(S[0]) is the number of outputs for us
-	if not nosum: # Sum the responses due to each input set
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), nis))
-	else:
-		y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), ni))
+    # nis: Number of inputs grouped together with a common DAC timing
+    # (2 for the complex case)
+    nis = int(ni/ndac) 
 
-	for i in range(ndac):
-		n1 = int(np.round(tp[i, 0]/delta_t, 0))
-		n2 = int(np.round(tp[i, 1]/delta_t, 0))
-		z1 = (n1, y1.shape[1], nis)
-		z2 = (n2, y1.shape[1], nis)
-		yy = + np.concatenate((np.zeros(z1), y1[:nf-n1+1, :, i*nis:(i + 1)*nis]), axis=0) \
-		     - np.concatenate((np.zeros(z2), y1[:nf-n2+1, :, i*nis:(i + 1)*nis]), axis=0)
-		yy = yy[::nd, :, :]
-		if not nosum: # Sum the responses due to each input set
-			y = y + yy
-		else:
-			y[:, :, i] = yy.reshape(yy.shape[0:2])
-	return y
+    # notice len(S[0]) is the number of outputs for us
+    if not nosum: # Sum the responses due to each input set
+        y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), nis))
+    else:
+        y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), ni))
+
+    for i in range(ndac):
+        n1 = int(np.round(tp[i, 0]/delta_t, 0))
+        n2 = int(np.round(tp[i, 1]/delta_t, 0))
+        z1 = (n1, y1.shape[1], nis)
+        z2 = (n2, y1.shape[1], nis)
+        yy = + np.concatenate((np.zeros(z1), y1[:nf-n1+1, :, i*nis:(i + 1)*nis]), axis=0) \
+             - np.concatenate((np.zeros(z2), y1[:nf-n2+1, :, i*nis:(i + 1)*nis]), axis=0)
+        yy = yy[::nd, :, :]
+        if not nosum: # Sum the responses due to each input set
+            y = y + yy
+        else:
+            y[:, :, i] = yy.reshape(yy.shape[0:2])
+    return y
 
 def test_pulse():
-	"""Test function for pulse()"""
-	import pkg_resources
-	import scipy.io
-	H = ([1], [1, 2, 10])
-	pp = pulse([H], tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
-	pp = pp.reshape((pp.shape[0], 1))
-	fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
-	pp2 = scipy.io.loadmat(fname)['pp']
-	assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
-	# FIXME ALSO CHECK MIMO TFS
-
+    """Test function for pulse()"""
+    import pkg_resources
+    import scipy.io
+    # SISO
+    H = ([1], [1, 2, 10])
+    pp = pulse([H], tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
+    pp = pp.reshape((pp.shape[0], 1))
+    fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
+    pp2 = scipy.io.loadmat(fname)['pp']
+    assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
+    # MISO
+    H0 = ([1], [1, 2, 10])
+    H1 = ([2], [1, 2, 10])
+    H2 = ([3], [1, 2, 10])
+    pp = pulse([[H0, H1, H2]], tp=(0., 1.), dt=.1, tfinal=10., nosum=True)
+    assert np.allclose(pp[:, 0, :], pp2, atol=1e-6, rtol=1e-4)
+    assert np.allclose(pp[:, 1, :], 2*pp2, atol=1e-6, rtol=1e-4)
+    assert np.allclose(pp[:, 2, :], 3*pp2, atol=1e-6, rtol=1e-4)
+    # FIXME ALSO CHECK MIMO TFS
