@@ -245,11 +245,11 @@ texinfo_domain_indices = False
 #texinfo_show_urls = 'footnote'
 
 def is_skip_function(app, what, name, obj, skip, options):
-	rg = re.compile('(test)', re.IGNORECASE|re.DOTALL)
-	m = rg.match(name)
-	ret = True if m else False
-	ret = ret or (name[0] == '_')
-	return ret
+    rg = re.compile('(test)', re.IGNORECASE|re.DOTALL)
+    m = rg.match(name)
+    ret = True if m else False
+    ret = ret or (name[0] == '_')
+    return ret
 
 def setup(app):
-	app.connect('autodoc-skip-member', is_skip_function)
+    app.connect('autodoc-skip-member', is_skip_function)
