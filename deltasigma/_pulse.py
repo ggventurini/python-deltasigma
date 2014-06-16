@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-"""This module provides the pulse() function, which calculates the sampled 
+"""This module provides the pulse() function, which calculates the sampled
 pulse response of a CT system.
 """
 
@@ -22,15 +22,15 @@ import collections
 import numpy as np
 from scipy.signal import step2, lti
 
-from ._utils import lcm, rat, carray
+from ._utils import lcm, rat
 from ._utils import _is_zpk, _is_num_den, _is_A_B_C_D
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
-    """Calculate the sampled pulse response of a CT system. 
+    """Calculate the sampled pulse response of a CT system.
 
     ``tp`` may be an array of pulse timings, one for each input, or even a
     simple 2-elements tuple.
-    
+
     **Parameters:**
 
     S : sequence
@@ -42,7 +42,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     In the case of a MISO system, a unidimensional sequence ``S[i]``
     is also acceptable.
 
-    tp : array-like    
+    tp : array-like
         An (n, 2) array of pulse timings
 
     dt : scalar
@@ -59,17 +59,17 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     y : ndarray
         The pulse response
     """
-    tp = carray(tp)
+    tp = np.asarray(tp)
     if len(tp.shape) == 1:
         if not tp.shape[0] == 2:
             raise ValueError("tp is not (n, 2)-shaped")
         tp = tp.reshape((1, tp.shape[0]))
-    if len(tp.shape) == 2: 
+    if len(tp.shape) == 2:
         if not tp.shape[1] == 2:
             raise ValueError("tp is not (n, 2)-shaped")
 
     # Compute the time increment
-    dd = 1;
+    dd = 1
     for tpi in np.nditer(tp.T.copy(order='C')):
         _, di = rat(tpi, 1e-3)
         dd = lcm(di, dd)
@@ -94,8 +94,8 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
                 y2 = y2i.reshape((y2i.shape[0], 1, 1))
             else:
                 y2 = np.concatenate((y2,
-                                                     y2i.reshape((y2i.shape[0], 1, 1))),
-                                                     axis=1)
+                                     y2i.reshape((y2i.shape[0], 1, 1))),
+                                    axis=1)
         if y1 is None:
             y1 = y2
         else:
@@ -106,7 +106,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     ndac = tp.shape[0]
 
     ni = len(S) # number of inputs
-    
+
     if ni % ndac != 0:
         raise ValueError('The number of inputs must be divisible by the number of dac timings.')
         # Original comment from the MATLAB sources:
@@ -115,7 +115,7 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
 
     # nis: Number of inputs grouped together with a common DAC timing
     # (2 for the complex case)
-    nis = int(ni/ndac) 
+    nis = int(ni/ndac)
 
     # notice len(S[0]) is the number of outputs for us
     if not nosum: # Sum the responses due to each input set
