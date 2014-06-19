@@ -28,62 +28,73 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <p>The <strong>python-deltasigma</strong> is a Python package to <em>synthesize, simulate, scale and map to implementable topologies</em> <strong><a href="https://en.wikipedia.org/wiki/Delta-sigma_modulation">ΔΣ modulators</a></strong>.</p>
+          <p align="right">G. Venturini, 2014</p>
+
+<p>The <strong>python-deltasigma</strong> is an open-source Python package to <em>synthesize, simulate, scale and map to implementable topologies</em> <strong><a href="https://en.wikipedia.org/wiki/Delta-sigma_modulation">ΔΣ modulators</a></strong>.</p>
 
 <p>It aims to provide <strong>a 1:1 Python port</strong> of Richard Schreier's <strong><em>excellent</em></strong> 
 <strong><a href="http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox">MATLAB Delta Sigma Toolbox</a></strong>,
-the <em>de facto</em> standard tool for high-level delta sigma simulation, upon which it is very heavily based.<a href="http://githalytics.com/ggventurini/python-deltasigma"><img src="https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8" alt="githalytics.com alpha" title="githalytics.com"></a></p>
+the <em>de facto</em> standard tool for high-level delta sigma simulation, upon which it is very heavily based.</p>
 
-<h1>
-<a name="status" class="anchor" href="#status"><span class="octicon octicon-link"></span></a>Status</h1>
-
-<p>This project is a work in progress and you are welcome to help improve it.</p>
-
-<p>Not all functionality has been ported. Take a look at <a href="https://github.com/ggventurini/python-deltasigma/blob/master/files.csv">files.csv</a> for the current status.</p>
+<h2>
+<a name="status" class="anchor" href="#status"><span class="octicon octicon-link"></span></a>Status</h2>
 
 <p><a href="https://travis-ci.org/ggventurini/python-deltasigma"><img src="https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master" alt="Build Status"></a> <a href="https://coveralls.io/r/ggventurini/python-deltasigma?branch=master"><img src="https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master" alt="Coverage Status"></a>
 <a href="https://pypi.python.org/pypi/deltasigma/"><img src="http://img.shields.io/badge/version-0.1-brightgreen.png" alt="PyPi version"></a>
 <a href="https://pypi.python.org/pypi/deltasigma/"><img src="https://pypip.in/download/deltasigma/badge.png" alt="PyPi downloads"></a>
 <a href="https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE"><img src="http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png" alt="BSD 2 clause license"></a></p>
 
-<p>To have an idea of the currently implemented functionality, take a look at these <a href="http://ipython.org/">IPython</a> notebooks:</p>
-
-<ul>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo1.ipynb">dsdemo1</a></strong>, notebook port of the interactive <code>dsdemo1.m</code>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo2.ipynb">dsdemo2</a></strong>, notebook port of the interactive <code>dsdemo2.m</code>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo3.ipynb">dsdemo3</a></strong>, notebook port of the interactive <code>dsdemo3.m</code>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb">dsdemo4</a></strong>, notebook port of <code>dsdemo4.m</code>. <a href="https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64">Audio file, right click to download</a>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb">dsexample1</a></strong>, python version of <code>dsexample1.m</code>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb">dsexample2</a></strong>, python version of <code>dsexample2.m</code>.</li>
-<li>
-<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb">dsexample3</a></strong>, python version of <code>dsexample3.m</code>.</li>
-</ul><p>If you have some examples you would like to share, <a href="http://tinymailto.com/5310">send me a mail</a>, and I will add them to the above list.</p>
-
-<p>Further functionality is expected to be ported according to <a href="https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md">the ROADMAP</a>.</p>
+<p><strong>The basic functionality has been fully ported!</strong></p>
 
 <h2>
-<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h2>
+<a name="-but-do-i-need-to-know-python" class="anchor" href="#-but-do-i-need-to-know-python"><span class="octicon octicon-link"></span></a>... but do I need to know Python?</h2>
 
-<h3>
-<a name="supported-platforms" class="anchor" href="#supported-platforms"><span class="octicon octicon-link"></span></a>Supported platforms</h3>
+<p>Strictly speaking, <em>yes</em>.</p>
 
-<p>python-deltasigma runs on every platform and arch. supported by its dependencies:</p>
+<p>Thankfully it turns out that, if you know how to use MATLAB a bit,
+getting used to the scientific stack in Python is rather immediate.</p>
+
+<p>Recommended resources to get you started:</p>
 
 <ul>
-<li><p><em>Platforms</em>: Linux, Mac OS X, Windows.</p></li>
-<li><p><em>Archs</em>: x86, x86_64 and armf (arm with floating point unit).</p></li>
-</ul><h3>
-<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h3>
+<li>The <a href="http://nbviewer.ipython.org/github/jrjohansson/scientific-python-lectures/tree/master/">scientific Python lectures</a> by J.R. Johansson,</li>
+<li>The <a href="http://wiki.scipy.org/NumPy_for_Matlab_Users">Numpy for MATLAB users</a> cheatsheet,</li>
+<li>and we provide plenty of examples!</li>
+</ul><p>When I was starting this project, I was looking for a programming language that is stable, weakly typed, geared towards numeric codes, free and most important that Just Works!™, so I based everything on the very impressive scientific Python stack.</p>
 
-<p>Using python-deltasigma requires <strong>Python 2</strong> or <strong>3</strong>, <strong>numpy</strong>, <strong>scipy</strong> (&gt;= 0.11.0) and <strong>matplotlib</strong>.</p>
+<h2>
+<a name="-tell-me-more" class="anchor" href="#-tell-me-more"><span class="octicon octicon-link"></span></a>... tell me more!</h2>
 
-<p>They are packaged by virtually all the major <em>Linux distributions</em>. </p>
+<p>To have an idea of the package capabilities, take a look at these <a href="http://ipython.org/">IPython</a> notebooks:</p>
+
+<ul>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo1.ipynb">NTF synthesis</a></strong>,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo2.ipynb">Simulation of Delta Sigma modulators</a></strong>,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo3.ipynb">Realization and dynamic range scaling</a></strong>,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb">Audio demo of mod1 and mod2</a></strong> and <a href="https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64">audio file</a>, right click, "Save as..." to download,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb">Synthesis of a 5th-order, low-pass modulator</a></strong>,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb">Synthesis of an 8th-order, band-pass modulator</a></strong>,</li>
+<li>
+<strong><a href="http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb">Synthesis of a continuous-time lowpass modulator</a></strong>.</li>
+</ul><p>If you have cool examples you would like to share, <a href="http://tinymailto.com/5310">send me a mail</a>, and I will add them to the above list.</p>
+
+<h2>
+<a name="install-python-deltasigma" class="anchor" href="#install-python-deltasigma"><span class="octicon octicon-link"></span></a>Install python-deltasigma</h2>
+
+<p>Using python-deltasigma requires <a href="https://www.python.org/"><strong>Python 2.6+</strong></a> or <a href="https://www.python.org/"><strong>Python 3.3+</strong></a>, <a href="http://www.numpy.org/">numpy</a>, <a href="http://www.scipy.org/">scipy</a> (&gt;= 0.11.0) and <a href="http://matplotlib.org/">matplotlib</a>.</p>
+
+<p>They're all free, and doubly so: <em>free as in beer</em> and <em>free as in speech</em>, just like this package.</p>
+
+<h3>
+<a name="prerequisites-linux" class="anchor" href="#prerequisites-linux"><span class="octicon octicon-link"></span></a>Prerequisites: Linux</h3>
+
+<p>The <code>python-deltasigma</code> dependencies are packaged by virtually all the major Linux distributions. </p>
 
 <p>On a Debian Linux system, you may install them issuing:</p>
 
@@ -92,29 +103,18 @@ the <em>de facto</em> standard tool for high-level delta sigma simulation, upon 
 
 <p>Refer to your system documentation for more information.</p>
 
-<p>On <em>Windows</em>, I hear good things about: </p>
+<h3>
+<a name="prerequisites-windows-and-mac-os-x" class="anchor" href="#prerequisites-windows-and-mac-os-x"><span class="octicon octicon-link"></span></a>Prerequisites: Windows and Mac OS X</h3>
+
+<p>To set up the dependencies quickly and in a matter of a few clicks, I hear good things about: </p>
 
 <ul>
-<li><p><a href="https://www.enthought.com/store/">Enthought Canopy</a>, a Python distribution 
-that carries both free and commercial versions, and</p></li>
 <li><p><a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>, 
-which offers its full version for free. </p></li>
-</ul><p>I do not run Windows, so I can't really provide more info (sorry), except 
-that people tell me they manage to have a working setup. </p>
-
-<p><em>Mac OS X</em> is also supported by <a href="https://www.enthought.com/store/">Enthought Canopy</a>
-and <a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a>, which likely
-provide the easiest and fastest solution to have a scientific Python stack up 
-and running.</p>
-
-<p>More information can be found on the 
-<a href="http://www.scipy.org/install.html">scipy install page</a> and on the 
-<a href="http://matplotlib.org/">matplotlib homepage</a>.</p>
-
-<p>I wrote in a different context some directions to <a href="https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy">compile numpy and scipy yourself</a>, which also apply here. Be warned, it can easily get complicated.</p>
-
-<h3>
-<a name="install-python-deltasigma" class="anchor" href="#install-python-deltasigma"><span class="octicon octicon-link"></span></a>Install python-deltasigma</h3>
+a scientific Python distribution that offers its full version for free and</p></li>
+<li><p><a href="https://www.enthought.com/store/">Enthought Canopy</a>, which carries GUIs and both
+free and commercial versions.</p></li>
+</ul><h3>
+<a name="stable-version" class="anchor" href="#stable-version"><span class="octicon octicon-link"></span></a>Stable version</h3>
 
 <p>You can install the latest stable version directly from the <a href="http://pypi.python.org">Python
 Package Index (PYPI)</a>, running:</p>
@@ -123,10 +123,13 @@ Package Index (PYPI)</a>, running:</p>
 </code></pre>
 
 <p>The above command will also attempt to compile and install the
-dependencies -for this to work you should already have the required
+dependencies - for this to work you should already have the required
 libraries in place.</p>
 
-<p>Otherwise, you can download the code from <a href="http://github.com/ggventurini/python-deltasigma">the Github
+<h3>
+<a name="bleeding-edge-version-developers" class="anchor" href="#bleeding-edge-version-developers"><span class="octicon octicon-link"></span></a>Bleeding edge version (developers)</h3>
+
+<p>Otherwise, you can check out the code from <a href="http://github.com/ggventurini/python-deltasigma">the Github
 repository</a>.</p>
 
 <p>Then run:</p>
@@ -134,25 +137,15 @@ repository</a>.</p>
 <pre><code>python setup.py install
 </code></pre>
 
-<p>The flag <code>--local</code> may be an interesting option to install the package
-for the current user only, and it doesn't require root privileges.</p>
-
-<h3>
-<a name="extras" class="anchor" href="#extras"><span class="octicon octicon-link"></span></a>Extras</h3>
-
-<p>Building the documentation requires the <strong><a href="http://sphinx-doc.org/">sphinx</a></strong> package. It is an optional step, as the <a href="http://python-deltasigma.readthedocs.org/en/latest/">the latest documentation is available online</a>, without need for you to build it.</p>
-
-<p>If you plan to run the provided unit tests, then you should install 
-<strong><a href="https://pypi.python.org/pypi/setuptools">setuptools</a></strong>, used to access the 
-reference function outputs. Testing <em>can</em> be automated with 
-<strong><a href="https://pypi.python.org/pypi/nose/">nose</a></strong>, issuing 
-<code>$ nosetests -v deltasigma/*.py</code>.</p>
+<p>If you're interested in contributing, you may be pleased to hear that
+<code>python-deltasigma</code> comes with a large Nose test suite and a complete
+Sphinx documentation.</p>
 
 <h2>
 <a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h2>
 
 <ol>
-<li><p>You can find the included <a href="http://python-deltasigma.readthedocs.org/en/latest/">package documentation online</a>.</p></li>
+<li><p>You can find <a href="http://docs.python-deltasigma.io/">the latest package documentation online</a> at <a href="http://docs.python-deltasigma.io">http://docs.python-deltasigma.io</a></p></li>
 <li><p>The original MATLAB Toolbox provides in-depth documentation, which is very useful to understand what the toolbox is capable of. See <a href="https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true">DSToolbox.pdf</a> and <a href="https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true">OnePageStory.pdf</a> (<em>PDF warning</em>).</p></li>
 <li><p>The book:</p></li>
 </ol><p>Richard Schreier, Gabor C. Temes, <em>Understanding Delta-Sigma Data Converters</em>, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press </p>
@@ -162,22 +155,11 @@ reference function outputs. Testing <em>can</em> be automated with
 <p><em>I am not affiliated with neither the sellers nor the authors.</em></p>
 
 <h2>
-<a name="how-to-contribute" class="anchor" href="#how-to-contribute"><span class="octicon octicon-link"></span></a>How to contribute</h2>
-
-<p>Pull requests are welcome!</p>
-
-<p>There are only a few <em>guidelines</em>, which can be overridden every time it is reasonable to do so:</p>
-
-<ul>
-<li><p>Please try to follow <code>PEP8</code>.</p></li>
-<li><p>Try to keep the functions signature identical. Parameters with <code>NaN</code> default values have their default value replaced with <code>None</code>. </p></li>
-<li><p>If a function has a varible number of return values, its Python port should implement the maximum number of return values.</p></li>
-</ul><h3>
-<a name="support-python-deltasigma" class="anchor" href="#support-python-deltasigma"><span class="octicon octicon-link"></span></a>Support python-deltasigma</h3>
+<a name="support-python-deltasigma" class="anchor" href="#support-python-deltasigma"><span class="octicon octicon-link"></span></a>Support python-deltasigma</h2>
 
 <p><em>I do not want your money.</em> I develop this software because I enjoy it and because I use it myself.</p>
 
-<p>If you wish to support the development of <code>python-deltasigma</code> or you find the package useful or you otherwise wish to contribute monetarily, <strong><em>please donate to cancer research instead:</em></strong> </p>
+<p>If you wish to support the development of <code>python-deltasigma</code> or you find the package useful or you otherwise wish to contribute monetarily, <strong><em>please donate to cancer research:</em></strong> </p>
 
 <ul>
 <li>
@@ -186,17 +168,17 @@ reference function outputs. Testing <em>can</em> be automated with
 <strong><a href="http://www.istitutotumori.mi.it/modules.php?name=Content&amp;pa=showpage&amp;pid=24">Fond. IRCCS Istituto Nazionale dei Tumori <em>(it)</em></a></strong>.</li>
 </ul><p>Consider <a href="http://tinymailto.com/5310">sending me a mail</a> afterwards, <strong><em>it makes for great motivation!</em></strong></p>
 
-<h3>
-<a name="why-this-project-was-born" class="anchor" href="#why-this-project-was-born"><span class="octicon octicon-link"></span></a>Why this project was born</h3>
+<h2>
+<a name="why-this-project-was-born" class="anchor" href="#why-this-project-was-born"><span class="octicon octicon-link"></span></a>Why this project was born</h2>
 
-<p>I like challenges, Delta Sigma modulation and I don't have the money for my own MATLAB license.</p>
+<p>I like challenges, ΔΣ modulation and I don't have the money for my own MATLAB license.</p>
 
 <p>With this Python package you can simulate Delta Sigma modulators for free, on any PC. </p>
 
 <p>I hope you find it useful.</p>
 
 <h2>
-<a name="licensing-and-copyright-notice" class="anchor" href="#licensing-and-copyright-notice"><span class="octicon octicon-link"></span></a>Licensing and copyright notice</h2>
+<a name="licensing-and-copyright-notices" class="anchor" href="#licensing-and-copyright-notices"><span class="octicon octicon-link"></span></a>Licensing and copyright notices</h2>
 
 <p>All original MATLAB code is Copyright (c) 2009, Richard Schreier. 
 See the LICENSE file for the licensing terms.</p>
@@ -208,7 +190,7 @@ subject to the same license terms.</p>
 MATLAB toolbox. The <code>pydsm</code> package is copyright (c) 2012, Sergio Callegari.</p>
 
 <p>When not otherwise specified, the Python code is Copyright 2013, Giuseppe 
-Venturini and the python-deltasigma contributors.</p>
+Venturini and the <code>python-deltasigma</code> contributors.</p>
 
 <p>MATLAB is a registered trademark of The MathWorks, Inc.</p>
         </section>
@@ -230,6 +212,16 @@ Venturini and the python-deltasigma contributors.</p>
       </div>
     </div>
 
-  
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-46404189-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
   </body>
 </html>
