@@ -23,7 +23,9 @@ from ._partitionABCD import partitionABCD
 from ._utils import minreal
 
 def calculateTF(ABCD, k=1.):
-    """Calculate the NTF and STF of a delta-sigma modulator given the loop filter
+    """Calculate the NTF and STF of a delta-sigma modulator.
+
+    The calculation is performed for a given loop filter
     ABCD matrix, assuming a quantizer gain of ``k``.
 
     **Parameters:**
