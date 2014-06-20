@@ -33,16 +33,40 @@ from ._figureMagic import figureMagic
 from ._simulateDSM import simulateDSM
 from ._undbv import undbv
 
-# Requires the following unimplemented functions:
-# calculateSNR, simulateDSM, simulateQDSM
-
 def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     """Plot a spectrum suitable to exemplify the NTF performance.
-    
+
+    **Parameters:**
+
+    ntf : scipy 'lti' object, tuple or ndarray
+           The first argument may be one of the various supported
+           representations for a (SISO) transfer function or an
+           ABCD matrix. See :func:`evalTF` for a more detailed
+           discussion.
+
+    f0 : float, optional
+         The center frequency. Normalized. Defaults to 0.
+
+    M : int, optional
+        M is defined as:
+
+        .. math::
+
+            M = n_{lev} - 1
+
+        The number of quantizer levels (:math:`n_{lev}`) defaults to 2 and
+        ``M`` defaults to 1.
+
+    quadrature : boolean, optional
+                 Whether the delta sigma modulator is a quadrature
+                 modulator or not. Defaults to ``False``.
+
     .. note::
 
-        Quadrature modulators require the following unimplemented functions:
-        :func:`simulateQDSM` (expected v. 0.2).
+        Quadrature modulators require the following currently unimplemented
+        functions: :func:`simulateQDSM` (expected v. 0.2).
+        Setting ``quadrature`` to ``True`` results in a
+        ``NotImplementedError`` being raised.
 
     .. plot::
 
@@ -60,8 +84,9 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     delta = 2
     Amp = undbv(-3) # Test tone amplitude, relative to full-scale.
-    f = 0.3         # Test tone frequency offset from f0, relative to bw.
-                    # (Will be adjusted to be an fft bin) 
+    # f below is the test tone frequency offset from f0, relative to bw.
+    # (It will be adjusted to be an fft bin)
+    f = 0.3
     N = 2**12
     f1_bin = np.round(f1*N)
     f2_bin = np.round(f2*N)
@@ -69,7 +94,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     if not quadrature:
         t = np.arange(0, N).reshape((1, -1))
         u = Amp*M*np.cos((2*np.pi/N)*fin*t)
-        v, xn, xmax, y = simulateDSM(u, ntf, M+1)
+        v, _, xmax, y = simulateDSM(u, ntf, M+1)
     else:
         raise NotImplementedError("The required simulateQDSM function " + \
                                   "is not available yet.")
@@ -118,8 +143,8 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         else:
             plt.text(f0 + 0.05, - 15, msg, horizontalalignment='left',
                      verticalalignment='bottom')
-        plt.text(- 0.5, - 135, ' NBW = %.1e' % NBW, horizontalalignment='left',
-                     verticalalignment='bottom')
+        plt.text(-0.5, -135, ' NBW = %.1e' % NBW, horizontalalignment='left',
+                 verticalalignment='bottom')
         figureMagic((-0.5, 0.5), 0.125, None, (-140, 0), 10, None)
     plt.xlabel('frequency')
     return
