@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -22,36 +22,44 @@ from numpy.linalg import lstsq
 
 from ._dbv import dbv
 from ._config import _debug
-from ._utils import carray
 
 def peakSNR(snr, amp):
-    """Find the snr peak by fitting a smooth curve to the top end of the SNR 
-     vs input amplitude data.
-     
-     The curve fitted is y = ax + b/(x-c).
-     
-     Parameters:
-     snr: ndarray
-     amp: ndarray
-     
-     Returns:
-     
-         peak_snr, peak_amp
-     
-    Notes:
-    
-     * Both amp and snr are expressed in dB.
-     * The two arrays snr and amp should have the same size.
+    """Find the SNR peak by fitting the SNR curve.
+
+    A smooth curve is fitted to the top end of the SNR vs input amplitude
+    data with Legendre's least-squares method.
+
+    The curve fitted to the data is:
+
+    .. math::
+
+        y = ax + \\frac{b}{x - c}
+
+    **Parameters:**
+
+    snr : 1D ndarray or array-like
+          Signal to Noise Ratio array, expressed in decibels (dB).
+
+    amp : 1D ndarray or array-like
+          Amplitude array, expressed in decibels (dB).
+
+    The two arrays ``snr`` and ``amp`` should have the same size.
+
+    **Returns:**
+
+    (peak_snr, peak_amp) : tuple
+                           The peak SNR value and its corresponding amplitude,
+                           expressed in dB.
     """
 
+    # sanitize inputs
+    snr = np.atleast_1d(np.asarray(snr))
+    amp = np.atleast_1d(np.asarray(amp))
     # Delete garbage data
     for check in (np.isinf, np.isnan):
         i = check(snr)
         snr = np.delete(snr, np.where(i))
         amp = np.delete(amp, np.where(i))
-    # sanitize inputs
-    snr = carray(snr).squeeze()
-    amp = carray(amp).squeeze()
     for x in (snr, amp):
         if len(x.shape) > 1 and np.prod(x.shape) != max(x.shape):
             raise ValueError("snr and amp should be vectors (ndim=1)" +
@@ -84,11 +92,13 @@ def peakSNR(snr, amp):
         plt.plot(dbv(amp), dbv(pred), '-', color='b')
         plt.hold(hold)
     return peak_snr, peak_amp
-    
+
 def test_peakSNR():
     """Test function for peakSNR().
     """
     import scipy.io, pkg_resources
+    global _debug
+    _debug = True
     fname = pkg_resources.resource_filename(__name__, "test_data/test_peak_snr.mat")
     snr = scipy.io.loadmat(fname)['snr'].reshape((-1,))
     amp = scipy.io.loadmat(fname)['amp'].reshape((-1,))
