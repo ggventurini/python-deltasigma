@@ -24,11 +24,12 @@
 # Copyright (c) 2014, G. Venturini and the python-deltasigma contributors
 #
 
+from __future__ import print_function
 import numpy as np
 
 from warnings import warn
 
-from ._config import setup_args
+from ._config import setup_args, _debug
 from ._utils import _is_zpk, _get_zpk
 
 warned = False
@@ -42,12 +43,16 @@ try:
     import pyximport
     pyximport.install(setup_args=setup_args, reload_support=True)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
-except ImportError:
+except ImportError as e:
+    if _debug:
+        print(str(e))
     _simulateDSM_cblas = None
 
 try:
     from ._simulateDSM_scipy_blas import simulateDSM as _simulateDSM_scipy_blas
-except ImportError:
+except ImportError as e:
+    if _debug:
+        print(str(e))
     _simulateDSM_scipy_blas = None
 
 # fall back to CPython
