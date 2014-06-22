@@ -24,11 +24,11 @@
 # Copyright (c) 2014, G. Venturini and the python-deltasigma contributors
 #
 
-import sys
 import numpy as np
 
 from warnings import warn
 
+from ._config import setup_args
 from ._utils import _is_zpk, _get_zpk
 
 warned = False
@@ -40,17 +40,14 @@ warned = False
 
 try:
     import pyximport
-    pyximport.install(setup_args={"script_args":(["--compiler=mingw32"] \
-                                  if sys.platform == 'win32' else []),
-                                  "include_dirs":np.get_include()},
-                      reload_support=True)
+    pyximport.install(setup_args=setup_args, reload_support=True)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
-except:
+except ImportError:
     _simulateDSM_cblas = None
 
 try:
     from ._simulateDSM_scipy_blas import simulateDSM as _simulateDSM_scipy_blas
-except:
+except ImportError:
     _simulateDSM_scipy_blas = None
 
 # fall back to CPython
