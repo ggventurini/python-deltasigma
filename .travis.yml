@@ -7,11 +7,11 @@ virtualenv:
   system_site_packages: false
 before_install:
  - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then sudo apt-get update; sudo apt-get build-dep -qq python-scipy python-numpy; sudo apt-get install -qq python-matplotlib cython; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then sudo apt-get update; sudo apt-get build-dep -qq python3-scipy python3-numpy; sudo apt-get build-dep -qq python3-matplotlib cython3; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then sudo apt-get update; sudo apt-get build-dep -qq python3-scipy python3-numpy; sudo apt-get build-dep -qq python-matplotlib cython; fi'
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
- - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then pip install numpy scipy matplotlib --upgrade; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then pip install numpy scipy matplotlib --upgrade; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then pip install numpy scipy matplotlib cython --upgrade; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.3" ]; then pip install numpy scipy matplotlib cython --upgrade; fi'
  - pip install nose coveralls
 # command to run tests, e.g. python setup.py test
 script: nosetests --with-coverage --cover-package=deltasigma deltasigma/*.py
