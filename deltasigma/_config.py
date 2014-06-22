@@ -48,6 +48,7 @@ else:
 # a CPython implementation (slower).
 setup_args = {"script_args":(["--compiler=mingw32"]
                              if sys.platform == 'win32' else [])}
+lib_include = [np.get_include()]
 if "include_dirs" not in blas_info and "BLAS_H" not in os.environ and \
     (not guessed_include or \
      not os.path.isfile(os.path.join(guessed_include, 'cblas.h'))):
@@ -55,7 +56,6 @@ if "include_dirs" not in blas_info and "BLAS_H" not in os.environ and \
          "BLAS_H.\nNOTE: You need to pass the path to the directories were the "
          "header files are, not the path to the files.")
 else:
-    lib_include = [np.get_include()]
     if "include_dirs" in blas_info:
         lib_include = lib_include + blas_info.get("include_dirs")
     elif "BLAS_H" in os.environ:
@@ -64,4 +64,4 @@ else:
         lib_include = lib_include + [guessed_include]
     else:
         pass # out of options
-    setup_args.update({"include_dirs":list(set(lib_include))})
+setup_args.update({"include_dirs":list(set(lib_include))})
