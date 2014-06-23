@@ -7,6 +7,13 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-4**: Cython implementation of ``simulateDSM()``, PEP8 and DOC fixes.
+ * ``deltasigma/_simulateDSM_cblas.pyx`` and
+   ``deltasigma/_simulateDSM_scipy_blas.pyx``, Cython implementation from
+   ``pydsm`` of ``simulateDSM()``, available if Cython is, providing a 70x
+   speed-up of DSM simulations.
+ * More documentation improvements and PEP8-related fixes.
+
 **0.1-3**: Bugfixes, PEP8, more test coverage
  * ``deltasigma/_realizeNT_ct.py`` now supports ``FF`` topologies.
  * ``deltasigma/_pulse.py`` now supports MIMO systems.
@@ -28,7 +35,8 @@ topologies.
  * ``deltasigma/_pulse.py``: Bugfix (reshape missing assignment), fix documentation formatting.
  * ``deltasigma/_bilogplot.py``: Fix plot. Add unit test.
  * ``deltasigma/_rmsGain.py``: Fix docstring.
- * ``deltasigma/_lollipop.py``: Use matplotlib's stem function. Enforce PEP8. Add support for color 'None'.
+ * ``deltasigma/_lollipop.py``: Use matplotlib's stem function. Enforce PEP8.
+   Add support for color 'None'.
 
 0.1: Bugfix: missing ``copy()`` in ``mapABCD()``.
 
