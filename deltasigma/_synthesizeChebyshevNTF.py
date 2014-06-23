@@ -88,7 +88,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order,OSR,1,H_inf)
         H1 = synthesizeChebyshevNTF(order,OSR,0,H_inf)
         # 1. Plot the singularities.
-        plotsize = (14, 7)
+        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better
@@ -153,7 +153,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
         H1 = synthesizeChebyshevNTF(order, OSR, 1, H_inf)
         # 1. Plot the singularities.
-        plotsize = (14, 7)
+        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better

@@ -16,7 +16,7 @@ import sys, os, re
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('.'))
 
 # -- General configuration -----------------------------------------------------
 
@@ -43,7 +43,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'python-deltasigma'
-copyright = u'2013, Giuseppe Venturini'
+copyright = u'2013-2014, Giuseppe Venturini'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -93,13 +93,30 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+#html_theme = 'default'
+
+### HTML output ###
+
+from deltasigma_theme import deltasigma_theme_path
+html_theme_path = [deltasigma_theme_path]
+html_theme = 'deltasigma_theme'
+
+html_title = "python-deltasigma v{release} documentation".format(release=release)
+html_short_title = "Home"
+html_static_path = ['_static']
+
+html_theme_options = {}
+
+html_sidebars = {
+  '**': ['localtoc.html', 'sourcelink.html', 'sidebarhelp.html',
+         'searchbox.html'],
+  'index': ['globaltoc.html', 'sidebarhelp.html', 'searchbox.html'],
+  }
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-html_theme_options = {
-                     "nosidebar": True}
+html_theme_options = {"nosidebar": True}
 
 # Add any paths that contain custom themes here, relative to this directory.
 #html_theme_path = []

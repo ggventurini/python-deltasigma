@@ -1,0 +1,52 @@
+{%- macro rellink_markup() %}
+  <nav id="rellinks">
+    <ul>
+      {%- if prev %}
+        <li>
+          &larr;
+          <a href="{{ prev.link|e }}" title="Previous document">{{ prev.title }}</a>
+        </li>
+      {%- endif %}
+      {%- if next %}
+        <li>
+          <a href="{{ next.link|e }}" title="Next document">{{ next.title }}</a>
+          &rarr;
+        </li>
+      {%- endif %}
+    </ul>
+  </nav>
+{%- endmacro %}
+
+{%- macro breadcrumbs_markup() %}
+  <nav id="breadcrumbs">
+    <ul>
+      {%- block rootrellink %}
+      <li><a href="{{ pathto(master_doc) }}">{{ shorttitle|e }}</a></li>
+      {%- endblock %}
+      {%- for parent in parents %}
+      <li>
+        <a href="{{ parent.link|e }}">{{ parent.title }}</a>
+      </li>
+      {%- endfor %}
+      {%- block relbaritems %} {% endblock %}
+    </ul>
+  </nav>
+{%- endmacro %}
+
+{%- macro relbar_top() %}
+  {%- if theme_showrelbartop|tobool %}
+  <div class="related top">
+    {{- rellink_markup () }}
+    {{- breadcrumbs_markup() }}
+  </div>
+  {%- endif %}
+{%- endmacro %}
+
+{%- macro relbar_bottom() %}
+  {%- if theme_showrelbarbottom|tobool %}
+  <div class="related bottom">
+    {{- rellink_markup () }}
+    {{- breadcrumbs_markup() }}
+  </div>
+  {%- endif %}
+{%- endmacro %}

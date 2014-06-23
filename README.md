@@ -1,7 +1,7 @@
 python-deltasigma
 =================
 
-The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more Python**.
+A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
 
 
 The **python-deltasigma** is a Python package to *synthesize, simulate, scale
