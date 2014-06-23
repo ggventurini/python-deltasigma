@@ -106,10 +106,10 @@ dependencies:
 Dependencies
 ~~~~~~~~~~~~
 
-Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>__`,
-at your choice, `numpy <http://www.numpy.org/>__`,
-`scipy <http://www.scipy.org>__` (>= 0.11.0) and 
-`matplotlib <http://www.matplotlib.org>__`.
+Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>`__,
+at your choice, `numpy <http://www.numpy.org/>`__,
+`scipy <http://www.scipy.org>`__ (>= 0.11.0) and 
+`matplotlib <http://www.matplotlib.org>`__.
 
 They are packaged by virtually all the major Linux distributions.
 
@@ -155,7 +155,7 @@ The required dependencies have been kept to a minimum to allow running
 but by a system administrator - where typically installing libraries is
 not possible and software packages are disarmingly outdated.
 
-If at all possible, installing `Cython <http://www.cython.org>__` is
+If at all possible, installing `Cython <http://www.cython.org>`__ is
 strongly recommended. 
 
 ``python-deltasigma`` contains python extension to simulate delta sigma
