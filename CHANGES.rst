@@ -29,8 +29,7 @@ topologies.
  * ``deltasigma/_utils.py``: add root multiplicity support in ``pretty_lti()``.
  * ``deltasigma/_utils.py``: bugfix in cplxpair for incoherent complex values.
 
-0.1-1: Bugfix: most importantly fix ``realizeNTF_ct()``.
-
+**0.1-1**: Bugfix: most importantly fix ``realizeNTF_ct()``.
  * ``deltasigma/_realizeNTF_ct.py``: Fixes for multi-timing, add unit tests for FB.
  * ``deltasigma/_pulse.py``: Bugfix (reshape missing assignment), fix documentation formatting.
  * ``deltasigma/_bilogplot.py``: Fix plot. Add unit test.
