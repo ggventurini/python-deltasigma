@@ -81,7 +81,7 @@ table.indextable tr.cap {
 }
 
 img {
-    width: auto;
+    width: auto !important;
 }
 
 img.toggler {
