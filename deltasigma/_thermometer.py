@@ -19,20 +19,32 @@
 import numpy as np
 
 def thermometer(x, m):
-	""" t = thermometer(x,m)	
-	t is an m by length(x) matrix wherein the first
-	x(i) components of column i are one
-	"""
-	t = np.zeros((m, len(x)))
-	for i in range(len(x)):
-	    t[:x[i], i] = np.ones((x[i], ))
-	return t
-	
+    """Convert x to thermometer (aka unary) code
+
+    **Parameters:**
+
+    x : 1-D ndarray
+        The array of positive ints, each of which will be converted.
+
+    m : int
+        total length of the thermometer array.
+
+    **Returns:**
+
+    t : ndarray
+        ``t`` is an m by ``len(x)`` matrix wherein the first
+        ``x(i)`` components of column ``i`` are one.
+    """
+    t = np.zeros((m, len(x)))
+    for i in range(len(x)):
+        t[:x[i], i] = np.ones((x[i], ))
+    return t
+
 def test():
-	"""Test function for thermometer()"""
-	tv = np.arange(50)
-	rm = np.zeros((70, 50))
-	for i in range(50):
-		rm[:i, i] = np.ones(rm[:i, i].shape)
-	assert np.allclose(thermometer(tv, 70), rm, rtol=1e-05, atol=1e-08)
+    """Test function for thermometer()"""
+    tv = np.arange(50)
+    rm = np.zeros((70, 50))
+    for i in range(50):
+        rm[:i, i] = np.ones(rm[:i, i].shape)
+    assert np.allclose(thermometer(tv, 70), rm, rtol=1e-05, atol=1e-08)
 

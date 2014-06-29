@@ -13,6 +13,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
+"""Module providing the clans() optimization function.
+"""
+
 from __future__ import division, print_function
 import numpy as np
 from scipy.optimize import minimize
@@ -22,8 +25,6 @@ from ._synthesizeNTF import synthesizeNTF
 from ._utils import cplxpair
 from ._evalTF import evalTF
 from ._dsclansNTF import dsclansNTF
-
-"""Module providing the clans() optimization function."""
 
 # We ported the version that was originally designed for the MATLAB
 # Optimization Toolbox version >= 6

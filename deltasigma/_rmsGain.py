@@ -21,46 +21,46 @@ from scipy.linalg import norm
 from ._evalTF import evalTF
 
 def rmsGain(H, f1, f2, N=100):
-	"""Compute the root mean-square gain of a discrete-time TF.
+    """Compute the root mean-square gain of a discrete-time TF.
 
-	The computation is carried out over the frequency band ``(f1, f2)``,
-	employing ``N`` discretization steps.
+    The computation is carried out over the frequency band ``(f1, f2)``,
+    employing ``N`` discretization steps.
 
-	**Parameters:**
+    **Parameters:**
 
-	H : object
-	    The discrete-time transfer function. See  :func:`evalTF` for the supported types.
+    H : object
+        The discrete-time transfer function. See  :func:`evalTF` for the supported types.
 
-	f1 : scalar
-	    The start value in Hertz of the frequency band over which the gain is evaluated.
+    f1 : scalar
+        The start value in Hertz of the frequency band over which the gain is evaluated.
 
-	f2 : scalar
-	    The end value (inclusive) in Hertz of the aforementioned frequency band.
+    f2 : scalar
+        The end value (inclusive) in Hertz of the aforementioned frequency band.
 
-	N : integer, optional
-	    The number of discretization points to be taken over specified interval.
+    N : integer, optional
+        The number of discretization points to be taken over specified interval.
 
-	**Returns:**
+    **Returns:**
 
-	Grms : scalar
-	    The root mean-square gain
-	"""
+    Grms : scalar
+        The root mean-square gain
+    """
 
-	w = np.linspace(2*np.pi*f1, 2*np.pi*f2, N)
-	g = norm(evalTF(H, np.exp(1j*w))) / np.sqrt(N)
+    w = np.linspace(2*np.pi*f1, 2*np.pi*f2, N)
+    g = norm(evalTF(H, np.exp(1j*w))) / np.sqrt(N)
 
-	return g
-	
+    return g
+    
 def test_rmsGain():
-	"""Test function for rmsGain()
-	"""
-	from ._utils import empty
-	H = empty()
-	H.num = (1,)
-	H.den = (1, 2, 10)
-	f1 = 0.001
-	f2 = 0.5
-	res = rmsGain(H, f1, f2, N=1000)
-	res1 = 0.102245275091
-	assert np.allclose((res,), (res1,), rtol=1e-05, atol=1e-08)
+    """Test function for rmsGain()
+    """
+    from ._utils import empty
+    H = empty()
+    H.num = (1,)
+    H.den = (1, 2, 10)
+    f1 = 0.001
+    f2 = 0.5
+    res = rmsGain(H, f1, f2, N=1000)
+    res1 = 0.102245275091
+    assert np.allclose((res,), (res1,), rtol=1e-05, atol=1e-08)
 

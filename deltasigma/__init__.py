@@ -14,22 +14,26 @@
 # LICENSE file for the licensing terms.
 
 """
-python-deltasigma
-=================
 
 :Author: Giuseppe Venturini
 :Release: |release|
 :Date: |today|
 
-Homepage: https:///github.com/ggventurini/python-deltasigma
+**Homepage:** http://www.python-deltasigma.io
+
+**Documentation:** http://docs.python-deltasigma.io
+
+**Repository:** https://github.com/ggventurini/python-deltasigma
+
+**Bug tracker:** https://github.com/ggventurini/python-deltasigma/issues
 
 Introduction
 ------------
 
-The **MATLAB Delta Sigma Toolbox** with **0% MATLAB** and **a *lot* more
-Python**.
+A port of the **MATLAB Delta Sigma Toolbox** based on free software and
+very little sleep.
 
-The **python-deltasigma** is a Python package to *synthesize, simulate,
+**Python-deltasigma** is a Python package to *synthesize, simulate,
 scale and map to implementable structures* **delta sigma modulators**.
 
 It aims to provide **a 1:1 Python port** of Richard Schreier's
@@ -41,11 +45,25 @@ which it is very heavily based.\ |githalytics.com alpha|
 Status
 ------
 
+|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2 clause license|
+
 This project is a *work in progress*, not all functionality has been
 ported, yet. The next figure shows the relationship between the main functions
 and the avaliable functionality at a glance.
 
 .. image:: ../doc/_static/functionality.png
+
+All the basic features are available since v. 0.1. A detailed changelog may be
+found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
+
+Detailed information split by file and function status may be found in 
+`files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
+
+The further functionality is expected to be ported and available in future releases
+according to `the ROADMAP <https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md>`__.
+
+Examples
+--------
 
 To see the currently implemented functionality in action, take a look
 at the following ipython notebooks:
@@ -55,7 +73,7 @@ at the following ipython notebooks:
 -  `dsdemo2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo2.ipynb>`__,
    notebook port of the interactive ``dsdemo2.m``.
 -  `dsdemo3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo3.ipynb>`__,
-   notebook port of the interactive `dsdemo3.m`.
+   notebook port of the interactive ``dsdemo3.m``.
 -  `dsdemo4 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb>`__,
    notebook port of ``dsdemo4.m``. `Audio
    file <https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64>`__, right click to download.
@@ -71,14 +89,6 @@ They are also a good means for getting started quickly.
 If you have some examples you would like to share, `send me a
 mail <http://tinymailto.com/5310>`__, and I will add them to the above
 list.
-
-|Build Status| |Coverage Status|
-
-For more detailed information about the development status take a look at
-`files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
-
-The further functionality is expected to be ported according to `the
-ROADMAP <https://github.com/ggventurini/python-deltasigma/blob/master/ROADMAP.md>`__.
 
 Install
 -------
@@ -96,20 +106,22 @@ dependencies:
 Dependencies
 ~~~~~~~~~~~~
 
-Using python-deltasigma requires **Python 2** or **3**, **numpy**,
-**scipy** (>= 0.11.0) and **matplotlib**.
+Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>`__,
+at your choice, `numpy <http://www.numpy.org/>`__,
+`scipy <http://www.scipy.org>`__ (>= 0.11.0) and 
+`matplotlib <http://www.matplotlib.org>`__.
 
-They are packaged by virtually all the major *Linux distributions*.
+They are packaged by virtually all the major Linux distributions.
 
 On a Debian Linux system, you may install them issuing:
 
 ::
 
-     # aptitude install python python-numpy python-scipy python-matplotlib
+    aptitude install python python-numpy python-scipy python-matplotlib
 
 Refer to your system documentation for more information.
 
-On *Windows*, I hear good things about:
+On Windows, I hear good things about:
 
 -  `Enthought Canopy <https://www.enthought.com/store/>`__, a Python
    distribution that carries both free and commercial versions, and
@@ -135,30 +147,70 @@ scipy
 yourself <https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy>`__,
 which also apply here. Be warned, it can easily get complicated.
 
+Optional dependencies
+~~~~~~~~~~~~~~~~~~~~~
+
+The required dependencies have been kept to a minimum to allow running
+``python-deltasigma`` on workstations that are not managed by the user
+but by a system administrator - where typically installing libraries is
+not possible and software packages are disarmingly outdated.
+
+If at all possible, installing `Cython <http://www.cython.org>`__ is
+strongly recommended. 
+
+``python-deltasigma`` contains python extension to simulate delta sigma
+modulators providing a near-native execution speed -- overall roughly a
+70x speed-up compared to a plain Python implementation.
+
+On Linux, installing Cython is just one: `aptitude install cython`
+away. 
+
+On Mac OS X and Windows, Cython may be installed as part of one of the
+frameworks above. Please notice a compiler is needed, this may require
+installing XCode and its command-line utilities or gcc through homebrew,
+on Mac OS X, or Mingw, on Windows. 
+
+If the BLAS headers are found on the machine, they will be used. In
+case they cannot be found automatically, it is recommended to set
+the environment variable ``BLAS_H`` to the BLAS headers directory. 
+
+On Mac OS X, consider linking the headers to their conventional location::
+
+    sudo ln -s /System/Library/Frameworks/Accelerate.framework/Versions/Current/Frameworks/vecLib.framework/Versions/Current/Headers/cblas.h /usr/include/cblas.h
+
+The Cython extensions were written by Sergio Callegari, please see the
+``deltasigma/`` for copyright notice and more information.
+
 Install python-deltasigma
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can install the latest stable version directly from the `Python Package
-Index (PYPI) <http://pypi.python.org>`__, running::
+Once the dependencies set up, it is possible to install the latest stable
+version directly from the `Python Package Index (PYPI) 
+<http://pypi.python.org>`__, running::
 
     pip install deltasigma
 
-The above command will also attempt to compile and install the dependencies -
-for this to work you should already have the required libraries in place.
+The above command will also attempt to compile and install the dependencies
+in case they are not found. Please notice this is not recommended and 
+for this to work you should already have the required C libraries in place.
 
-Otherwise, you can head over to `the Github repository
-<http://github.com/ggventurini/python-deltasigma>`__ and download the code
-from there.
+If you are interested in a bleeding-edge version -- potentially less stable 
+-- or in contributing code (*that's awesome!*) you can head over to 
+`the Github repository <http://github.com/ggventurini/python-deltasigma>`__
+and check out the code from there.
 
 Then run::
 
     python setup.py install
 
-The flag ``--local`` may be an interesting option to install the package for
+The flag ``--user`` may be an interesting option to install the package for
 the current user only, and it doesn't require root privileges.
 
-Extras
-~~~~~~
+Extras for developers
+~~~~~~~~~~~~~~~~~~~~~
+
+The following may be installed at a later stage and are typically only
+necessary for developers.
 
 Building the documentation requires the
 `sphinx <http://sphinx-doc.org/>`__ package. It is an optional step,
@@ -166,36 +218,39 @@ as the `the latest documentation is available
 online <http://python-deltasigma.readthedocs.org/en/latest/>`__, without
 need for you to build it.
 
-If you plan to run the provided unit tests, then you should install
-`setuptools <https://pypi.python.org/pypi/setuptools>`__, used to
-access the reference function outputs. Testing *can* be automated with
-`nose <https://pypi.python.org/pypi/nose/>`__, issuing::
+If you plan to modify the code, `python-deltasigma` comes with a complete 
+unit tests suite, which is run against every commit and that any addition
+should pass both for Python 2 and 3.
+To run it locally, `setuptools <https://pypi.python.org/pypi/setuptools>`__
+is needed, as it is used to access the reference function outputs.
 
-    $ nosetests -v deltasigma/*.py
+Running the test suite may be conveniently automated installing
+`nose <https://pypi.python.org/pypi/nose/>`__, and then issuing::
 
-Documentation
--------------
+    nosetests -v deltasigma/*.py
 
-1. You can find the included `package documentation
-   online <http://python-deltasigma.readthedocs.org/en/latest/>`__.
+from the repository root.
 
-2. The original MATLAB Toolbox provides in-depth documentation, which is
-   very useful to understand what the toolbox is capable of. See
-   `DSToolbox.pdf <https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true>`__
-   and
-   `OnePageStory.pdf <https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true>`__
-   (*PDF warning*).
+Useful resources
+----------------
 
-3. The book:
+The original MATLAB Toolbox provides in-depth documentation, which is
+very useful to understand what the toolbox is capable of. See
+`DSToolbox.pdf <https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true>`__
+and
+`OnePageStory.pdf <https://github.com/ggventurini/python-deltasigma/blob/master/delsig/OnePageStory.pdf?raw=true>`__
+(*PDF warning*).
 
-Richard Schreier, Gabor C. Temes, *Understanding Delta-Sigma Data
-Converters*, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press
+The book:
+
+    Richard Schreier, Gabor C. Temes, *Understanding Delta-Sigma Data
+    Converters*, ISBN: 978-0-471-46585-0, November 2004, Wiley-IEEE Press
 
 is probably *the most authoritative resource on the topic*. Chapter 8-9
 show how to use the MATLAB toolkit and the observations apply also to
-this Python port. Links `on
-amazon <http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852>`__,
-`on the Wiley-IEEE
+this Python port. Links on
+`amazon <http://www.amazon.com/Understanding-Delta-Sigma-Converters-Richard-Schreier/dp/0471465852>`__,
+on `the Wiley-IEEE
 press <http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471465852,miniSiteCd-IEEE2.html>`__.
 
 *I am not affiliated with neither the sellers nor the authors.*
@@ -221,6 +276,8 @@ is reasonable to do so:
 
 -  If a function has a varible number of return values, its Python port
    should implement the maximum number of return values.
+
+No commit should ever fail the test suite.
 
 Reporting bugs
 ~~~~~~~~~~~~~~
@@ -254,7 +311,8 @@ Why this project was born
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 I like challenges, delta-sigma modulation and I don't have the money for
-my own MATLAB license.
+my own MATLAB license. After all, *which grad student or young researcher
+has it?*
 
 With this Python package you can simulate delta-sigma modulators for
 free, on any PC.
@@ -270,6 +328,11 @@ the LICENSE file for the licensing terms.
 The Python code here provided is a derivative work from the above
 toolkit and subject to the same license terms.
 
+Credit goes to Richard Schreier for the original ideas, their MATLAB
+implementation and the all the  diagrams found in this documentation.
+Little-to-no conceptual improvements are introduced here, just code
+adaptation, refactoring, rewrites and fixing of a few minor issues.
+
 This package contains some source code from ``pydsm``, also based on the
 same MATLAB toolbox. The ``pydsm`` package is copyright (c) 2012, Sergio
 Callegari.
@@ -284,10 +347,14 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :width: 1
 .. |Build Status| image:: https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master
    :target: https://travis-ci.org/ggventurini/python-deltasigma
-   :width: 86
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
-   :width: 86
+.. |PyPi version| image:: http://img.shields.io/badge/version-0.1-brightgreen.png
+   :target: https://pypi.python.org/pypi/deltasigma/
+.. |PyPi downloads| image::  https://pypip.in/download/deltasigma/badge.png
+   :target: https://pypi.python.org/pypi/deltasigma/
+.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png
+   :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
 
 Credits
 ~~~~~~~
@@ -601,7 +668,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.1-2'
+__version__ = '0.1-4'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"

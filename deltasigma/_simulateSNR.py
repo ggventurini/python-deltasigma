@@ -17,6 +17,7 @@
 """
 
 from __future__ import division
+import collections
 from warnings import warn
 import numpy as np
 from numpy.fft import fft, fftshift
@@ -34,13 +35,15 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     amplitudes and calculate the signal-to-noise ratio (SNR) in dB for each 
     input.
 
-    Two alternative descriptions of the modulator can be used:
+    Three alternative descriptions of the modulator can be used:
 
      * The modulator is described by a noise transfer function (NTF), provided
        as ``arg1`` and the number of quantizer levels (``nlev``).
 
-     * Alternatively, the first argument to simulateSNR may be an ABCD matrix or
-       the name of a function taking the input signal as its sole argument.
+     * Alternatively, the first argument to simulateSNR may be an ABCD matrix. 
+
+     * Lastly, ``arg1`` may be a function taking the input signal as its
+       sole argument.
 
     The band of interest is defined by the oversampling ratio (``osr``)
     and the center frequency (``f0``).
@@ -56,9 +59,11 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     associated with the input tone. Due to spectral smearing, the input tone
     is not allowed to lie in bins 0 or 1. The length of the FFT is :math:`2^k`.
 
-    If ntf is complex, simulateQDSM (which is slow) is called.
-    If ABCD is complex, simulateDSM is used with the real equivalent of ABCD
-    in order to speed up simulations.
+    If the NTF is complex, :func:`simulateQDSM` (which is slow, also available
+    in a future release) is called.
+
+    If ABCD is complex, :func:`simulateDSM` is used with the real equivalent
+    of ABCD in order to speed up simulations.
 
     Future versions may accommodate STFs.
 
@@ -109,12 +114,12 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     **Returns:**
 
     snr : ndarray
-        The SNR, from simulation
+        The SNR, from simulation.
 
     amp : ndarray
         The amplitudes corresponding to the SNR values.
 
-    **Example:**
+    .. rubric:: Example:
 
     Compare the SNR vs input amplitude curve for a fifth-order modulator, as 
     determined by the describing function method (:func:`predictSNR`) with
@@ -126,14 +131,17 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)
         snr, amp = simulateSNR(H, OSR)
-        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.plot(amp, snr_pred, 'b', label='Predicted')
+        plt.hold(True)
+        plt.plot(amp, snr, 'go', label='Simulated')
         plt.grid(True)
         figureMagic([-100, 0], 10, None,
                     [0, 100], 10, None)
         plt.xlabel('Input Level, dB')
-        plt.ylabel('SNR dB')
+        plt.ylabel('SNR, dB')
         s = 'peak SNR = %4.1fdB\\n' % max(snr)
         plt.text(-65, 15, s, horizontalalignment='left')
+        plt.legend(loc='best')
 
     .. plot::
 
@@ -143,14 +151,17 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         H = synthesizeNTF(5, OSR, 1)
         snr_pred, amp, _, _, _ = predictSNR(H,OSR)
         snr, amp = simulateSNR(H, OSR)
-        plt.plot(amp, snr_pred, 'b', amp, snr, 'go')
+        plt.plot(amp, snr_pred, 'b', label='Predicted')
+        plt.hold(True)
+        plt.plot(amp, snr, 'go', label='Simulated')
         plt.grid(True)
         figureMagic([-100, 0], 10, None,
                     [0, 100], 10, None)
         plt.xlabel('Input Level, dB')
-        plt.ylabel('SNR dB')
+        plt.ylabel('SNR, dB')
         s = 'peak SNR = %4.1fdB\\n' % max(snr)
         plt.text(-65, 15, s, horizontalalignment='left')
+        plt.legend(loc='best')
 
     """
     # Look at arg1 and decide if the system is quadrature
@@ -173,7 +184,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                               np.array((-15,)),
                               np.arange(-10, 1)
                             ))
-    elif not hasattr(amp, '__len__'):
+    elif not isinstance(amp, collections.Iterable):
         amp = np.array((amp, ))
     else:
         amp = np.asarray(amp)
@@ -252,10 +263,13 @@ def test_simulateSNR():
     import numpy as np
     import pkg_resources
     import scipy.io
+    from scipy.signal import lti
     from ._mapABCD import mapABCD
     from ._realizeNTF import realizeNTF
     from ._stuffABCD import stuffABCD
     from ._synthesizeNTF import synthesizeNTF
+
+    # first test: f0 = 0
     # Load test references
     fname = pkg_resources.resource_filename(__name__, "test_data/test_snr_amp.mat")
     amp_ref = scipy.io.loadmat(fname)['amp'].reshape((-1,))
@@ -292,8 +306,7 @@ def test_simulateSNR():
     # We do three tests:
     # SNR from ABCD matrix
     # SNR from NTF
-    # SNR from ABCD matrix with user specified amplitudes
-    assert np.allclose(ABCD, ABCD_ref, atol=9e-5, rtol=1e-4)
+    # SNR from LTI obj with user specified amplitudes
     snr, amp = simulateSNR(ABCD, osr, None, f0, nlev);
     assert np.allclose(snr, snr_ref, atol=1, rtol=5e-2)
     assert np.allclose(amp, amp_ref, atol=5e-1, rtol=1e-2)
@@ -301,6 +314,40 @@ def test_simulateSNR():
     assert np.allclose(snr2, snr_ref, atol=1e-5, rtol=1e-5)
     assert np.allclose(amp2, amp_ref, atol=1e-5, rtol=1e-5)
     amp_user = np.linspace(-100, 0, 200)[::10]
-    snr_user, amp_user = simulateSNR(ABCD, osr, amp_user, f0, nlev)
+    snr_user, amp_user = simulateSNR(lti(*ntf), osr=osr, amp=amp_user, f0=f0,
+                                     nlev=nlev)
     assert np.allclose(snr_user, snr_user_ref[::10], atol=1e-5, rtol=1e-5)
     assert np.allclose(amp_user, amp_user_ref[::10], atol=1e-5, rtol=1e-5)
+
+    # next test: f0 = 0
+    # Load test references
+    fname = pkg_resources.resource_filename(__name__, "test_data/test_snr_amp2.mat")
+    amp_ref = scipy.io.loadmat(fname)['amp'].reshape((-1,))
+    snr_ref = scipy.io.loadmat(fname)['snr'].reshape((-1,))
+    ABCD_ref = scipy.io.loadmat(fname)['ABCD'].reshape((4, 5))
+
+    order = 3;
+    osr = 256;
+    nlev = 2;
+    f0 = 0.;
+    Hinf = 1.25;
+    form = 'CIFB';
+
+    ntf = synthesizeNTF(order, osr, 2, Hinf, f0);
+
+    a1, g1, b1, c1 = realizeNTF(ntf, form);
+    a1_ref = [0.008863535715733, 0.093216950269955, 0.444473912607388]
+    g1_ref = [9.035620546615189e-05]
+    b1_ref = [0.008863535715733, 0.093216950269955, 0.444473912607388, 1.]
+    c1_ref = [1., 1., 1.]
+    assert np.allclose(a1, a1_ref, atol=1e-9, rtol=5e-5)
+    assert np.allclose(g1, g1_ref, atol=1e-9, rtol=5e-5)
+    assert np.allclose(b1, b1_ref, atol=1e-9, rtol=1e-4)
+    assert np.allclose(c1, c1_ref, atol=1e-9, rtol=2e-5)
+
+    ABCD = stuffABCD(a1, g1, b1, c1, form);
+    assert np.allclose(ABCD, ABCD_ref, atol=9e-5, rtol=1e-4)
+    snr, amp = simulateSNR(ABCD, osr, None, f0, nlev)
+    assert np.allclose(snr, snr_ref, atol=1e-5, rtol=1e-5)
+    assert np.allclose(amp, amp_ref, atol=1e-5, rtol=1e-5)
+    

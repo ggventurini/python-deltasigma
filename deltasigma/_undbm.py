@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,36 +21,36 @@ import numpy as np
 from ._utils import carray, save_input_form, restore_input_form
 
 def undbm(p, z=50):
-	"""Calculate the RMS voltage equivalent of a power ``p`` expressed in dBm.
+    """Calculate the RMS voltage equivalent of a power ``p`` expressed in dBm.
 
-	.. math::
+    .. math::
 
-	    V_{\\mathrm{RMS}} = \\sqrt{z\\ 10^{p/10 - 3}}
+        V_{\\mathrm{RMS}} = \\sqrt{z\\ 10^{p/10 - 3}}
 
-	**Parameters:**
+    **Parameters:**
 
-	p : scalar or sequence
-	    The power to be converted.
+    p : scalar or sequence
+        The power to be converted.
 
-	z : scalar, optional
-	    The normalization resistance value, defaults to 50 ohm.
+    z : scalar, optional
+        The normalization resistance value, defaults to 50 ohm.
 
-	**Returns:**
+    **Returns:**
 
-	Vrms : scalar or sequence
-	       The RMS voltage corresponding to p
+    Vrms : scalar or sequence
+           The RMS voltage corresponding to p
 
-	.. seealso:: :func:`undbp`, :func:`undbv`, :func:`dbm`, :func:`db`
+    .. seealso:: :func:`undbp`, :func:`undbv`, :func:`dbm`, :func:`db`
 
-	"""
-	iform = save_input_form(p)
-	p = carray(p)
-	up = np.sqrt(z*10.**(p/10.-3))
-	return restore_input_form(up, iform)
+    """
+    iform = save_input_form(p)
+    p = carray(p)
+    up = np.sqrt(z*10.**(p/10.-3))
+    return restore_input_form(up, iform)
 
 def test():
-	"""Test function for undbm()"""
-	assert np.allclose([undbm(53.015)], [100.054125892], rtol=1e-05, atol=1e-08)
-	assert np.allclose([undbm(3, 100)], [0.44668359215], rtol=1e-05, atol=1e-08)
-	assert np.isscalar(undbm(3, 100))
+    """Test function for undbm()"""
+    assert np.allclose([undbm(53.015)], [100.054125892], rtol=1e-05, atol=1e-08)
+    assert np.allclose([undbm(3, 100)], [0.44668359215], rtol=1e-05, atol=1e-08)
+    assert np.isscalar(undbm(3, 100))
 

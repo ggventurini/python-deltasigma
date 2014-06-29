@@ -18,7 +18,6 @@
  that do not find a direct replacement in numpy/scipy.
 """
 
-from warnings import warn
 import collections
 import fractions
 from fractions import Fraction as Fr
@@ -56,7 +55,7 @@ lcm = lambda a, b: int(a * b / float(gcd(a, b)))
 lcm.__doc__ = """Calculate the Least Common Multiple of ``a`` and ``b``.\n"""
 
 
-class empty:
+class empty(object):
 
     """An empty function used to hold attributes"""
 
@@ -90,8 +89,8 @@ def mfloor(x):
 def carray(x):
     """Check that x is an ndarray. If not, try to convert it to ndarray.
     """
-    if not hasattr(x, 'shape'):
-        if not hasattr(x, '__len__'):
+    if not isinstance(x, np.ndarray):
+        if not isinstance(x, collections.Iterable):
             x = np.array((x,))
         else:
             x = np.array(x)
@@ -155,7 +154,7 @@ def minreal(tf, tol=None):
     if (hasattr(tf, 'inputs') and not tf.inputs == 1) or \
        (hasattr(tf, 'outputs') and not tf.outputs == 1):
         raise TypeError("Only SISO transfer functions can be evaluated.")
-    if (hasattr(tf, 'zeros') and hasattr(tf, 'poles')):
+    if hasattr(tf, 'zeros') and hasattr(tf, 'poles'):
         # LTI objects have poles and zeros,
         zeros = tf.zeros
         poles = tf.poles
@@ -266,7 +265,7 @@ def save_input_form(a):
     """
     if np.isscalar(a):
         ret = 'scalar'
-    elif hasattr(a, 'shape'):
+    elif isinstance(a, np.ndarray):
         ret = a.shape
     elif type(a) == tuple:
         ret = 'tuple'
@@ -403,7 +402,7 @@ def _get_zpk(arg, input=0):
     elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
         z, p, k = arg.zeros, arg.poles, arg.gain
     elif _is_zpk(arg):
-        z, p, k = carray(arg[0]).squeeze(), carray(arg[1]).squeeze(), arg[2]
+        z, p, k = np.atleast_1d(arg[0]), np.atleast_1d(arg[1]), arg[2]
     elif _is_num_den(arg):
         sys = lti(*arg)
         z, p, k = sys.zeros, sys.poles, sys.gain
@@ -639,7 +638,7 @@ def _cell_like_list(shape, init=None):
 
     """
     a = []
-    for i in range(shape[0]):
+    for _ in range(shape[0]):
         if len(shape) == 1:
             a.append(init)
         else:
@@ -850,7 +849,7 @@ def test_get_zpk():
 
 def test_get_num_den():
     """Test function for _get_num_den()"""
-    from scipy.signal import zpk2ss, zpk2tf
+    from scipy.signal import zpk2ss
     z = (.4,)
     p = (.9, .1 + .2j, .1 - .2j)
     k = .4

@@ -35,16 +35,16 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
     **Parameters:**
 
     x, y : ndarray
-           data to be plotted
+         data to be plotted
 
     color : any matplotlib color, optional
             plotting color
 
     lw : float, optional
-             line width value in points
+         line width value in points
 
     ybot : float, optional
-               Dummy parameter available for compatiblity
+           Dummy parameter available for compatiblity
 
     **Returns:**
 
@@ -81,9 +81,12 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
 
 def test_lollipop():
     """Test function for lollipop()"""
+    from warnings import catch_warnings
     t = np.arange(1, 20)*1e-3
     f = 20.
     a = np.sin(2*np.pi*f*t)
     plt.figure()
-    lollipop(t, a, color=None, lw=1.5, ybot=0.1)
+    with catch_warnings(record=True) as w:
+        lollipop(t, a, color=None, lw=1.5, ybot=0.1)
+        assert len(w) > 0
     plt.grid(True)
