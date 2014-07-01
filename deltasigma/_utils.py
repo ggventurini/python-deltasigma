@@ -865,6 +865,8 @@ def test_get_num_den():
     numt, dent = _get_num_den(lti(z, p, k))  # LTI
     assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
     assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+    assert len(numt.shape) == 1
+    assert len(dent.shape) == 1
     A, B, C, D = zpk2ss(z, p, k)  # A,B,C,D
     D = np.atleast_2d(D)
     numt, dent = _get_num_den((A, B, C, D))  # A,B,C,D
@@ -877,6 +879,12 @@ def test_get_num_den():
     numt, dent = _get_num_den(ABCD)  # A,B,C,D
     assert np.allclose(numt, num, atol=1e-8, rtol=1e-5)
     assert np.allclose(dent, den, atol=1e-8, rtol=1e-5)
+    H = [[1],[2]] # check no 0-length arrays are returned
+    numt, dent = _get_num_den(H)
+    assert np.allclose(numt, 1, atol=1e-8, rtol=1e-5)
+    assert np.allclose(dent, 2, atol=1e-8, rtol=1e-5)
+    assert len(numt.shape) == 1
+    assert len(dent.shape) == 1
 
 
 def test_minreal():
