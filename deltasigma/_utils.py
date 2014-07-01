@@ -519,20 +519,22 @@ def _get_num_den(arg, input=0):
     if len(num.shape) > 1:
         num = num.squeeze()
     if len(den.shape) > 1:
-        num = den.squeeze()
+        den = den.squeeze()
 
     # default accuracy: sqrt_ps
     sqrt_eps = np.sqrt(eps)
-    while True:
+    while len(num.shape) and len(num):
         if abs(num[0]) < sqrt_eps:
             num = num[1:]
         else:
             break
-    while True:
+    while len(den.shape) and len(den):
         if abs(den[0]) < sqrt_eps:
             den = den[1:]
         else:
             break
+    den = np.atleast_1d(den)
+    num = np.atleast_1d(num)
 
     return num, den
 
