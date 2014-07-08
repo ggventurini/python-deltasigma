@@ -118,7 +118,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
        (hasattr(arg2, 'outputs') and not arg2.outputs == 1):
             raise TypeError("The supplied TF isn't a SISO transfer function.")
     if isinstance(arg2, np.ndarray):
-        ABCD = carray(arg2)
+        ABCD = np.asarray(arg2, dtype=np.float64)
         if ABCD.shape[1] != ABCD.shape[0] + nu:
             raise ValueError('The ABCD argument does not have proper dimensions.')
         form = 1
@@ -160,9 +160,9 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         B = np.hstack((B1, B2))
 
     N = u.shape[1]
-    v = np.empty((nq, N))
-    y = np.empty((nq, N))     # to store the quantizer input
-    xn = np.empty((order, N)) # to store the state information
+    v = np.empty((nq, N), dtype=np.float64)
+    y = np.empty((nq, N), dtype=np.float64)     # to store the quantizer input
+    xn = np.empty((order, N), dtype=np.float64) # to store the state information
     xmax = np.abs(x0) # to keep track of the state maxima
 
     for i in range(N):
