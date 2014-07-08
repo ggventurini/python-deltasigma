@@ -119,8 +119,8 @@ def evalTFP(Hs, Hz, f):
                          "(N,) or (N, 1) or (N, 1, 1) ...")
     f = f.reshape((-1,))
     # sanitize poles and zeros
-    szeros, spoles = carray(szeros).squeeze(), carray(spoles).squeeze()
-    zzeros, zzeros = carray(zzeros).squeeze(), carray(zzeros).squeeze()
+    szeros, spoles = np.asarray(szeros), np.asarray(spoles)
+    zzeros, zzeros = np.asarray(zzeros), np.asarray(zzeros)
     # back to business
     slim = min(0.001, max(1e-05, eps**(1./(1 + spoles.size))))
     zlim = min(0.001, max(1e-05, eps**(1./(1 + zzeros.size))))
