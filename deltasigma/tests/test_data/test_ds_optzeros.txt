@@ -1,0 +1,13 @@
+The file test_ds_optzeros.mat was generated with the following code:
+
+res = struct();
+for j=1:14,
+    field = strcat('n', int2str(j));
+    a = []
+    for opt=0:2,    
+        a = [a, ds_optzeros(j, opt)];
+    res.(field) = a;
+    end
+end
+
+And then exporting the variable res.
