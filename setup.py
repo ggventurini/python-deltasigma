@@ -30,6 +30,7 @@ setup(
     license="BSD",
     keywords="delta sigma modulator simulator",
     url="http://github.com/ggventurini/python-deltasigma",
+    test_suite = "deltasigma.tests",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Education",
