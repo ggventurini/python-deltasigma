@@ -48,6 +48,7 @@ def axisLabels(ran, incr):
 
     ValueError: "Unrecognised incr."
     """
+    ran = np.asarray(ran)
     ran[np.abs(ran) < 1e-6] = 0
     s = []
     if not isinstance(incr, collections.Iterable):

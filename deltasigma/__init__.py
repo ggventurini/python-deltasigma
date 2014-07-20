@@ -751,7 +751,7 @@ from ._realizeNTF_ct import realizeNTF_ct
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._scaleABCD import scaleABCD
-from ._simulateDSM import simulateDSM
+from ._simulateDSM import simulateDSM, simulation_backends
 from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
