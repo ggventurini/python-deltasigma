@@ -1,0 +1,21 @@
+% code to generate snr, amp, snr_user, amp_user
+clc
+clear *
+stf = []
+% Design parameters
+order = 4;
+osr = 256;
+nlev = 2;
+f0 = 0.22;
+Hinf = 1.25;
+form = 'CRFB';
+
+ntf = synthesizeNTF(order,osr,2,Hinf,f0);
+[a1,g1,b1,c1] = realizeNTF(ntf,form);
+ABCD = stuffABCD(a1, g1, b1, c1, form);
+[a2,g2,b2,c2] = mapABCD(ABCD, form);
+
+[snr, amp] = simulateSNR(ABCD, osr, [], f0, nlev);
+amp_user = linspace(-100, 0, 200);
+[snr_user, amp_user] = simulateSNR(ABCD, osr, amp_user, f0, nlev)
+%[snr2, amp2] = simulateSNR(ntf, osr, [], f0, nlev)
