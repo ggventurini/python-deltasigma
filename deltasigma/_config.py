@@ -36,10 +36,10 @@ _debug = False
 
 # get blas information to compile the cython extensions
 blas_info = get_info("blas")
-if len(blas_info) == 0:
+if len(blas_info) == 0 and _debug:
     warn("Numpy did not detect the BLAS library in the system")
 # Let's make an educated guess
-if 'linux' in sys.platform:
+if 'linux' in sys.platform or 'darwin' in sys.platform:
     guessed_include = '/usr/include'
 else:
     guessed_include = None
