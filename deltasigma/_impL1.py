@@ -86,12 +86,14 @@ def impL1(arg1, n=10):
         # Complex loop filter
         lfr_den = np.real(convolve(lf_den, np.conj(lf_den))).squeeze()
         lfr_num = convolve(lf_num, np.conj(lf_den)).squeeze()
-        lf_i = (np.real(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
-        lf_q = (np.imag(lfr_num).tolist()[0], lfr_den.tolist()[0], 1)
-        _, y = dimpulse(lf_i, t=ts) + 1j*dimpulse(lf_q, t=ts)
+        lf_i = (np.real(lfr_num).tolist(), lfr_den.tolist(), 1)
+        lf_q = (np.imag(lfr_num).tolist(), lfr_den.tolist(), 1)
+        y = dimpulse(lf_i, t=ts)[1][0] + 1j*dimpulse(lf_q, t=ts)[1][0]
+        y = y.squeeze()
     else:
         _, y = dimpulse((lf_num, lf_den, 1), t=ts)
-    return y[0].squeeze()
+        y = y[0].squeeze()
+    return y
 
 def test_impL1():
     """Test function for impL1()"""
