@@ -20,6 +20,8 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
+from nose.tools import raises
+
 class TestDB(unittest.TestCase):
     """Test class for db()"""
 
@@ -38,22 +40,33 @@ class TestDB(unittest.TestCase):
         pass
 
     def test_db_1(self):
-        """Test function for db() 1/3"""
+        """Test function for db() 1/6"""
         res = ds.db(self.tv1, 'power')
         self.assertTrue(np.allclose(self.r1, res, atol=1e-8, rtol=1e-5))
 
     def test_db_2(self):
-        """Test function for db() 2/4"""
+        """Test function for db() 2/6"""
         res = ds.db(self.tv2, 'power')
         self.assertTrue(np.allclose(self.r2, res, atol=1e-8, rtol=1e-5))
 
     def test_db_3(self):
-        """Test function for db() 3/4"""
+        """Test function for db() 3/6"""
         res = ds.db(self.tv3, 'power')
         self.assertTrue(np.allclose(self.r3, res, atol=1e-8, rtol=1e-5))
 
     def test_db_4(self):
-        """Test function for db() 4/4"""
+        """Test function for db() 4/6"""
         res = ds.undbv(ds.db(self.tv4, 'voltage'))
         self.assertTrue(np.allclose(self.tv4, res, atol=1e-8, rtol=1e-5))
+
+    @raises(ValueError)
+    def test_db_5(self):
+        """Test function for db() 5/6"""
+        res = ds.db([1], 'wrong')
+
+    def test_db_6(self):
+        """Test function for db() 6/6"""
+        res = ds.db(self.tv1, 'power', R=100)
+        # the R value should be ignored (warning only)
+        self.assertTrue(np.allclose(self.r1, res, atol=1e-8, rtol=1e-5))
 
