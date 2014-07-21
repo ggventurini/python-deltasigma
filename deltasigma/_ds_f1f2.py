@@ -32,15 +32,3 @@ def ds_f1f2(OSR=64, f0=0., complex_flag=False):
             f2 = 0.5/OSR
     return f1, f2
 
-def test_ds_f1f2():
-    """Test function for ds_f1f2()"""
-    f0 = 1e3
-    OSR = 128
-    cf = False
-    t1f1, t1f2 = ds_f1f2(OSR, f0, cf)
-    t2f1, t2f2 = ds_f1f2(OSR, f0, not cf)
-    t3f1, t3f2 = ds_f1f2(OSR, .24/OSR, cf)
-    assert (t1f1, t1f2) == (f0 - 0.25/OSR, f0 + 0.25/OSR)
-    assert (t2f1, t2f2) == (f0 - 0.5/OSR, f0 + 0.5/OSR)
-    assert (t3f1, t3f2) == (0., 0.5/OSR)
-
