@@ -77,23 +77,3 @@ def db(x, input_type='voltage', R=1.):
         raise ValueError("db got input_type %s, instead of voltage or power" % input_type)
     return y
 
-
-def test_db():
-    """Test function for db()
-    """
-    from ._undbv import undbv
-    tv = np.array([2])
-    r = np.array([3.01029996])
-    res = db(tv, 'power')
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-    tv = 2
-    r = 3.01029996
-    res = db(tv, 'power')
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-    tv = 2, 2
-    r = 3.01029996, 3.01029996
-    res = db(tv, 'power')
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-    t = np.array([3.0])
-    r1 = undbv(db(t, 'voltage'))
-    assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
