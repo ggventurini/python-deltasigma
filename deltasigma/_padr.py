@@ -53,21 +53,4 @@ def padr(x, n, val=0.):
                        ), axis=1
                       )
     return y
-                      
-def test_padr():
-    """Test function for padr()"""
-    tv = np.eye(15)
-    tr = padr(tv, n=25, val=2)
-    res = np.concatenate((tv, 2.*np.ones((15, 10))), axis=1)
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # 1-d array
-    tv = np.arange(10)
-    tr = padr(tv, n=25, val=1.5)
-    res = np.hstack((tv.reshape((1, -1)), 1.5*np.ones((1, 15))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # empty matrix array
-    tv = np.array([])
-    tr = padr(tv, n=25, val=1.5)
-    res = np.hstack((tv.reshape((1, -1)), 1.5*np.ones((1, 25))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
