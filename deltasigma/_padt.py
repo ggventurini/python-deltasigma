@@ -53,21 +53,4 @@ def padt(x, n, val=0.):
                        ), axis=0
                       )
     return y
-                      
-def test_padt():
-    """Test function for padt()"""
-    tv = np.eye(15)
-    tr = padt(tv, n=25, val=2)
-    res = np.concatenate((2.*np.ones((10, 15)), tv), axis=0)
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # 1-d array
-    tv = np.arange(10)
-    tr = padt(tv, n=25, val=1.5)
-    res = np.vstack((1.5*np.ones((15, 1)), tv.reshape((-1, 1))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # empty matrix array
-    tv = np.array([])
-    tr = padt(tv, n=25, val=1.5)
-    res = np.vstack((1.5*np.ones((25, 1)), tv.reshape((-1, 1))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
 
