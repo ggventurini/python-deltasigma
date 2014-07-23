@@ -67,24 +67,3 @@ def calculateSNR(hwfft, f, nsig=1):
         snr = dbv(s/n)
     return snr
 
-def test_calculateSNR():
-    """Test function for calculateSNR()
-    """
-    from numpy.fft import fft
-    from ._ds_hann import ds_hann
-    N = 2**12
-    t = np.arange(N)
-    f1, f2 = 1./8, 1./302
-    A = np.cos(2*np.pi*f1*t)
-    B = .01*np.cos(2*np.pi*f2*t)
-    y = A + B
-    window = ds_hann(N)
-    hwfft = fft(window*y)
-    snr = calculateSNR(hwfft[:N/2], int(N*f1))
-    assert np.allclose(snr, 40, atol=1e-8, rtol=1e-8)
-    hwfft = np.zeros((N/2, ))
-    hwfft[512] = 1. # specially crafted to have Inf snr
-    snr = calculateSNR(hwfft[:N/2], 512)
-    print(snr)
-    assert snr == np.Inf
-
