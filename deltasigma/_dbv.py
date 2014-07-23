@@ -48,9 +48,3 @@ def dbv(x):
     y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))
     return restore_input_form(y, iform)
 
-def test_dbv():
-    """Test function for dbv()"""
-    t = np.array([3.0])
-    r1 = undbv(dbv(t))
-    assert np.allclose(t, r1, atol=1e-8, rtol=1e-5)
-
