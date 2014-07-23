@@ -70,8 +70,9 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         ABCD[diagonal] = np.ones((order,))
         subdiag = [i[even:order:2] for i in diagonal_indices(ABCD, -1)]
         ABCD[subdiag] = c[0, even:order:2]
-        supdiag = [i[odd:order:2] for i in diagonal_indices(ABCD[:order, :order], +1)]
-        ABCD[supdiag] = -g.reshape((-1,))
+        if order > odd:
+            supdiag = [i[odd:order:2] for i in diagonal_indices(ABCD[:order, :order], +1)]
+            ABCD[supdiag] = -g.reshape((-1,))
         # row numbers of delaying integrators
         dly = np.arange(odd + 1, order, 2)
         ABCD[dly, :] = ABCD[dly, :] + np.dot(np.diag(c[0, dly - 1]), ABCD[dly - 1, :])
