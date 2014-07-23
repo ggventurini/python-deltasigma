@@ -48,20 +48,3 @@ def dbp(x):
     y[nonzero] = 10. * np.log10(np.abs(x[nonzero]))
     return restore_input_form(y, iform)
 
-
-def test_dbp():
-    """Test function for dbp()
-    """
-    tv = np.array([2])
-    r = np.array([3.01029996])
-    res = dbp(tv)
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-    tv = 2
-    r = 3.01029996
-    res = dbp(tv)
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
-    assert np.isscalar(res)  # check for type coherence
-    tv = 2, 2
-    r = 3.01029996, 3.01029996
-    res = dbp(tv)
-    assert np.allclose(r, res, atol=1e-8, rtol=1e-5)
