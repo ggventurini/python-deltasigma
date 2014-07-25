@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# <filename>
-# This module provides the tests for the ____________ function.
+# test_circ_smooth.py
+# This module provides the tests for the circ_smooth() function.
 # Copyright 2014 Giuseppe Venturini & Shayne Hodge
 # This file is part of python-deltasigma.
 #
@@ -16,12 +16,20 @@
 import unittest
 import numpy as np
 import deltasigma as ds
+import pkg_resources
+from scipy.io import loadmat
+from os.path import join
 
-class TestTestTemplate(unittest.TestCase):
-    """Class doc string"""
+
+class TestCircSmooth(unittest.TestCase):
+    """Test function for circ_smooth()"""
+
     def setUp(self):
-        pass
+        file_path = join('test_data', 'test_circ_smooth.mat')
+        fname = pkg_resources.resource_filename(__name__, file_path)
+        self.bt = loadmat(fname)['b']
 
-    def test_true_is_true(self):
-        """Function doc string"""
-        self.assertTrue(True)
+    def test_circ_smooth(self):
+        A = np.arange(1, 101)
+        b = ds.circ_smooth(A, 16)
+        self.assertTrue(np.allclose(self.bt, b, atol=1e-8, rtol=1e-5))
