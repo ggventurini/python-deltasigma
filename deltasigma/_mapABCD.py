@@ -123,7 +123,11 @@ def mapABCD(ABCD, form='CRFB'):
     else:
         raise ValueError('Form %s is not yet supported.' % form)
 
-    return a.squeeze(), g.squeeze(), b.squeeze(), c.squeeze()
+    a = np.atleast_1d(a.squeeze())
+    g = np.atleast_1d(g.squeeze())
+    b = np.atleast_1d(b.squeeze())
+    c = np.atleast_1d(c.squeeze())
+    return a, g, b, c
 
 def test_mapABCD():
 	"""Test function for mapABCD()"""
