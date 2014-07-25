@@ -77,7 +77,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     if ymax is None:
         ymax = nlev + 5
     order = ABCD.shape[0] - 1
-    xlim = xlim*np.ones((1, order)) if np.isscalar(xlim) else xlim.reshape((1, -1))
+    xlim = xlim*np.ones((order,)) if np.isscalar(xlim) else xlim.reshape((-1, ))
     if np.isreal(ABCD).all():
         quadrature = False
     else:
