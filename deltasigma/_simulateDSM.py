@@ -46,7 +46,7 @@ try:
         # it on Windows, we'll make available a patch to re-enable it.
         # In most cases now, users only get error messages from BLAS
         # not being available.
-        raise(ImportError, 'CBLAS extension disabled on Windows')
+        raise ImportError('CBLAS extension disabled on Windows')
     import pyximport
     pyximport.install(setup_args=setup_args)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
