@@ -22,7 +22,8 @@ import numpy as np
 def delay(x, n=1):
     """Delay signal ``x`` by ``n`` samples.
     """
-    nx = np.size(x)
+    x = np.atleast_1d(x)
+    nx = max(x.shape)
     if nx <= n:
         y = np.zeros(x.shape)
     else:
