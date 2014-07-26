@@ -96,15 +96,3 @@ def ds_optzeros(n, opt=1):
         m += 2
     return optZeros
 
-def test_optzeros():
-    """Test function for ds_optzeros()"""
-    import pkg_resources
-    import scipy.io
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_ds_optzeros.mat")
-    res = scipy.io.loadmat(fname)['res']
-    ns = ('n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'n7', 'n8', 'n9', 'n10', 'n11', 'n12', 'n13', 
-          'n14')
-    for i in range(len(ns)):
-        for opt in (0, 1, 2):
-            assert np.allclose(res[ns[i]][0][0][:, opt], ds_optzeros(i+1, opt), atol=1e-10, rtol=1e-6)
-    
