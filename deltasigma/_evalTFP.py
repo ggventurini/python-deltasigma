@@ -156,29 +156,3 @@ def evalTFP(Hs, Hz, f):
     H = restore_input_form(H, form_f)
     return H
 
-def test_evalTFP():
-    """Test function for evalTFP"""
-    #          (z-0.3)
-    # H1 = ---------------
-    #      (z-0.5) (z-0.9)
-    H1 = (np.array([.3]), np.array([.5, .9]), 1)
-    #             1
-    # H2 = ---------------
-    #      (z-0.3) (z-0.9)
-    H2 = (np.array([]), np.array([.3, .9]), 1)
-    a = evalTFP(H1, H2, .2)
-    at = np.array([0.5611 + 0.1483j])
-    assert np.allclose(np.array([a]), at, atol=1e-4, rtol=1e-4)
-    assert np.isscalar(a)
-    #          (z-0.301)
-    # H1 = ---------------
-    #      (z-0.5) (z-0.9)
-    H1 = (np.array([.301]), np.array([.5, .9]), 1)
-    #             1
-    # H2 = ---------------
-    #      (z-0.3) (z-0.9)
-    H2 = (np.array([]), np.array([.3, .9]), 1)
-    a = evalTFP(H1, H2, np.array([.2, .23, .4]))
-    at = np.array([0.5610 + 0.1488j, 0.4466 + 0.0218j, 0.0632 - 0.1504j])
-    assert np.allclose(a, at, atol=1e-4, rtol=1e-4)
-    assert np.array([.2, .23, .4]).shape == a.shape
