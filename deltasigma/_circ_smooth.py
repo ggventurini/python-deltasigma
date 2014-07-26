@@ -125,14 +125,4 @@ def circ_smooth(x, n=16):
     yp = np.hstack((xw[n - 1:nx], xw[:n - 1] + xw[nx:]))
     y = circshift(yp, [int(n/2. - 1)])
     return y
-    
-def test_circ_smooth():
-    """Test function for circ_smooth()
-    """
-    import pkg_resources
-    from scipy.io import loadmat
-    A = np.arange(1, 101)
-    b = circ_smooth(A, 16)
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_circ_smooth.mat")
-    bt = loadmat(fname)['b']
-    assert np.allclose(bt, b, atol=1e-8, rtol=1e-5) 
+
