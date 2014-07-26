@@ -82,27 +82,3 @@ def ds_quantize(y, n=2):
             v[i] = m * L[i]
     return v
 
-
-def test_ds_quantize():
-    """Test function for ds_quantize()
-    """
-    t = np.arange(-3, 3, .2)
-    t = t.reshape((1, t.shape[0]))
-    y = t
-    for _ in range(2):
-        y = np.concatenate((y, t), axis=0)
-    n = np.array([2, 3, 4])
-    re1 = ds_quantize(y, n)
-    re2 = np.array([[-1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1., -1.,
-                     -1., -1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-                      1., 1., 1., 1.],
-                    [-2., -2., -2., -2., -2., -2., -2., -2., -2., -2., 0., 0., 0.,
-                      0., 0., 0., 0., 0., 0., 0., 2., 2., 2., 2., 2., 2.,
-                      2., 2., 2., 2.],
-                    [-3., -3., -3., -3., -3., -1., -1., -1., -1., -1., -1., -1., -1.,
-                     -1., -1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 3.,
-                      3., 3., 3., 3.]
-                   ])
-    assert np.allclose(re1, re2, atol=1e-8, rtol=1e-5)
-    re1 = ds_quantize(y[1, :], n=3)
-    assert np.allclose(re1, re2[1, :], atol=1e-8, rtol=1e-5)
