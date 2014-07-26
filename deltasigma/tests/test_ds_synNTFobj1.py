@@ -24,8 +24,15 @@ class TestDSSynNTFObj1(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_first_quantize(self):
-        """ Test function for ds_synNTFobj1() """
+    def test_ds_synNTFobj1_1(self):
+        """Test function for ds_synNTFobj1() 1/2"""
         res = -27.167735573627283
         tv = ds.ds_synNTFobj1(.5, (.9, 2), 64, .1)
         self.assertTrue(np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5))
+
+    def test_ds_synNTFobj1_2(self):
+        """Test function for ds_synNTFobj1() 2/2"""
+        res = -43.0365
+        tv = ds.ds_synNTFobj1(.5, (.9, 2), 64, 0.)
+        self.assertTrue(np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5))
+
