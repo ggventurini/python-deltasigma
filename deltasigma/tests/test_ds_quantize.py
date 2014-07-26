@@ -19,7 +19,7 @@ import deltasigma as ds
 
 
 class TestDSQuantize(unittest.TestCase):
-    """Test functions for ds_quantize()"""
+    """Test class for ds_quantize()"""
 
     def setUp(self):
         t = np.arange(-3, 3, .2)
@@ -42,11 +42,11 @@ class TestDSQuantize(unittest.TestCase):
                    3., 3., 3., 3.]])
 
     def test_first_quantize(self):
-        """ First test function for ds_quantize() """
+        """Test function for ds_quantize() 1/2 """
         self.assertTrue(
             np.allclose(self.re1_first, self.re2, atol=1e-8, rtol=1e-5))
 
     def test_second_quantizer(self):
-        """Second test function for ds_quantize() """
+        """Test function for ds_quantize() 2/2 """
         self.assertTrue(
             np.allclose(self.re1_second, self.re2[1, :], atol=1e-8, rtol=1e-5))
