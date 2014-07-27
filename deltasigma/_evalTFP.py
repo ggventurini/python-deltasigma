@@ -43,7 +43,7 @@ def evalTFP(Hs, Hz, f):
         Hz is a DT (SISO) TF in zpk-tuple form.
 
     f : scalar or 1D array or sequence
-        frequency values.
+        Frequency values.
 
     **Returns:**
 
