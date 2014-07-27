@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,12 +21,13 @@ import numpy as np
 from ._calculateTF import calculateTF
 
 def mod2():
-    """Populate a structure describing the second-order modulator.
+    """A description of the second-order modulator.
     
     **Returns:**
 
     ABCD, NTF, STF : a tuple of (ndarray, lti, lti)
-        The elements are the ABCD matrix (ndarray), the NTF (lti object), the STF (lti object).
+        The elements are the ABCD matrix (ndarray),
+        the NTF (lti object), the STF (lti object).
 
     """
     A = np.array([[1., 0.], [1., 1.]])
