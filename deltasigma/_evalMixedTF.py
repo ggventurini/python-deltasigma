@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -23,11 +23,32 @@ from ._evalTFP import evalTFP
 from ._utils import carray, save_input_form, restore_input_form
 
 def evalMixedTF(tf, f, df=1e-5):
-    """Compute the mixed transfer function ``tf`` at a frequency f.
+    """Compute a mixed transfer function.
 
-    ``tf`` is a dictionary of lists of 1d arrays, with fields 'Hs' and 'Hz', 
-    which represent continuous-time and discrete-time TFs which will be 
-    evaluated, multiplied together and then added up.
+    Mathematically, it means to evaluate the sum of products:
+
+    .. math::
+
+        TF(f) = \\Sum_i H_{z,i}(f) \\cdot H_{s,i}(f)
+
+    **Parameters:**
+
+    tf : dict
+        ``tf`` is a dictionary of lists of 1d arrays, with keys 'Hs' and 'Hz',
+        which represent continuous-time and discrete-time TFs which will be
+        evaluated, multiplied together and then added up.
+    f : scalar or sequence-like
+        The frequencies (or frequency, if ``f`` is a scalar) at which the
+        product will be evaluated.
+    df : float, optional
+        If the method happens to evaluate a transfer function in a root, it
+        will move away of ``df``, defaulting to 1E-5.
+
+    **Returns:**
+
+    TF : scalar or sequence
+        The sum of products computed at ``f``.
+
     """
     iform = save_input_form(f)
     f = carray(f)
