@@ -29,7 +29,7 @@ def evalMixedTF(tf, f, df=1e-5):
 
     .. math::
 
-        TF(f) = \\Sum_i H_{z,i}(f) \\cdot H_{s,i}(f)
+        TF(f) = \\sum_i H_{z,i}(f) \\cdot H_{s,i}(f)
 
     **Parameters:**
 
