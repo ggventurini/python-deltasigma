@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -42,10 +42,10 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
     of the equivalent DT system with input ``v`` satisfies:
     ``y(n) = yc(n-)`` for integer ``n``. The DACs are characterized by
     rectangular impulse responses with edge times specified in the t list.
-    
+
     **Input:**
 
-    sys_c : object 
+    sys_c : object
            the LTI description of the CT system, which can be:
 
      * the ABCD matrix,
@@ -54,7 +54,7 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
      * a list of LTI objects
 
     t : array_like
-        The edge times of the DAC pulse used to make CT waveforms 
+        The edge times of the DAC pulse used to make CT waveforms
         from DT inputs. Each row corresponds to one of the system
         inputs; [-1 -1] denotes a CT input. The default is [0 1],
         for all inputs except the first.
@@ -62,15 +62,15 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
     f0 : float
          The (normalized) frequency at which the Gp filters' gains are
          to be set to unity. Default 0 (DC).
-    
+
     **Output:**
 
     sys : tuple
-         the LTI description for the DT equivalent, in A, B, C, D 
+         the LTI description for the DT equivalent, in A, B, C, D
          representation.
 
     Gp : list of lists
-         the mixed CT/DT prefilters which form the samples 
+         the mixed CT/DT prefilters which form the samples
          fed to each state for the CT inputs.
 
     **Example:**
@@ -108,9 +108,9 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
 
     Equivalent to::
 
-               (z -1)^2 
+               (z -1)^2
         NTF = ----------
-                 z^2 
+                 z^2
 
     .. seealso:: R. Schreier and B. Zhang, "Delta-sigma modulators employing \
     continuous-time circuitry," IEEE Transactions on Circuits and Systems I, \
@@ -139,12 +139,12 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
             di[i] = False
 
     # c2d assumes t1=0, t2=1.
-    # Also c2d often complains about poor scaling and can even produce 
+    # Also c2d often complains about poor scaling and can even produce
     # incorrect results.
     A, B, C, D, _ = cont2discrete((Ac, Bc, Cc, Dc), 1, method='zoh')
     Bc1 = Bc[:, ~di]
 
-    # Examine the discrete-time inputs to see how big the 
+    # Examine the discrete-time inputs to see how big the
     # augmented matrices need to be.
     B1 = B[:, ~di]
     D1 = D[:, ~di]
@@ -205,35 +205,35 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
         n, m = Bc1.shape
         Gp = np.empty_like(np.zeros((n, m)), dtype=object)
         # !!Make this like stf: an array of zpk objects
-        ztf = np.empty_like(Bc1, dtype=object) 
+        ztf = np.empty_like(Bc1, dtype=object)
         # Compute the z-domain portions of the filters
         ABc1 = np.dot(A, Bc1)
         for h in range(m):
             for i in range(n):
                 if Bc1[i, h] == 0:
-                    ztf[i, h] = (np.array([]), 
-                                 np.array([0.]), 
+                    ztf[i, h] = (np.array([]),
+                                 np.array([0.]),
                                  -ABc1[i, h]) # dt=1
                 else:
                     ztf[i, h] = (np.atleast_1d(ABc1[i, h]/Bc1[i, h]),
-                                 np.array([0.]), 
+                                 np.array([0.]),
                                  Bc1[i, h]) # dt = 1
         # Compute the s-domain portions of each of the filters
         stf = np.empty_like(np.zeros((n, n)), dtype=object) # stf[out, in] = zpk
         for oi in range(n):
             for ii in range(n):
                 # Doesn't do pole-zero cancellation
-                stf[oi, ii] = ss2zpk(Ac, np.eye(n), np.eye(n)[oi, :], 
+                stf[oi, ii] = ss2zpk(Ac, np.eye(n), np.eye(n)[oi, :],
                                      np.zeros((1, n)), input=ii)
                 # scipy as of v 0.13 has no support for LTI MIMO systems
                 # only 'MISO', therefore you can't write:
-                # stf = ss2zpk(Ac, eye(n), eye(n), np.zeros(n, n))) 
+                # stf = ss2zpk(Ac, eye(n), eye(n), np.zeros(n, n)))
         for h in range(m):
             for i in range(n):
                 # k = 1 unneded, see below
                 for j in range(n):
                     # check the k values for a non-zero term
-                    if stf[i, j][2] != 0 and ztf[j, h][2] != 0: 
+                    if stf[i, j][2] != 0 and ztf[j, h][2] != 0:
                         if Gp[i, h] is None:
                             Gp[i, h] = {}
                             Gp[i, h].update({'Hs':[list(stf[i, j])]})
@@ -242,7 +242,7 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
                             Gp[i, h].update({'Hs':Gp[i, h]['Hs'] + [list(stf[i, j])]})
                             Gp[i, h].update({'Hz':Gp[i, h]['Hz'] + [list(ztf[j, h])]})
                         # the MATLAB-like cell code for the above statements would have
-                        # been: 
+                        # been:
                         #Gp[i, h](k).Hs = stf[i, j]
                         #Gp[i, h](k).Hz = ztf[j, h]
                         #k = k + 1
@@ -296,108 +296,4 @@ def _B2formula(Ac, t1, t2, B2):
     if norm(term1 - term) > 0.001:
         warn('Inaccurate calculation in mapCtoD.')
     return term
-
-def test_mapCtoD():
-    """Test function for mapCtoD()"""
-    from ._calculateTF import calculateTF
-    # The first test comes straight from the DSToolbox doc
-    # We map the standard continuous time DS modulator to its DT counterpart
-    # and we check whether the TF is (1 - 1/z)**2
-    LFc = (np.array([[0., 0.], [1., 0.]]), 
-           np.array([[1., -1.], [0., -1.5]]), 
-           np.array([[0., 1.]]), 
-           np.array(([[0., 0.]]))
-          )
-    tdac = [0, 1]
-    LF, Gp = mapCtoD(LFc, tdac)
-    ABCD = np.vstack((np.hstack((LF[0], LF[1])),
-                      np.hstack((LF[2], LF[3]))
-                    ))
-    H = calculateTF(ABCD)
-    assert np.allclose(H[0].num, [ 1., -2.,  1.], atol=1e-8, rtol=1e-5)
-    assert np.allclose(H[0].den, [1., 0., 0.], atol=1e-8, rtol=1e-5)
-    # zero delay NRZ test
-    ABCDc = np.array([[0., 0.,  0., 0.04440879, -0.04440879],
-                      [1., 0., -0.00578297, 0., -0.23997611],
-                      [0., 1.,  0., 0., -0.67004646],
-                      [0., 0.,  1., 0.,  0.]])
-    tdac = np.array([[-1., -1], [0., 1.]])
-    sys_d, Gp = mapCtoD(ABCDc, tdac)
-    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
-                      np.hstack((sys_d[2], sys_d[3]))
-                    ))
-    ABCDref = np.array([[1., 0., 0., 0.04440879, -0.04440879],
-                        [0.99903645, 0.99710991, -0.0057774, 0.0221937, -0.26000208],
-                        [0.49975909, 0.99903645,  0.99710991, 0.00739932, -0.79673041],
-                        [0., 0., 1., 0., 0.]])
-    assert np.allclose(ABCD, ABCDref, atol=1e-8, rtol=1e-5)
-    # .1 delay NRZ
-    ABCDc = np.array([[0., 0., 0., 0.0444, -0.0444],
-                      [1., 0., -0.0058, 0., -0.2440],
-                      [0., 1.,  0., 0., -0.6942],
-                      [0., 0.,  1., 0., -0.0682]])
-
-    tdac = np.array([[-1., -1], [0.1, 1.1]])
-    sys_d, Gp = mapCtoD(ABCDc, tdac)
-    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
-                      np.hstack((sys_d[2], sys_d[3]))
-                    ))
-    ABCDref = np.array([[1., 0., 0., -0.0044, 0.0444, -0.0400],
-                        [0.999, 0.9971, -0.0058, -0.0282, 0.0222, -0.2358],
-                        [0.4998, 0.999, 0.9971, -0.0944, 0.0074, -0.7285],
-                        [0., 0., 0., 0., 0., 1.],
-                        [0., 0., 1., -0.0682, 0., 0.]])
-    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
-    # Non-zero f0 test
-    f0 = .2
-    ABCDc = np.array([[0, 0, 1, -1],
-                      [1, 0, 0, -1.5],
-                      [0, 1, 0, 0]])
-    tdac = np.array([0.1, 1.1])
-    sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
-    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
-                      np.hstack((sys_d[2], sys_d[3]))
-                    ))
-    ABCDref = np.array([
-    [1.0000,         0,   -0.1000,    0.9355,   -0.9000],
-    [1.0000,    1.0000,   -0.2450,    0.4784,   -1.7550],
-    [     0,         0,         0,         0,    1.0000],
-    [     0,    1.0000,         0,         0,         0]])
-    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
-    # Non-zero f0 test, short DAC pulse
-    f0 = .2
-    ABCDc = np.array([[0, 0, 1, -1],
-                      [1, 0, 0, -1.5],
-                      [0, 1, 0, 0]])
-    tdac = np.array([0.1, 0.4])
-    sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
-    ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
-                      np.hstack((sys_d[2], sys_d[3]))
-                    ))
-    print(ABCD)
-    ABCDref = np.array([
-    [1.0000,         0,    0.9355,   -0.3000],
-    [1.0000,    1.0000,    0.4784,   -0.6750],
-    [     0,    1.0000,         0,         0]])
-    assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
-    #
-    # is this ABCD_ref correct??
-    #f0 = .2
-    #ABCDc = np.array([[0., -1.5791, 0., 0., 0.3362, 0.2928],
-    #                  [1., 0., 0., 0., 0., 0.1658],
-    #                  [0., 1., 0., -1.5791, 0., 0.4160],
-    #                  [0., 0., 1., 0., 0., -0.5262],
-    #                  [0., 0., 0., 1., 0., -0.0545]])
-    #ABCDref = np.array([[0.3090, -1.1951, 0, 0, -0.0086, 0.2401,    0.1156],
-    #                 [0.7568, 0.3090,  0, 0, 0.0278, 0.1406,    0.2259],
-    #                 [0.3784, 0.5329,  0.3090, -1.1951, 0.0961,    0.0462,    0.6867],
-    #                 [0.1418, 0.3784,  0.7568, 0.3090, 0.0209,    0.0123,   -0.2026],
-    #                 [0.,     0.,      0, 0, 0, 0, 1.],
-    #                 [0.,     0.,      0, 1., -0.0545, 0, 0.]])
-    #tdac = np.array([[-1., -1], [0.1, 1.1]])
-    #sys_d, Gp = mapCtoD(ABCDc, tdac, f0=f0)
-    #ABCD = np.vstack((np.hstack((sys_d[0], sys_d[1])),
-    #                  np.hstack((sys_d[2], sys_d[3]))
-    #                ))
-    #assert np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4)
 
