@@ -52,17 +52,3 @@ def mapRtoQ(ABCDr):
 
     return ABCDq, ABCDp
 
-def test_mapRtoQ():
-    """Test function for mapRtoQ()
-    """
-    test_matrix = np.arange(1, 25).reshape((4, 6)).T
-    resq, resp = mapRtoQ(test_matrix)
-    dq = np.array([[4.5 - 2.5j, 16.5 - 2.5j],
-                   [6.5 - 2.5j, 18.5 - 2.5j],
-                   [8.5 - 2.5j, 20.5 - 2.5j]])
-    dp = np.array([[-3.5 + 4.5j, -3.5 + 16.5j],
-                   [-3.5 + 6.5j, -3.5 + 18.5j],
-                   [-3.5 + 8.5j, -3.5 + 20.5j]])
-
-    assert np.allclose(resq, dq, atol=1e-8, rtol=1e-5)
-    assert np.allclose(resp, dp, atol=1e-8, rtol=1e-5)
