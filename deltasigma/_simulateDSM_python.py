@@ -198,30 +198,3 @@ def ds_quantize(y, n):
         v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
     return v
 
-def test_simulateDSM():
-    """Test function for simulateDSM()"""
-    import numpy as np
-    import pkg_resources
-    import scipy.io
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-    v_ref = scipy.io.loadmat(fname)['v']
-    xn_ref = scipy.io.loadmat(fname)['xn']
-    xmax_ref = scipy.io.loadmat(fname)['xmax']
-    y_ref = scipy.io.loadmat(fname)['y']
-    OSR = 32
-    H = synthesizeNTF(5, OSR, 1)
-    N = 8192
-    fB = np.ceil(N/(2.*OSR))
-    f = 85
-    u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-    v, xn, xmax, y = simulateDSM(u,H);
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    a, g, b, c = realizeNTF(H, 'CRFB')
-    ABCD = stuffABCD(a, g, b, c, form='CRFB')
-    v, xn, xmax, y = simulateDSM(u, ABCD)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
