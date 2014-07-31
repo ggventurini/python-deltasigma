@@ -108,10 +108,3 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None,
               'will be ignored.') % yLab)
     return
 
-def test_figureMagic():
-    """Test function for figureMagic()"""
-    a = np.arange(10)
-    plt.figure()
-    plt.plot(a)
-    figureMagic(xRange=[1, 10], dx=1, xLab=None, yRange=[2, 8], dy=.5,
-                yLab=None, size=(10, 6), name="Test plot")

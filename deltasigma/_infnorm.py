@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 
-"""This module provides the infnorm() function, which finds the infinity 
+"""This module provides the infnorm() function, which finds the infinity
 norm of a z-domain transfer function.
 """
 
@@ -22,7 +22,7 @@ from warnings import warn
 import numpy as np
 from scipy.optimize import fminbound
 from ._nabsH import nabsH
-from ._evalTF import evalTF 
+from ._evalTF import evalTF
 
 def infnorm(H):
     """Find the infinity norm of a z-domain transfer function.
@@ -71,12 +71,3 @@ def infnorm(H):
     # in the original Toolbox, wmax is returned (seems to be never used though)
     # rep? We return fmax.
     return Hinf, fmax
-
-def test_infnorm():
-    """Test function for infnorm()"""
-    num, den = np.poly([3, 0.3, 1]), np.poly([2, 0.5, .25])
-    H = (num, den)
-    Hinf, fmax = infnorm(H)
-    assert np.allclose(Hinf, 1.84888889, atol=1e-8, rtol=1e-5)
-    assert np.allclose(fmax, 3.141592653589793/2./np.pi, atol=1e-8, rtol=1e-5)
-
