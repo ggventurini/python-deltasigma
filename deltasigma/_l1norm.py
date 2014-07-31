@@ -46,19 +46,19 @@ def l1norm(H):
             rounding errors.
 
     """
-        if _is_zpk(H):
-            z, p, k = H
-            HP = (z, p, k, 1.)
-        elif _is_num_den(H):
-            num, den = H
-            HP = (num, den, 1.)
-        elif _is_A_B_C_D(H):
-            A, B, C, D = H
-            HP = (A, B, C, D, 1.)
-        elif isinstance(H, lti):
-            warn('l1norm() got an LTI object, translated to zpk form, rounding errors possible.')
-            z, p, k = _get_zpk(H)
-            HP = (z, p, k, 1.)
+    if _is_zpk(H):
+        z, p, k = H
+        HP = (z, p, k, 1.)
+    elif _is_num_den(H):
+        num, den = H
+        HP = (num, den, 1.)
+    elif _is_A_B_C_D(H):
+        A, B, C, D = H
+        HP = (A, B, C, D, 1.)
+    elif isinstance(H, lti):
+        warn('l1norm() got an LTI object, translated to zpk form, rounding errors possible.')
+        z, p, k = _get_zpk(H)
+        HP = (z, p, k, 1.)
     _, y = dimpulse(HP, t=np.arange(100))
     return np.sum(np.abs(y[0]))
 
