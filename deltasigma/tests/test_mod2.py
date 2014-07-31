@@ -30,6 +30,7 @@ class TestMod2(unittest.TestCase):
 
     def test_mod2(self):
         """Test function for mod2()"""
-        ABCD, ntf, stf = mod2()
-        self.assertTrue(np.allclose(ABCD, ABCDtest, atol=1e-8, rtol=1e-5))
+        ABCD, ntf, stf = ds.mod2()
+        self.assertTrue(np.allclose(ABCD, self.ABCDmod2, atol=1e-8,
+                        rtol=1e-5))
 
