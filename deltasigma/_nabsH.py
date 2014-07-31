@@ -32,13 +32,3 @@ def nabsH(w, H):
 	z = np.exp(1j*w)
 	return -np.abs(evalTF(H, z))
 
-def test_nabsH():
-	"""Test function for nabsH()"""
-	H = ([1, 2], [2, 0, .25], 1)
-	N = 129
-	w = np.linspace(0, 2*np.pi, num=N, endpoint=True)
-	z = np.exp(1j*w)
-	r1 = -np.abs(evalTF(H, z))
-	r2 = nabsH(w, H)
-	assert np.allclose(r1, r2, atol=1e-8, rtol=1e-5)
-
