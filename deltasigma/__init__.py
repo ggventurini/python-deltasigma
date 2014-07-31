@@ -56,7 +56,7 @@ and the avaliable functionality at a glance.
 All the basic features are available since v. 0.1. A detailed changelog may be
 found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
 
-Detailed information split by file and function status may be found in 
+Detailed information split by file and function status may be found in
 `files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
 
 The further functionality is expected to be ported and available in future releases
@@ -108,7 +108,7 @@ Dependencies
 
 Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>`__,
 at your choice, `numpy <http://www.numpy.org/>`__,
-`scipy <http://www.scipy.org>`__ (>= 0.11.0) and 
+`scipy <http://www.scipy.org>`__ (>= 0.11.0) and
 `matplotlib <http://www.matplotlib.org>`__.
 
 They are packaged by virtually all the major Linux distributions.
@@ -156,23 +156,23 @@ but by a system administrator - where typically installing libraries is
 not possible and software packages are disarmingly outdated.
 
 If at all possible, installing `Cython <http://www.cython.org>`__ is
-strongly recommended. 
+strongly recommended.
 
 ``python-deltasigma`` contains python extension to simulate delta sigma
 modulators providing a near-native execution speed -- overall roughly a
 70x speed-up compared to a plain Python implementation.
 
 On Linux, installing Cython is just one: `aptitude install cython`
-away. 
+away.
 
 On Mac OS X and Windows, Cython may be installed as part of one of the
 frameworks above. Please notice a compiler is needed, this may require
 installing XCode and its command-line utilities or gcc through homebrew,
-on Mac OS X, or Mingw, on Windows. 
+on Mac OS X, or Mingw, on Windows.
 
 If the BLAS headers are found on the machine, they will be used. In
 case they cannot be found automatically, it is recommended to set
-the environment variable ``BLAS_H`` to the BLAS headers directory. 
+the environment variable ``BLAS_H`` to the BLAS headers directory.
 
 On Mac OS X, consider linking the headers to their conventional location::
 
@@ -185,17 +185,17 @@ Install python-deltasigma
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the dependencies set up, it is possible to install the latest stable
-version directly from the `Python Package Index (PYPI) 
+version directly from the `Python Package Index (PYPI)
 <http://pypi.python.org>`__, running::
 
     pip install deltasigma
 
 The above command will also attempt to compile and install the dependencies
-in case they are not found. Please notice this is not recommended and 
+in case they are not found. Please notice this is not recommended and
 for this to work you should already have the required C libraries in place.
 
-If you are interested in a bleeding-edge version -- potentially less stable 
--- or in contributing code (*that's awesome!*) you can head over to 
+If you are interested in a bleeding-edge version -- potentially less stable
+-- or in contributing code (*that's awesome!*) you can head over to
 `the Github repository <http://github.com/ggventurini/python-deltasigma>`__
 and check out the code from there.
 
@@ -218,7 +218,7 @@ as the `the latest documentation is available
 online <http://python-deltasigma.readthedocs.org/en/latest/>`__, without
 need for you to build it.
 
-If you plan to modify the code, `python-deltasigma` comes with a complete 
+If you plan to modify the code, `python-deltasigma` comes with a complete
 unit tests suite, which is run against every commit and that any addition
 should pass both for Python 2 and 3.
 To run it locally, `setuptools <https://pypi.python.org/pypi/setuptools>`__
@@ -473,6 +473,11 @@ gers.
 
 Topologies diagrams
 ~~~~~~~~~~~~~~~~~~~
+
+All the following topology diagrams are reproduced from
+`DSToolbox.pdf <https://github.com/ggventurini/python-deltasigma/blob/master/delsig/DSToolbox.pdf?raw=true>`__
+in the `MATLAB Delta Sigma Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
+written by Richard Schreier. All credits belong to the original author.
 
 CIFB
 ::::
