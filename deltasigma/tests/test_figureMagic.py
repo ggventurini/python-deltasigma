@@ -21,10 +21,11 @@ import pylab as plt
 
 class TestFigureMagic(unittest.TestCase):
     """Test functions for figureMagic()"""
+
     def setUp(self):
         pass
 
-    def test_evalTF_first(self):
+    def test_figureMagic(self):
         """test plotting - None should be returned."""
         a = np.arange(10)
         plt.figure()
