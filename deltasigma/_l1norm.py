@@ -27,7 +27,7 @@ from scipy.signal import lti, dimpulse
 from ._utils import _is_zpk, _is_A_B_C_D, _is_num_den, _get_zpk
 
 def l1norm(H):
-	"""Compute the l1-norm of a z-domain transfer function.
+    """Compute the l1-norm of a z-domain transfer function.
 
         The norm is evaluated over the first 100 samples.
 
@@ -45,7 +45,7 @@ def l1norm(H):
             LTI objects are translated to ZPK tuples, with possible
             rounding errors.
 
-	"""
+    """
         if _is_zpk(H):
             z, p, k = H
             HP = (z, p, k, 1.)
@@ -59,6 +59,6 @@ def l1norm(H):
             warn('l1norm() got an LTI object, translated to zpk form, rounding errors possible.')
             z, p, k = _get_zpk(H)
             HP = (z, p, k, 1.)
-	_, y = dimpulse(HP, t=np.arange(100))
-	return np.sum(np.abs(y[0]))
+    _, y = dimpulse(HP, t=np.arange(100))
+    return np.sum(np.abs(y[0]))
 
