@@ -26,10 +26,10 @@ class Testl1norm(unittest.TestCase):
     """Test class for l1norm()"""
 
     def setUp(self):
-	zeros = np.array(())
-	poles = np.array((.5,))
-	k = 1.
-	self.zpk_tuple = zeros, poles, k
+        zeros = np.array(())
+        poles = np.array((.5,))
+        k = 1.
+        self.zpk_tuple = zeros, poles, k
         splti = lti(zeros, poles, k)
         self.num_den_tuple = (splti.num, splti.den)
         self.ABCD_tuple = (splti.A, splti.B, splti.C, splti.D)
@@ -37,21 +37,21 @@ class Testl1norm(unittest.TestCase):
 
     def test_l1norm_1(self):
         """Test function for l1norm() 1/4"""
-	self.assertTrue(np.allclose(ds.l1norm(self.num_den_tuple), 2.,
+        self.assertTrue(np.allclose(ds.l1norm(self.num_den_tuple), 2.,
                         rtol=1e-5, atol=1e-8))
 
     def test_l1norm_2(self):
         """Test function for l1norm() 2/4"""
-	self.assertTrue(np.allclose(ds.l1norm(self.zpk_tuple), 2.,
+        self.assertTrue(np.allclose(ds.l1norm(self.zpk_tuple), 2.,
                         rtol=1e-5, atol=1e-8))
 
     def test_l1norm_3(self):
         """Test function for l1norm() 3/4"""
-	self.assertTrue(np.allclose(ds.l1norm(self.ABCD_tuple), 2.,
+        self.assertTrue(np.allclose(ds.l1norm(self.ABCD_tuple), 2.,
                         rtol=1e-5, atol=1e-8))
 
     def test_l1norm_4(self):
         """Test function for l1norm() 4/4"""
-	self.assertTrue(np.allclose(ds.l1norm(self.splti), 2.,
+        self.assertTrue(np.allclose(ds.l1norm(self.splti), 2.,
                         rtol=1e-5, atol=1e-8))
 
