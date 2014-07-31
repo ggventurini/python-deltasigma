@@ -207,8 +207,8 @@ pre {
     font-family: Monaco, Consolas, "Lucida Console", monospace;
     margin: 1rem -5px;
     padding: 20px;
-    font-size: 1rem;
-    line-height: 1rem;
+    font-size: .9rem;
+    line-height: 1.15rem;
     overflow: auto;
 }
 
