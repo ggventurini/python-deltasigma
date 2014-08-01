@@ -235,28 +235,21 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = z / evalRPoly(ntf_z[j - 1:j + 1], z) * product
                 T[j, i] = product * Dfactor
                 T[j - 1, i] = product
-            if (odd):
+            if odd:
                 T[0, i] = product * z / (z - 1.)
         a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
         if stf is None:
             b = np.hstack((a, np.zeros((1, 1))))
             b[0, order] = 1.
     elif form == 'CRFFD':
-        raise ValueError('I am sorry to inform you, the CRFFD is buggy in' +
-                         ' MATLAB and its Python port is equally buggy.\n' +
-                         'To this day, it is unclear what the original' +
-                         ' author meant with this code.\n'
-                         'If you know how to fix this, feel free to mail' +
-                         'me at ggventurini+GITHUB@gmail.com')
-        # Find g
-        # Assume the roots are ordered, real first, then cx conj. pairs
         for i in range(order2):
             g[0, i] = 2 * (1. - np.real(ntf_z[2 * i + 1 * odd]))
-  # zL1 = z*(1-1/H(z))
-        zL1 = np.atleast_2d(zSet * (1. - 1.0 / evalTF(ntf, zSet)))
+        zL1 = np.zeros((1, order * 2), dtype='complex')
         # Form the linear matrix equation a*T*=zL1
         for i in range(order * 2):
             z = zSet[i]
+            # zL1 = z*(1-1/H(z))
+            zL1 = np.atleast_2d(z*(1. - 1.0/evalTF(ntf, z)))
             if odd:
                 Dfactor = (z - 1.) / z
                 product = 1. / Dfactor
@@ -281,7 +274,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         # with the secondary zeros after the primary zeros
         for i in range(order2):
             g[0, i] = 2 * (1. - np.real(ntf_z[2 * i + 1 * odd]))
-  # Find the dividing line between the zeros
+        # Find the dividing line between the zeros
         theta0 = np.abs(np.angle(ntf_z[0]))
         # !! 0.5 radians is an arbitrary separation !!
         i = np.flatnonzero(np.abs(np.abs(np.angle(ntf_z)) - theta0) > 0.5)
@@ -337,7 +330,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         # Assume the roots are ordered, real first, then cx conj. pairs
         for i in range(order2):
             g[0, i] = 2 * (1 - np.real(ntf_z[2 * i + 1 * odd]))
-  # code copied from case 'CIFF':
+        # code copied from case 'CIFF':
         L1 = np.zeros((1, order * 2), dtype='complex')
         # Form the linear matrix equation a*T*=L1
         for i in range(order * 2):
@@ -374,7 +367,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 ABCD[0, order + 1] = -1
             _, stfListi = calculateTF(ABCD)
             stfList.append(stfListi)
-  # Build the matrix equation b A  =  x and solve it.
+        # Build the matrix equation b A  =  x and solve it.
         A = np.zeros((order + 1, max(zSet.shape)))
         for i in range(0, order + 1):
             A[i, :] = evalTF(stfList[i], zSet)
@@ -498,27 +491,27 @@ def test_realizeNTF():
                               'c': (1., 1., 1., 1., 1.)
                              }
                          },
-               #'CRFFD':{2:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         3:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         4:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         5:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           }
-               #        }
+               'CRFFD':{2:{'a':(0.7749, 0.2164),
+                           'g':(0.),
+                           'b':(1., 0., 1.),
+                           'c':(1., 1.)
+                          },
+                        3:{'a':(0.7997,0.2442, 0.0440),
+                           'g':(0.),
+                           'b':(1., 0., 0., 1.),
+                           'c':(1., 1., 1.)
+                          },
+                        4:{'a':(0.8055, 0.2500, 0.0586, 0.0061),
+                           'g':(0., 0.),
+                           'b':(1., 0., 0., 0., 1.),
+                           'c':(1., 1., 1., 1.)
+                          },
+                        5:{'a':(0.8077, 0.2521, 0.0644, 0.0089, 0.0007),
+                           'g':(0., 0.),
+                           'b':(1., 0., 0., 0., 0., 1.),
+                           'c':(1., 1., 1., 1., 1.)
+                          }
+                       },
                 'Stratos': {2: {'a': (0.7749, 0.2164),
                                 'g': (0, ),
                                 'b': (1, 0., 1.),
@@ -596,17 +589,17 @@ def test_realizeNTF():
                                 'c': (1., 1., 1., 1)
                                }
                            },
-               #'CRFFD':{2:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         4:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           }
-               #        }
+                  'CRFFD':{2:{'a':(0.7749, 0.2164),
+                              'g':(0.),
+                              'b':(1., 0., 1.),
+                              'c':(1., 1.)
+                             },
+                           4:{'a':(0.8020, 0.2449, 0.0537, 0.0046),
+                              'g':(0, 0.0069),
+                              'b':(1., 0., 0., 0., 1.),
+                              'c':(1., 1., 1., 1.)
+                             }
+                          },
                   'Stratos': {2: {'a': (0., -0.6667),
                                   'g': (2., ),
                                   'b': (1, 0., 1.),
