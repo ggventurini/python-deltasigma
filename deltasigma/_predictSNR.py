@@ -115,9 +115,9 @@ def predictSNR(ntf, OSR=64, amp=None, f0=0.):
     num, den = _get_num_den(ntf)
     Nb = 100
     if f0 == 0:
-        band_of_interest = np.linspace(0, np.pi/R, Nb)
+        band_of_interest = np.linspace(0, np.pi/OSR, Nb)
     else:
-        band_of_interest = np.linspace(2*np.pi*(f0 - 0.25/R), 2*np.pi*(f0 + 0.25/R), Nb)
+        band_of_interest = np.linspace(2*np.pi*(f0 - 0.25/OSR), 2*np.pi*(f0 + 0.25/OSR), Nb)
         XTAB = np.linspace(-2, 0, 21)
         YTAB = np.array([
             [0.46575960516930,   0.67366999387741],
@@ -229,7 +229,7 @@ def predictSNR(ntf, OSR=64, amp=None, f0=0.):
         _, h = freqz(num, (1 - k1[0, n])*num + k1[0, n]*den, band_of_interest)
         # For both DC and sine wave inputs, use u^2/2 as the signal 
         # power since true DC measurements are usually impossible.
-        snr[0, n] = dbp(0.5*u[n]**2/(np.sum(h**2)/(R*Nb)*sigma_e2[0, n]))
+        snr[0, n] = dbp(0.5*u[n]**2/(np.sum(h**2)/(OSR*Nb)*sigma_e2[0, n]))
     return snr.squeeze(), amp.squeeze(), k0.squeeze(), k1.squeeze(), sigma_e2.squeeze()
 
 def powerGain(num, den, Nimp=100):
