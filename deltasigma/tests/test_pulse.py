@@ -27,6 +27,7 @@ from deltasigma import pulse, axisLabels
 
 class TestPulse(unittest.TestCase):
     """Test class for pulse()"""
+
     def setUp(self):
         self.H = ([1], [1, 2, 10])
         self.H0 = ([1], [1, 2, 10])
