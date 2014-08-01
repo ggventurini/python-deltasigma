@@ -51,6 +51,8 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 
     * *"CRFBD"*: CRFB with delaying quantizer.
 
+    * *"CRFFD"*: CRFF with delaying quantizer.
+
     * *"PFF"*: Parallel feed-forward.
 
     * *"Stratos"*: A CIFF-like structure with non-delaying resonator feedbacks,
