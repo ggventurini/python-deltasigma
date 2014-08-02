@@ -22,13 +22,13 @@ import numpy as np
 from ._evalTF import evalTF
 
 def nabsH(w, H):
-	"""Computes the negative of the absolute value of H.
+    """Computes the negative of the absolute value of H.
 
-	The computation is performed at the specified angular
-        frequency ``w``, on the unit circle.
+    The computation is performed at the specified angular
+    frequency ``w``, on the unit circle.
 
-	This function is used by :func:`infnorm`.
-	"""
-	z = np.exp(1j*w)
-	return -np.abs(evalTF(H, z))
+    This function is used by :func:`infnorm`.
+    """
+    z = np.exp(1j*w)
+    return -np.abs(evalTF(H, z))
 
