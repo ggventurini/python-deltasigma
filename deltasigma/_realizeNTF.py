@@ -246,12 +246,12 @@ def realizeNTF(ntf, form='CRFB', stf=None):
     elif form == 'CRFFD':
         for i in range(order2):
             g[0, i] = 2 * (1. - np.real(ntf_z[2 * i + 1 * odd]))
-        zL1 = np.zeros((1, order * 2), dtype='complex')
+        zL1 = np.zeros((1, order*2), dtype='complex')
         # Form the linear matrix equation a*T*=zL1
         for i in range(order * 2):
             z = zSet[i]
             # zL1 = z*(1-1/H(z))
-            zL1 = np.atleast_2d(z*(1. - 1.0/evalTF(ntf, z)))
+            zL1[0, i] = z*(1. - 1.0/evalTF(ntf, z))
             if odd:
                 Dfactor = (z - 1.) / z
                 product = 1. / Dfactor
@@ -266,7 +266,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         a = -np.real(np.linalg.lstsq(T.T, zL1.T)[0]).T
         if stf is None:
             b = np.hstack((np.atleast_2d(1),
-                           np.zeros(1, order - 1),
+                           np.zeros((1, order - 1)),
                            np.atleast_2d(1))
                          )
     elif form == 'PFF':
@@ -387,7 +387,7 @@ def test_realizeNTF():
     # nlev = 2 - not needed
     f0s = (0., 0.25)
     Hinf = 1.5
-    forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'Stratos')
+    forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'CRFFD', 'Stratos')
     res = {0.: {'CIFB': {2: {'a': (0.2164, 0.7749),
                              'g': (0, ),
                              'b': (0.2164, 0.7749, 1.0000),
@@ -498,18 +498,18 @@ def test_realizeNTF():
                            'b':(1., 0., 1.),
                            'c':(1., 1.)
                           },
-                        3:{'a':(0.7997,0.2442, 0.0440),
-                           'g':(0.),
+                        3:{'a':(0.7967, 0.2399, 0.0398),
+                           'g':(0.0058),
                            'b':(1., 0., 0., 1.),
                            'c':(1., 1., 1.)
                           },
-                        4:{'a':(0.8055, 0.2500, 0.0586, 0.0061),
-                           'g':(0., 0.),
+                        4:{'a':(0.8020, 0.2449, 0.0537, 0.0046),
+                           'g':(0., 0.0069),
                            'b':(1., 0., 0., 0., 1.),
                            'c':(1., 1., 1., 1.)
                           },
-                        5:{'a':(0.8077, 0.2521, 0.0644, 0.0089, 0.0007),
-                           'g':(0., 0.),
+                        5:{'a':(0.8023, 0.2443, 0.0570, 0.0071, 0.0002),
+                           'g':(0.0028, 0.0079),
                            'b':(1., 0., 0., 0., 0., 1.),
                            'c':(1., 1., 1., 1., 1.)
                           }
@@ -591,13 +591,13 @@ def test_realizeNTF():
                                 'c': (1., 1., 1., 1)
                                }
                            },
-                  'CRFFD':{2:{'a':(0.7749, 0.2164),
-                              'g':(0.),
+                  'CRFFD':{2:{'a':(-1.2149e-15, -0.6667),
+                              'g':(2.),
                               'b':(1., 0., 1.),
                               'c':(1., 1.)
                              },
-                           4:{'a':(0.8020, 0.2449, 0.0537, 0.0046),
-                              'g':(0, 0.0069),
+                           4:{'a':(0.0000, -0.5585, -0.2164, -0.2164),
+                              'g':(2., 2.),
                               'b':(1., 0., 0., 0., 1.),
                               'c':(1., 1., 1., 1.)
                              }
@@ -623,11 +623,14 @@ def test_realizeNTF():
                     # odd-order pass band modulator
                     continue
                 # Optimized zero placement
-                print("Testing form: %s, order: %d, f0: %f" % \
-                      (form, order, f0))
+                print("Testing form: %s, order: %d, f0: %f, OSR %d" % \
+                      (form, order, f0, osr))
                 ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
                 a, g, b, c = realizeNTF(ntf, form)
+                print(ntf)
                 print(a, g, b, c)
+                print(res[f0][form][order]['a'], res[f0][form][order]['g'],
+                      res[f0][form][order]['b'], res[f0][form][order]['c'])
                 assert np.allclose(a, res[f0][form][order]['a'],
                                    atol=1e-4, rtol=1e-3)
                 assert np.allclose(g, res[f0][form][order]['g'],
