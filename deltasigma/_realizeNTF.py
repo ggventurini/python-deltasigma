@@ -51,6 +51,8 @@ def realizeNTF(ntf, form='CRFB', stf=None):
 
     * *"CRFBD"*: CRFB with delaying quantizer.
 
+    * *"CRFFD"*: CRFF with delaying quantizer.
+
     * *"PFF"*: Parallel feed-forward.
 
     * *"Stratos"*: A CIFF-like structure with non-delaying resonator feedbacks,
@@ -235,28 +237,21 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = z / evalRPoly(ntf_z[j - 1:j + 1], z) * product
                 T[j, i] = product * Dfactor
                 T[j - 1, i] = product
-            if (odd):
+            if odd:
                 T[0, i] = product * z / (z - 1.)
         a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
         if stf is None:
             b = np.hstack((a, np.zeros((1, 1))))
             b[0, order] = 1.
     elif form == 'CRFFD':
-        raise ValueError('I am sorry to inform you, the CRFFD is buggy in' +
-                         ' MATLAB and its Python port is equally buggy.\n' +
-                         'To this day, it is unclear what the original' +
-                         ' author meant with this code.\n'
-                         'If you know how to fix this, feel free to mail' +
-                         'me at ggventurini+GITHUB@gmail.com')
-        # Find g
-        # Assume the roots are ordered, real first, then cx conj. pairs
         for i in range(order2):
             g[0, i] = 2 * (1. - np.real(ntf_z[2 * i + 1 * odd]))
-  # zL1 = z*(1-1/H(z))
-        zL1 = np.atleast_2d(zSet * (1. - 1.0 / evalTF(ntf, zSet)))
+        zL1 = np.zeros((1, order*2), dtype='complex')
         # Form the linear matrix equation a*T*=zL1
         for i in range(order * 2):
             z = zSet[i]
+            # zL1 = z*(1-1/H(z))
+            zL1[0, i] = z*(1. - 1.0/evalTF(ntf, z))
             if odd:
                 Dfactor = (z - 1.) / z
                 product = 1. / Dfactor
@@ -271,7 +266,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         a = -np.real(np.linalg.lstsq(T.T, zL1.T)[0]).T
         if stf is None:
             b = np.hstack((np.atleast_2d(1),
-                           np.zeros(1, order - 1),
+                           np.zeros((1, order - 1)),
                            np.atleast_2d(1))
                          )
     elif form == 'PFF':
@@ -281,7 +276,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         # with the secondary zeros after the primary zeros
         for i in range(order2):
             g[0, i] = 2 * (1. - np.real(ntf_z[2 * i + 1 * odd]))
-  # Find the dividing line between the zeros
+        # Find the dividing line between the zeros
         theta0 = np.abs(np.angle(ntf_z[0]))
         # !! 0.5 radians is an arbitrary separation !!
         i = np.flatnonzero(np.abs(np.abs(np.angle(ntf_z)) - theta0) > 0.5)
@@ -337,7 +332,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         # Assume the roots are ordered, real first, then cx conj. pairs
         for i in range(order2):
             g[0, i] = 2 * (1 - np.real(ntf_z[2 * i + 1 * odd]))
-  # code copied from case 'CIFF':
+        # code copied from case 'CIFF':
         L1 = np.zeros((1, order * 2), dtype='complex')
         # Form the linear matrix equation a*T*=L1
         for i in range(order * 2):
@@ -374,7 +369,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 ABCD[0, order + 1] = -1
             _, stfListi = calculateTF(ABCD)
             stfList.append(stfListi)
-  # Build the matrix equation b A  =  x and solve it.
+        # Build the matrix equation b A  =  x and solve it.
         A = np.zeros((order + 1, max(zSet.shape)))
         for i in range(0, order + 1):
             A[i, :] = evalTF(stfList[i], zSet)
@@ -392,7 +387,7 @@ def test_realizeNTF():
     # nlev = 2 - not needed
     f0s = (0., 0.25)
     Hinf = 1.5
-    forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'Stratos')
+    forms = ('CRFB', 'CRFF', 'CIFB', 'CIFF', 'CRFBD', 'CRFFD', 'Stratos')
     res = {0.: {'CIFB': {2: {'a': (0.2164, 0.7749),
                              'g': (0, ),
                              'b': (0.2164, 0.7749, 1.0000),
@@ -498,27 +493,27 @@ def test_realizeNTF():
                               'c': (1., 1., 1., 1., 1.)
                              }
                          },
-               #'CRFFD':{2:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         3:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         4:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         5:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           }
-               #        }
+               'CRFFD':{2:{'a':(0.7749, 0.2164),
+                           'g':(0.),
+                           'b':(1., 0., 1.),
+                           'c':(1., 1.)
+                          },
+                        3:{'a':(0.7967, 0.2399, 0.0398),
+                           'g':(0.0058),
+                           'b':(1., 0., 0., 1.),
+                           'c':(1., 1., 1.)
+                          },
+                        4:{'a':(0.8020, 0.2449, 0.0537, 0.0046),
+                           'g':(0., 0.0069),
+                           'b':(1., 0., 0., 0., 1.),
+                           'c':(1., 1., 1., 1.)
+                          },
+                        5:{'a':(0.8023, 0.2443, 0.0570, 0.0071, 0.0002),
+                           'g':(0.0028, 0.0079),
+                           'b':(1., 0., 0., 0., 0., 1.),
+                           'c':(1., 1., 1., 1., 1.)
+                          }
+                       },
                 'Stratos': {2: {'a': (0.7749, 0.2164),
                                 'g': (0, ),
                                 'b': (1, 0., 1.),
@@ -596,17 +591,17 @@ def test_realizeNTF():
                                 'c': (1., 1., 1., 1)
                                }
                            },
-               #'CRFFD':{2:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           },
-               #         4:{'a':(),
-               #            'g':(),
-               #            'b':(),
-               #            'c':()
-               #           }
-               #        }
+                  'CRFFD':{2:{'a':(-1.2149e-15, -0.6667),
+                              'g':(2.),
+                              'b':(1., 0., 1.),
+                              'c':(1., 1.)
+                             },
+                           4:{'a':(0.0000, -0.5585, -0.2164, -0.2164),
+                              'g':(2., 2.),
+                              'b':(1., 0., 0., 0., 1.),
+                              'c':(1., 1., 1., 1.)
+                             }
+                          },
                   'Stratos': {2: {'a': (0., -0.6667),
                                   'g': (2., ),
                                   'b': (1, 0., 1.),
@@ -628,11 +623,14 @@ def test_realizeNTF():
                     # odd-order pass band modulator
                     continue
                 # Optimized zero placement
-                print("Testing form: %s, order: %d, f0: %f" % \
-                      (form, order, f0))
+                print("Testing form: %s, order: %d, f0: %f, OSR %d" % \
+                      (form, order, f0, osr))
                 ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
                 a, g, b, c = realizeNTF(ntf, form)
+                print(ntf)
                 print(a, g, b, c)
+                print(res[f0][form][order]['a'], res[f0][form][order]['g'],
+                      res[f0][form][order]['b'], res[f0][form][order]['c'])
                 assert np.allclose(a, res[f0][form][order]['a'],
                                    atol=1e-4, rtol=1e-3)
                 assert np.allclose(g, res[f0][form][order]['g'],
