@@ -30,11 +30,11 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     
     The NTF is a type-2 highpass Chebyshev function.
 
-    func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
+    :func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
     is approximately constant in the passband. When the OSR or ``H_inf`` are
-    low, this assumption breaks down and synthesizeNTF yields a non-optimal
-    NTF. :func:`synthesizeChebyshevNTF` creates non-optimal NTFs, but fares
-    better than synthesizeNTF in the aforementioned circumstances.
+    low, this assumption breaks down and :func:`synthesizeNTF` yields a
+    non-optimal NTF. :func:`synthesizeChebyshevNTF` creates non-optimal NTFs, but fares
+    better than :func:`synthesizeNTF` in the aforementioned circumstances.
 
     **Parameters:**
 
@@ -45,7 +45,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         oversampling ratio, defaults to 64
 
     opt : int, optional
-        ignored value, for consistency with ::func:synthesizeNTF
+        ignored value, for consistency with :func:`synthesizeNTF`
 
     H_inf : float, optional
         maximum NTF gain, defaults to 1.5
@@ -64,7 +64,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
 
     **Raises:**
 
-    * ValueError: Order must be even for a bandpass modulator
+    * ValueError: Order must be even for a bandpass modulator.
 
     **Example:**
 
