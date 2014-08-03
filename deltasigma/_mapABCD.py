@@ -92,16 +92,16 @@ def mapABCD(ABCD, form='CRFB'):
         a[:order:2] = ABCD[order, :order:2]
         b = ABCD[:, order].T
     elif form == 'CRFFD':
-        #order=order - 1
-        #odd=rem(order,2)
-        #even=not  odd
+        order = order - 1
+        odd = order % 2
+        even = 1 - odd
         diagonal = diagonal_indices(ABCD[:order, :order])
         subdiag = diagonal_indices(ABCD[:order, :order], -1)
-        supdiag = [a[1+odd:order:2] for a in 
-                      diagonal_indices(ABCD[:order, :order], -1)]
+        supdiag = [a[odd:order:2] for a in 
+                      diagonal_indices(ABCD[:order, :order], +1)]
         g = -ABCD[supdiag]
-        c = np.vstack((-ABCD[0, order + 2], ABCD[subdiag]))
-        a = np.zeros((1, order))
+        c = np.concatenate((np.atleast_1d(-ABCD[0, order + 2]), ABCD[subdiag]))
+        a = np.zeros((order, ))
         for i in range(0, order, 2):
             a[i] = ABCD[order, i]
             ABCD[order, :] = ABCD[order, :] - a[i]*ABCD[i, :]

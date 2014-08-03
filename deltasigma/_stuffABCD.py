@@ -160,33 +160,34 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         subdiag = diagonal_indices(ABCD[:order, :order], -1)
         supdiag = diagonal_indices(ABCD[:order, :order], +1)
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
-        ABCD[:, order] = b.T
+        ABCD[:, order] = b.reshape((-1,))
         # B2 = -(c_1 0... 0)
         ABCD[0, order + 1] = -c[0, 0]
-        ABCD[diagonal] = np.ones((1, order))
+        ABCD[diagonal] = np.ones((order, ))
         # rows to have c*(preceding row) added.
         multc = np.arange(1, order, 2)
         if order > 2:
-            ABCD[subdiag[1::2]] = c[2::2]
+            ABCD[[i[1::2] for i in subdiag]] = c[0, 2::2]
         if even:
-            ABCD[supdiag[::2]] = -g
+            ABCD[[i[::2] for i in supdiag]] = -g.reshape((-1,))
         else:
             # subtract g*(following row) from the multc rows
-            ABCD[multc, :] = ABCD[multc, :] - np.diag(g) * ABCD[multc + 1, :]
-        ABCD[multc, :] = ABCD[multc, :] + np.diag(c[multc]) * ABCD[multc - 1, :]
+            ABCD[multc, :] = ABCD[multc, :] - np.dot(np.diag(g[0, :]), ABCD[multc + 1, :])
+        ABCD[multc, :] = ABCD[multc, :] + np.dot(np.diag(c[0, multc]), ABCD[multc - 1, :])
         # C
-        ABCD[order, 1:order:2] = a[1:order:2]
+        ABCD[order, 1:order:2] = a[0, 1:order:2]
         for i in range(0, order, 2):
-            ABCD[order, :] = ABCD[order, :] + a[i] * ABCD[i, :]
+            ABCD[order, :] = ABCD[order, :] + a[0, i]*ABCD[i, :]
         # The above gives y(n+1); need to add a delay to get y(n).
         # Do this by augmenting the states. Note: this means that
         # the apparent order of the NTF is one higher than it actually is.
         A, B, C, D = partitionABCD(ABCD, 2)
-        A = np.array([A, np.zeros((order, 1)), C, 0]).reshape(1, -1)
+        A = np.vstack((np.hstack((A, np.zeros((order, 1)))),
+                       np.hstack((C, np.zeros((1, 1))))))
         B = np.vstack((B, D))
         C = np.hstack((np.zeros((1, order)), np.ones((1, 1))))
         D = np.array([0, 0]).reshape(1, 2)
-        ABCD = np.array([A, B, C, D]).reshape(1, -1)
+        ABCD = np.vstack((np.hstack((A, B)), np.hstack((C, D))))
     elif 'PFF' == form:
         # B1 = (b_1 b_2... b_n), D=(b_(n+1) 0)
         ABCD[:, order] = b.T
