@@ -51,7 +51,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
 
     umax : scalar, optional
         The maximum allowable input amplitude. ``umax`` is calculated if it
-    	is not supplied.
+        is not supplied.
 
     **Returns:**
 
@@ -69,7 +69,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     `S` is defined such that::
 
         ABCDs = [[S*A*Sinv, S*B], [C*Sinv, D]]
-    	xs = S*x
+        xs = S*x
 
     Where the multiplications are *matrix multiplications*.
 
