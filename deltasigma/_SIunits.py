@@ -95,17 +95,3 @@ def SIunits(x):
         factor, prefix = factor[0], prefix[0]
     return factor, prefix
 
-def test():
-    """Test function for SIunits()"""
-    tv = (0, 1, 1e3, 2100312.24, .32545, 21e-9, 34e-12, 9569300e-12)
-    correct = (0, ''), (1, ''), (1e3, 'k'), (1e6, 'M'), (1e-3, 'm'), (1e-9, 'n'), (1e-12, 'p'), (1e-6, 'u')
-    f, p = SIunits(tv)
-    res = zip(f,p)
-    for r, c in zip(res, correct):
-        assert r[0] == c[0] and r[1] == c[1]
-    # test scalars
-    tv = 2100312.24
-    correct = (1e6, 'M')
-    f, p = SIunits(tv)
-    assert f == correct[0] and p == correct[1]
-
