@@ -47,8 +47,3 @@ def undbp(x):
     up = 10.**(x/10.)
     return restore_input_form(up, iform)
 
-def test_undbp():
-    """Test function for undbp()"""
-    assert np.allclose([undbp(53.05)], [201836.636368], rtol=1e-05, atol=1e-08)
-    assert np.allclose([undbp(3)], [1.99526231497], rtol=1e-05, atol=1e-08)
-
