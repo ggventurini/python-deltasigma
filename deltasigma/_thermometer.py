@@ -40,11 +40,3 @@ def thermometer(x, m):
         t[:x[i], i] = np.ones((x[i], ))
     return t
 
-def test():
-    """Test function for thermometer()"""
-    tv = np.arange(50)
-    rm = np.zeros((70, 50))
-    for i in range(50):
-        rm[:i, i] = np.ones(rm[:i, i].shape)
-    assert np.allclose(thermometer(tv, 70), rm, rtol=1e-05, atol=1e-08)
-
