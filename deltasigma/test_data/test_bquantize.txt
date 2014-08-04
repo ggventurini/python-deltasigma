@@ -1,5 +1,0 @@
-% The mat file test_bquantize.mat contains the variable s, \
-% computed with:
-
-b = linspace(-10,10,101);
-s = bquantize(b);

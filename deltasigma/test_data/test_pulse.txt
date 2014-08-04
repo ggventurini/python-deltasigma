@@ -1,5 +1,0 @@
-% The mat file test_pulse.mat contains the variable pp, \
-% computed with output of:
-
-H = tf([1], [1 2 10])
-pp = pulse(ss(H), [0. 1], .1, 10)

@@ -1,4 +1,0 @@
-OSR = 32; H = synthesizeNTF(5,OSR,1);
-N = 8192; fB = ceil(N/(2*OSR));
-f=85; u = 0.5*sin(2*pi*f/N*[0:N-1]);
-[v xn xmax y] = simulateDSM(u,H);
