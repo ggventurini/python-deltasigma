@@ -46,13 +46,4 @@ def rms(x, no_dc=False):
     if no_dc:
         x = x - np.mean(x)
     return la.norm(x)/np.sqrt(max(x.shape))
-    
-def test_rms():
-    """Test function for rms()
-    """
-    tv = np.arange(100)
-    res1 = np.sqrt(np.sum(tv**2.)/float(tv.shape[0]))
-    res2 = np.sqrt((np.sum((tv - tv.mean())**2.))/tv.shape[0])
-    assert np.allclose(rms(tv), res1, rtol=1e-05, atol=1e-08)
-    assert np.allclose(rms(tv, no_dc=True), res2, rtol=1e-05, atol=1e-08)
 
