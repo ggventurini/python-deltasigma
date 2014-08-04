@@ -19,7 +19,8 @@
 
 import unittest
 import numpy as np
-import deltasigma as ds
+
+from deltasigma import undbp
 
 class TestUndbp(unittest.TestCase):
     """Test class for undbp()"""
