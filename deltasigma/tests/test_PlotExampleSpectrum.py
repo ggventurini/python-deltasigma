@@ -27,7 +27,7 @@ class TestPlotExampleSpectrum(unittest.TestCase):
         pass
 
     def test_PlotExampleSpectrum(self):
-        """Test function for PlotExampleSpectrum() 1/3"""
+        """Test function for PlotExampleSpectrum()"""
         order = 3
         osr = 32
         f0 = 0.

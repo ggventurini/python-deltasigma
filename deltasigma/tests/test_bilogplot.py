@@ -25,9 +25,12 @@ import deltasigma as ds
 
 class TestBiLogPlot(unittest.TestCase):
     """Test function for bilogplot()"""
+
     def setUp(self):
         pass
+
     def test_bilogplot(self):
+        """Test function for bilogplot()"""
         f0 = 1./8
         OSR = 64
         order = 8

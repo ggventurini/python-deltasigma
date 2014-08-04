@@ -27,9 +27,6 @@ class TestDocumentNTF(unittest.TestCase):
     def setUp(self):
         order = 4
         self.osr = 64
-        # Note - nlev is never used
-        # Was there another originally here where it would be used?
-        nlev = 2
         f0 = 0.0
         Hinf = 1.5
         form = 'CRFB'
@@ -42,13 +39,14 @@ class TestDocumentNTF(unittest.TestCase):
             ))
         self.ABCD = stuffABCD(a, g, b, c, form)
 
-    def test_first_ntf_plot(self):
-        """ Check plot with f0 = 0 """
+    def test_documentNTF1(self):
+        """Test function for DocumentNTF(): check plot with f0 = 0 1/2"""
         # check that DocumentNTF plots with no errors.
         f0 = 0.0
         self.assertIsNone(ds.DocumentNTF(self.ABCD, self.osr, f0))
 
-    def test_second_ntf_plot(self):
-        """ Check plot with f0 = 0.333 """
+    def test_documentNTF2(self):
+        """Test function for DocumentNTF(): check plot with f0 = 0.333 2/2"""
         f0 = 0.333
         self.assertIsNone(ds.DocumentNTF(self.ntf2, self.osr, f0))
+

@@ -37,14 +37,14 @@ class TestPulse(unittest.TestCase):
         self.pp2 = scipy.io.loadmat(fname)['pp']
 
     def test_pulse1(self):
-        """Test function for pulse(): SISO 1/3"""
+        """Test function for pulse(): SISO 1/6"""
         # SISO
         pp = pulse([self.H], tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
         pp = pp.reshape((pp.shape[0], 1))
         self.assertTrue(np.allclose(pp, self.pp2, atol=1e-6, rtol=1e-4))
 
     def test_pulse2(self):
-        """Test function for pulse(): SIMO 2/3"""
+        """Test function for pulse(): SIMO 2/6"""
         # SIMO
         # 1 input, 3 outputs
         pp = pulse([[self.H0, self.H1, self.H2]], tp=(0., 1.), dt=.1, tfinal=10., nosum=True)
@@ -53,7 +53,7 @@ class TestPulse(unittest.TestCase):
         self.assertTrue(np.allclose(pp[:, 2, :], 3*self.pp2, atol=1e-6, rtol=1e-4))
 
     def test_pulse3(self):
-        """Test function for pulse(): MISO 3/3"""
+        """Test function for pulse(): MISO 3/6"""
         # MISO
         # 3 inputs, one output
         # we rely here on _pulse() zipping the input tfs list
@@ -66,21 +66,21 @@ class TestPulse(unittest.TestCase):
     # FIXME ALSO CHECK MIMO TFS
 
     @raises(ValueError)
-    def test_pulse_tp_scalar(self):
-        """Test _pulse fail if tp scalar"""
+    def test_pulse4_tp_scalar(self):
+        """Test function for pulse(): fail if tp scalar 4/6"""
         H = ((1,), (0, 0))
         pulse(H, tp=1, dt=.1, tfinal=10)
 
     @raises(ValueError)
-    def test_pulse_tp_not_nx2(self):
-        """Test _pulse fail if tp.shape not (n, 2)"""
+    def test_pulse5_tp_not_nx2(self):
+        """Test function for pulse(): fail if tp.shape not (n, 2) 5/6"""
         H = ((1,), (0, 0))
         tp = ((1, 2, 3), (4, 5, 6))
         pulse(H, tp=1, dt=.1, tfinal=10)
 
     @raises(ValueError)
-    def test_pulse_S_tp_mismatch(self):
-        """Test _pulse fail if mismatched ndac, ni"""
+    def test_pulse6_S_tp_mismatch(self):
+        """Test function for pulse(): fail if mismatched ndac, ni 6/6"""
         H = ((1,), (0, 0))
         S = [[H], [H], [H]]
         tp = ((1, 2), (3, 4), (5, 6))
