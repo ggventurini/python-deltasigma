@@ -129,9 +129,3 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
     if not hold_status:
         plt.hold(False)
 
-def test_plotPZ():
-    """Test function for plotPZ()"""
-    plt.figure()
-    plotPZ(((1, .2), (1, 0, .10)), color=('r', 'b'), showlist=True)
-    plt.figure()
-    plotPZ(((1, 0, .10), (1, .2, .01)), showlist=False)
