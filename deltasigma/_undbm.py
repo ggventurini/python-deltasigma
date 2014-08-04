@@ -48,9 +48,3 @@ def undbm(p, z=50):
     up = np.sqrt(z*10.**(p/10.-3))
     return restore_input_form(up, iform)
 
-def test():
-    """Test function for undbm()"""
-    assert np.allclose([undbm(53.015)], [100.054125892], rtol=1e-05, atol=1e-08)
-    assert np.allclose([undbm(3, 100)], [0.44668359215], rtol=1e-05, atol=1e-08)
-    assert np.isscalar(undbm(3, 100))
-
