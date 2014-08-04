@@ -19,7 +19,6 @@
 from warnings import warn
 import numpy as np
 import pylab as plt
-from numpy.matlib import repmat
 
 # Plot lollipops (o's and sticks)
 # 
@@ -27,15 +26,15 @@ from numpy.matlib import repmat
 #       | o     o     o         o o o   o o 
 #       | |   o | o o | o     o | | | o | | 
 #       | | o | | | | | | o o | | | | | | | 
-#          +----------------------------------->
+#       +----------------------------------->
 
 def lollipop(x, y, color=None, lw=2, ybot=0):
     """Plot lollipops (o's and sticks)
     
     **Parameters:**
 
-    x, y : ndarray
-         data to be plotted
+    x, y : ndarrays
+        The data to be plotted
 
     color : any matplotlib color, optional
             plotting color
@@ -79,14 +78,3 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
     plt.setp(stemlines, **lolli_fmt)
     plt.setp(baseline, 'color','k')
 
-def test_lollipop():
-    """Test function for lollipop()"""
-    from warnings import catch_warnings
-    t = np.arange(1, 20)*1e-3
-    f = 20.
-    a = np.sin(2*np.pi*f*t)
-    plt.figure()
-    with catch_warnings(record=True) as w:
-        lollipop(t, a, color=None, lw=1.5, ybot=0.1)
-        assert len(w) > 0
-    plt.grid(True)
