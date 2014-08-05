@@ -365,7 +365,7 @@ of Richard Schreier's MATLAB Delta Sigma toolbox. It contains code from
 ``pydsm``, also based on the same MATLAB toolbox and written by Sergio
 Callegari.
 
-Contributors: *future contributors will be added here.*
+Contributors: Shayne Hodge
 
 Implementation model
 --------------------
