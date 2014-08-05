@@ -7,6 +7,18 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-5**: CRFFD support, separate tests, less verbosity and DOC fixes.
+ * Add CRFFD support (see ``realizeNTF``, ``mapABCD`` and ``stuffABCD``).
+ * Move all tests to a dedicated location (tests/).
+ * Ensure float64 is the data representation when simulating DSM.
+ * Add the ``simulations_backends`` variable and its doc.
+ * Cython: disable cblas extension on Win. Reduce verbosity.
+ * Multiple minor fixes to ensure scalars are never returned in place of
+   arrays.
+
+Many thanks to Shayne Hodge for reporting issues with ``deltasigma`` on
+Windows and several patches to the test suite.
+
 **0.1-4**: Cython implementation of ``simulateDSM()``, PEP8 and DOC fixes.
  * ``deltasigma/_simulateDSM_cblas.pyx`` and
    ``deltasigma/_simulateDSM_scipy_blas.pyx``, Cython implementation from
