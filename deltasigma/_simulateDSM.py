@@ -64,11 +64,19 @@ except ImportError as e:
         print(str(e))
     _simulateDSM_scipy_blas = None
 
+try:
+    from ._simulateDSM_numba import simulateDSM as _simulateDSM_numba
+except ImportError as e:
+    # printing it automatically for dev purposes for now
+    print(str(e))
+    _simulateDSM_numba = None
+
 # fall back to CPython
 from ._simulateDSM_python import simulateDSM as _simulateDSM_python
 
 simulation_backends = {'CBLAS':(_simulateDSM_cblas is not None),
                        'Scipy_BLAS':(_simulateDSM_scipy_blas is not None),
+                       'Numba':(_simulateDSM_numba is not None),
                        'CPython':True}
 
 def simulateDSM(u, arg2, nlev=2, x0=0.):
@@ -200,9 +208,13 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
     Click on "Source" above to see the source code.
     """
     global warned
-    if _simulateDSM_cblas or _simulateDSM_scipy_blas:
+    if _simulateDSM_cblas or _simulateDSM_scipy_blas or _simulateDSM_numba:
         if not _is_zpk(arg2) and not isinstance(arg2, np.ndarray):
             arg2 = _get_zpk(arg2)
+        if _simulateDSM_numba:
+            print("Using prototype Numba implementation.")
+            return _simulateDSM_numba(u, arg2, nlev, x0, store_xn=True,
+                                      store_xmax=True, store_y=True)
         if _simulateDSM_cblas:
             return _simulateDSM_cblas(u, arg2, nlev, x0, store_xn=True,
                                       store_xmax=True, store_y=True)
