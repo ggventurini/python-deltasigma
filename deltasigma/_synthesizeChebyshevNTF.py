@@ -88,7 +88,6 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order,OSR,1,H_inf)
         H1 = synthesizeChebyshevNTF(order,OSR,0,H_inf)
         # 1. Plot the singularities.
-        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better
@@ -106,7 +105,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         plt.plot(f, magH0, label='synthesizeNTF')
         plt.hold(True)
         plt.plot(f, magH1, label='synthesizeChebyshevNTF')
-        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None, plotsize)
+        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None)
         plt.xlabel('Normalized frequency ($1\\\\rightarrow f_s)$')
         plt.ylabel('dB')
         plt.legend(loc=4)
@@ -153,7 +152,6 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
         H1 = synthesizeChebyshevNTF(order, OSR, 1, H_inf)
         # 1. Plot the singularities.
-        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better
@@ -171,7 +169,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         plt.plot(f, magH0, label='synthesizeNTF')
         plt.hold(True)
         plt.plot(f, magH1, label='synthesizeChebyshevNTF')
-        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None, plotsize)
+        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None)
         plt.xlabel('Normalized frequency ($1\\\\rightarrow f_s)$')
         plt.ylabel('dB')
         plt.legend(loc=4)
