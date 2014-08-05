@@ -50,17 +50,4 @@ def rmsGain(H, f1, f2, N=100):
     g = norm(evalTF(H, np.exp(1j*w))) / np.sqrt(N)
 
     return g
-    
-def test_rmsGain():
-    """Test function for rmsGain()
-    """
-    from ._utils import empty
-    H = empty()
-    H.num = (1,)
-    H.den = (1, 2, 10)
-    f1 = 0.001
-    f2 = 0.5
-    res = rmsGain(H, f1, f2, N=1000)
-    res1 = 0.102245275091
-    assert np.allclose((res,), (res1,), rtol=1e-05, atol=1e-08)
 

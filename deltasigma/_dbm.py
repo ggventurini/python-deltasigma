@@ -52,15 +52,3 @@ def dbm(v, R=50):
     y[nonzero] = 10. * np.log10(np.abs(v[nonzero] ** 2.) / R) + 30
     return restore_input_form(y, iform)
 
-
-def test_dbm():
-    """Test function for dbm()
-    """
-    v = np.arange(10) * 1e-3
-    r = [-np.inf, -46.98970004, -40.96910013, -37.44727495, -34.94850022,
-         -33.01029996, -31.42667504, -30.08773924, -28.9279003, -27.90484985]
-    assert np.allclose(dbm(v), r, atol=1e-8, rtol=1e-5)
-    v = 9e-3  # test scalars.
-    r = -27.90484985
-    assert np.allclose(dbm(v), r, atol=1e-8, rtol=1e-5)
-    assert np.isscalar(dbm(v))

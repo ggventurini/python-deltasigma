@@ -25,6 +25,7 @@
 #
 
 from __future__ import print_function
+import os
 import numpy as np
 
 from warnings import warn
@@ -34,14 +35,20 @@ from ._utils import _is_zpk, _get_zpk
 
 warned = False
 
-# options to compile the cython extensions on Windows
+# Code to compile the Cython extensions
 # Extensions tested on Linux and Mac OS X, but not on Windows
-# please report any bug (or patches!) on 
+# please report any bug (or patches!) on
 # https://github.com/ggventurini/python-deltasigma/issues
 
 try:
+    if 'nt' in os.name:
+        # if somebody actually goes through the trouble of compiling
+        # it on Windows, we'll make available a patch to re-enable it.
+        # In most cases now, users only get error messages from BLAS
+        # not being available.
+        raise ImportError('CBLAS extension disabled on Windows')
     import pyximport
-    pyximport.install(setup_args=setup_args, reload_support=True)
+    pyximport.install(setup_args=setup_args)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
 except ImportError as e:
     if _debug:
@@ -49,6 +56,8 @@ except ImportError as e:
     _simulateDSM_cblas = None
 
 try:
+    import pyximport
+    pyximport.install(setup_args=setup_args, inplace=True)
     from ._simulateDSM_scipy_blas import simulateDSM as _simulateDSM_scipy_blas
 except ImportError as e:
     if _debug:
@@ -58,24 +67,81 @@ except ImportError as e:
 # fall back to CPython
 from ._simulateDSM_python import simulateDSM as _simulateDSM_python
 
-def simulateDSM(u, arg2, nlev=2, x0=0):
+simulation_backends = {'CBLAS':(_simulateDSM_cblas is not None),
+                       'Scipy_BLAS':(_simulateDSM_scipy_blas is not None),
+                       'CPython':True}
+
+def simulateDSM(u, arg2, nlev=2, x0=0.):
     """Simulate a Delta Sigma modulator
+
+    Compute the output of a general delta-sigma modulator with input ``u``,
+    a structure described by ``ABCD``, an initial state ``x0`` (default zero) and
+    a quantizer with a number of levels specified by ``nlev``.
 
     **Syntax:**
 
-     * [v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)
-     * [v, xn, xmax, y] = simulateDSM(u, ntf, nlev=2, x0=0)
+     * ``[v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)``
+     * ``[v, xn, xmax, y] = simulateDSM(u, ntf, nlev=2, x0=0)``
 
-    Compute the output of a general delta-sigma modulator with input u,
-    a structure described by ABCD, an initial state x0 (default zero) and
-    a quantizer with a number of levels specified by nlev.
-    Multiple quantizers are implied by making nlev an array,
-    and multiple inputs are implied by the number of rows in u.
+    **Parameters:**
 
-    Alternatively, the modulator may be described by an NTF.
-    The NTF is zpk object. (And the STF is assumed to be 1.)
-    The structure that is simulated is the block-diagonal structure used by
-    ``zpk2ss()``.
+    u : ndarray or sequence
+        The input vector to be used in the simulation. Multiple inputs
+        are implied by the number of rows in ``u``.
+    arg2 : 2D ndarray or a supported LTI description
+        The second argument may be either the ABCD matrix describing the
+        modulator or its NTF. In the latter case, the NTF is converted to
+        a ZPK description and the structure that is simulated is the
+        block-diagonal structure used by scipy's ``zpk2ss()``.
+        The STF is assumed to be 1.
+    nlev : int or sequence or ndarray
+        Number of levels in the quantizers. Set ``nlev`` to a scalar for a
+        signle quantizer modulator. Multiple quantizers are implied by
+        making nlev an array.
+    x0 : float or sequence or ndarray
+        The initial status of the modulator. If ``x0`` is set to float, its
+        value will be used for all the states. If it is set to a sequence of
+        floats, each of its values will be assigned to a state variable.
+
+    **Returns:**
+
+    v : ndarray
+        The quantizer output.
+    xn : ndarray
+        The modulator states.
+    xmax : nedarray
+        The maximum value that each state reached during simulation.
+    y : ndarray
+        The quantizer input.
+
+    **Notes:**
+
+    Three implementations of this function are (potentially) available to the
+    user, in order of ascending execution speed:
+
+    * A CPython implementation, always available.
+    * A Cython-based implementation requiring the BLAS headers and a compatible
+      compiler.
+    * A Cython-based implementation accessing the BLAS library pre-compiled
+      through scipy, requiring only a compatible compiler.
+
+    The difference in execution time from the first implementation -- dynamically
+    interpreted -- to the latter two -- statically compiled automatically before
+    execution -- is a factor 20.
+
+    The fastest available implementation is automatically selected.
+
+    To assess which implementations are available in your installation, check
+    the ``simulation_backends`` variable, for example::
+
+       from __future__ import print_function
+       import deltasigma as ds
+       print(ds.simulation_backends)
+
+    Example output::
+
+        {'Scipy_BLAS': True, 'CBLAS': True, 'CPython': True}
+
 
     **Example:**
 
@@ -86,7 +152,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
-        N = 8192 
+        N = 8192
         fB = np.ceil(N/(2*OSR))
         f = 85
         u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
@@ -102,7 +168,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
-        N = 8192 
+        N = 8192
         fB = np.ceil(N/(2*OSR))
         f = 85
         u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
@@ -148,113 +214,4 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
                  'Refer to the docs for how to switch to a fast one')
             warned = True
         return _simulateDSM_python(u, arg2, nlev, x0)
-
-def test_simulateDSM_cblas():
-    """Test function for simulateDSM_cblas()"""
-    import pkg_resources
-    import scipy.io
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    # skip early if not available
-    try:
-        from nose.plugins.skip import SkipTest
-    except ImportError:
-        SkipTest = None
-    if _simulateDSM_cblas is None:
-        if SkipTest is not None:
-            raise SkipTest
-        return
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-    v_ref = scipy.io.loadmat(fname)['v']
-    xn_ref = scipy.io.loadmat(fname)['xn']
-    xmax_ref = scipy.io.loadmat(fname)['xmax']
-    y_ref = scipy.io.loadmat(fname)['y']
-    OSR = 32
-    H = synthesizeNTF(5, OSR, 1)
-    N = 8192
-    fB = np.ceil(N/(2.*OSR))
-    f = 85
-    u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-    v, xn, xmax, y = _simulateDSM_cblas(u, H, nlev=2, x0=0, store_xn=True,
-                                        store_xmax=True, store_y=True)
-    assert np.allclose(v.reshape(-1), v_ref.reshape(-1), atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    a, g, b, c = realizeNTF(H, 'CRFB')
-    ABCD = stuffABCD(a, g, b, c, form='CRFB')
-    v, xn, xmax, y = _simulateDSM_cblas(u, ABCD, nlev=2, x0=0, store_xn=True,
-                                        store_xmax=True, store_y=True)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-
-def test_simulateDSM_scipy_blas():
-    """Test function for simulateDSM_scipy_blas()"""
-    import pkg_resources
-    import scipy.io
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    # skip early if not available
-    try:
-        from nose.plugins.skip import SkipTest
-    except ImportError:
-        SkipTest = None
-    if _simulateDSM_scipy_blas is None:
-        if SkipTest is not None:
-            raise SkipTest
-        return
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-    v_ref = scipy.io.loadmat(fname)['v']
-    xn_ref = scipy.io.loadmat(fname)['xn']
-    xmax_ref = scipy.io.loadmat(fname)['xmax']
-    y_ref = scipy.io.loadmat(fname)['y']
-    OSR = 32
-    H = synthesizeNTF(5, OSR, 1)
-    N = 8192
-    fB = np.ceil(N/(2.*OSR))
-    f = 85
-    u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-    v, xn, xmax, y = _simulateDSM_scipy_blas(u, H, nlev=2, x0=0, store_xn=True,
-                                        store_xmax=True, store_y=True)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    a, g, b, c = realizeNTF(H, 'CRFB')
-    ABCD = stuffABCD(a, g, b, c, form='CRFB')
-    v, xn, xmax, y = _simulateDSM_scipy_blas(u, ABCD, nlev=2, x0=0, 
-                                             store_xn=True, store_xmax=True,
-                                             store_y=True)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-
-def test_simulateDSM():
-    """Test function for simulateDSM()"""
-    import pkg_resources
-    import scipy.io
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    from ._utils import _get_num_den
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-    v_ref = scipy.io.loadmat(fname)['v']
-    xn_ref = scipy.io.loadmat(fname)['xn']
-    xmax_ref = scipy.io.loadmat(fname)['xmax']
-    y_ref = scipy.io.loadmat(fname)['y']
-    OSR = 32
-    H = synthesizeNTF(5, OSR, 1)
-    N = 8192
-    fB = np.ceil(N/(2.*OSR))
-    f = 85
-    u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-    v, xn, xmax, y = simulateDSM(u, H, nlev=2, x0=0)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    HP = _get_num_den(H)
-    v, xn, xmax, y = simulateDSM(u, HP, nlev=2, x0=0)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    a, g, b, c = realizeNTF(H, 'CRFB')
-    ABCD = stuffABCD(a, g, b, c, form='CRFB')
-    v, xn, xmax, y = simulateDSM(u, ABCD, nlev=2, x0=0)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
 

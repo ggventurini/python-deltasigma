@@ -36,10 +36,10 @@ _debug = False
 
 # get blas information to compile the cython extensions
 blas_info = get_info("blas")
-if len(blas_info) == 0:
+if len(blas_info) == 0 and _debug:
     warn("Numpy did not detect the BLAS library in the system")
 # Let's make an educated guess
-if 'linux' in sys.platform:
+if 'linux' in sys.platform or 'darwin' in sys.platform:
     guessed_include = '/usr/include'
 else:
     guessed_include = None
@@ -50,7 +50,7 @@ setup_args = {"script_args":(["--compiler=mingw32"]
                              if sys.platform == 'win32' else [])}
 lib_include = [np.get_include()]
 if "include_dirs" not in blas_info and "BLAS_H" not in os.environ and \
-    (not guessed_include or \
+   'nt' not in os.name and (not guessed_include or \
      not os.path.isfile(os.path.join(guessed_include, 'cblas.h'))):
     warn("Cannot find the path for 'cblas.h'. You may set it using the environment variable "
          "BLAS_H.\nNOTE: You need to pass the path to the directories were the "
@@ -63,5 +63,5 @@ else:
     elif guessed_include:
         lib_include = lib_include + [guessed_include]
     else:
-        pass # out of options
+        pass # we're on windows
 setup_args.update({"include_dirs":list(set(lib_include))})

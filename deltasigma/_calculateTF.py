@@ -122,30 +122,3 @@ def calculateTF(ABCD, k=1.):
     stf_min, ntf_min = minreal((stf, ntf), tol)
     return ntf_min, stf_min
 
-def test_calculateTF():
-    """Test function for calculateTF()"""
-    from ._utils import cplxpair
-    ABCD = [[1.000000000000000, 0., 0., 0.044408783846879, -0.044408783846879],
-            [0.999036450096481, 0.997109907515262, -0.005777399147297, 0., 0.499759089304780],
-            [0.499759089304780, 0.999036450096481, 0.997109907515262,  0., -0.260002096136488],
-            [0,                 0,                 1.000000000000000,  0, -0.796730400347216]]
-    ABCD = np.array(ABCD)
-    ntf, stf = calculateTF(ABCD)
-    ntf_zeros, ntf_poles = np.roots(ntf.num), np.roots(ntf.den)
-    stf_zeros, stf_poles = np.roots(stf.num), np.roots(stf.den)
-    mntf_poles = np.array((1.498975311463384, 1.102565142679772, 0.132677264750882))
-    mntf_zeros = np.array((0.997109907515262 + 0.075972576202904j,
-                           0.997109907515262 - 0.075972576202904j,
-                           1.000000000000000 + 0.000000000000000j)
-                          )
-    mstf_zeros = np.array((-0.999999999999996,))
-    mstf_poles = np.array((1.498975311463384, 1.102565142679772, 0.132677264750882))
-    # for some reason, sometimes the zeros are in different order.
-    ntf_zeros, mntf_zeros = cplxpair(ntf_zeros), cplxpair(mntf_zeros)
-    stf_zeros, mstf_zeros = cplxpair(stf_zeros), cplxpair(mstf_zeros)
-    ntf_poles, mntf_poles = cplxpair(ntf_poles), cplxpair(mntf_poles)
-    stf_poles, mstf_poles = cplxpair(stf_poles), cplxpair(mstf_poles)
-    assert np.allclose(ntf_zeros, mntf_zeros, rtol=1e-5, atol=1e-8)
-    assert np.allclose(ntf_poles, mntf_poles, rtol=1e-5, atol=1e-8)
-    assert np.allclose(stf_zeros, mstf_zeros, rtol=1e-5, atol=1e-8)
-    assert np.allclose(stf_poles, mstf_poles, rtol=1e-5, atol=1e-8)

@@ -2,7 +2,7 @@
 
 import os
 from setuptools import setup, find_packages
-__version__ = "0.1-4"
+__version__ = "0.1-5"
 
 def read(fname):
     try:
@@ -16,7 +16,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-      'deltasigma': ['test_data/*.mat', 'test_data/*.txt']
+      'deltasigma': ['tests/test_data/*.mat', 'tests/test_data/*.txt']
     },
     install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
     zip_safe=False,
@@ -30,6 +30,7 @@ setup(
     license="BSD",
     keywords="delta sigma modulator simulator",
     url="http://github.com/ggventurini/python-deltasigma",
+    test_suite = "deltasigma.tests",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Education",

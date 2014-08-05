@@ -111,31 +111,8 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
     plt.grid(True)
     y_bot = min(-80, np.round(NG0*1.1, -1))
     figureMagic(xRange=(f_left, 0.5), dx=1/20., yRange=(y_bot, 15), dy=10)
-    plt.ylabel('|H(f)|')
-    plt.xlabel('frequency')
+    plt.ylabel('|H(f)| dB')
+    plt.xlabel('Frequency ($1 \\rightarrow f_{s}$)')
     plt.title('Frequency Response')
     return
 
-def test_DocumentNTF():
-    """Test function for DocumentNTF"""
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    order = 4
-    osr = 64
-    nlev = 2
-    f0 = 0.
-    Hinf = 1.5
-    form = 'CRFB'
-    ntf = synthesizeNTF(order, osr, 2, Hinf, f0)
-    a, g, b, c = realizeNTF(ntf, form)
-    b = np.concatenate(( # Use a single feed-in for the input
-                   np.atleast_1d(b[0]),
-                   np.zeros((max(b.shape) - 1))
-                  ))
-    ABCD = stuffABCD(a, g, b, c, form)
-    DocumentNTF(ABCD, osr, f0)
-    assert True # we check that DocumentNTF plots with no errors.
-    ntf = synthesizeNTF(order, osr, 2, Hinf, f0=.333)
-    DocumentNTF(ntf, osr, f0=.333)
-    assert True # we check that DocumentNTF plots with no errors.

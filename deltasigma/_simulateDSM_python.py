@@ -118,7 +118,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
        (hasattr(arg2, 'outputs') and not arg2.outputs == 1):
             raise TypeError("The supplied TF isn't a SISO transfer function.")
     if isinstance(arg2, np.ndarray):
-        ABCD = carray(arg2)
+        ABCD = np.asarray(arg2, dtype=np.float64)
         if ABCD.shape[1] != ABCD.shape[0] + nu:
             raise ValueError('The ABCD argument does not have proper dimensions.')
         form = 1
@@ -160,9 +160,9 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         B = np.hstack((B1, B2))
 
     N = u.shape[1]
-    v = np.empty((nq, N))
-    y = np.empty((nq, N))     # to store the quantizer input
-    xn = np.empty((order, N)) # to store the state information
+    v = np.empty((nq, N), dtype=np.float64)
+    y = np.empty((nq, N), dtype=np.float64)     # to store the quantizer input
+    xn = np.empty((order, N), dtype=np.float64) # to store the state information
     xmax = np.abs(x0) # to keep track of the state maxima
 
     for i in range(N):
@@ -198,30 +198,3 @@ def ds_quantize(y, n):
         v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
     return v
 
-def test_simulateDSM():
-    """Test function for simulateDSM()"""
-    import numpy as np
-    import pkg_resources
-    import scipy.io
-    from ._synthesizeNTF import synthesizeNTF
-    from ._realizeNTF import realizeNTF
-    from ._stuffABCD import stuffABCD
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_simulateDSM.mat")
-    v_ref = scipy.io.loadmat(fname)['v']
-    xn_ref = scipy.io.loadmat(fname)['xn']
-    xmax_ref = scipy.io.loadmat(fname)['xmax']
-    y_ref = scipy.io.loadmat(fname)['y']
-    OSR = 32
-    H = synthesizeNTF(5, OSR, 1)
-    N = 8192
-    fB = np.ceil(N/(2.*OSR))
-    f = 85
-    u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-    v, xn, xmax, y = simulateDSM(u,H);
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)
-    a, g, b, c = realizeNTF(H, 'CRFB')
-    ABCD = stuffABCD(a, g, b, c, form='CRFB')
-    v, xn, xmax, y = simulateDSM(u, ABCD)
-    assert np.allclose(v, v_ref, atol=1e-6, rtol=1e-4)
-    assert np.allclose(y, y_ref, atol=1e-6, rtol=1e-4)

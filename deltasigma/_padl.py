@@ -52,20 +52,4 @@ def padl(x, n, val=0.):
                         xp
                        ), axis=1)
     return y
-                      
-def test_padl():
-    """Test function for padl()"""
-    tv = np.eye(15)
-    tr = padl(tv, n=25, val=2)
-    res = np.concatenate((2.*np.ones((15, 10)), tv), axis=1)
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # 1-d array
-    tv = np.arange(10)
-    tr = padl(tv, n=25, val=1.5)
-    res = np.hstack((1.5*np.ones((1, 15)), tv.reshape((1, -1))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
-    # empty matrix array
-    tv = np.array([])
-    tr = padl(tv, n=25, val=1.5)
-    res = np.hstack((1.5*np.ones((1, 25)), tv.reshape((1, -1))))
-    assert np.allclose(tr, res, atol=1e-8, rtol=1e-5)
+

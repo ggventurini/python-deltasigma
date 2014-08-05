@@ -47,24 +47,3 @@ def dsclansNTF(x, order, rmax, Hz):
     H = (Hz, Hp, 1.)
     return H
 
-def test_dsclansNTF():
-    """Test function for dsclansNTF()
-    """
-    x = dsclansNTF(np.arange(1, 100.001, .001), 3, .5, 100)
-    rt = np.array(x[1][:])
-    rt.sort()
-    rp = np.array([0, -0.016805373426715, 0.014809370415763])
-    rp.sort()
-    rz = (100., )
-    assert np.allclose(rp, rt, rtol=1e-5, atol=1e-6)
-    assert np.allclose(rz, x[0], rtol=1e-5, atol=1e-8)
-    rp = np.array([0.35378443 +0.j, 0.34187718 +0.22831019j,
-                   0.34187718 -0.22831019j, 0.32978826 +0.59355161j,
-                   0.32978826 -0.59355161j])
-    x = np.array([0.67623674, 0.9277613, 0.70365961, 0.60374009, 0.78008118])
-    Hz = np.array([0.99604531 - 0.08884669j, 0.99604531 +0.08884669j,
-                   0.99860302 - 0.05283948j, 0.99860302 +0.05283948j,
-                   1.00000000 +0.j])
-    tp =  dsclansNTF(x, order=5, rmax=.95, Hz=Hz)[1]
-    assert np.allclose(rp, tp, rtol=1e-5, atol=1e-6)
-

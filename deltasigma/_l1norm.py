@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -17,21 +17,48 @@
 """
 
 from __future__ import division
+
 import numpy as np
-from scipy.signal import dimpulse
+
+from warnings import warn
+
+from scipy.signal import lti, dimpulse
+
+from ._utils import _is_zpk, _is_A_B_C_D, _is_num_den, _get_zpk
 
 def l1norm(H):
-	"""Compute the l1-norm of a z-domain transfer function.
-	"""
-	_, y = dimpulse(H, t=np.arange(100))
-	return np.sum(np.abs(y[0]))
+    """Compute the l1-norm of a z-domain transfer function.
 
-def test_l1norm():
-	"""Test function for l1norm()
-	"""
-	zeros = np.array(())
-	poles = np.array((.5,))
-	k = 1.
-	zpkt_tuple = zeros, poles, k, 1
-	assert np.allclose(l1norm(zpkt_tuple), 2., rtol=1e-5, atol=1e-8)
+        The norm is evaluated over the first 100 samples.
+
+        **Parameters:**
+
+        H : sequence or lti object
+            Any supported LTI representation is accepted.
+
+        **Returns:**
+
+        l1normH : float
+            The L1 norm of ``H``.
+
+        .. note:
+            LTI objects are translated to ZPK tuples, with possible
+            rounding errors.
+
+    """
+    if _is_zpk(H):
+        z, p, k = H
+        HP = (z, p, k, 1.)
+    elif _is_num_den(H):
+        num, den = H
+        HP = (num, den, 1.)
+    elif _is_A_B_C_D(H):
+        A, B, C, D = H
+        HP = (A, B, C, D, 1.)
+    elif isinstance(H, lti):
+        warn('l1norm() got an LTI object, translated to zpk form, rounding errors possible.')
+        z, p, k = _get_zpk(H)
+        HP = (z, p, k, 1.)
+    _, y = dimpulse(HP, t=np.arange(100))
+    return np.sum(np.abs(y[0]))
 

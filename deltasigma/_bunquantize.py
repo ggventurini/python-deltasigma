@@ -34,18 +34,3 @@ def bunquantize(q):
         y += [(qi[1:qi.shape[0]+1:2, :]*2.**qi[:qi.shape[0]:2, :]).sum()]
     return carray(y)
 
-def test_bunquantize():
-    """Test function for bunquantize()
-    """
-    from ._bquantize import bquantize
-    x = np.linspace(-10, 10, 101)
-    yr = bquantize(x)
-    yv = []
-    y = []
-    for yi in yr:
-        y += [yi.csd]
-        yv += [yi.val]
-    yv = carray(yv)
-    xres = bunquantize(y)
-    assert np.allclose(xres, yv, atol=1e-8, rtol=1e-5)
-

@@ -47,8 +47,3 @@ def undbv(x):
     up = 10.**(x/20.)
     return restore_input_form(up, iform)
     
-def test_undbv():
-    """Test function for undbv()"""
-    assert np.allclose([undbv(53.05)], [449.26232467], rtol=1e-05, atol=1e-08)
-    assert np.allclose([undbv(3)], [1.41253754462], rtol=1e-05, atol=1e-08)
-

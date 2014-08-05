@@ -26,32 +26,25 @@ from ._utils import carray
 from ._rmsGain import rmsGain
 
 def ds_synNTFobj1(x, p, osr, f0):
-	"""Objective function for :func:`synthesizeNTF`
+    """Objective function for :func:`synthesizeNTF`
 
-	This function is not meant to be used directly but it is provided for compliance with the 
-	MATLAB DS Toolbox.
+    This function is not meant to be used directly but it is provided for compliance with the 
+    MATLAB DS Toolbox.
 
-	"""
-	p = carray(p)
-	z = np.exp(2j*np.pi*(f0 + 0.5/osr*x))
-	z = carray(z)
-	if f0 > 0:
-		z = padt(z, p.shape[0]/2., np.exp(2j*np.pi*f0))
+    """
+    p = carray(p)
+    z = np.exp(2j*np.pi*(f0 + 0.5/osr*x))
+    z = carray(z)
+    if f0 > 0:
+        z = padt(z, p.shape[0]/2., np.exp(2j*np.pi*f0))
 
-	z = np.hstack((z, np.conj(z))) 
-	z = z[:]
-	if f0 == 0:
-		z = padb(z, p.shape[0], 1)
+    z = np.hstack((z, np.conj(z))) 
+    z = z[:]
+    if f0 == 0:
+        z = padb(z, p.shape[0], 1)
 
-	f1, f2 = ds_f1f2(osr, f0)
-	ntf = (z, p, 1)
-	y = db(rmsGain(ntf, f1, f2))
-	return y
-
-def test_ds_synNTFobj1():
-	"""Test function for ds_synNTFobj1()
-	"""
-	res = -27.167735573627283
-	tv =  ds_synNTFobj1(.5, (.9, 2), 64, .1)
-	assert np.allclose((res,), (tv, ), atol=1e-8, rtol=1e-5)
+    f1, f2 = ds_f1f2(osr, f0)
+    ntf = (z, p, 1)
+    y = db(rmsGain(ntf, f1, f2))
+    return y
 

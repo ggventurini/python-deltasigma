@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,8 +21,8 @@ import numpy as np
 from ._calculateTF import calculateTF
 
 def mod1():
-    """Populate a structure describing the first-order modulator.
-    
+    """A description of the first-order modulator.
+
     **Returns:**
 
     ABCD, NTF, STF : a tuple of (ndarray, lti, lti)
@@ -37,8 +37,3 @@ def mod1():
     H, G = calculateTF(ABCD)
     return ABCD, H, G
 
-def test_mod1():
-    """Test function for mod1()"""
-    ABCD, ntf, stf = mod1()
-    ABCDtest = [[1., 1., -1.], [1., 0., 0.]]
-    assert np.allclose(ABCD, ABCDtest, atol=1e-8, rtol=1e-5)

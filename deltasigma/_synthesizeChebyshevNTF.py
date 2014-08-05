@@ -30,11 +30,11 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     
     The NTF is a type-2 highpass Chebyshev function.
 
-    func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
+    :func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
     is approximately constant in the passband. When the OSR or ``H_inf`` are
-    low, this assumption breaks down and synthesizeNTF yields a non-optimal
-    NTF. :func:`synthesizeChebyshevNTF` creates non-optimal NTFs, but fares
-    better than synthesizeNTF in the aforementioned circumstances.
+    low, this assumption breaks down and :func:`synthesizeNTF` yields a
+    non-optimal NTF. :func:`synthesizeChebyshevNTF` creates non-optimal NTFs, but fares
+    better than :func:`synthesizeNTF` in the aforementioned circumstances.
 
     **Parameters:**
 
@@ -45,7 +45,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         oversampling ratio, defaults to 64
 
     opt : int, optional
-        ignored value, for consistency with ::func:synthesizeNTF
+        ignored value, for consistency with :func:`synthesizeNTF`
 
     H_inf : float, optional
         maximum NTF gain, defaults to 1.5
@@ -64,7 +64,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
 
     **Raises:**
 
-    * ValueError: Order must be even for a bandpass modulator
+    * ValueError: Order must be even for a bandpass modulator.
 
     **Example:**
 
@@ -88,7 +88,6 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order,OSR,1,H_inf)
         H1 = synthesizeChebyshevNTF(order,OSR,0,H_inf)
         # 1. Plot the singularities.
-        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better
@@ -106,7 +105,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         plt.plot(f, magH0, label='synthesizeNTF')
         plt.hold(True)
         plt.plot(f, magH1, label='synthesizeChebyshevNTF')
-        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None, plotsize)
+        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None)
         plt.xlabel('Normalized frequency ($1\\\\rightarrow f_s)$')
         plt.ylabel('dB')
         plt.legend(loc=4)
@@ -153,7 +152,6 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
         H1 = synthesizeChebyshevNTF(order, OSR, 1, H_inf)
         # 1. Plot the singularities.
-        plotsize = (12, 6)
         plt.subplot(121)
         # we plot the singularities of the optimized NTF in light 
         # green with slightly bigger markers so that we can better
@@ -171,7 +169,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         plt.plot(f, magH0, label='synthesizeNTF')
         plt.hold(True)
         plt.plot(f, magH1, label='synthesizeChebyshevNTF')
-        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None, plotsize)
+        figureMagic([0, 0.5], 0.05, None, [-80, 20], 10, None)
         plt.xlabel('Normalized frequency ($1\\\\rightarrow f_s)$')
         plt.ylabel('dB')
         plt.legend(loc=4)
@@ -246,23 +244,3 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     ntf = (z, p, 1)
     return ntf
 
-def test_synthesizeChebyshevNTF():
-    """Test function for synthesizeChebyshevNTF()"""
-    from ._utils import cplxpair
-    from warnings import catch_warnings
-    z, p, k = synthesizeChebyshevNTF()
-    zref = [1., .9991 + 0.0425j, .9991 - 0.0425j]
-    pref = [.6609, .7686 + .2858j, .7686 - .2858j]
-    kref = 1.
-    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
-    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
-    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)
-    with catch_warnings(record=True) as w:
-        z, p, k = synthesizeChebyshevNTF(order=4, OSR=32, opt=1, H_inf=1.5, f0=.33)
-        assert len(w) > 0
-    zref = [-.4513 + .8924j, -.4513 - .8924j, -.5122 + 0.8589j, -.5122 - 0.8589j]
-    pref = [-.2249 + .7665j, -.2249 - .7665j, -.5506 + .6314j, -.5506 - .6314j]
-    kref = 1.
-    assert np.allclose(cplxpair(z), cplxpair(zref), atol=1e-4, rtol=1e-4)
-    assert np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4)
-    assert np.allclose(k, kref, atol=1e-4, rtol=1e-4)

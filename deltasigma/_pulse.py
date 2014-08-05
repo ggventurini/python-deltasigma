@@ -137,23 +137,3 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
             y[:, :, i] = yy.reshape(yy.shape[0:2])
     return y
 
-def test_pulse():
-    """Test function for pulse()"""
-    import pkg_resources
-    import scipy.io
-    # SISO
-    H = ([1], [1, 2, 10])
-    pp = pulse([H], tp=(0., 1.), dt=.1, tfinal=10., nosum=False)
-    pp = pp.reshape((pp.shape[0], 1))
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_pulse.mat")
-    pp2 = scipy.io.loadmat(fname)['pp']
-    assert np.allclose(pp, pp2, atol=1e-6, rtol=1e-4)
-    # MISO
-    H0 = ([1], [1, 2, 10])
-    H1 = ([2], [1, 2, 10])
-    H2 = ([3], [1, 2, 10])
-    pp = pulse([[H0, H1, H2]], tp=(0., 1.), dt=.1, tfinal=10., nosum=True)
-    assert np.allclose(pp[:, 0, :], pp2, atol=1e-6, rtol=1e-4)
-    assert np.allclose(pp[:, 1, :], 2*pp2, atol=1e-6, rtol=1e-4)
-    assert np.allclose(pp[:, 2, :], 3*pp2, atol=1e-6, rtol=1e-4)
-    # FIXME ALSO CHECK MIMO TFS

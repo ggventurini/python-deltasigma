@@ -225,10 +225,11 @@ case 'CRFFD'
 	g(i) = 2*(1-real(ntf_z(2*i-1+odd)));
     end
     %zL1 = z*(1-1/H(z))
-    zL1 = zSet .* (1-1./evalTF(ntf,zSet));
+    zL1 = zeros(1,order);
     %Form the linear matrix equation a*T*=zL1
     for i=1:order*2
 	z = zSet(i);
+    zL1(i) = z .* (1-1./evalTF(ntf,z));
 	if( odd )
 	    Dfactor = (z-1)/z;
 	    product = 1/Dfactor;

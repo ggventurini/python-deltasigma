@@ -146,12 +146,3 @@ def dsclansObjb(x, order, OSR, Q, rmax, Hz):
     g = np.sum(np.abs(dimpulse(H, t=np.arange(100))[1][0])) - 1 - Q
     return -g
 
-def test_clans():
-    """Test function for clans()"""
-    ntf = clans(5, 32, 5, .95, 1)
-    poles = np.array((0.41835234+0.j, 0.48922229+0.1709716j, 
-                      0.48922229-0.1709716j, 0.65244885+0.3817224j, 
-                      0.65244885-0.3817224j))
-    print("Poles:", ntf[1])
-    assert np.allclose(poles, ntf[1], atol=1e-8, rtol=1e-5)
-

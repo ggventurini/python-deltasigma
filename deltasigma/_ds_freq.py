@@ -38,13 +38,4 @@ def ds_freq(osr=64., f0=0., quadrature=False):
 		f = np.delete(f, dels)
 		f = np.sort(np.concatenate((f, np.linspace(f1, f2, num=100))))
 	return f
-	
-def test_ds_freq():
-	"""Test function for ds_freq()
-	"""
-	a = ds_freq(osr=128, f0=0., quadrature=True)
-	b = np.diff(a)
-	res = (0.00190595677588, 0.00510204081633, 0.207803148686, 0.00491921819577)
-	tres = (a.mean(), b.mean(), a.std(), b.std())
-	assert np.allclose(res, tres, atol=1e-8, rtol=1e-5)
-	
+
