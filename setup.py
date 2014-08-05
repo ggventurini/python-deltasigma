@@ -16,7 +16,7 @@ setup(
     version=__version__,
     packages=find_packages(),
     package_data={
-      'deltasigma': ['test_data/*.mat', 'test_data/*.txt']
+      'deltasigma': ['tests/test_data/*.mat', 'tests/test_data/*.txt']
     },
     install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
     zip_safe=False,
