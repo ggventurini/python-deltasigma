@@ -227,7 +227,7 @@ is needed, as it is used to access the reference function outputs.
 Running the test suite may be conveniently automated installing
 `nose <https://pypi.python.org/pypi/nose/>`__, and then issuing::
 
-    nosetests -v deltasigma/*.py
+    nosetests -v deltasigma
 
 from the repository root.
 
