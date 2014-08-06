@@ -80,7 +80,7 @@ used to access the reference function outputs.
 Testing can be automated with
 **[nose](https://pypi.python.org/pypi/nose/)**, issuing:
 
-    nosetests -v deltasigma/*.py
+    nosetests -v deltasigma
 
 ## Documentation
 
