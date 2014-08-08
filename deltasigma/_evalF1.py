@@ -15,10 +15,9 @@
 
 """Module providing the evalF1() function
 """
-
 from __future__ import division
 
-from ._utils import carray
+import numpy as np
 
 def evalF1(f1, z, phi=None):
     """Calculate the values of the F1 filter 
@@ -26,10 +25,11 @@ def evalF1(f1, z, phi=None):
     """
     if phi is not None:
         z = z/phi
-    f1 = carray(f1).squeeze()
+    f1 = np.asarray(f1).squeeze()
+    f1 = np.atleast_1d(f1)
 
     F1 = 0.5
     for i in range(f1.shape[0]):
-        F1 = F1 + f1[i]*z^(2*i+1)
+        F1 = F1 + f1[i]*z**(2*i+1)
 
     return F1
