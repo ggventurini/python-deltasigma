@@ -28,7 +28,7 @@ from _utils import carray, _get_zpk
 
 from numba import double, int32, complex64
 from numba.types import pyobject
-from numba.decorators import jit
+from numba.decorators import jit, autojit
 
 # Using object mode, is nopython mode faster?  Array slicing doesn't work in it
 # Input data type assumptions
@@ -38,85 +38,8 @@ from numba.decorators import jit
 # x0 = 1D double array
 
 #@jit(arg_types=[double[:, :], complex64[:], int32[:], double[:]])
-@jit()
+@autojit()
 def simulateDSM(u, arg2, nlev=2, x0=0):
-    """Simulate a Delta Sigma modulator
-
-    **Syntax:**
-
-     * [v, xn, xmax, y] = simulateDSM(u, ABCD, nlev=2, x0=0)
-     * [v, xn, xmax, y] = simulateDSM(u, ntf, nlev=2, x0=0)
-
-    Compute the output of a general delta-sigma modulator with input u,
-    a structure described by ABCD, an initial state x0 (default zero) and
-    a quantizer with a number of levels specified by nlev.
-    Multiple quantizers are implied by making nlev an array,
-    and multiple inputs are implied by the number of rows in u.
-
-    Alternatively, the modulator may be described by an NTF.
-    The NTF is zpk object. (And the STF is assumed to be 1.)
-    The structure that is simulated is the block-diagonal structure used by
-    ``zpk2ss()``.
-
-    **Example:**
-
-    Simulate a 5th-order binary modulator with a half-scale sine-wave input and
-    plot its output in the time and frequency domains.::
-
-        import numpy as np
-        from deltasigma import *
-        OSR = 32
-        H = synthesizeNTF(5, OSR, 1)
-        N = 8192
-        fB = np.ceil(N/(2*OSR))
-        f = 85
-        u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-        v = simulateDSM(u, H)[0]
-
-    Graphical display of the results:
-
-    .. plot::
-
-        import numpy as np
-        import pylab as plt
-        from numpy.fft import fft
-        from deltasigma import *
-        OSR = 32
-        H = synthesizeNTF(5, OSR, 1)
-        N = 8192
-        fB = np.ceil(N/(2*OSR))
-        f = 85
-        u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
-        v = simulateDSM(u, H)[0]
-        plt.figure(figsize=(10, 7))
-        plt.subplot(2, 1, 1)
-        t = np.arange(85)
-        # the equivalent of MATLAB 'stairs' is step in matplotlib
-        plt.step(t, u[t], 'g', label='u(n)')
-        plt.hold(True)
-        plt.step(t, v[t], 'b', label='v(n)')
-        plt.axis([0, 85, -1.2, 1.2]);
-        plt.ylabel('u, v');
-        plt.xlabel('sample')
-        plt.legend()
-        plt.subplot(2, 1, 2)
-        spec = fft(v*ds_hann(N))/(N/4)
-        plt.plot(np.linspace(0, 0.5, N/2 + 1), dbv(spec[:N/2 + 1]))
-        plt.axis([0, 0.5, -120, 0])
-        plt.grid(True)
-        plt.ylabel('dBFS/NBW')
-        snr = calculateSNR(spec[:fB], f)
-        s = 'SNR = %4.1fdB' % snr
-        plt.text(0.25, -90, s)
-        s =  'NBW = %7.5f' % (1.5/N)
-        plt.text(0.25, -110, s)
-        plt.xlabel("frequency $1 \\\\rightarrow f_s$")
-
-    Click on "Source" above to see the source code.
-    """
-
-    #fprintf(1,'Warning: You are running the non-mex version of simulateDSM.\n');
-    #fprintf(1,'Please compile the mex version with "mex simulateDSM.c"\n');
 
     nlev = carray(nlev)
     u = np.array(u) if not hasattr(u, 'ndim') else u
@@ -193,6 +116,8 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
+#@jit(arg_types=[double[:, :], int32[:, :]])
+@autojit
 def ds_quantize(y, n):
     """v = ds_quantize(y,n)
     Quantize y to:
