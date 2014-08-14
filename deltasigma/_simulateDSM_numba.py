@@ -24,7 +24,7 @@ import numpy as np
 
 from scipy.signal import tf2zpk, zpk2ss
 from scipy.linalg import orth, norm, inv
-from ._utils import carray, _get_zpk
+from _utils import carray, _get_zpk
 
 from numba import double, int32, complex64
 from numba.types import pyobject

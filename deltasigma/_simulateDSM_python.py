@@ -24,7 +24,7 @@ import numpy as np
 
 from scipy.signal import tf2zpk, zpk2ss
 from scipy.linalg import orth, norm, inv
-from ._utils import carray, _get_zpk
+from _utils import carray, _get_zpk
 
 def simulateDSM(u, arg2, nlev=2, x0=0):
     """Simulate a Delta Sigma modulator
@@ -54,7 +54,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
-        N = 8192 
+        N = 8192
         fB = np.ceil(N/(2*OSR))
         f = 85
         u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
@@ -70,7 +70,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         from deltasigma import *
         OSR = 32
         H = synthesizeNTF(5, OSR, 1)
-        N = 8192 
+        N = 8192
         fB = np.ceil(N/(2*OSR))
         f = 85
         u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
@@ -126,15 +126,15 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         zeros, poles, k = _get_zpk(arg2)
         form = 2
     #raise TypeError('%s: Unknown transfer function %s' % (__name__, str(arg2)))
-        
+
     # need to set order and form now.
     order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
-    
+
     if not isinstance(x0, collections.Iterable):
         x0 = x0*np.ones((order, 1))
     else:
         x0 = np.array(x0).reshape((-1, 1))
-    
+
     if form == 1:
         A = ABCD[:order, :order]
         B = ABCD[:order, order:order+nu+nq]
@@ -150,9 +150,9 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         if C[0, 0] < 0:
             S = -S
             Sinv = -Sinv
-        A = np.dot(np.dot(S, A), Sinv) 
-        B2 = np.dot(S, B2) 
-        C = np.hstack((np.ones((1, 1)), np.zeros((1, order-1)))) # C=C*Sinv; 
+        A = np.dot(np.dot(S, A), Sinv)
+        B2 = np.dot(S, B2)
+        C = np.hstack((np.ones((1, 1)), np.zeros((1, order-1)))) # C=C*Sinv;
         D2 = np.zeros((0,))
         # !!!! Assume stf=1
         B1 = -B2
@@ -181,7 +181,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
 def ds_quantize(y, n):
     """v = ds_quantize(y,n)
     Quantize y to:
-     
+
     * an odd integer in [-n+1, n-1], if n is even, or
     * an even integer in [-n, n], if n is odd.
 
@@ -189,7 +189,7 @@ def ds_quantize(y, n):
     and mid-tread quantizers.
     """
     v = np.zeros(y.shape)
-    for qi in range(n.shape[0]): 
+    for qi in range(n.shape[0]):
         if n[qi] % 2 == 0: # mid-rise quantizer
             v[qi, 0] = 2*np.floor(0.5*y[qi, 0]) + 1
         else: # mid-tread quantizer
