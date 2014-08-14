@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -21,7 +21,7 @@ from warnings import warn
 
 import numpy as np
 import numpy.linalg as linalg
-from scipy.signal import ss2zpk
+from scipy.signal import ss2zpk, dimpulse
 
 from ._evalTFP import evalTFP
 from ._impL1 import impL1
@@ -30,14 +30,14 @@ from ._pulse import pulse
 from ._utils import carray, eps, _get_zpk
 
 def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
-                  ABCDc=None):
+                  ABCDc=None, method='LOOP'):
     """Realize an NTF with a continuous-time loop filter.
-    
+
     **Parameters:**
 
     ntf : object
         A noise transfer function (NTF).
-    
+
     form : str, optional
         A string specifying the topology of the loop filter.
 
@@ -47,12 +47,12 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         For the FB structure, the elements of ``Bc`` are calculated
         so that the sampled pulse response matches the L1 impulse
         response.  For the FF structure, ``Cc`` is calculated.
-    
+
     tdac : sequence, optional
         The timing for the feedback DAC(s). If ``tdac[0] >= 1``,
         direct feedback terms are added to the quantizer.
 
-        Multiple timings (one or more per integrator) for the FB 
+        Multiple timings (one or more per integrator) for the FB
         topology can be specified by making tdac a list of lists,
         e.g. ``tdac = [[1, 2], [1, 2], [[0.5, 1], [1, 1.5]], []]``
 
@@ -61,10 +61,10 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         DACs, one with ``[0.5, 1]`` timing and the other with
         ``[1, 1.5]`` timing, and there is no direct feedback
         DAC to the quantizer.
-    
+
     ordering : sequence, optional
         A vector specifying which NTF zero-pair to use in each resonator
-        Default is for the zero-pairs to be used in the order specified 
+        Default is for the zero-pairs to be used in the order specified
         in the NTF.
 
     bp : sequence, optional
@@ -73,8 +73,16 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
 
     ABCDc : ndarray, optional
         The loop filter structure, in state-space form.
-        If this argument is omitted, ABCDc is constructed according 
+        If this argument is omitted, ABCDc is constructed according
         to "form."
+
+    method : str, optional
+        The default fitting method is ``'LOOP'``, which means that
+        the DT and CT loop responses will be matched.
+        Alternatively, it is possible to set the method to ``'NTF'``,
+        which will result in the NTF responses to be matched.
+        See :ref:`discrete-time-to-continuous-time-mapping` for a
+        more in-depth discussion.
 
     **Returns:**
 
@@ -92,7 +100,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
 
         from deltasigma import *
         ntf = ([1, 1], [0, 0], 1)
-        ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB') 
+        ABCDc, tdac2 = realizeNTF_ct(ntf, 'FB')
 
     Returns:
 
@@ -116,6 +124,9 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     odd = order - 2*order2
     # compensate for limited accuracy of zero calculation
     ntf_z[np.abs(ntf_z - 1) < eps**(1./(1. + order))] = 1.
+    method = method.upper()
+    if method not in ('LOOP', 'NTF'):
+        raise ValueError('Unimplemented matching method %s.' % method)
     # check if multiple timings mode
     if (type(tdac) == list or type(tdac) == tuple) and len(tdac) and \
        (type(tdac[0]) == list or type(tdac[0]) == tuple):
@@ -147,9 +158,9 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         else:
             n_extra = n_direct
         tdac2 = np.vstack(
-                 (np.array((-1, -1)), 
-                  np.array(tdac).reshape((1, 2)), 
-                  0.5*np.dot(np.ones((n_extra, 1)), np.array([[-1, 1]])) 
+                 (np.array((-1, -1)),
+                  np.array(tdac).reshape((1, 2)),
+                  0.5*np.dot(np.ones((n_extra, 1)), np.array([[-1, 1]]))
                   + np.cumsum(np.ones((n_extra, 2)), 0) + (n_direct - n_extra)
                  ))
     else:
@@ -191,7 +202,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
                    (type(tdi[0]) in (list, tuple)):
                     for j in range(len(tdi)):
                         tdj = tdi[j]
-                        tdac2 = np.vstack((tdac2, 
+                        tdac2 = np.vstack((tdac2,
                                            np.array(tdj).reshape(1,-1)))
                         if Bc is not None:
                             Bc = np.hstack((Bc, Bci[:, i].reshape((-1, 1))))
@@ -221,9 +232,14 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     else:
         raise ValueError('Sorry, no code for form "%s".', form)
 
-    # Sample the L1 impulse response
     n_imp = np.ceil(2*order + np.max(tdac2[:, 1]) + 1)
-    y = impL1(ntf, n_imp)
+    if method == 'LOOP':
+        # Sample the L1 impulse response
+        y = impL1(ntf, n_imp)
+    else:
+        # Sample the NTF impulse response
+        y = dimpulse((ntf_z, ntf_p, 1., 1.), t=np.arange(n_imp+1))[1][0]
+        y = np.atleast_1d(y.squeeze())
     sys_c = []
     for i in range(Bc.shape[1]): # number of inputs
         sys_tmp = []
@@ -237,7 +253,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     # !! Note: if t1=int, matlab says pulse(sys) @t1 ~=0
     # !! This code corrects this problem.
     if n_extra > 0:
-        y_right = padb(np.vstack((np.zeros((1, n_direct)), 
+        y_right = padb(np.vstack((np.zeros((1, n_direct)),
                                   np.eye(n_direct))),
                        n_imp + 1)
         # Replace the last column in yy with an ordered set of impulses
@@ -246,16 +262,29 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         else:
             yy = np.hstack((yy[:, :-1], y_right))
 
+    if method == 'NTF':
+        # convolve CT loop response and NTF response
+        yynew = None
+        for i in range(yy.shape[1]):
+            yytmp = np.convolve(yy[:, i], y)[:-n_imp]
+            if yynew is None:
+                yynew = yytmp.reshape((-1, 1))
+            else:
+                yynew = np.hstack((yynew, yytmp.reshape((-1, 1))))
+        yy = yynew
+        e1 = np.zeros(y.shape)
+        e1[0] = 1.
+        y = y - e1
     # Solve for the coefficients
     x = linalg.lstsq(yy, y)[0]
     if linalg.norm(np.dot(yy, x) - y) > 0.0001:
         warn('Pulse response fit is poor.')
     if form == 'FB':
         if not multi_timing:
-            Bc2 = np.hstack((x[:order].reshape((-1, 1)), 
+            Bc2 = np.hstack((x[:order].reshape((-1, 1)),
                              np.zeros((order, n_extra))))
             if n_extra > 0:
-                Dc2 = np.hstack((np.array([[0]]), 
+                Dc2 = np.hstack((np.array([[0]]),
                                  x[order:].reshape((-1, 1))))
             else:
                 Dc2 = x[order:].reshape((-1, 1))
@@ -288,8 +317,8 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     L0c = ss2zpk(Ac, Bc1, Cc, Dc1)
     G0 = evalTFP(L0c, ntf, f0)
     if f0 == 0:
-        Bc[:, 0] = np.dot(Bc[:, 0], 
-                          np.abs(np.dot(Bc[0, 1:], 
+        Bc[:, 0] = np.dot(Bc[:, 0],
+                          np.abs(np.dot(Bc[0, 1:],
                                         (tdac2[1:, 1] - tdac2[1:, 0]))
                                  /Bc[0, 0]))
     else:
