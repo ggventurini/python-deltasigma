@@ -19,10 +19,11 @@
 import numpy as np
 from deltasigma import synthesizeNTF, realizeNTF, stuffABCD
 import _simulateDSM_numba
+import _simulateDSM_python
 import cProfile
 import pstats
 
-def test_script():
+def setup():
     OSR = 32
     H = synthesizeNTF(5, OSR, 1)
     N = 8192
@@ -30,15 +31,25 @@ def test_script():
     u = 0.5*np.sin(2*np.pi*f/N*np.arange(N))
     a, g, b, c = realizeNTF(H, 'CRFB')
     ABCD = stuffABCD(a, g, b, c, form='CRFB')
+    return OSR, H, N, f, u, ABCD
 
-    _simulateDSM_numba.simulateDSM(u, H, 2, 0)
+def test_script_numba():
+    OSR, H, N, f, u, ABCD = setup()
+    #_simulateDSM_numba.simulateDSM(u, H, 2, 0)
+    _simulateDSM_numba.simulateDSM(u, ABCD, 2, 0)
 
-        #_simulateDSM_numba.simulateDSM(u, ABCD, 2, 0)
+def test_script_cpython():
+    OSR, H, N, f, u, ABCD = setup()
+    #_simulateDSM_python.simulateDSM(u, H, 2, 0)
+    _simulateDSM_python.simulateDSM(u, ABCD, 2, 0)
 
-        #_simulateDSM_python.simulateDSM(u, H, 2, 0)
+cProfile.run('test_script_numba()', 'numba_stats')
+pn = pstats.Stats('numba_stats')
+print('Numba stats')
+pn.sort_stats('time').print_stats(10)
+pn.sort_stats('cumtime').print_stats(10)
 
-        #_simulateDSM_python.simulateDSM(u, ABCD, 2, 0)
-
-cProfile.run('test_script()', 'numba_stats')
-p = pstats.Stats('numba_stats')
-p.sort_stats('time').print_stats(25)
+cProfile.run('test_script_cpython()', 'cpython_stats')
+pc = pstats.Stats('cpython_stats')
+print('CPython stats')
+pc.sort_stats('time').print_stats(10)
