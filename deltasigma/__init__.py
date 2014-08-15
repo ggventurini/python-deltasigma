@@ -560,7 +560,7 @@ The DT loop filter transfer function can be found from:
 
 .. math::
 
-    L_{1,DT}(z) = 1 - \\frac{1}{NTF(z)}
+    L_{1,DT}(z) = 1 - \\frac{1}{NTF_{DT}(z)}
 
 The CT loop filter is readily known, since it has been selected by the user,
 but it needs to be converted to an equivalent DT transformation. This operation
@@ -598,13 +598,13 @@ following as :math:`l[n]`, it is possible to write the equation:
 
 .. math::
 
-    [l_0[n]\\; l_1[n]\\; \\dots \\; l_{order}[n]]\ K = l[n]
+    [\\ l_0[n]\\; l_1[n]\\; \\dots \\; l_{order}[n]\\ ]\ K = l[n]
 
 Where we define the vector :math:`K` as:
 
 .. math::
 
-    K = [k_0 \\; k_1 \\; \dots \\; k_{order}]^T
+    K = [\\ k_0 \\; k_1 \\; \dots \\; k_{order}\\ ]^T
 
 In the ideal case, provided that the impulse responses have been evaluated for
 a sufficiently high number of points :math:`N` (:math:`N > order`), the
@@ -631,7 +631,7 @@ And by definition:
 
 .. math::
 
-    NTF = \\frac{1}{1+L(z)}
+    NTF = \\frac{1}{1+L_1(z)}
 
 Combining the two we can write the equation:
 
@@ -644,7 +644,7 @@ rewrite the above in the time domain, getting:
 
 .. math::
 
-    \\sum_i k_i h[n] * l_i[n] = \\delta[n] - h[n] \\qquad \\forall i
+    \\sum_i k_i \\left(h[n] * l_i[n]\\right) = \\delta[n] - h[n] \\qquad \\forall i
 
 Where :math:`h[n]` is the impulse response of the DT NTF.
 
@@ -652,7 +652,7 @@ The above can be rewritten as:
 
 .. math::
 
-    [h[h]*l_0[n] \\; \\dots \\; h_{order}[n]] K = \\delta[n] - h[n]
+    [\\ h[n]*l_0[n] \\; \\dots \\; h[n]*l_{order}[n]\\ ] K = \\delta[n] - h[n]
 
 And solved exactly, in the ideal case, or in the least squares sense,
 in presence of non-idealities [R3]_.
