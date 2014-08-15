@@ -24,8 +24,8 @@ from fractions import Fraction as Fr
 import numpy as np
 from scipy.signal import lti, ss2tf, ss2zpk, zpk2tf
 
-from ._constants import eps
-from ._partitionABCD import partitionABCD
+from _constants import eps
+from _partitionABCD import partitionABCD
 
 
 def rat(x, tol):

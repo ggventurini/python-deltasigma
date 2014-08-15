@@ -43,17 +43,19 @@ class TestSimulateDSM(unittest.TestCase):
         a, g, b, c = realizeNTF(self.H, 'CRFB')
         self.ABCD = stuffABCD(a, g, b, c, form='CRFB')
 
-    def test_simulateDSM_numba(self):
+    def test_simulateDSM_numba_ABCD(self):
         """Test function for simulateDSM_numba()"""
         #print self.ABCD
         #print self.u
         #print self.H
         v, xn, xmax, y = ds._simulateDSM._simulateDSM_numba(
-            self.u, self.H, 2, 0)
-        self.assertTrue(np.allclose(
-            v.reshape(-1), self.v_ref.reshape(-1), atol=1e-6, rtol=1e-4))
-        self.assertTrue(np.allclose(y, self.y_ref, atol=1e-6, rtol=1e-4))
-        v, xn, xmax, y = ds._simulateDSM._simulateDSM_numba(
             self.u, self.ABCD, 2, 0)
         self.assertTrue(np.allclose(v, self.v_ref, atol=1e-6, rtol=1e-4))
         self.assertTrue(np.allclose(y, self.y_ref, atol=1e-6, rtol=1e-4))
+
+#    def test_simulateDSM_numba_H(self):
+#        v, xn, xmax, y = ds._simulateDSM._simulateDSM_numba(
+#            self.u, self.H, 2, 0)
+#        self.assertTrue(np.allclose(
+#            v.reshape(-1), self.v_ref.reshape(-1), atol=1e-6, rtol=1e-4))
+#        self.assertTrue(np.allclose(y, self.y_ref, atol=1e-6, rtol=1e-4))
