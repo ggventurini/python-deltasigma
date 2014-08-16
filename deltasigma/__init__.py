@@ -45,7 +45,8 @@ which it is very heavily based.\ |githalytics.com alpha|
 Status
 ------
 
-|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2 clause license|
+|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD
+2 clause license| |DOI BADGE|
 
 This project is a *work in progress*, not all functionality has been
 ported, yet. The next figure shows the relationship between the main functions
@@ -353,8 +354,11 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image::  https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
-.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png
+.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
+.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.11167.png
+   :target: http://dx.doi.org/10.5281/zenodo.11167
+
 
 Credits
 ~~~~~~~
