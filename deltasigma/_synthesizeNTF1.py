@@ -4,7 +4,7 @@
 # This file is distributed with python-deltasigma.
 # Copyright 2013 Giuseppe Venturini
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 #
-# The following code has been taken with little modifications from pydsm, 
+# The following code has been taken with little modifications from pydsm,
 # its original copyright notice follows:
 #
 # Copyright (c) 2012, Sergio Callegari
@@ -21,8 +21,8 @@
 #
 # The code was ported from the MATLAB Delta Sigma toolbox, which is
 # Copyright (c) 2009, Richard Schreier
-# 
-# The three software follow the same license, known as the 3-clause BSD. 
+#
+# The three software follow the same license, known as the 2-clause BSD.
 # See the LICENSE file for details.
 
 """

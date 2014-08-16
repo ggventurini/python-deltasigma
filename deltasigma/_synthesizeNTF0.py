@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is distributed with python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 #
-# The following code has been (slightly) modified from pydsm, its original 
+# The following code has been (slightly) modified from pydsm, its original
 # copyright notice follows:
 #
 # Copyright (c) 2012, Sergio Callegari
@@ -21,8 +21,8 @@
 #
 # The py dsm code was ported from the MATLAB Delta Sigma toolbox
 # Copyright (c) 2009, Richard Schreier
-# 
-# The three software follow the same license, known as the 3-clause BSD. 
+#
+# The three software follow the same license, known as the 2-clause BSD.
 # See the LICENSE file for details.
 
 """
@@ -39,15 +39,15 @@ from ._config import itn_limit
 
 def synthesizeNTF0(order, osr, opt, H_inf, f0):
     """Synthesize a noise transfer function for a delta-sigma modulator.
-    
+
     ::warn This function is not meant to be used directly, instead, set
     optimize_NTF to False and call synthesizeNTF(...).
 
     Parameters
     ----------
-    order : int, 
+    order : int,
         the order of the modulator
-    osr : float, 
+    osr : float,
         the oversamping ratio
     opt : int or list of floats
         flag for optimized zeros
@@ -97,7 +97,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 
     See also:
        clans()   "Closed-loop analysis of noise-shaper." An alternative
-                 method for selecting NTFs based on the 1-norm of the 
+                 method for selecting NTFs based on the 1-norm of the
                  impulse response of the NTF
 
        synthesizeChebyshevNTF()    Select a type-2 highpass Chebyshev NTF.
