@@ -27,5 +27,5 @@ def sinc_decimate(x, m, r):
     for _ in range(m):
         x = np.cumsum(x)
         x = np.concatenate((x[:r], x[r:] - x[:-r]), axis=0)/r
-    return x[r::r]
+    return x[r-1::r]
 
