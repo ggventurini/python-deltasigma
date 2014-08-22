@@ -9,7 +9,7 @@ scale and map to implementable topologies* **delta sigma modulators**.
 
 It aims to provide **a 1:1 Python port** of Richard Schreier's
 ***excellent*** **`MATLAB Delta Sigma
-Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__**,
+Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`_**,
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based. |githalytics.com alpha|
 
