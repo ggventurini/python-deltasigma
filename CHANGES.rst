@@ -7,6 +7,11 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-6**: ``sinc_decimate()`` fix, NTF matching method in ``realizeNTF_ct()``
+ * An off-by-1 indexing bug was found in ``sinc_decimate()``, **all users are
+   strongly recommended to update**.
+ * Add NTF matching method to ``realizeNTF_ct()``.
+
 **0.1-5**: CRFFD support, separate tests, less verbosity and DOC fixes.
  * Add CRFFD support (see ``realizeNTF``, ``mapABCD`` and ``stuffABCD``).
  * Move all tests to a dedicated location (tests/).
