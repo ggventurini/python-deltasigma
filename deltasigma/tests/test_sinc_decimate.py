@@ -20,24 +20,32 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
+from nose.tools import raises
+
 class TestSincDecimate(unittest.TestCase):
     """Test class for sinc_decimate()"""
 
     def test_sinc_decimate_1(self):
-        """Test function for sinc_decimate() 1/3"""
+        """Test function for sinc_decimate() 1/4"""
         x = [1]*10
         self.assertTrue(np.allclose(ds.sinc_decimate(x, 1, 10), [1.]))
 
     def test_sinc_decimate_2(self):
-        """Test function for sinc_decimate() 2/3"""
+        """Test function for sinc_decimate() 2/4"""
         x = [1]*10
         self.assertTrue(np.allclose(ds.sinc_decimate(x, 2, 5), [.6, 1.]))
 
     def test_sinc_decimate_3(self):
-        """Test function for sinc_decimate() 3/3"""
+        """Test function for sinc_decimate() 3/4"""
         x = [1]*10
         x = np.cumsum(np.asarray(x))
         self.assertTrue(np.allclose(ds.sinc_decimate(x, 1, 5), [3., 8.]))
         self.assertTrue(np.allclose(ds.sinc_decimate(x, 2, 5), [1.4, 6.]))
         self.assertTrue(np.allclose(ds.sinc_decimate(x, 3, 3), [0.55555556, 3., 6.]))
+
+    @raises(ValueError)
+    def test_sinc_decimate_4(self):
+        """Test function for sinc_decimate() 4/4"""
+        x = [1]*10
+        ds.sinc_decimate(x, 2, 15)
 
