@@ -67,11 +67,12 @@ The test suite requires
 access the reference function outputs.
 
 Testing can be automated with
-`nose <https://pypi.python.org/pypi/nose/>`__, issuing:
+`nose <https://pypi.python.org/pypi/nose/>`__ and triggered with:
 
 ::
 
-    nosetests -v deltasigma/*.py
+    python setup.py test
+
 
 Documentation
 -------------
