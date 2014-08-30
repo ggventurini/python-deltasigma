@@ -8,8 +8,8 @@ The **python-deltasigma** is a Python package to *synthesize, simulate,
 scale and map to implementable topologies* **delta sigma modulators**.
 
 It aims to provide **a 1:1 Python port** of Richard Schreier's
-***excellent*** **`MATLAB Delta Sigma
-Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`_**,
+***excellent*** `MATLAB Delta Sigma
+Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based. |githalytics.com alpha|
 
@@ -59,15 +59,15 @@ if you're installing a development version from Git.
 Extras
 ~~~~~~
 
-Install the **`sphinx <http://sphinx-doc.org/>`__** package to build the
+Install the `sphinx <http://sphinx-doc.org/>`__ package to build the
 documentation yourself.
 
 The test suite requires
-**`setuptools <https://pypi.python.org/pypi/setuptools>`__**, used to
+`setuptools <https://pypi.python.org/pypi/setuptools>`__, used to
 access the reference function outputs.
 
 Testing can be automated with
-**`nose <https://pypi.python.org/pypi/nose/>`__**, issuing:
+`nose <https://pypi.python.org/pypi/nose/>`__, issuing:
 
 ::
 
