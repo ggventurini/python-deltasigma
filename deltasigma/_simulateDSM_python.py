@@ -16,6 +16,8 @@
 """Module providing the simulateDSM() function
 """
 
+from __future__ import division
+
 import collections
 
 from warnings import warn
@@ -26,7 +28,7 @@ from scipy.signal import tf2zpk, zpk2ss
 from scipy.linalg import orth, norm, inv
 from ._utils import carray, _get_zpk
 
-def simulateDSM(u, arg2, nlev=2, x0=0):
+def simulateDSM(u, arg2, nlev=2, x0=0.):
     """Simulate a Delta Sigma modulator
 
     **Syntax:**
@@ -131,7 +133,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
     order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
     
     if not isinstance(x0, collections.Iterable):
-        x0 = x0*np.ones((order, 1))
+        x0 = x0*np.ones((order, 1), dtype=np.float64)
     else:
         x0 = np.array(x0).reshape((-1, 1))
     
