@@ -17,10 +17,12 @@
 """
 
 from __future__ import division
+
 import numpy as np
 import pylab as plt
 
 from ._dbv import dbv
+
 
 def frespF1(f1, f=None, phi=1, plot=False):
     """Plot/calculate the frequency response of the F1 filter 

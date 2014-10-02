@@ -19,6 +19,7 @@ top.
 
 import numpy as np
 
+
 def padt(x, n, val=0.):
     """Pad a matrix ``x`` on the top to length ``n`` with value ``val``.
 
@@ -53,4 +54,3 @@ def padt(x, n, val=0.):
                        ), axis=0
                       )
     return y
-

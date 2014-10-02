@@ -95,4 +95,3 @@ def partitionABCD(ABCD, m=None):
     C = ABCD[n:n+r, :n]
     D = ABCD[n:n+r, n:n+m]
     return A, B, C, D
-

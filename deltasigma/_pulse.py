@@ -18,12 +18,14 @@ pulse response of a CT system.
 """
 
 from __future__ import division
-import collections
-import numpy as np
-from scipy.signal import step2, lti
 
-from ._utils import lcm, rat
-from ._utils import _is_zpk, _is_num_den, _is_A_B_C_D
+import collections
+
+import numpy as np
+from scipy.signal import lti, step2
+
+from ._utils import _is_A_B_C_D, _is_num_den, _is_zpk, lcm, rat
+
 
 def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     """Calculate the sampled pulse response of a CT system.
@@ -136,4 +138,3 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
         else:
             y[:, :, i] = yy.reshape(yy.shape[0:2])
     return y
-

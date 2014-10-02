@@ -17,10 +17,12 @@
 """
 
 from __future__ import division, print_function
+
 import numpy as np
 from numpy.linalg import norm
 
 from ._dbv import dbv
+
 
 def calculateSNR(hwfft, f, nsig=1):
     """Estimate the SNR from the FFT.
@@ -66,4 +68,3 @@ def calculateSNR(hwfft, f, nsig=1):
     else:
         snr = dbv(s/n)
     return snr
-

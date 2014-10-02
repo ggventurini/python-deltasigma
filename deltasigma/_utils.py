@@ -21,6 +21,7 @@
 import collections
 import fractions
 from fractions import Fraction as Fr
+
 import numpy as np
 from scipy.signal import lti, ss2tf, ss2zpk, zpk2tf
 
@@ -684,4 +685,3 @@ def mround(x):
     _internal = np.frompyfunc(_mround, 1, 1)
     xf = np.array(_internal(x), dtype=x.dtype)
     return restore_input_form(xf, iform)
-

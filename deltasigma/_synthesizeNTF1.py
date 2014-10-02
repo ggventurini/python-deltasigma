@@ -36,15 +36,18 @@ Module providing the synthesizeNTF1() function.
 # Portions of code ported from the DELSIG toolbox
 # Copyright (c) 2009, Richard Schreier
 
+from warnings import warn
+
 import numpy as np
 from scipy.optimize import fmin_l_bfgs_b
-from warnings import warn
-from ._evalTF import evalTF
-from ._utils import cplxpair
+
+from ._constants import eps
 from ._ds_optzeros import ds_optzeros
 from ._ds_synNTFobj1 import ds_synNTFobj1
+from ._evalTF import evalTF
 from ._padl import padl
-from ._constants import eps
+from ._utils import cplxpair
+
 
 def synthesizeNTF1(order, osr, opt, H_inf, f0):
     """

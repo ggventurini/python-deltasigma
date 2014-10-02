@@ -16,9 +16,11 @@
 """Module providing the plotSpectrum() function
 """
 from __future__ import division
+
 import pylab as plt
 
 from ._logsmooth import logsmooth
+
 
 def plotSpectrum(X, fin, fmt='-', **xargs):
     """Plot a smoothed spectrum on a LOG x-axis.
@@ -93,4 +95,3 @@ def plotSpectrum(X, fin, fmt='-', **xargs):
     """
     f, p = logsmooth(X, fin)
     plt.semilogx(f, p, fmt, **xargs)
-

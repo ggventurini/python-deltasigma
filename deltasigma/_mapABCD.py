@@ -17,9 +17,11 @@
 """
 
 from __future__ import division, print_function
+
 import numpy as np
 
 from ._utils import diagonal_indices
+
 
 def mapABCD(ABCD, form='CRFB'):
     """Compute the coefficients for the specified structure.
@@ -128,4 +130,3 @@ def mapABCD(ABCD, form='CRFB'):
     b = np.atleast_1d(b.squeeze())
     c = np.atleast_1d(c.squeeze())
     return a, g, b, c
-

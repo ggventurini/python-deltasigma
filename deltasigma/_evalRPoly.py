@@ -18,7 +18,9 @@ of a polynomial which is given in terms of its roots.
 """
 
 import numpy as np
+
 from ._utils import carray
+
 
 def evalRPoly(roots, x, k=1):
 	"""Compute the value of a polynomial which is given in terms of its roots.
@@ -29,4 +31,3 @@ def evalRPoly(roots, x, k=1):
 	for r in roots:
 		y = y*(x - r)
 	return y
-

@@ -19,14 +19,14 @@
 from __future__ import division
 
 import collections
-
 from warnings import warn
 
 import numpy as np
-
+from scipy.linalg import inv, norm, orth
 from scipy.signal import tf2zpk, zpk2ss
-from scipy.linalg import orth, norm, inv
-from ._utils import carray, _get_zpk
+
+from ._utils import _get_zpk, carray
+
 
 def simulateDSM(u, arg2, nlev=2, x0=0.):
     """Simulate a Delta Sigma modulator
@@ -199,4 +199,3 @@ def ds_quantize(y, n):
         L = n[qi] - 1
         v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
     return v
-

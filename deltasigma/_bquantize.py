@@ -18,7 +18,9 @@ quantize a vector to signed digits.
 """
 
 from __future__ import division, print_function
+
 import numpy as np
+
 from ._constants import eps
 from ._utils import empty, mfloor
 

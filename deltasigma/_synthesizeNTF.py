@@ -29,11 +29,14 @@
 Module providing the main NTF synthesis function.
 """
 
-import numpy as np
 from warnings import warn
+
+import numpy as np
+
 from ._config import optimize_NTF
 from ._synthesizeNTF0 import synthesizeNTF0
 from ._synthesizeNTF1 import synthesizeNTF1
+
 
 def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     """Synthesize a noise transfer function for a delta-sigma modulator.
@@ -143,4 +146,3 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     else:
         ntf = synthesizeNTF1(order, osr, opt, H_inf, f0)
     return ntf
-

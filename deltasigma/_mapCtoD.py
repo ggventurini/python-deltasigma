@@ -17,20 +17,22 @@
 """
 
 from __future__ import division, print_function
+
 import collections
 from warnings import warn
 
 import numpy as np
-from numpy.random import rand
 from numpy.linalg import cond
-from scipy.linalg import inv, expm, norm
-from scipy.signal import lti, cont2discrete, ss2zpk
+from numpy.random import rand
+from scipy.linalg import expm, inv, norm
+from scipy.signal import cont2discrete, lti, ss2zpk
 
 from ._constants import eps
 from ._evalMixedTF import evalMixedTF
 from ._padb import padb
 from ._padr import padr
 from ._utils import _getABCD
+
 
 def mapCtoD(sys_c, t=(0, 1), f0=0.):
     """Map a MIMO continuous-time to an equiv. SIMO discrete-time system.
@@ -296,4 +298,3 @@ def _B2formula(Ac, t1, t2, B2):
     if norm(term1 - term) > 0.001:
         warn('Inaccurate calculation in mapCtoD.')
     return term
-

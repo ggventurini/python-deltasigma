@@ -21,6 +21,7 @@ import pylab as plt
 
 from ._utils import _get_zpk
 
+
 def plotPZ(H, color='b', markersize=5, showlist=False):
     """Plot the poles and zeros of a transfer function.
 
@@ -128,4 +129,3 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
 
     if not hold_status:
         plt.hold(False)
-

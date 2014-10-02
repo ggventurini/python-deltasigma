@@ -17,9 +17,12 @@
 """
 
 from __future__ import division, print_function
+
 import numpy as np
+
 from ._partitionABCD import partitionABCD
 from ._utils import carray, diagonal_indices
+
 
 def stuffABCD(a, g, b, c, form='CRFB'):
     """Calculate the ABCD matrix from the parameters of a modulator topology.
@@ -265,4 +268,3 @@ def stuffABCD(a, g, b, c, form='CRFB'):
     else:
         raise ValueError('Form %s is not yet supported.', form)
     return ABCD
-

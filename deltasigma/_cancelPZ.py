@@ -17,10 +17,12 @@
 """
 
 from __future__ import division
-import numpy as np
+
 import copy
 
+import numpy as np
 from scipy.signal import lti
+
 
 def cancelPZ(arg1, tol=1e-6):
     """Cancel zeros/poles in a SISO transfer function.
@@ -64,4 +66,3 @@ def cancelPZ(arg1, tol=1e-6):
             p = np.delete(p, cancel[0])
             z = np.delete(z, i)
     return z, p, k
-

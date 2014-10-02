@@ -17,7 +17,9 @@
 """
 
 from __future__ import division
+
 import numpy as np
+
 
 def mapRtoQ(ABCDr):
     """Map a real ABCD matrix to a quadrature one.
@@ -51,4 +53,3 @@ def mapRtoQ(ABCDr):
     ABCDp = 0.5*(ABCD11 - ABCD22) + 0.5j*(ABCD21 + ABCD12);
 
     return ABCDq, ABCDp
-

@@ -19,6 +19,7 @@ left.
 
 import numpy as np
 
+
 def padl(x, n, val=0.):
     """Pad a matrix ``x`` on the left to length ``n`` with value ``val``.
 
@@ -52,4 +53,3 @@ def padl(x, n, val=0.):
                         xp
                        ), axis=1)
     return y
-

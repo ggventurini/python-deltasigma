@@ -17,11 +17,13 @@
 """
 
 from __future__ import division, print_function
+
 import numpy as np
 import numpy.random as npr
 
 from ._partitionABCD import partitionABCD
 from ._simulateDSM import simulateDSM
+
 
 def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10):
     """Scale the loop filter of a general delta-sigma modulator for dynamic range.
@@ -145,4 +147,3 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
                        np.hstack((np.dot(C, Sinv), D))
                      ))
     return ABCDs, umax, S
-

@@ -18,10 +18,10 @@
 
 from __future__ import division
 
+from warnings import warn
+
 import numpy as np
 import pylab as plt
-
-from warnings import warn
 from numpy.linalg import norm
 
 from ._dbp import dbp
@@ -169,4 +169,3 @@ def _logsmooth2(X, inBin, nbin=8):
         p[i] = 10*np.log10(norm(X[(startbin[i] - 1):stopbin[i]])**2 /
                            (stopbin[i] - startbin[i] + 1))
     return f, p
-

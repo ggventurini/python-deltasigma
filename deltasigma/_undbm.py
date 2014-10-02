@@ -18,7 +18,8 @@
 
 import numpy as np
 
-from ._utils import carray, save_input_form, restore_input_form
+from ._utils import carray, restore_input_form, save_input_form
+
 
 def undbm(p, z=50):
     """Calculate the RMS voltage equivalent of a power ``p`` expressed in dBm.
@@ -47,4 +48,3 @@ def undbm(p, z=50):
     p = carray(p)
     up = np.sqrt(z*10.**(p/10.-3))
     return restore_input_form(up, iform)
-

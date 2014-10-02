@@ -17,10 +17,12 @@
 """
 
 from __future__ import division
+
 import numpy as np
 from scipy.linalg import norm
 
 from ._dbp import dbp
+
 
 def logsmooth(X, inBin, nbin=8, n=3):
     """Smooth the fft, and convert it to dB.
@@ -137,4 +139,3 @@ def logsmooth(X, inBin, nbin=8, n=3):
         p[i] = dbp(norm(X[startbin[i]:stopbin[i] + 1])**2/
                    (stopbin[i] - startbin[i] + 1))
     return f, p
-

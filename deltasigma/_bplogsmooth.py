@@ -18,11 +18,13 @@ converts it to dB.
 """
 
 from __future__ import division
+
 import numpy as np
 from numpy.linalg import norm
 
 from ._dbp import dbp
 from ._utils import carray, mround
+
 
 def bplogsmooth(X, tbin, f0):
     """Smooth the FFT and convert it to dB.
@@ -82,4 +84,3 @@ def bplogsmooth(X, tbin, f0):
                        ord=1)
                   )
     return f, p
-

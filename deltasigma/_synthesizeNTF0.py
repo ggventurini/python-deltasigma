@@ -30,12 +30,15 @@ Synthesize a noise transfer function (NTF) for a delta-sigma modulator without
 optimizing the result.
 """
 
-import numpy as np
 from warnings import warn
+
+import numpy as np
+
+from ._config import itn_limit
+from ._ds_optzeros import ds_optzeros
 from ._evalTF import evalTF
 from ._utils import cplxpair
-from ._ds_optzeros import ds_optzeros
-from ._config import itn_limit
+
 
 def synthesizeNTF0(order, osr, opt, H_inf, f0):
     """Synthesize a noise transfer function for a delta-sigma modulator.
@@ -216,4 +219,3 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
 
     z = cplxpair(z)
     return z, p, k
-

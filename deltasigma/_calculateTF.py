@@ -18,9 +18,11 @@
 
 import numpy as np
 from scipy.signal import lti, ss2zpk
+
 from ._constants import eps
 from ._partitionABCD import partitionABCD
 from ._utils import minreal
+
 
 def calculateTF(ABCD, k=1.):
     """Calculate the NTF and STF of a delta-sigma modulator.
@@ -121,4 +123,3 @@ def calculateTF(ABCD, k=1.):
     ntf = lti(ntf_p, ntf_z, ntf_k)
     stf_min, ntf_min = minreal((stf, ntf), tol)
     return ntf_min, stf_min
-

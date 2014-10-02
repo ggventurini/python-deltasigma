@@ -18,8 +18,9 @@
 """
 
 import matplotlib as mpl
-import pylab as plt
 import numpy as np
+import pylab as plt
+
 
 def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
     """Quickly change several figure parameters.
@@ -97,4 +98,3 @@ def _setTextFontsize(ax, fontsize):
     for artist in ax.get_children():
         if isinstance(artist, mpl.text.Text):
             artist.set_size(fontsize)
-

@@ -18,7 +18,7 @@
 
 import numpy as np
 
-from ._utils import carray, save_input_form, restore_input_form
+from ._utils import carray, restore_input_form, save_input_form
 
 
 def dbp(x):
@@ -47,4 +47,3 @@ def dbp(x):
     nonzero = (x != 0)
     y[nonzero] = 10. * np.log10(np.abs(x[nonzero]))
     return restore_input_form(y, iform)
-

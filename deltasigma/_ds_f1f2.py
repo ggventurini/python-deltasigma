@@ -31,4 +31,3 @@ def ds_f1f2(OSR=64, f0=0., complex_flag=False):
             f1 = 0.
             f2 = 0.5/OSR
     return f1, f2
-

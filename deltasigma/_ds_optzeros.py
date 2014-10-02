@@ -95,4 +95,3 @@ def ds_optzeros(n, opt=1):
         optZeros[m + 1] = -z[i]
         m += 2
     return optZeros
-

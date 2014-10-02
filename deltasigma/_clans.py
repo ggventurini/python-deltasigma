@@ -17,14 +17,16 @@
 """
 
 from __future__ import division, print_function
+
 import numpy as np
 from scipy.optimize import minimize
 from scipy.signal import dimpulse
 
+from ._dsclansNTF import dsclansNTF
+from ._evalTF import evalTF
 from ._synthesizeNTF import synthesizeNTF
 from ._utils import cplxpair
-from ._evalTF import evalTF
-from ._dsclansNTF import dsclansNTF
+
 
 # We ported the version that was originally designed for the MATLAB
 # Optimization Toolbox version >= 6
@@ -145,4 +147,3 @@ def dsclansObjb(x, order, OSR, Q, rmax, Hz):
     # dimpulse(H, n=100)[y is 0][output 0]
     g = np.sum(np.abs(dimpulse(H, t=np.arange(100))[1][0])) - 1 - Q
     return -g
-

@@ -47,4 +47,3 @@ def zinc(f, m=64, n=1):
 
     """
     return np.fabs(np.sinc(m * f) / np.sinc(f)) ** n
-

@@ -18,8 +18,10 @@ point(s) given by the user.
 """
 
 import numpy as np
+
 from ._evalRPoly import evalRPoly
-from ._utils import _is_num_den, _is_zpk, _get_zpk
+from ._utils import _get_zpk, _is_num_den, _is_zpk
+
 
 def evalTF(tf, z):
     """Evaluates the rational function ``tf`` at the point(s)
@@ -74,4 +76,3 @@ def evalTF(tf, z):
         zeros, poles, k = _get_zpk(tf)
         h = k*evalRPoly(zeros, z)/evalRPoly(poles, z)
     return h
-

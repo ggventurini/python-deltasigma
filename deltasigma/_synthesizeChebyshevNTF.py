@@ -17,13 +17,14 @@
 """
 
 from __future__ import division
+
 from warnings import warn
 
 import numpy as np
-
 from scipy.signal import cheby2
 
 from ._ds_f1f2 import ds_f1f2
+
 
 def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     """Synthesize a noise transfer function for a delta-sigma modulator.
@@ -243,4 +244,3 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
             break
     ntf = (z, p, 1)
     return ntf
-

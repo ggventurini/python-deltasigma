@@ -17,17 +17,19 @@
 """
 
 from __future__ import division, print_function
+
 from warnings import warn
 
 import numpy as np
 import numpy.linalg as linalg
-from scipy.signal import ss2zpk, dimpulse
+from scipy.signal import dimpulse, ss2zpk
 
 from ._evalTFP import evalTFP
 from ._impL1 import impL1
 from ._padb import padb
 from ._pulse import pulse
-from ._utils import carray, eps, _get_zpk
+from ._utils import _get_zpk, carray, eps
+
 
 def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
                   ABCDc=None, method='LOOP'):
@@ -330,4 +332,3 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     #ABCDc = np.dot(ABCDc, np.abs(ABCDc) > eps**(1./2.))
     ABCDc[np.nonzero(np.abs(ABCDc) < eps**(1./2))] = 0.
     return ABCDc, tdac2
-

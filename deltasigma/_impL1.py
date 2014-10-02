@@ -23,6 +23,7 @@ from scipy.signal import convolve, dimpulse
 from ._padr import padr
 from ._utils import _get_num_den, _is_num_den, _is_zpk
 
+
 def impL1(arg1, n=10):
     """Impulse response evaluation for NTFs.
 
@@ -94,4 +95,3 @@ def impL1(arg1, n=10):
         _, y = dimpulse((lf_num, lf_den, 1), t=ts)
         y = y[0].squeeze()
     return y
-

@@ -20,6 +20,7 @@ Square (RMS) of a vector.
 import numpy as np
 import numpy.linalg as la
 
+
 def rms(x, no_dc=False):
     """Calculate the RMS value of ``x``.
 
@@ -46,4 +47,3 @@ def rms(x, no_dc=False):
     if no_dc:
         x = x - np.mean(x)
     return la.norm(x)/np.sqrt(max(x.shape))
-

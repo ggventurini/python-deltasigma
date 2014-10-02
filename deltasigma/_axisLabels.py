@@ -62,4 +62,3 @@ def axisLabels(ran, incr):
     for i in range(first, len(ran), incr):
         s += ['%g' % ran[i]]
     return s
-

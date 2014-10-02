@@ -81,4 +81,3 @@ def ds_quantize(y, n=2):
         if i.any():
             v[i] = m * L[i]
     return v
-
