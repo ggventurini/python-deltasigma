@@ -85,7 +85,7 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
     cdef int order
 
     try:
-        if type(arg2)==tuple and len(arg2)==3:
+        if type(arg2) in (tuple, list) and len(arg2)==3:
             # Assume ntf in zpk form
             ntf_z=np.asarray(arg2[0], dtype=np.complex128)
             ntf_p=np.asarray(arg2[1], dtype=np.complex128)
