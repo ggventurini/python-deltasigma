@@ -7,6 +7,10 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-8**: Accept both tuples and lists as NTFs for simulation.
+ * Previously passing a tuple for the NTF resulted in an error. Fixed.
+ * Doc fixes in ``mapCtoD()``.
+
 **0.1-7**: Quantization fix in the Cython backends. More tests.
  * A bug was found in the function responsible for quantizing the loop
    filter output in ``simulateDSM()``, only the Cython implementations are
