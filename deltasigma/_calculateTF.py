@@ -117,9 +117,9 @@ def calculateTF(ABCD, k=1.):
     tol = min(1e-3, max(1e-6, eps**(1/ABCD.shape[0])))
     # input #0 is the signal
     # input #1 is the quantization noise
-    stf_p, stf_z, stf_k  = ss2zpk(Acl, Bcl, Ccl, Dcl, input=0)
-    ntf_p, ntf_z, ntf_k = ss2zpk(Acl, Bcl, Ccl, Dcl, input=1)
-    stf = lti(stf_p, stf_z, stf_k)
-    ntf = lti(ntf_p, ntf_z, ntf_k)
+    stf_z, stf_p, stf_k  = ss2zpk(Acl, Bcl, Ccl, Dcl, input=0)
+    ntf_z, ntf_p, ntf_k = ss2zpk(Acl, Bcl, Ccl, Dcl, input=1)
+    stf = lti(stf_z, stf_p, stf_k)
+    ntf = lti(ntf_z, ntf_p, ntf_k)
     stf_min, ntf_min = minreal((stf, ntf), tol)
     return ntf_min, stf_min
