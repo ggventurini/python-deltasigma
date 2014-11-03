@@ -52,17 +52,21 @@ class TestCalculateTF(unittest.TestCase):
                                              cplxpair(mstf_poles))
 
     def test_ntf_zeros_equal(self):
+        """Test function for calculateTF() 2/4"""
         self.assertTrue(
             np.allclose(self.ntf_zeros, self.mntf_zeros, rtol=1e-5, atol=1e-8))
 
     def test_ntf_poles_equal(self):
+        """Test function for calculateTF() 1/4"""
         self.assertTrue(
             np.allclose(self.ntf_poles, self.mntf_poles, rtol=1e-5, atol=1e-8))
 
     def test_stf_zeros_equal(self):
+        """Test function for calculateTF() 4/4"""
         self.assertTrue(
             np.allclose(self.stf_zeros, self.mstf_zeros, rtol=1e-5, atol=1e-8))
 
     def test_stf_poles_equal(self):
+        """Test function for calculateTF() 3/4"""
         self.assertTrue(
             np.allclose(self.stf_poles, self.mstf_poles, rtol=1e-5, atol=1e-8))
