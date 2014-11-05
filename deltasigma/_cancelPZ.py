@@ -29,20 +29,20 @@ def cancelPZ(arg1, tol=1e-6):
 
     **Parameters:**
 
-    arg1 : arguments
-        The `cancelPZ` function can be called with either 1, 2, 3 or 4 arguments.
+    arg1 : LTI system description
+        Multiple descriptions are supported for the LTI system.
 
-    If one argument is used, it is a scipy `lti` object.
+        If one argument is used, it is a scipy ``lti`` object.
 
-    If more arguments are used, they should be arranged in a tuple, the 
-    following gives the number of elements in the tuple and their
-    interpretation:
+        If more arguments are used, they should be arranged in a tuple, the
+        following gives the number of elements in the tuple and their
+        interpretation:
 
-    * 2: (numerator, denominator)
-    * 3: (zeros, poles, gain)
-    * 4: (A, B, C, D)
+        * 2: (numerator, denominator)
+        * 3: (zeros, poles, gain)
+        * 4: (A, B, C, D)
 
-    Each argument can be an array or sequence.
+        Each argument can be an array or sequence.
 
     tol : float, optional
         the absolute tolerance for pole, zero cancellation. Defaults to 1e-6.
