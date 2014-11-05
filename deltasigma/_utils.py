@@ -130,12 +130,23 @@ def cplxpair(x, tol=100):
 
 def minreal(tf, tol=None):
     """Remove pole/zero pairs from a transfer function
-    when the two match within the tolerance tol.
+    when the two match within the tolerance ``tol``.
 
-    tf may be a transfer function (lti object) or a list of transfer functions
-    tol is optional and defaults to the system epsilon if unset.
+    **Parameters:**
 
-    return a list of tfs or a tf, depending on the input type.
+    tf : supported TF representation or list
+        ``tf`` may be a transfer function (LTI object) or a list of transfer
+        functions, each of them expressed in a supported representation.
+
+    tol : float, optional
+        The tolerance to be accepted when simplifying pole-zero pairs. It
+        defaults to the system epsilon if unset.
+
+    **Returns:**
+
+    tf_simplified : supported TF representation or list
+        A list of TFs or a TF, depending on the input type, each of them
+        represented by an LTI object.
     """
     # initially based on python-control
     # which is in turn based on octave minreal
