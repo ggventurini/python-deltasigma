@@ -319,10 +319,13 @@ def pretty_lti(arg):
     p = np.atleast_1d(p)
     z = np.round(np.real_if_close(z), 4)
     p = np.round(np.real_if_close(p), 4)
+    k = np.round(k, 4)
     signs = {1:'+', -1:'-'}
     if not len(z) and not len(p):
         return "%g" % k
     ppstr = ["", "", ""]
+    if np.allclose(k, 0., atol=1e-5):
+        return "0"
     if k != 1:
         ppstr[1] = "%g " % k
     for i, s in zip((0, 2), (z, p)):
