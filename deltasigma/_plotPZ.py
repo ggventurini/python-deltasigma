@@ -69,6 +69,8 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
     # Copyright (c) 2009, Richard Schreier
     
     z, p, _ = _get_zpk(H)
+    p = np.real_if_close(np.round(p, 5))
+    z = np.real_if_close(np.round(z, 5))
 
     pole_fmt = {'marker': 'x', 'markersize': markersize}
     zero_fmt = {'marker': 'o', 'markersize': markersize}
@@ -105,7 +107,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
         ps = p[p.imag >= 0]
         for pi in ps:
             markers += [plt.Line2D((), (), linestyle='None', **pole_fmt)]
-            if pi.imag == 0:
+            if np.allclose(pi.imag, 0, atol=1e-5):
                 descr += ['%+.4f' % pi.real]
             else:
                 descr += ['%+.4f+/-j%.4f' %  (pi.real, pi.imag)]
