@@ -62,7 +62,7 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
         c_nlev = np.asarray(nlev, dtype=np.int)
         if c_nlev.ndim > 1:
             raise TypeError()
-        c_nlev=c_nlev.reshape(1)
+        c_nlev=c_nlev.reshape(-1)
     except (ValueError, TypeError):
          raise ValueError(\
             "invalid argument: nlev must be convertible into a 1D int array")
