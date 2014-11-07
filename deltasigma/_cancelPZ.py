@@ -59,7 +59,7 @@ def cancelPZ(arg1, tol=1e-6):
     z = copy.copy(arg1.zeros)
     p = copy.copy(arg1.poles)
     k = arg1.gain
-    for i in range(max(z.shape) - 1, 0, -1):
+    for i in range(max(z.shape) - 1, -1, -1):
         d = z[i] - p
         cancel = np.nonzero(np.abs(d) < tol)[0]
         if cancel.size:
