@@ -78,11 +78,13 @@ at the following ipython notebooks:
 -  `dsdemo4 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb>`__,
    notebook port of ``dsdemo4.m``. `Audio
    file <https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64>`__, right click to download.
--  `dsexample1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb>`__, python
+-  `MASH example <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/MASH_example.ipynb>`__,
+   an example of the simulation of a MASH cascade.
+-  `dsexample1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb>`__, Python
    version of ``dsexample1.m``.
--  `dsexample2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb>`__, python
+-  `dsexample2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb>`__, Python
    version of ``dsexample2.m``.
--  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, python
+-  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, Python
    version of ``dsexample3.m``.
 
 They are also a good means for getting started quickly.
