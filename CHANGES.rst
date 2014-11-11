@@ -7,6 +7,17 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-9**: Add support for modulators with multiple outputs, allowing simulating
+MASH cascade DSMs.
+ * Add support in ``partitionABCD()`` for specifying the number of outputs.
+ * Add support for multiple quantizers in ``calculateTF()``.
+ * BUGFIX: Fix simulation of DSMs with multiple quantizers.
+ * BUGFIX: ``cancelPZ()`` was not testing the first root.
+ * ``pretty_lti()`` now returns 0 if k is 0 after rounding.
+ * ``plotPZ()`` doesn't list coincident real roots as complex conjugate
+   roots with imag(root) = +/-0.
+ * DOC: add example of MASH cascade.
+
 **0.1-8**: Accept both tuples and lists as NTFs for simulation.
  * Previously passing a tuple for the NTF resulted in an error. Fixed.
  * Doc fixes in ``mapCtoD()``.
