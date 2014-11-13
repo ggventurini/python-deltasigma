@@ -45,7 +45,8 @@ which it is very heavily based.\ |githalytics.com alpha|
 Status
 ------
 
-|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2 clause license|
+|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD
+2 clause license| |DOI BADGE|
 
 This project is a *work in progress*, not all functionality has been
 ported, yet. The next figure shows the relationship between the main functions
@@ -77,11 +78,13 @@ at the following ipython notebooks:
 -  `dsdemo4 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsdemo4.ipynb>`__,
    notebook port of ``dsdemo4.m``. `Audio
    file <https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/sax.wav.b64>`__, right click to download.
--  `dsexample1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb>`__, python
+-  `MASH example <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/MASH_example.ipynb>`__,
+   an example of the simulation of a MASH cascade.
+-  `dsexample1 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample1.ipynb>`__, Python
    version of ``dsexample1.m``.
--  `dsexample2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb>`__, python
+-  `dsexample2 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample2.ipynb>`__, Python
    version of ``dsexample2.m``.
--  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, python
+-  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, Python
    version of ``dsexample3.m``.
 
 They are also a good means for getting started quickly.
@@ -353,8 +356,11 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image::  https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
-.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png
+.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
+.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.11167.png
+   :target: http://dx.doi.org/10.5281/zenodo.11167
+
 
 Credits
 ~~~~~~~
@@ -521,6 +527,154 @@ CRFFD
     :align: center
     :alt: CRFFD topology
 
+.. _discrete-time-to-continuous-time-mapping:
+
+Discrete time to continuous time mapping
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The approach presented here to design a CT delta-sigma modulator starts with the
+synthesis of the noise transfer function.
+
+Once a suitable NTF has been identified, we need to realize the transfer function with a
+continuous time loop filter.
+
+First, a loop filter topology is selected among the Feed-Forward (FF) and Feedback (FB)
+structures. The feed-forward or feedback paths -- depending on the topology -- will be
+characterized by an unknown proportionality factor :math:`k_i`, for each of the
+:math:`i \in \\{0 \dots order\\}` branches.
+
+.. image:: ../doc/_static/DS_equivalence_DT_CT.png
+    :align: center
+    :alt: DT-CT mapping model
+
+The objective is to determine the gain factors :math:`{k_i}` to construct a CT loop
+filter such that its sampled pulse response is equal to the impulse response of a DT
+prototype's loop filter.
+
+We consider here three approaches:
+
+* equating the loop filter transfer functions,
+* matching the loop filter impulse responses, implemented in :func:`realizeNTF_ct`
+  as method ``'LOOP'``,
+* matching the DT NTF and CT filter pulse responses, implemented in
+  :func:`realizeNTF_ct` as method ``'NTF'``.
+
+1: equate the loop filter transfer functions
+::::::::::::::::::::::::::::::::::::::::::::
+
+The DT loop filter transfer function can be found from:
+
+.. math::
+
+    L_{1,DT}(z) = 1 - \\frac{1}{NTF_{DT}(z)}
+
+The CT loop filter is readily known, since it has been selected by the user,
+but it needs to be converted to an equivalent DT transformation. This operation
+is performed through the impulse invariance transformation, here denoted as
+:math:`\\mathscr{I\\!I\\!T}` [R2]_.
+
+Solving the equation:
+
+.. math::
+
+    L_{1, DT}(z) = \\mathscr{I\\!I\\!T}\\!\\!\\left(L_{1, CT}\\right)(z)
+
+will allow determining the exact values of the coefficients :math:`k_i` [R1]_.
+
+This approach has limited use in the real case:
+
+* Developing an analytical CT model and applying the impulse invariance
+  transformation may entail significant difficulties in presence of
+  non-idealities.
+* The equation above will not have a solution when the integrators are non-ideal
+  since the poles of the transfer functions on RHS and LHS are different.
+
+2: match the loop filter impulse responses
+::::::::::::::::::::::::::::::::::::::::::
+
+Although it may be non-trivial to reach an analytical expression for
+:math:`\\mathscr{I\\!I\\!T}\\!\\!\\left(L_{1, CT}\\right)(z)`, it is still
+possible to evaluate through numerical simulations (or in a some case
+analytically), N samples of the pulse response of each path
+:math:`\\{l_i[n]\\}`, obtained setting all the gain coefficients to one
+or :math:`k_i = 1, \\; \\forall i \\in \\{0 \\dots order\\}`.
+
+Evaluating the impulse response of the prototype DT loop filter, denoted in the
+following as :math:`l[n]`, it is possible to write the equation:
+
+.. math::
+
+    [\\ l_0[n]\\; l_1[n]\\; \\dots \\; l_{order}[n]\\ ]\ K = l[n]
+
+Where we define the vector :math:`K` as:
+
+.. math::
+
+    K = [\\ k_0 \\; k_1 \\; \dots \\; k_{order}\\ ]^T
+
+In the ideal case, provided that the impulse responses have been evaluated for
+a sufficiently high number of points :math:`N` (:math:`N > order`), the
+equation has a exact solution, indepently of :math:`N` [R2]_.
+
+In presence of non-idealities, it is possible to use Least Squares fitting to
+find the optimum :math:`\{k_i\}`.
+
+As discussed in [R3]_, this method is particularly sensitive to the value of
+:math:`N` in the non-ideal cases.
+
+3: match the DT NTF and CT filter pulse responses
+:::::::::::::::::::::::::::::::::::::::::::::::::
+
+A more robust approach is the following:
+
+Remember the goal of DT to CT mapping is to have:
+
+.. math::
+
+    NTF_{DT} = NTF_{eq, CT}
+
+And by definition:
+
+.. math::
+
+    NTF = \\frac{1}{1+L_1(z)}
+
+Combining the two we can write the equation:
+
+.. math::
+
+    NTF_{DT} = \\frac{1}{1+L_{1,eq,CT}(z)}
+
+To avoid having to apply the impulse invariance transformation, we can
+rewrite the above in the time domain, getting:
+
+.. math::
+
+    \\sum_i k_i \\left(h[n] * l_i[n]\\right) = \\delta[n] - h[n] \\qquad \\forall i
+
+Where :math:`h[n]` is the impulse response of the DT NTF.
+
+The above can be rewritten as:
+
+.. math::
+
+    [\\ h[n]*l_0[n] \\; \\dots \\; h[n]*l_{order}[n]\\ ] K = \\delta[n] - h[n]
+
+And solved exactly, in the ideal case, or in the least squares sense,
+in presence of non-idealities [R3]_.
+
+.. [R1] P. Benabes, M. Keramat, and R. Kielbasa, "A methodology for designing
+        continuous-time sigma-delta modulators," in Proc. Eur. Conf. Design
+        Test, Washington, DC, 1997, pp. 46-50
+
+.. [R2] J. Cherry and W. Snelgrove, "Excess loop delay in continuous-time
+        delta-sigma modulators," IEEE Trans. Circuits Syst. II,
+        Analog Digit. Signal Process., vol. 46, no. 4, pp. 376-389, Apr. 1999
+
+.. [R3] Shanthi Pavan, "Systematic Design Centering of Continuous Time
+        Oversampling Converters",  IEEE Trans. on Circuits Syst. II Express
+        Briefs, Volume.57, Issue 3, pp.158, 2010
+
 Package contents
 ----------------
 
@@ -673,7 +827,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.1-5'
+__version__ = '0.1-9'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"

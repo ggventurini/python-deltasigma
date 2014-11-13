@@ -16,17 +16,19 @@
 """Module providing the simulateDSM() function
 """
 
-import collections
+from __future__ import division
 
+import collections
 from warnings import warn
 
 import numpy as np
-
+from scipy.linalg import inv, norm, orth
 from scipy.signal import tf2zpk, zpk2ss
-from scipy.linalg import orth, norm, inv
-from ._utils import carray, _get_zpk
 
-def simulateDSM(u, arg2, nlev=2, x0=0):
+from ._utils import _get_zpk, carray
+
+
+def simulateDSM(u, arg2, nlev=2, x0=0.):
     """Simulate a Delta Sigma modulator
 
     **Syntax:**
@@ -131,9 +133,9 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
     order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
     
     if not isinstance(x0, collections.Iterable):
-        x0 = x0*np.ones((order, 1))
+        x0 = x0*np.ones((order,), dtype=np.float64)
     else:
-        x0 = np.array(x0).reshape((-1, 1))
+        x0 = np.array(x0).reshape((-1,))
     
     if form == 1:
         A = ABCD[:order, :order]
@@ -172,9 +174,10 @@ def simulateDSM(u, arg2, nlev=2, x0=0):
         y0 = np.real(np.dot(C, x0) + np.dot(D1, u[:, i]))
         y[:, i] = y0
         v[:, i] = ds_quantize(y0, nlev)
-        x0 = np.dot(A, x0) + np.dot(B, np.vstack((u[:, i], v[:, i])))
+        x0 = np.dot(A, x0) + np.dot(B, np.concatenate((u[:, i], v[:, i])))
         xn[:, i] = np.real_if_close(x0.T)
-        xmax = np.max(np.hstack((np.abs(x0), xmax)), axis=1, keepdims=True)
+        xmax = np.max(np.hstack((np.abs(x0).reshape((-1, 1)), xmax.reshape((-1, 1)))),
+                      axis=1, keepdims=True)
 
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
@@ -191,10 +194,9 @@ def ds_quantize(y, n):
     v = np.zeros(y.shape)
     for qi in range(n.shape[0]): 
         if n[qi] % 2 == 0: # mid-rise quantizer
-            v[qi, 0] = 2*np.floor(0.5*y[qi, 0]) + 1
+            v[qi] = 2*np.floor(0.5*y[qi]) + 1
         else: # mid-tread quantizer
-            v[qi, 0] = 2*np.floor(0.5*(y[qi, 0] + 1))
+            v[qi] = 2*np.floor(0.5*(y[qi] + 1))
         L = n[qi] - 1
-        v[qi, 0] = np.sign(v[qi, 0])*np.min((np.abs(v[qi, 0]), L))
+        v[qi] = np.sign(v[qi])*np.min((np.abs(v[qi]), L))
     return v
-

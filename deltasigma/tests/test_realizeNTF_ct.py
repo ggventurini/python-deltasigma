@@ -63,7 +63,7 @@ class TestRealizeNTF_CT(unittest.TestCase):
         self.tdac2_ref5 = np.array([[-1., -1.], [ 0.5, 1.5]])
 
     def test_realizeNTF_ct_1(self):
-        """Test function for realizeNTF_ct() 1/9"""
+        """Test function for realizeNTF_ct() 1/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FB')
         self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref1, atol=1e-8,
                                     rtol=1e-5))
@@ -71,7 +71,7 @@ class TestRealizeNTF_CT(unittest.TestCase):
                                     rtol=1e-5))
 
     def test_realizeNTF_ct_2(self):
-        """Test function for realizeNTF_ct() 2/9"""
+        """Test function for realizeNTF_ct() 2/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FB', tdac=[0, 1])
         self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref2, atol=1e-8,
                                     rtol=1e-5))
@@ -79,7 +79,7 @@ class TestRealizeNTF_CT(unittest.TestCase):
                                     rtol=1e-5))
 
     def test_realizeNTF_ct_3(self):
-        """Test function for realizeNTF_ct() 3/9"""
+        """Test function for realizeNTF_ct() 3/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', self.tdac3)
         self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref3, atol=1e-8,
                                     rtol=1e-4))
@@ -87,7 +87,7 @@ class TestRealizeNTF_CT(unittest.TestCase):
                                     rtol=1e-4))
 
     def test_realizeNTF_ct_4(self):
-        """Test function for realizeNTF_ct() 4/9"""
+        """Test function for realizeNTF_ct() 4/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF')
         self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref4, atol=1e-8,
                                     rtol=1e-4))
@@ -95,7 +95,7 @@ class TestRealizeNTF_CT(unittest.TestCase):
                                     rtol=1e-4))
 
     def test_realizeNTF_ct_5(self):
-        """Test function for realizeNTF_ct() 5/9"""
+        """Test function for realizeNTF_ct() 5/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', tdac=[.5, 1.5])
         self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref5, atol=1e-8,
                                     rtol=1e-4))
@@ -104,22 +104,68 @@ class TestRealizeNTF_CT(unittest.TestCase):
 
     @raises(ValueError)
     def test_realizeNTF_ct_6(self):
-        """Test function for realizeNTF_ct() 6/9"""
+        """Test function for realizeNTF_ct() 6/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'DUMMY', tdac=[.5, 1.5])
 
     @raises(ValueError)
     def test_realizeNTF_ct_7(self):
-        """Test function for realizeNTF_ct() 7/9"""
+        """Test function for realizeNTF_ct() 7/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', tdac=[.5, 1.5, 3.])
 
     @raises(ValueError)
     def test_realizeNTF_ct_8(self):
-        """Test function for realizeNTF_ct() 8/9"""
+        """Test function for realizeNTF_ct() 8/15"""
         tdac= [[-1, -1], [.5, 1.5], [.5, .8], [0.1, 2.]]
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', tdac)
 
     @raises(ValueError)
     def test_realizeNTF_ct_9(self):
-        """Test function for realizeNTF_ct() 9/9"""
+        """Test function for realizeNTF_ct() 9/15"""
         ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FF', self.tdac3)
+
+    def test_realizeNTF_ct_10(self):
+        """Test function for realizeNTF_ct() 10/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FB', method='NTF')
+        self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref1, atol=1e-8,
+                                    rtol=1e-5))
+        self.assertTrue(np.allclose(tdac2, self.tdac2_ref1, atol=1e-8,
+                                    rtol=1e-5))
+
+    def test_realizeNTF_ct_11(self):
+        """Test function for realizeNTF_ct() 11/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FB', tdac=[0, 1], method='NTF')
+        self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref2, atol=1e-8,
+                                    rtol=1e-5))
+        self.assertTrue(np.allclose(tdac2, self.tdac2_ref2, atol=1e-8,
+                                    rtol=1e-5))
+
+    def test_realizeNTF_ct_12(self):
+        """Test function for realizeNTF_ct() 12/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', self.tdac3, method='NTF')
+        self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref3, atol=1e-8,
+                                    rtol=1e-4))
+        self.assertTrue(np.allclose(tdac2, self.tdac2_ref3, atol=1e-8,
+                                    rtol=1e-4))
+
+    def test_realizeNTF_ct_13(self):
+        """Test function for realizeNTF_ct() 13/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', method='NTF')
+        self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref4, atol=1e-8,
+                                    rtol=1e-4))
+        self.assertTrue(np.allclose(tdac2, self.tdac2_ref4, atol=1e-8,
+                                    rtol=1e-4))
+
+    def test_realizeNTF_ct_14(self):
+        """Test function for realizeNTF_ct() 14/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', tdac=[.5, 1.5],
+                                        method='NTF')
+        self.assertTrue(np.allclose(ABCDc, self.ABCDc_ref5, atol=1e-8,
+                                    rtol=1e-4))
+        self.assertTrue(np.allclose(tdac2, self.tdac2_ref5, atol=1e-8,
+                                    rtol=1e-4))
+
+    @raises(ValueError)
+    def test_realizeNTF_ct_15(self):
+        """Test function for realizeNTF_ct() 15/15"""
+        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', method='DUMMY')
 

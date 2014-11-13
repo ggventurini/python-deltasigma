@@ -18,13 +18,13 @@
 
 from __future__ import division
 
-import numpy as np
-
 from warnings import warn
 
-from scipy.signal import lti, dimpulse
+import numpy as np
+from scipy.signal import dimpulse, lti
 
-from ._utils import _is_zpk, _is_A_B_C_D, _is_num_den, _get_zpk
+from ._utils import _get_zpk, _is_A_B_C_D, _is_num_den, _is_zpk
+
 
 def l1norm(H):
     """Compute the l1-norm of a z-domain transfer function.
@@ -61,4 +61,3 @@ def l1norm(H):
         HP = (z, p, k, 1.)
     _, y = dimpulse(HP, t=np.arange(100))
     return np.sum(np.abs(y[0]))
-

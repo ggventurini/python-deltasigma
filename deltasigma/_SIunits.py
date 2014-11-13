@@ -19,8 +19,11 @@ suffix.
 """
 
 from __future__ import division
-import numpy as np 
+
+import numpy as np
+
 from ._constants import eps
+
 
 def SIunits(x):
     """Calculates the factor for representing ``x`` in engineering 
@@ -94,4 +97,3 @@ def SIunits(x):
     if scalar_input:
         factor, prefix = factor[0], prefix[0]
     return factor, prefix
-

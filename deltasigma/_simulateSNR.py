@@ -17,15 +17,18 @@
 """
 
 from __future__ import division
+
 import collections
 from warnings import warn
+
 import numpy as np
 from numpy.fft import fft, fftshift
 
-from ._simulateDSM import simulateDSM
 from ._calculateSNR import calculateSNR
 from ._mapQtoR import mapQtoR
+from ._simulateDSM import simulateDSM
 from ._utils import _get_zpk
+
 
 def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                 quadrature=False):
@@ -257,4 +260,3 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         snr[i] = calculateSNR(hwfft[inBandBins - 1], F)
         i += 1
     return snr, amp
-

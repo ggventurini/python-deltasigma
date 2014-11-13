@@ -18,20 +18,22 @@
 """
 
 from __future__ import division
+
 import numpy as np
-from numpy.fft import fft, fftshift
 import pylab as plt
+from numpy.fft import fft, fftshift
 
 from ._calculateSNR import calculateSNR
 from ._circ_smooth import circ_smooth
-from ._dbv import dbv
 from ._dbp import dbp
+from ._dbv import dbv
 from ._ds_f1f2 import ds_f1f2
 from ._ds_hann import ds_hann
 from ._evalTF import evalTF
 from ._figureMagic import figureMagic
 from ._simulateDSM import simulateDSM
 from ._undbv import undbv
+
 
 def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     """Plot a spectrum suitable to exemplify the NTF performance.
@@ -148,4 +150,3 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         figureMagic((-0.5, 0.5), 0.125, None, (-140, 0), 10, None)
     plt.xlabel('frequency')
     return
-

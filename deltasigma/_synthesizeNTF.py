@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is distributed with python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -13,7 +13,7 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
 #
-# The following code has been (slightly) modified from pydsm, its original 
+# The following code has been (slightly) modified from pydsm, its original
 # copyright notice follows:
 #
 # Copyright (c) 2012, Sergio Callegari
@@ -21,19 +21,22 @@
 #
 # The py dsm code was ported from the MATLAB Delta Sigma toolbox
 # Copyright (c) 2009, Richard Schreier
-# 
-# The three software follow the same license, known as the 3-clause BSD. 
+#
+# The three software follow the same license, known as the 2-clause BSD.
 # See the LICENSE file for details.
 
 """
 Module providing the main NTF synthesis function.
 """
 
-import numpy as np
 from warnings import warn
+
+import numpy as np
+
 from ._config import optimize_NTF
 from ._synthesizeNTF0 import synthesizeNTF0
 from ._synthesizeNTF1 import synthesizeNTF1
+
 
 def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     """Synthesize a noise transfer function for a delta-sigma modulator.
@@ -106,9 +109,9 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
     Returns::
 
-              (z -1) (z^2 -1.997z +1) (z^2 -1.992z +0.9999)      
+              (z -1) (z^2 -1.997z +1) (z^2 -1.992z +0.9999)
         --------------------------------------------------------
-         (z -0.7778) (z^2 -1.796z +0.8549) (z^2 -1.613z +0.665) 
+         (z -0.7778) (z^2 -1.796z +0.8549) (z^2 -1.613z +0.665)
 
     .. plot::
 
@@ -118,8 +121,8 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
     .. seealso::
 
-       :func:`clans` : Closed-Loop Analysis of Noise-Shaper. 
-               An alternative method for selecting NTFs based on the 1-norm of the 
+       :func:`clans` : Closed-Loop Analysis of Noise-Shaper.
+               An alternative method for selecting NTFs based on the 1-norm of the
                impulse response of the NTF
 
        :func:`synthesizeChebyshevNTF()` : Select a type-2 highpass Chebyshev NTF.
@@ -143,4 +146,3 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     else:
         ntf = synthesizeNTF1(order, osr, opt, H_inf, f0)
     return ntf
-

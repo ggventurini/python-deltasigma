@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -17,17 +17,18 @@
 """
 
 from __future__ import division
+
 from warnings import warn
 
 import numpy as np
-
 from scipy.signal import cheby2
 
 from ._ds_f1f2 import ds_f1f2
 
+
 def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
     """Synthesize a noise transfer function for a delta-sigma modulator.
-    
+
     The NTF is a type-2 highpass Chebyshev function.
 
     :func:`synthesizeNTF` assumes that magnitude of the denominator of the NTF
@@ -55,7 +56,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
 
     **Returns:**
 
-    z, p, k : tuple 
+    z, p, k : tuple
         a zpk tuple containing the zeros and poles of the NTF.
 
     **Warns:**
@@ -74,8 +75,8 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         OSR = 4
         order = 8
         H_inf = 3
-        H0 = synthesizeNTF(order,OSR,1,H_inf)
-        H1 = synthesizeChebyshevNTF(order,OSR,0,H_inf)
+        H0 = synthesizeNTF(order, OSR, 1, H_inf)
+        H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
 
     .. plot::
 
@@ -85,11 +86,11 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         OSR = 4
         order = 8
         H_inf = 3
-        H0 = synthesizeNTF(order,OSR,1,H_inf)
-        H1 = synthesizeChebyshevNTF(order,OSR,0,H_inf)
+        H0 = synthesizeNTF(order, OSR, 1, H_inf)
+        H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
         # 1. Plot the singularities.
         plt.subplot(121)
-        # we plot the singularities of the optimized NTF in light 
+        # we plot the singularities of the optimized NTF in light
         # green with slightly bigger markers so that we can better
         # distinguish the two NTF's when overlayed.
         plotPZ(H1, markersize=7, color='#90EE90')
@@ -139,7 +140,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         order = 5
         H_inf = 1.2
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
-        H1 = synthesizeChebyshevNTF(order, OSR, 1, H_inf)
+        H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
 
     .. plot::
 
@@ -150,10 +151,10 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         order = 5
         H_inf = 1.2
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
-        H1 = synthesizeChebyshevNTF(order, OSR, 1, H_inf)
+        H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
         # 1. Plot the singularities.
         plt.subplot(121)
-        # we plot the singularities of the optimized NTF in light 
+        # we plot the singularities of the optimized NTF in light
         # green with slightly bigger markers so that we can better
         # distinguish the two NTF's when overlayed.
         plotPZ(H1, markersize=7, color='#90EE90')
@@ -243,4 +244,3 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
             break
     ntf = (z, p, 1)
     return ntf
-

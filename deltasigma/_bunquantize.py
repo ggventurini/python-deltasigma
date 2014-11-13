@@ -17,7 +17,9 @@
 """
 
 import numpy as np
+
 from ._utils import carray
+
 
 def bunquantize(q):
     """The value corresponding to a bidirectionally quantized quantity.
@@ -33,4 +35,3 @@ def bunquantize(q):
     for qi in q:
         y += [(qi[1:qi.shape[0]+1:2, :]*2.**qi[:qi.shape[0]:2, :]).sum()]
     return carray(y)
-

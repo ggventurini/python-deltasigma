@@ -18,11 +18,15 @@ norm of a z-domain transfer function.
 """
 
 from __future__ import division
+
 from warnings import warn
+
 import numpy as np
 from scipy.optimize import fminbound
-from ._nabsH import nabsH
+
 from ._evalTF import evalTF
+from ._nabsH import nabsH
+
 
 def infnorm(H):
     """Find the infinity norm of a z-domain transfer function.

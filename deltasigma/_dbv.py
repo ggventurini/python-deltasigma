@@ -17,9 +17,10 @@
 """
 
 import numpy as np
-from ._undbv import undbv
 
-from ._utils import carray, save_input_form, restore_input_form
+from ._undbv import undbv
+from ._utils import carray, restore_input_form, save_input_form
+
 
 def dbv(x):
     """Calculate the dB equivalent of the voltage ratio ``x``.
@@ -47,4 +48,3 @@ def dbv(x):
     nonzero = (x != 0)
     y[nonzero] = 20.*np.log10(np.abs(x[nonzero]))
     return restore_input_form(y, iform)
-

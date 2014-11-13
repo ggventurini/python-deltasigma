@@ -16,11 +16,15 @@
 """Module providing the calculateTF() function
 """
 
+from warnings import warn
+
 import numpy as np
 from scipy.signal import lti, ss2zpk
+
 from ._constants import eps
 from ._partitionABCD import partitionABCD
-from ._utils import minreal
+from ._utils import carray, minreal
+
 
 def calculateTF(ABCD, k=1.):
     """Calculate the NTF and STF of a delta-sigma modulator.
@@ -33,12 +37,31 @@ def calculateTF(ABCD, k=1.):
     ABCD : array_like,
         The ABCD matrix that describes the system.
 
-    k : float, optional
-        The quantizer gain. If not specified, a default value of 1 is used.
+    k : float or ndarray-like, optional
+        The quantizer gains. If only one quantizer is present, it may be set
+        to a float, corresponding to the quantizer gain. If multiple quantizers
+        are present, a list should be used, with quantizer gains ordered
+        according to the order in which the quantizer inputs apperar in the
+        ``C`` and ``D`` submatrices. If not specified, a default of one quatizer
+        with gain ``1.`` is assumed.
 
     **Returns:**
 
-    (NTF, STF) : a tuple of two LTI objects.
+    (NTF, STF) : a tuple of two LTI objects (or of two lists of LTI objects).
+
+    If the system has multiple quantizers, multiple STFs and NTFs will be
+    returned.
+
+    In that case:
+
+    * ``STF[i]`` is the STF from ``u`` to output number ``i``.
+    * ``NTF[i, j]`` is the NTF from the quantization noise of the quantizer
+      number ``j`` to output number ``i``.
+
+    **Note:**
+
+    Setting ``k`` to a list is unsupported in the MATLAB code (last checked
+    Nov. 2014).
 
     **Example:**
 
@@ -95,30 +118,68 @@ def calculateTF(ABCD, k=1.):
         1
 
     """
-    A, B, C, D = partitionABCD(ABCD)
-    if B.shape[1] > 1:
-        B1 = B[:, 0]
-        B2 = B[:, 1]
-        B1 = B1.reshape((B1.shape[0], 1)) if len(B1.shape) == 1 else B1
-        B2 = B2.reshape((B2.shape[0], 1)) if len(B2.shape) == 1 else B2
-    else:
-        B1 = B
-        B2 = B
+
+    nq = len(k) if type(k) in (tuple, list) else 1
+    A, B, C, D = partitionABCD(ABCD, m=nq+1, r=nq)
+    k = carray(k)
+    diagk = np.atleast_2d(np.diag(k))
+
+    B1 = B[:, 0]
+    B2 = B[:, 1:]
+    B1 = B1.reshape((B1.shape[0], 1)) if len(B1.shape) == 1 else B1
+    B2 = B2.reshape((B2.shape[0], 1)) if len(B2.shape) == 1 else B2
+
+    # In a single-quantizer system, D2 should be all zeros, as any
+    # non-zero term in D2 would imply we got a delay-free loop.
+    # The original MATLAB code implies so.
+    # The trouble arises when we adapt and extend the code to calculate
+    # the transfer functions for multiple-quantizer systems. There the
+    # off-diagonal terms of D2 may very well be non-zero, therefore
+    # in the following we consider D2.
+    # this means that if you supply an ABCD matrix, with one quantizer
+    # and an (erroneously) zero-delay loop, the MATLAB toolbox will
+    # disregard D2 and pretend it's zero and the loop is correctly
+    # delayed, spitting out the corresponding TF.
+    # Instead here we print out a warning and process the ABCD matrix
+    # with the user-supplied, non-zero D2 matrix.
+    # The resulting TFs will obviously be different.
+
+    D1 = D[:, 0]
+    D2 = D[:, 1:]
+    D1 = D1.reshape((D1.shape[0], 1)) if len(D1.shape) == 1 else D1
+    D2 = D2.reshape((D2.shape[0], 1)) if len(D2.shape) == 1 else D2
+
+    # WARN DELAY FREE LOOPS
+    if np.diag(D2).any():
+        warn("Delay free loop detected! D2 diag: %s", str(np.diag(D2)))
 
     # Find the noise transfer function by forming the closed-loop
     # system (sys_cl) in state-space form.
-    Acl = A + k * np.dot(B2, C)
-    Bcl = np.hstack((B1 + k*B2*D[0, 0], B2))
-    Ccl = k*C
-    Dcl = np.array((k*D[0, 0], 1.))
-    Dcl = Dcl.reshape((1, Dcl.shape[0])) if len(Dcl.shape) == 1 else Dcl
+    Ct = np.linalg.inv(np.eye(nq) - D2*diagk)
+    Acl = A + np.dot(B2, np.dot(Ct, np.dot(diagk, C)))
+    Bcl = np.hstack((B1 + np.dot(B2, np.dot(Ct, np.dot(diagk, D1))),
+                     np.dot(B2, Ct)))
+    Ccl = np.dot(Ct, np.dot(diagk, C))
+    Dcl = np.dot(Ct, np.hstack((np.dot(diagk, D1), np.eye(nq))))
     tol = min(1e-3, max(1e-6, eps**(1/ABCD.shape[0])))
-    # input #0 is the signal
-    # input #1 is the quantization noise
-    stf_p, stf_z, stf_k  = ss2zpk(Acl, Bcl, Ccl, Dcl, input=0)
-    ntf_p, ntf_z, ntf_k = ss2zpk(Acl, Bcl, Ccl, Dcl, input=1)
-    stf = lti(stf_p, stf_z, stf_k)
-    ntf = lti(ntf_p, ntf_z, ntf_k)
-    stf_min, ntf_min = minreal((stf, ntf), tol)
-    return ntf_min, stf_min
+    ntfs = np.empty((nq, Dcl.shape[0]), dtype=np.object_)
+    stfs = np.empty((Dcl.shape[0],), dtype=np.object_)
+
+    # sweep the outputs 'cause scipy is silly but we love it anyhow.
+    for i in range(Dcl.shape[0]):
+        # input #0 is the signal
+        # inputs #1,... are quantization noise
+        stf_p, stf_z, stf_k  = ss2zpk(Acl, Bcl, Ccl[i, :], Dcl[i, :], input=0)
+        stf = lti(stf_p, stf_z, stf_k)
+        for j in range(nq):
+            ntf_z, ntf_p, ntf_k = ss2zpk(Acl, Bcl, Ccl[i, :], Dcl[i, :], input=j+1)
+            ntf = lti(ntf_z, ntf_p, ntf_k)
+            stf_min, ntf_min = minreal((stf, ntf), tol)
+            ntfs[i, j] = ntf_min
+        stfs[i] = stf_min
+
+    # if we have one stf and one ntf, then just return those in a list
+    if ntfs.shape == (1, 1):
+        return [ntfs[0, 0], stfs[0]]
+    return ntfs, stfs
 

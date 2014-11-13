@@ -18,12 +18,13 @@
 
 import numpy as np
 
-from ._padt import padt
-from ._padb import padb 
 from ._db import db
-from ._ds_f1f2 import ds_f1f2 
-from ._utils import carray
+from ._ds_f1f2 import ds_f1f2
+from ._padb import padb
+from ._padt import padt
 from ._rmsGain import rmsGain
+from ._utils import carray
+
 
 def ds_synNTFobj1(x, p, osr, f0):
     """Objective function for :func:`synthesizeNTF`
@@ -47,4 +48,3 @@ def ds_synNTFobj1(x, p, osr, f0):
     ntf = (z, p, 1)
     y = db(rmsGain(ntf, f1, f2))
     return y
-

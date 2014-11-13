@@ -25,13 +25,15 @@
 #
 
 from __future__ import print_function
-import os
-import numpy as np
 
+import os
 from warnings import warn
 
-from ._config import setup_args, _debug
-from ._utils import _is_zpk, _get_zpk
+import numpy as np
+
+from ._config import _debug, setup_args
+from ._simulateDSM_python import simulateDSM as _simulateDSM_python
+from ._utils import _get_zpk, _is_zpk
 
 warned = False
 
@@ -65,7 +67,6 @@ except ImportError as e:
     _simulateDSM_scipy_blas = None
 
 # fall back to CPython
-from ._simulateDSM_python import simulateDSM as _simulateDSM_python
 
 simulation_backends = {'CBLAS':(_simulateDSM_cblas is not None),
                        'Scipy_BLAS':(_simulateDSM_scipy_blas is not None),
@@ -214,4 +215,3 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
                  'Refer to the docs for how to switch to a fast one')
             warned = True
         return _simulateDSM_python(u, arg2, nlev, x0)
-

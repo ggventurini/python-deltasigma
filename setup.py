@@ -2,7 +2,7 @@
 
 import os
 from setuptools import setup, find_packages
-__version__ = "0.1-5"
+__version__ = "0.1-9"
 
 def read(fname):
     try:
@@ -44,6 +44,6 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3"]
+        "Programming Language :: Python :: 3.4"]
 )
 

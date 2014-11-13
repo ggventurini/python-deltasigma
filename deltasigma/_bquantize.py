@@ -18,7 +18,9 @@ quantize a vector to signed digits.
 """
 
 from __future__ import division, print_function
+
 import numpy as np
+
 from ._constants import eps
 from ._utils import empty, mfloor
 
@@ -91,29 +93,3 @@ def bquantize(x, nsd=3, abstol=eps, reltol=10 * eps):
             addme = np.array((p, sx)).reshape((2, 1))
             y[i].csd = np.concatenate((y[i].csd, addme), axis=1)
     return y
-
-
-def test_bquantize():
-    """Test function for bquantize()
-    """
-    import scipy.io
-    import pkg_resources
-    x = np.linspace(-10, 10, 101)
-    y = bquantize(x)
-    yval = [yi.val for yi in y]
-    ycsd = [yi.csd for yi in y]
-    fname = pkg_resources.resource_filename(__name__, "test_data/test_bquantize.mat")
-    s = scipy.io.loadmat(fname)['s']
-    mval = []
-    mcsd = []
-    for i in range(s.shape[1]):
-        mval.append(float(s[0, i][0]))
-        mcsd.append(s[0, i][1])
-    for i in range(len(mval)):
-        assert np.allclose(mval[i], yval[i], atol=1e-8, rtol=1e-5)
-        print(mcsd[i].shape, ycsd[i].shape)
-        assert np.prod(mcsd[i].shape) + np.prod(ycsd[i].shape) == 0 or \
-               mcsd[i].shape == ycsd[i].shape
-
-        if 0 not in ycsd[i].shape:
-            assert np.allclose(mcsd[i], ycsd[i], atol=1e-8, rtol=1e-5)

@@ -20,6 +20,7 @@ import numpy as np
 
 from ._calculateTF import calculateTF
 
+
 def mod2():
     """A description of the second-order modulator.
 
@@ -37,4 +38,3 @@ def mod2():
     ABCD = np.vstack((np.hstack((A, B)), np.hstack((C, D))))
     H, G = calculateTF(ABCD)
     return ABCD, H, G
-

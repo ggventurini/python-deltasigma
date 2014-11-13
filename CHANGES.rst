@@ -7,6 +7,33 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-9**: Add support for modulators with multiple outputs, allowing simulating
+MASH cascade DSMs.
+ * Add support in ``partitionABCD()`` for specifying the number of outputs.
+ * Add support for multiple quantizers in ``calculateTF()``.
+ * BUGFIX: Fix simulation of DSMs with multiple quantizers.
+ * BUGFIX: ``cancelPZ()`` was not testing the first root.
+ * ``pretty_lti()`` now returns 0 if k is 0 after rounding.
+ * ``plotPZ()`` doesn't list coincident real roots as complex conjugate
+   roots with imag(root) = +/-0.
+ * DOC: add example of MASH cascade.
+
+**0.1-8**: Accept both tuples and lists as NTFs for simulation.
+ * Previously passing a tuple for the NTF resulted in an error. Fixed.
+ * Doc fixes in ``mapCtoD()``.
+
+**0.1-7**: Quantization fix in the Cython backends. More tests.
+ * A bug was found in the function responsible for quantizing the loop
+   filter output in ``simulateDSM()``, only the Cython implementations are
+   affected: **all users are strongly recommended to upgrade**.
+ * Add more test for ``simulateDSM()``.
+ * Check for the filter and data lengths in ``sinc_decimate()``.
+
+**0.1-6**: ``sinc_decimate()`` fix, NTF matching method in ``realizeNTF_ct()``
+ * An off-by-1 indexing bug was found in ``sinc_decimate()``, **all users are
+   strongly recommended to update**.
+ * Add NTF matching method to ``realizeNTF_ct()``.
+
 **0.1-5**: CRFFD support, separate tests, less verbosity and DOC fixes.
  * Add CRFFD support (see ``realizeNTF``, ``mapABCD`` and ``stuffABCD``).
  * Move all tests to a dedicated location (tests/).

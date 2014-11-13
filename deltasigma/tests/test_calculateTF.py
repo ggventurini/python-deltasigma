@@ -21,17 +21,18 @@ from deltasigma._utils import cplxpair
 
 class TestCalculateTF(unittest.TestCase):
     """Test function for calculateTF()"""
+
     def setUp(self):
         ABCD = [[1.0, 0.0, 0.0, 0.044408783846879, -0.044408783846879],
                 [0.999036450096481, 0.997109907515262, -0.005777399147297,
                  0.0, 0.499759089304780],
                 [0.499759089304780, 0.999036450096481, 0.997109907515262,
                  0.0, -0.260002096136488],
-                [0.0, 0.0, 1.0,  0.0, -0.796730400347216]]
+                [0.0, 0.0, 1.0,  0.0, 0.0]]
         ABCD = np.array(ABCD)
-        (ntf, stf) = ds.calculateTF(ABCD)
-        (ntf_zeros, ntf_poles) = (np.roots(ntf.num), np.roots(ntf.den))
-        (stf_zeros, stf_poles) = (np.roots(stf.num), np.roots(stf.den))
+        ntf, stf = ds.calculateTF(ABCD)
+        ntf_zeros, ntf_poles = ntf.zeros, ntf.poles
+        stf_zeros, stf_poles = stf.zeros, stf.poles
         mntf_poles = np.array((1.498975311463384, 1.102565142679772,
                                0.132677264750882))
         mntf_zeros = np.array((0.997109907515262 + 0.075972576202904j,
@@ -42,27 +43,86 @@ class TestCalculateTF(unittest.TestCase):
                                0.132677264750882))
 
         # for some reason, sometimes the zeros are in different order.
-        (self.ntf_zeros, self.mntf_zeros) = (cplxpair(ntf_zeros),
-                                             cplxpair(mntf_zeros))
-        (self.stf_zeros, self.mstf_zeros) = (cplxpair(stf_zeros),
-                                             cplxpair(mstf_zeros))
-        (self.ntf_poles, self.mntf_poles) = (cplxpair(ntf_poles),
-                                             cplxpair(mntf_poles))
-        (self.stf_poles, self.mstf_poles) = (cplxpair(stf_poles),
-                                             cplxpair(mstf_poles))
+        self.ntf_zeros, self.mntf_zeros = (cplxpair(ntf_zeros),
+                                           cplxpair(mntf_zeros))
+        self.stf_zeros, self.mstf_zeros = (cplxpair(stf_zeros),
+                                           cplxpair(mstf_zeros))
+        self.ntf_poles, self.mntf_poles = (cplxpair(ntf_poles),
+                                           cplxpair(mntf_poles))
+        self.stf_poles, self.mstf_poles = (cplxpair(stf_poles),
+                                           cplxpair(mstf_poles))
 
-    def test_ntf_zeros_equal(self):
+    def test_calculateTF1(self):
+        """Test function for calculateTF() 1/4"""
+        # ntf zeros
         self.assertTrue(
             np.allclose(self.ntf_zeros, self.mntf_zeros, rtol=1e-5, atol=1e-8))
-
-    def test_ntf_poles_equal(self):
+        # ntf poles
         self.assertTrue(
             np.allclose(self.ntf_poles, self.mntf_poles, rtol=1e-5, atol=1e-8))
-
-    def test_stf_zeros_equal(self):
+        # stf zeros
         self.assertTrue(
             np.allclose(self.stf_zeros, self.mstf_zeros, rtol=1e-5, atol=1e-8))
-
-    def test_stf_poles_equal(self):
+        # stf poles
         self.assertTrue(
             np.allclose(self.stf_poles, self.mstf_poles, rtol=1e-5, atol=1e-8))
+
+    def test_calculateTF2(self):
+        """Test function for calculateTF() 2/4"""
+        # test an easy TF
+        ABCD = np.array([[1., 1., -1.],
+                        [1., 0., 0.]])
+        k = 1.
+        ntf, stf = ds.calculateTF(ABCD, k) 
+        self.assertTrue(np.allclose(stf.poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(not len(stf.zeros))
+        self.assertTrue(np.allclose(stf.gain, 1., rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.zeros, [1.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.gain, 1., rtol=1e-5, atol=1e-8))
+
+    def test_calculateTF3(self):
+        """Test function for calculateTF() 3/4"""
+        # test for the default k value
+        ABCD = np.array([[1., 1., -1.],
+                        [1., 0., 0.]])
+        ntf, stf = ds.calculateTF(ABCD)
+        self.assertTrue(np.allclose(stf.poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(not len(stf.zeros))
+        self.assertTrue(np.allclose(stf.gain, 1., rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.zeros, [1.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntf.gain, 1., rtol=1e-5, atol=1e-8))
+
+    def test_calculateTF4(self):
+        """Test function for calculateTF() 4/4"""
+        # Easy test for a 2-quantizers system
+        # MASH 1-0 cascade
+        ABCD = [[1, 1, -1, 0],
+                [1, 0, 0, 0],
+                [1, 0, -1, 0]]
+        ABCD = np.array(ABCD, dtype=np.float_)
+        k = [1., 1.]
+        # here we get back arrays of transfer functions
+        ntfs, stfs = ds.calculateTF(ABCD, k=k)
+        self.assertTrue(np.allclose(stfs[0].poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(not len(stfs[0].zeros))
+        self.assertTrue(np.allclose(stfs[0].gain, 1., rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(stfs[1].poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(not len(stfs[1].zeros))
+        self.assertTrue(np.allclose(stfs[1].gain, 1., rtol=1e-5, atol=1e-8))
+        # e1 to V1
+        self.assertTrue(np.allclose(ntfs[0, 0].poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntfs[0, 0].zeros, [1.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(ntfs[0, 0].gain, 1., rtol=1e-5, atol=1e-8))
+        # e1 to V2
+        self.assertTrue(np.allclose(ntfs[1, 0].poles, [0.], rtol=1e-5, atol=1e-8))
+        self.assertTrue(not len(ntfs[1, 0].zeros))
+        self.assertTrue(np.allclose(ntfs[1, 0].gain, -1., rtol=1e-5, atol=1e-8))
+        # e2 to V2
+        self.assertTrue(not len(ntfs[1, 1].zeros))
+        self.assertTrue(not len(ntfs[1, 1].poles))
+        self.assertTrue(np.allclose(ntfs[1, 1].gain, 1., rtol=1e-5, atol=1e-8))
+        # e2 to V1
+        self.assertTrue(np.allclose(ntfs[0, 1].gain, 0., rtol=1e-5, atol=1e-8))
+

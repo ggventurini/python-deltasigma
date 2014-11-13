@@ -21,6 +21,7 @@
 import collections
 import fractions
 from fractions import Fraction as Fr
+
 import numpy as np
 from scipy.signal import lti, ss2tf, ss2zpk, zpk2tf
 
@@ -129,12 +130,23 @@ def cplxpair(x, tol=100):
 
 def minreal(tf, tol=None):
     """Remove pole/zero pairs from a transfer function
-    when the two match within the tolerance tol.
+    when the two match within the tolerance ``tol``.
 
-    tf may be a transfer function (lti object) or a list of transfer functions
-    tol is optional and defaults to the system epsilon if unset.
+    **Parameters:**
 
-    return a list of tfs or a tf, depending on the input type.
+    tf : supported TF representation or list
+        ``tf`` may be a transfer function (LTI object) or a list of transfer
+        functions, each of them expressed in a supported representation.
+
+    tol : float, optional
+        The tolerance to be accepted when simplifying pole-zero pairs. It
+        defaults to the system epsilon if unset.
+
+    **Returns:**
+
+    tf_simplified : supported TF representation or list
+        A list of TFs or a TF, depending on the input type, each of them
+        represented by an LTI object.
     """
     # initially based on python-control
     # which is in turn based on octave minreal
@@ -307,10 +319,13 @@ def pretty_lti(arg):
     p = np.atleast_1d(p)
     z = np.round(np.real_if_close(z), 4)
     p = np.round(np.real_if_close(p), 4)
+    k = np.round(k, 4)
     signs = {1:'+', -1:'-'}
     if not len(z) and not len(p):
         return "%g" % k
     ppstr = ["", "", ""]
+    if np.allclose(k, 0., atol=1e-5):
+        return "0"
     if k != 1:
         ppstr[1] = "%g " % k
     for i, s in zip((0, 2), (z, p)):
@@ -684,4 +699,3 @@ def mround(x):
     _internal = np.frompyfunc(_mround, 1, 1)
     xf = np.array(_internal(x), dtype=x.dtype)
     return restore_input_form(xf, iform)
-

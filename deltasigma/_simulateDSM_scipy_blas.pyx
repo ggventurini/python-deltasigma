@@ -62,7 +62,7 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
         c_nlev = np.asarray(nlev, dtype=np.int)
         if c_nlev.ndim > 1:
             raise TypeError()
-        c_nlev=c_nlev.reshape(1)
+        c_nlev=c_nlev.reshape(-1)
     except (ValueError, TypeError):
          raise ValueError(\
             "invalid argument: nlev must be convertible into a 1D int array")
@@ -85,7 +85,7 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
     cdef int order
 
     try:
-        if type(arg2)==tuple and len(arg2)==3:
+        if type(arg2) in (tuple, list) and len(arg2)==3:
             # Assume ntf in zpk form
             ntf_z=np.asarray(arg2[0], dtype=np.complex128)
             ntf_p=np.asarray(arg2[1], dtype=np.complex128)
@@ -229,3 +229,4 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
     if not store_xn:
         xn = c_x0
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
+

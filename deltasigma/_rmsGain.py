@@ -18,7 +18,9 @@
 
 import numpy as np
 from scipy.linalg import norm
+
 from ._evalTF import evalTF
+
 
 def rmsGain(H, f1, f2, N=100):
     """Compute the root mean-square gain of a discrete-time TF.
@@ -50,4 +52,3 @@ def rmsGain(H, f1, f2, N=100):
     g = norm(evalTF(H, np.exp(1j*w))) / np.sqrt(N)
 
     return g
-

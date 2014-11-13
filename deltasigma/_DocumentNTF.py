@@ -17,18 +17,20 @@
 """
 
 from __future__ import division
+
 import numpy as np
 import pylab as plt
 
-from ._plotPZ import plotPZ
-from ._ds_freq import ds_freq
-from ._dbv import dbv
-from ._evalTF import evalTF
-from ._ds_f1f2 import ds_f1f2
-from ._rmsGain import rmsGain
 from ._calculateTF import calculateTF
-from ._infnorm import infnorm
+from ._dbv import dbv
+from ._ds_f1f2 import ds_f1f2
+from ._ds_freq import ds_freq
+from ._evalTF import evalTF
 from ._figureMagic import figureMagic
+from ._infnorm import infnorm
+from ._plotPZ import plotPZ
+from ._rmsGain import rmsGain
+
 
 def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
     """Plot the NTF's poles and zeros as well as its frequency-response
@@ -115,4 +117,3 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
     plt.xlabel('Frequency ($1 \\rightarrow f_{s}$)')
     plt.title('Frequency Response')
     return
-

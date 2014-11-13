@@ -17,7 +17,9 @@
 """
 
 from __future__ import division
+
 from ._evalF1 import evalF1
+
 
 def evalF0(f1, z, phi):
     """Calculate the values of the F0 (prototype) filter 

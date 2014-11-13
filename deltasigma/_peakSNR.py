@@ -17,11 +17,13 @@
 """
 
 from __future__ import division
+
 import numpy as np
 from numpy.linalg import lstsq
 
-from ._dbv import dbv
 from ._config import _debug
+from ._dbv import dbv
+
 
 def peakSNR(snr, amp):
     """Find the SNR peak by fitting the SNR curve.
@@ -92,4 +94,3 @@ def peakSNR(snr, amp):
         plt.plot(dbv(amp), dbv(pred), '-', color='b')
         plt.hold(hold)
     return peak_snr, peak_amp
-

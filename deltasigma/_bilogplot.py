@@ -18,10 +18,10 @@
 
 from __future__ import division
 
+from warnings import warn
+
 import numpy as np
 import pylab as plt
-
-from warnings import warn
 from numpy.linalg import norm
 
 from ._dbp import dbp
@@ -169,25 +169,3 @@ def _logsmooth2(X, inBin, nbin=8):
         p[i] = 10*np.log10(norm(X[(startbin[i] - 1):stopbin[i]])**2 /
                            (stopbin[i] - startbin[i] + 1))
     return f, p
-
-
-def test_bilogplot():
-    """Test function for bilogplot()"""
-    from ._synthesizeNTF import synthesizeNTF
-    from ._simulateDSM import simulateDSM
-    from ._calculateSNR import calculateSNR
-    from ._ds_hann import ds_hann
-    f0 = 1./8
-    OSR = 64
-    order = 8
-    N = 8192
-    H = synthesizeNTF(order, OSR, 1, 1.5, f0)
-    fB = int(np.ceil(N/(2. * OSR)))
-    ftest = int(np.round(f0*N + 1./3 * fB))
-    u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
-    v, xn, xmax, y = simulateDSM(u, H)
-    spec = np.fft.fft(v*ds_hann(N))/(N/4)
-    X = spec[:N/2 + 1]
-    plt.figure()
-    bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10))
-    # graphical function: we check it doesn't fail

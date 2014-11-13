@@ -17,7 +17,9 @@
 """
 
 from __future__ import division
+
 import numpy as np
+
 
 def mapQtoR(ABCD):
     """Map a quadrature ABCD matrix to a real one.
@@ -67,4 +69,3 @@ def mapQtoR(ABCD):
     A[::2, 1::2] = -np.imag(ABCD)
     A[1::2, ::2] = +np.imag(ABCD)
     return A
-

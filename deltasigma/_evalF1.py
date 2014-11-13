@@ -19,6 +19,7 @@ from __future__ import division
 
 import numpy as np
 
+
 def evalF1(f1, z, phi=None):
     """Calculate the values of the F1 filter 
     (tranformed prototype filter) of a Saramaki HBF at the given points.

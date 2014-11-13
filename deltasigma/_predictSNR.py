@@ -18,13 +18,15 @@
 
 
 from __future__ import division
+
 import numpy as np
+from scipy.interpolate import interp1d
 from scipy.signal import dimpulse, freqz
 from scipy.special import erfinv
-from scipy.interpolate import interp1d
 
 from ._dbp import dbp
 from ._utils import _get_num_den
+
 
 def predictSNR(ntf, OSR=64, amp=None, f0=0.):
     """Predict the SNR curve of a binary delta-sigma modulator.
@@ -256,4 +258,3 @@ def powerGain(num, den, Nimp=100):
         pGain = np.Inf
 
     return pGain, Nimp
-

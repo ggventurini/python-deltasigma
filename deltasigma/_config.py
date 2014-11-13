@@ -16,12 +16,11 @@
 """Module providing configuration switches.
 """
 
-import os, sys
-
-import numpy as np
-
+import os
+import sys
 from warnings import warn
 
+import numpy as np
 from numpy.distutils.system_info import get_info
 
 # should synthesizeNTF run the optimization routine?

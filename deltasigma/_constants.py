@@ -21,4 +21,3 @@ not found in Python.
 import numpy as np
 
 eps = np.finfo(np.float).eps # x86 2.22044604925e-16
-

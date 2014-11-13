@@ -20,6 +20,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
+from nose.tools import raises
 from scipy.signal import lti
 
 class TestPartitionABCD(unittest.TestCase):
@@ -37,19 +38,18 @@ class TestPartitionABCD(unittest.TestCase):
                 [0.499759089304780, 0.999036450096481, 0.997109907515262,  0., -0.260002096136488],
                 [0, 0, 1., 0, -0.796730400347216]]
         self.ABCD2 = np.array(ABCD)
-        self.at = np.array([[1., 0., 0.],
-                            [0.999036450096481, 0.997109907515262, -0.005777399147297],
-                            [0.499759089304780, 0.999036450096481,  0.997109907515262]
-                           ])
-        self.bt = np.array([[0.044408783846879, -0.044408783846879],
-                            [0., 0.499759089304780],
-                            [0., -0.260002096136488]
-                           ])
-        self.ct = np.array([0., 0, 1])
-        self.dt = np.array([0., -0.796730400347216])
+        self.at2 = self.ABCD2[:3, :3]
+        self.bt2 = self.ABCD2[:3, 3:]
+        self.ct2 = self.ABCD2[3, :3]
+        self.dt2 = self.ABCD2[3, 3:]
+
+        self.at3 = self.ABCD2[:2, :2]
+        self.bt3 = self.ABCD2[:2, 2:]
+        self.ct3 = self.ABCD2[2:, :2]
+        self.dt3 = self.ABCD2[2:, 2:]
 
     def test_partitionABCD_1(self):
-        """Test function for partitionABCD() 1/2"""
+        """Test function for partitionABCD() 1/5"""
         a, b, c, d = ds.partitionABCD(self.ABCD1)
         self.assertTrue(np.allclose(a, self.ob.A, rtol=1e-5, atol=1e-8))
         self.assertTrue(np.allclose(b, self.ob.B, rtol=1e-5, atol=1e-8))
@@ -57,10 +57,31 @@ class TestPartitionABCD(unittest.TestCase):
         self.assertTrue(np.allclose(d, self.ob.D, rtol=1e-5, atol=1e-8))
 
     def test_partitionABCD_2(self):
-        """Test function for partitionABCD() 2/2"""
+        """Test function for partitionABCD() 2/5"""
         ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=2)
-        self.assertTrue(np.allclose(self.at, ar, rtol=1e-5, atol=1e-8))
-        self.assertTrue(np.allclose(self.bt, br, rtol=1e-5, atol=1e-8))
-        self.assertTrue(np.allclose(self.ct, cr, rtol=1e-5, atol=1e-8))
-        self.assertTrue(np.allclose(self.dt, dr, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.at2, ar, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.bt2, br, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.ct2, cr, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.dt2, dr, rtol=1e-5, atol=1e-8))
+
+    def test_partitionABCD_3(self):
+        """Test function for partitionABCD() 3/5"""
+        ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=2, r=1)
+        self.assertTrue(np.allclose(self.at2, ar, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.bt2, br, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.ct2, cr, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.dt2, dr, rtol=1e-5, atol=1e-8))
+
+    def test_partitionABCD_4(self):
+        """Test function for partitionABCD() 4/5"""
+        ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=3, r=2)
+        self.assertTrue(np.allclose(self.at3, ar, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.bt3, br, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.ct3, cr, rtol=1e-5, atol=1e-8))
+        self.assertTrue(np.allclose(self.dt3, dr, rtol=1e-5, atol=1e-8))
+
+    @raises(ValueError)
+    def test_partitionABCD_5(self):
+        """Test function for partitionABCD() 5/5"""
+        ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=2, r=2)
 

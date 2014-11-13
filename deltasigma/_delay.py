@@ -19,6 +19,7 @@ specified amount of samples.
 
 import numpy as np
 
+
 def delay(x, n=1):
     """Delay signal ``x`` by ``n`` samples.
     """
@@ -34,4 +35,3 @@ def delay(x, n=1):
         else:
             y = np.concatenate((np.zeros((x.shape[0], n)), x[:, :nx-n]), axis=1)
     return y
-

@@ -14,12 +14,14 @@
 # LICENSE file for the licensing terms.
 
 from __future__ import division
+
 import numpy as np
 
+from ._constants import eps
 from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._utils import carray, restore_input_form, save_input_form
-from ._constants import eps
+
 
 def evalTFP(Hs, Hz, f):
     """Evaluate a CT-DT transfer function product.
@@ -169,4 +171,3 @@ def evalTFP(Hs, Hz, f):
     # return H matching the shape of f
     H = restore_input_form(H, form_f)
     return H
-

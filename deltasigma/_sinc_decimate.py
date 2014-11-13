@@ -18,14 +18,18 @@ by a sinc filter of specified order and length.
 """
 
 from __future__ import division
+
 import numpy as np
+
 
 def sinc_decimate(x, m, r):
     """Decimate ``x`` by an ``m``-th order sinc filter of length ``r``.
     """
     x = x[:]
+    if len(x) < r:
+        raise ValueError('Filter length longer than input data ( %d > %d )' %
+                         (r, len(x)))
     for _ in range(m):
         x = np.cumsum(x)
         x = np.concatenate((x[:r], x[r:] - x[:-r]), axis=0)/r
-    return x[r::r]
-
+    return x[r-1::r]

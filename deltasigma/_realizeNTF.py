@@ -17,6 +17,7 @@
 """
 
 from __future__ import division, print_function
+
 from warnings import warn
 
 import numpy as np
@@ -25,7 +26,7 @@ from ._calculateTF import calculateTF
 from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._stuffABCD import stuffABCD
-from ._utils import carray, cplxpair, _get_zpk
+from ._utils import _get_zpk, carray, cplxpair
 
 
 def realizeNTF(ntf, form='CRFB', stf=None):
@@ -377,4 +378,3 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         x = x[:].T
         b = np.real(x / A)
     return a.squeeze(), g.squeeze(), b.squeeze(), c.squeeze()
-

@@ -17,10 +17,12 @@
 """
 
 from __future__ import division
+
 import numpy as np
 
 from ._evalTFP import evalTFP
-from ._utils import carray, save_input_form, restore_input_form
+from ._utils import carray, restore_input_form, save_input_form
+
 
 def evalMixedTF(tf, f, df=1e-5):
     """Compute a mixed transfer function.

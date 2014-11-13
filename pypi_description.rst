@@ -8,8 +8,8 @@ The **python-deltasigma** is a Python package to *synthesize, simulate,
 scale and map to implementable topologies* **delta sigma modulators**.
 
 It aims to provide **a 1:1 Python port** of Richard Schreier's
-***excellent*** **`MATLAB Delta Sigma
-Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__**,
+***excellent*** `MATLAB Delta Sigma
+Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based. |githalytics.com alpha|
 
@@ -23,7 +23,7 @@ which it is very heavily based. |githalytics.com alpha|
 **Latest version:** `0.1 <https://pypi.python.org/pypi/deltasigma/>`__
 
 |Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2
-clause license|
+clause license| |DOI BADGE|
 
 Install
 -------
@@ -59,19 +59,20 @@ if you're installing a development version from Git.
 Extras
 ~~~~~~
 
-Install the **`sphinx <http://sphinx-doc.org/>`__** package to build the
+Install the `sphinx <http://sphinx-doc.org/>`__ package to build the
 documentation yourself.
 
 The test suite requires
-**`setuptools <https://pypi.python.org/pypi/setuptools>`__**, used to
+`setuptools <https://pypi.python.org/pypi/setuptools>`__, used to
 access the reference function outputs.
 
 Testing can be automated with
-**`nose <https://pypi.python.org/pypi/nose/>`__**, issuing:
+`nose <https://pypi.python.org/pypi/nose/>`__ and triggered with:
 
 ::
 
-    nosetests -v deltasigma/*.py
+    python setup.py test
+
 
 Documentation
 -------------
@@ -135,5 +136,7 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image:: https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
-.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD%20%282%20clause%29-brightgreen.png
+.. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
+.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.11535.png   
+   :target: http://dx.doi.org/10.5281/zenodo.11535

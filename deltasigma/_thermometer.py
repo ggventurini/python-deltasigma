@@ -18,6 +18,7 @@
 
 import numpy as np
 
+
 def thermometer(x, m):
     """Convert x to thermometer (aka unary) code
 
@@ -39,4 +40,3 @@ def thermometer(x, m):
     for i in range(len(x)):
         t[:x[i], i] = np.ones((x[i], ))
     return t
-

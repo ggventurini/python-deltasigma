@@ -18,7 +18,9 @@ expressed in Volt, or a power, expressed in Watt, to dBm.
 """
 
 from __future__ import division
+
 from warnings import warn
+
 import numpy as np
 
 from ._dbp import dbp
@@ -76,4 +78,3 @@ def db(x, input_type='voltage', R=1.):
     else:
         raise ValueError("db got input_type %s, instead of voltage or power" % input_type)
     return y
-

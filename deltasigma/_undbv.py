@@ -16,9 +16,11 @@
 """This module provides the undbv() function.
 """
 from __future__ import division
+
 import numpy as np
 
-from ._utils import carray, save_input_form, restore_input_form
+from ._utils import carray, restore_input_form, save_input_form
+
 
 def undbv(x):
     """Convert ``x`` from dB to voltage.
@@ -46,4 +48,3 @@ def undbv(x):
     x = carray(x)
     up = 10.**(x/20.)
     return restore_input_form(up, iform)
-    

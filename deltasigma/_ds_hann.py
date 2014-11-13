@@ -19,6 +19,7 @@ window that does not smear tones located exactly in a bin.
 
 import numpy as np
 
+
 def ds_hann(n):
     """A Hann window of length :math:`n`. 
 
@@ -61,4 +62,3 @@ def ds_hann(n):
     """
     x = np.arange(n, dtype='float_')
     return .5*(1 - np.cos(2*np.pi*x/n))
-

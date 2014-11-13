@@ -17,9 +17,10 @@
 """
 
 from __future__ import division
+
 import numpy as np
 
-from ._utils import carray, save_input_form, restore_input_form
+from ._utils import carray, restore_input_form, save_input_form
 
 
 def dbm(v, R=50):
@@ -51,4 +52,3 @@ def dbm(v, R=50):
     nonzero = (v != 0)
     y[nonzero] = 10. * np.log10(np.abs(v[nonzero] ** 2.) / R) + 30
     return restore_input_form(y, iform)
-

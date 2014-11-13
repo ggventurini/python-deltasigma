@@ -17,8 +17,10 @@
 """
 
 from warnings import warn
+
 import numpy as np
 import pylab as plt
+
 
 # Plot lollipops (o's and sticks)
 # 
@@ -77,4 +79,3 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
     plt.setp(markerline, **pop_fmt)
     plt.setp(stemlines, **lolli_fmt)
     plt.setp(baseline, 'color','k')
-

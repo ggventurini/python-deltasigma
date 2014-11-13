@@ -21,6 +21,7 @@ import numpy as np
 
 from ._evalTF import evalTF
 
+
 def nabsH(w, H):
     """Computes the negative of the absolute value of H.
 
@@ -31,4 +32,3 @@ def nabsH(w, H):
     """
     z = np.exp(1j*w)
     return -np.abs(evalTF(H, z))
-

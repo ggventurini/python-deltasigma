@@ -19,6 +19,7 @@ bottom.
 
 import numpy as np
 
+
 def padb(x, n, val=0.):
     """Pad a matrix ``x`` on the bottom to length ``n`` with value ``val``.
 
@@ -51,4 +52,3 @@ def padb(x, n, val=0.):
                         val*np.ones((n - xp.shape[0], xp.shape[1]))
                        ), axis=0)
     return y
-

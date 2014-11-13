@@ -19,6 +19,7 @@ right.
 
 import numpy as np
 
+
 def padr(x, n, val=0.):
     """Pad a matrix ``x`` on the right to length ``n`` with value ``val``.
 
@@ -53,4 +54,3 @@ def padr(x, n, val=0.):
                        ), axis=1
                       )
     return y
-
