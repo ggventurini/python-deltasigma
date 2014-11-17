@@ -45,25 +45,17 @@ class TestchangeFig(unittest.TestCase):
 
         ax = fig.add_subplot(211)
         ax.plot(xval, np.cos(2*np.pi*xval))
-        ax.plot(xval, np.cos(3*np.pi*xval))
-        ax.plot(xval, np.cos(4*np.pi*xval))
-        ax.plot(xval, np.cos(5*np.pi*xval))
-        ax.plot(xval, np.cos(6*np.pi*xval))
         ax.plot(xval, np.cos(7*np.pi*xval))
         ax.plot(xval, np.cos(8*np.pi*xval))
 
         ax = fig.add_subplot(212)
-        ax.plot(xval, np.cos(2*np.pi*xval))
         ax.plot(xval, np.cos(3*np.pi*xval))
         ax.plot(xval, np.cos(4*np.pi*xval))
-        ax.plot(xval, np.cos(5*np.pi*xval))
         ax.plot(xval, np.cos(6*np.pi*xval))
-        ax.plot(xval, np.cos(7*np.pi*xval))
-        ax.plot(xval, np.cos(8*np.pi*xval))
         ax.text(.01, -.9, "This is a TEST")
 
         #fig.savefig("origDemo.png")
-        changeFig(linewidth=3, fontsize=18)
+        changeFig(linewidth=3, fontsize=18, markersize=1, bw=True)
         ds._changeFig._setAxLinewidth(ax, linewidth=3, markersize=1, BW=True)
         #fig.savefig("changeDemo.png")
         self.assertTrue(True) #no errors
