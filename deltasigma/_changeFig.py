@@ -22,7 +22,7 @@ import numpy as np
 import pylab as plt
 
 
-def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
+def changeFig(fontsize=None, linewidth=None, markersize=None, bw=False, fig=None):
     """Quickly change several figure parameters.
 
     Take each axes in the figure, and for each line and text item 
@@ -31,17 +31,21 @@ def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
     **Parameters:**
 
     fontsize : scalar, optional
-        the font size, given in points
+        the font size, given in points, defaults to ``None``, no change.
 
     linewidth : scalar, optional
-        the line width, given in points
+        the line width, given in points. Defaults to ``None``, no change.
 
     markersize : scalar, optional
-        the marker size, given in points
+        the marker size, given in points. Defaults to ``None``, no change.
+
+    bw : boolean, optional
+        if set to ``True``, the figure will be converted to BW. Deafaults to
+        ``False``.
 
     fig : a matplotlib figure object, optional
-        the figure to apply the modifications to, if not given it is assumed
-        to be a the currently active figure.
+        the figure to apply the modifications to, if not given, it is assumed
+        to be the currently active figure.
 
     **Returns:**
 
@@ -52,37 +56,43 @@ def changeFig(fontsize=9, linewidth=1, markersize=6, fig=None):
         This function may be useful to enhance the readibility of
         figures to be used in presentations.
 
+    .. seealso:: :func:`figureMagic`, to quickly change plot ranges and more.
+
     """
     if fig is None:
         fig = plt.gcf()
     for ax in fig.get_axes():
-        _setAxLinewidth(ax, linewidth, markersize)
-        _setAxLabelsFontsize(ax, fontsize)
-        _setTextFontsize(ax, fontsize)
+        if linewidth is not None or markersize is not None or bw:
+            _setAxLinewidth(ax, linewidth, markersize, bw)
+        if fontsize is not None:
+            _setAxLabelsFontsize(ax, fontsize)
+            _setTextFontsize(ax, fontsize)
 
-def _setAxLinewidth(ax, linewidth, markersize, BW=False):
+def _setAxLinewidth(ax, linewidth=None, markersize=None, BW=False):
     """Take each Line2D in the axes, ax, and convert the line style
     Optionally also convert to BW, from http://tinyurl.com/qylqgoz
     """
-    COLORMAP = {
-        'b': {'marker': None, 'dash': (None,None)},
-        'g': {'marker': None, 'dash': [5,5]},
-        'r': {'marker': None, 'dash': [5,3,1,3]},
-        'c': {'marker': None, 'dash': [1,3]},
-        'm': {'marker': None, 'dash': [5,2,5,2,5,10]},
-        'y': {'marker': None, 'dash': [5,3,1,2,1,10]},
-        'k': {'marker': 'o', 'dash': (None,None)} #[1,2,1,10]}
-        }
+    LINES = [{'marker': None, 'dash': (None,None)},
+             {'marker': None, 'dash': [5,5]},
+             {'marker': None, 'dash': [5,3,1,3]},
+             {'marker': None, 'dash': [1,3]},
+             {'marker': None, 'dash': [5,2,5,2,5,10]},
+             {'marker': None, 'dash': [5,3,1,2,1,10]},
+             {'marker': 'o', 'dash': (None,None)}] #[1,2,1,10]}
+    COLORMAP = {}
 
     for line in ax.get_lines():
         if BW:
             origColor = line.get_color()
+            if not origColor in COLORMAP:
+                newColor = LINES.pop(0)
+                COLORMAP.update({origColor:newColor})
             line.set_color('black')
             line.set_dashes(COLORMAP[origColor]['dash'])
             line.set_marker(COLORMAP[origColor]['marker'])
         if markersize is not None:
             line.set_markersize(markersize)
-        if markersize is not None:
+        if linewidth is not None:
             line.set_linewidth(linewidth)
 
 def _setAxLabelsFontsize(ax, fontsize):
@@ -98,3 +108,4 @@ def _setTextFontsize(ax, fontsize):
     for artist in ax.get_children():
         if isinstance(artist, mpl.text.Text):
             artist.set_size(fontsize)
+
