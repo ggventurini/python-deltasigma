@@ -13,7 +13,8 @@ before_install:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
  - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then pip install numpy scipy matplotlib cython --upgrade; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then pip install numpy scipy matplotlib cython --upgrade; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then pip install numpy scipy matplotlib --upgrade; fi'
+ - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then pip install cython --upgrade --install-option="--no-cython-compile"; fi'
  - pip install nose coveralls
 # command to run tests, e.g. python setup.py test
 script: nosetests --with-coverage --cover-package=deltasigma deltasigma
