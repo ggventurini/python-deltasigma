@@ -9,7 +9,9 @@ topologies.
 
 **0.1-10**: Bugfix and additional options in ``changeFig()``.
  * BUGFIX: ship Cython sources in the package.
+ * BUGFIX: only modify explicitely set options in ``changeFig()``.
  * Add support for ``xfticks`` and ``yfticks`` options in ``changeFig()``.
+ * Add support for BW conversion of plots in ``changeFig()``.
 
 **0.1-9**: Add support for modulators with multiple outputs, allowing simulating
 MASH cascade DSMs.
