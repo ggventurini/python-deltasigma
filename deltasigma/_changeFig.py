@@ -22,7 +22,8 @@ import numpy as np
 import pylab as plt
 
 
-def changeFig(fontsize=None, linewidth=None, markersize=None, bw=False, fig=None):
+def changeFig(fontsize=None, linewidth=None, markersize=None, xfticks=False,
+              yfticks=False, bw=False, fig=None):
     """Quickly change several figure parameters.
 
     Take each axes in the figure, and for each line and text item 
@@ -39,8 +40,27 @@ def changeFig(fontsize=None, linewidth=None, markersize=None, bw=False, fig=None
     markersize : scalar, optional
         the marker size, given in points. Defaults to ``None``, no change.
 
+    xfticks : string, optional
+        this parameter may be set to ``'sci'`` or ``'plain'`` and only has an
+        effect on linear axes.
+        if set to ``'sci'``, the x-axis labels will be formatted in scientific
+        notation, with three decimals, eg ``'1.000E3'``. If set to plain,
+        plain float formatting will be used, eg. ``'0.001'``.
+        Defaults to ``None``, meaning no change is performed.
+
+    yfticks : string, optional
+        this parameter may be set to ``'sci'`` or ``'plain'`` and only has an
+        effect on linear axes.
+        if set to ``'sci'``, the y-axis labels will be formatted in scientific
+        notation, with three decimals, eg ``'1.000E3'``. If set to plain,
+        plain float formatting will be used, eg. ``'0.001'``.
+        Defaults to ``None``, meaning no change is performed.
+
+        if set to ``True``, the y-axis labels will be formatted in scientific
+        notation, with three decimals, eg ``'1.000E3'``. Defaults to ``False``.
+
     bw : boolean, optional
-        if set to ``True``, the figure will be converted to BW. Deafaults to
+        if set to ``True``, the figure will be converted to BW. Defaults to
         ``False``.
 
     fig : a matplotlib figure object, optional
@@ -67,6 +87,14 @@ def changeFig(fontsize=None, linewidth=None, markersize=None, bw=False, fig=None
         if fontsize is not None:
             _setAxLabelsFontsize(ax, fontsize)
             _setTextFontsize(ax, fontsize)
+        if xfticks == 'sci' and ax.xaxis.get_scale() == 'linear':
+            _setLabelsFormatter(ax.get_xaxis(), format_str='%.3E')
+        elif xfticks == 'plain' and ax.xaxis.get_scale() == 'linear':
+            ax.ticklabel_format(style='plain', axis='x')
+        if yfticks == 'sci' and ax.yaxis.get_scale() == 'linear':
+            _setLabelsFormatter(ax.get_yaxis(), format_str='%.3E')
+        elif yfticks == 'plain' and ax.xaxis.get_scale() == 'linear':
+            ax.ticklabel_format(style='plain', axis='y')
 
 def _setAxLinewidth(ax, linewidth=None, markersize=None, BW=False):
     """Take each Line2D in the axes, ax, and convert the line style
@@ -108,4 +136,8 @@ def _setTextFontsize(ax, fontsize):
     for artist in ax.get_children():
         if isinstance(artist, mpl.text.Text):
             artist.set_size(fontsize)
+
+def _setLabelsFormatter(ax, format_str='%.3E'):
+    form = lambda x, p: format_str % x
+    ax.set_major_formatter(mpl.ticker.FuncFormatter(form))
 

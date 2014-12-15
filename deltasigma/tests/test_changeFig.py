@@ -38,7 +38,7 @@ class TestchangeFig(unittest.TestCase):
         ax = fig.add_subplot(212)
         ax.plot(xval, np.cos(8*np.pi*xval))
         ax.text(.01, -.9, "This is a TEST")
-        changeFig(linewidth=3, fontsize=18)
+        changeFig(linewidth=3, fontsize=18, xfticks='sci', yfticks='sci')
 
         fig = plt.figure()
         xval = np.arange(0, 1, .01)
@@ -56,6 +56,7 @@ class TestchangeFig(unittest.TestCase):
 
         #fig.savefig("origDemo.png")
         changeFig(linewidth=3, fontsize=18, markersize=1, bw=True)
+        changeFig(xfticks='plain', yfticks='plain')
         ds._changeFig._setAxLinewidth(ax, linewidth=3, markersize=1, BW=True)
         #fig.savefig("changeDemo.png")
         self.assertTrue(True) #no errors
