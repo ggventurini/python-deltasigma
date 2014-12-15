@@ -7,6 +7,10 @@ Version 0.1 series
 The 0.1 series features support for (real) baseband and passband modulator
 topologies.
 
+**0.1-10**: Bugfix and additional options in ``changeFig()``.
+ * BUGFIX: ship Cython sources in the package.
+ * Add support for ``xfticks`` and ``yfticks`` options in ``changeFig()``.
+
 **0.1-9**: Add support for modulators with multiple outputs, allowing simulating
 MASH cascade DSMs.
  * Add support in ``partitionABCD()`` for specifying the number of outputs.
