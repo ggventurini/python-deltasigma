@@ -43,21 +43,22 @@ def changeFig(fontsize=None, linewidth=None, markersize=None, xfticks=False,
     xfticks : string, optional
         this parameter may be set to ``'sci'`` or ``'plain'`` and only has an
         effect on linear axes.
-        if set to ``'sci'``, the x-axis labels will be formatted in scientific
+
+        If set to ``'sci'``, the x-axis labels will be formatted in scientific
         notation, with three decimals, eg ``'1.000E3'``. If set to plain,
         plain float formatting will be used, eg. ``'0.001'``.
+
         Defaults to ``None``, meaning no change is performed.
 
     yfticks : string, optional
         this parameter may be set to ``'sci'`` or ``'plain'`` and only has an
         effect on linear axes.
-        if set to ``'sci'``, the y-axis labels will be formatted in scientific
+
+        If set to ``'sci'``, the y-axis labels will be formatted in scientific
         notation, with three decimals, eg ``'1.000E3'``. If set to plain,
         plain float formatting will be used, eg. ``'0.001'``.
-        Defaults to ``None``, meaning no change is performed.
 
-        if set to ``True``, the y-axis labels will be formatted in scientific
-        notation, with three decimals, eg ``'1.000E3'``. Defaults to ``False``.
+        Defaults to ``None``, meaning no change is performed.
 
     bw : boolean, optional
         if set to ``True``, the figure will be converted to BW. Defaults to
