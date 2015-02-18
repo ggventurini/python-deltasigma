@@ -13,8 +13,7 @@ topologies.
  * Add support for ``xfticks`` and ``yfticks`` options in ``changeFig()``.
  * Add support for BW conversion of plots in ``changeFig()``.
 
-**0.1-9**: Add support for modulators with multiple outputs, allowing simulating
-MASH cascade DSMs.
+**0.1-9**: Add support for modulators with multiple outputs, allowing simulating MASH cascade DSMs.
  * Add support in ``partitionABCD()`` for specifying the number of outputs.
  * Add support for multiple quantizers in ``calculateTF()``.
  * BUGFIX: Fix simulation of DSMs with multiple quantizers.
