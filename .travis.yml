@@ -1,22 +1,31 @@
 language: python
 python:
-  - "2.7"
-  - "3.4"
-virtualenv:
-#  system_site_packages: true
-  system_site_packages: false
+  - 2.7
+  - 3.4
+# no virtualenv
+#virtualenv:
+#  system_site_packages: false
+
+# Setup anaconda
 before_install:
- - sudo apt-get update
- - sudo apt-get install -qq libblas-dev
- - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then sudo apt-get build-dep -qq python-scipy  python-numpy;  sudo apt-get install -qq python-numpy python-scipy python-matplotlib cython; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then sudo apt-get build-dep -qq python3-scipy python3-numpy; sudo apt-get build-dep -qq python-matplotlib cython; fi'
-# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
-install: 
- - 'if [ $TRAVIS_PYTHON_VERSION == "2.7" ]; then pip install -v -v -v numpy scipy matplotlib cython --upgrade; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then pip install -v -v -v numpy scipy matplotlib --upgrade; fi'
- - 'if [ $TRAVIS_PYTHON_VERSION == "3.4" ]; then pip install -v -v -v cython --upgrade --install-option="--no-cython-compile"; fi'
- - pip install nose coveralls
-# command to run tests, e.g. python setup.py test
+  - if [ ${TRAVIS_PYTHON_VERSION:0:1} == "2" ]; then wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh; else wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - if [ ${TRAVIS_PYTHON_VERSION:0:1} == "2" ]; then export PATH=/home/travis/miniconda/bin:$PATH; else export PATH=/home/travis/miniconda3/bin:$PATH; fi
+  - conda update --yes conda
+
+# Install packages
+install:
+  - conda create --quiet --yes -n buildenv python=$TRAVIS_PYTHON_VERSION
+  - source activate buildenv
+  - conda install --yes numpy scipy matplotlib cython nose setuptools coverage
+  - pip install python-coveralls
+  - python setup.py install
+
+# Run the tests
 script: nosetests --with-coverage --cover-package=deltasigma deltasigma
+
+# Calculate coverage
 after_success:
- - coveralls
+  - coveralls
+
