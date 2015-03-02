@@ -8,6 +8,9 @@ python:
 
 # Setup anaconda
 before_install:
+  # we need blas.h
+  - sudo apt-get update
+  - sudo apt-get install -qq libblas-dev
   - if [ ${TRAVIS_PYTHON_VERSION:0:1} == "2" ]; then wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh; else wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh; fi
   - chmod +x miniconda.sh
   - ./miniconda.sh -b
