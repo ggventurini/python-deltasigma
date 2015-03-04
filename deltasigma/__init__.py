@@ -15,7 +15,7 @@
 
 """
 
-:Author: Giuseppe Venturini
+:Author: Giuseppe Venturini, based on Richard Schreier's work, who deserves most of the credit.
 :Release: |release|
 :Date: |today|
 
