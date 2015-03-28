@@ -14,6 +14,8 @@
 # LICENSE file for the licensing terms.
 
 """
+*A port of the* **MATLAB Delta Sigma Toolbox** *based on free software and
+very little sleep.*
 
 :Author: Giuseppe Venturini, based on Richard Schreier's work, who deserves most of the credit.
 :Release: |release|
@@ -27,11 +29,9 @@
 
 **Bug tracker:** https://github.com/ggventurini/python-deltasigma/issues
 
+
 Introduction
 ------------
-
-A port of the **MATLAB Delta Sigma Toolbox** based on free software and
-very little sleep.
 
 **Python-deltasigma** is a Python package to *synthesize, simulate,
 scale and map to implementable structures* **delta sigma modulators**.
@@ -41,6 +41,11 @@ It aims to provide **a 1:1 Python port** of Richard Schreier's
 Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based.\ |githalytics.com alpha|
+
+Contents
+--------
+
+.. contents:: Contents
 
 Status
 ------
@@ -106,8 +111,8 @@ dependencies:
 
 -  *Archs*: x86, x86\_64 and armf (arm with floating point unit).
 
-Dependencies
-~~~~~~~~~~~~
+Required dependencies
+~~~~~~~~~~~~~~~~~~~~~
 
 Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>`__,
 at your choice, `numpy <http://www.numpy.org/>`__,
@@ -150,8 +155,8 @@ scipy
 yourself <https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy>`__,
 which also apply here. Be warned, it can easily get complicated.
 
-Optional dependencies
-~~~~~~~~~~~~~~~~~~~~~
+Optional (but recommended) dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The required dependencies have been kept to a minimum to allow running
 ``python-deltasigma`` on workstations that are not managed by the user
@@ -184,8 +189,8 @@ On Mac OS X, consider linking the headers to their conventional location::
 The Cython extensions were written by Sergio Callegari, please see the
 ``deltasigma/`` for copyright notice and more information.
 
-Install python-deltasigma
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Install the deltasigma package
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the dependencies set up, it is possible to install the latest stable
 version directly from the `Python Package Index (PYPI)
