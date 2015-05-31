@@ -205,14 +205,27 @@ def minreal(tf, tol=None):
 
 
 def diagonal_indices(a, offset=0):
-    """Return the indices to the main diagonal of a 2D array a (if offset = 0),
-    or to a secondary diagonal, having the offset from the main one as specified.
+    """The indices to the diagonal of a 2D array ``a``
 
-    The array a does not need to be square.
+    The indices are those to the main diagonal (if ``offset`` is 0), or to a
+    secondary diagonal, having the specified offset from the main one.
 
-    Note: the sup-diagonal is at offset +1, the sub-diagonal at offset -1.
+    The array ``A`` does not need to be square.
 
-    Returns: (xs, ys)
+    **Parameters:**
+
+    a : ndarray
+        The 2D ndarray for which the diagonal indices should be calculated.
+    offset : int, optional
+        The diagonal offset from the main one. Note that the sup-diagonal is at
+        offset +1, the sub-diagonal at offset -1, and so on. Defaults to 0,
+        which corresponds to the main diagonal.
+
+    **Returns:**
+
+    xs, ys : tuples
+        The indices in the two coordinates. Thanks to ``numpy``'s advanced
+        slicing, the diagonal may be accessed with ``A[(xs, ys)]``.
     """
     di, dj = np.diag_indices_from(a[:min(a.shape), :min(a.shape)])
     if offset > 0:
