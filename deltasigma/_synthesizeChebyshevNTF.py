@@ -86,6 +86,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         OSR = 4
         order = 8
         H_inf = 3
+        plt.figure(figsize=(12,6))
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
         H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
         # 1. Plot the singularities.
@@ -150,6 +151,7 @@ def synthesizeChebyshevNTF(order=3, OSR=64, opt=0, H_inf=1.5, f0=0.):
         OSR = 32
         order = 5
         H_inf = 1.2
+        plt.figure(figsize=(12,6))
         H0 = synthesizeNTF(order, OSR, 1, H_inf)
         H1 = synthesizeChebyshevNTF(order, OSR, 0, H_inf)
         # 1. Plot the singularities.

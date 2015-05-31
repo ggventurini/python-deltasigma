@@ -75,6 +75,9 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None,
        figureMagic([0, 1], dx=.1, xLab=None, yRange=[-1.2, 1.2],
                    dy=.2, yLab=None, size=(8, 4), name="After")
 
+    .. seealso:: :func:`changeFig` to quickly change low-level plot parameters
+                 such as font and marker size, the linewidth, or to prepare a
+                 plot for printing in B/W.
     """
     fig = plt.gcf()
     if size is not None and len(size):

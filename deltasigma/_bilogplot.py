@@ -40,11 +40,13 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
     negative values as well.
 
     .. note::
+
         This is implemented in a slightly different way from The MATLAB Delta
         Sigma Toolbox, where all values below ``xmin`` are clipped and the scale is
         always logarithmic. It our implementation, no clippin is done and below
         ``xmin`` the data is simply plotted with a linear scale. For this reason
         slightly different plots may be generated.
+
 
     **Parameters:**
 
@@ -52,28 +54,32 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
         Hann-windowed FFT
 
     f0 : int
-        bin number of center frequency
+        Bin number of center frequency
 
     fbin : int
-        bin number of test tone
+        Bin number of test tone
 
     x : 3-elements sequence-like
-        x is a sequence of three *positive* floats: ``xmin``, ``xmax_left``, ``xmax_right``.
-        ``xmin`` is the minimum value of the logarithmic plot range. ``xmax_left`` is the
-        length of the plotting interval on the left (negative) side, ``xmax_right`` is its
-        respective on the right (positive) side.
+        x is a sequence of three *positive* floats: ``xmin``, ``xmax_left``,
+        ``xmax_right``.  ``xmin`` is the minimum value of the logarithmic plot
+        range. ``xmax_left`` is the length of the plotting interval on the left
+        (negative) side, ``xmax_right`` is its respective on the right
+        (positive) side.
 
     y : 3-elements sequence-like
-        y is a sequence of three floats: ``ymin``, ``ymax``, ``dy``.
-        ``ymin`` is the minimum value of the y-axis, ``ymax`` its maximum value and
+        y is a sequence of three floats: ``ymin``, ``ymax``, ``dy``. ``ymin``
+        is the minimum value of the y-axis, ``ymax`` its maximum value and
         ``dy`` is the ticks spacing.
 
     .. note::
-        The MATLAB Delta Sigma toolbox allows for a fourth option ``y_skip``, which
-        is the ``incr`` value passed to MATLAB's ``axisLabels``.
-        No such thing is supported here. A warning is issued if ``len(v) == 4``.
 
-    Additional keyword parameters ``**fmt`` will be passed to matplotlib's ``semilogx()``.
+        The MATLAB Delta Sigma toolbox allows for a fourth option ``y_skip``,
+        which is the ``incr`` value passed to MATLAB's ``axisLabels``.  No such
+        thing is supported here. A warning is issued if ``len(v) == 4``.
+
+
+    Additional keyword parameters ``**fmt`` will be passed to matplotlib's
+    ``semilogx()``.
 
     The FFT is smoothed before plotting and converted to dB. See
     :func:`logsmooth` for details regarding the algorithm used.

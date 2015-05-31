@@ -14,8 +14,10 @@
 # LICENSE file for the licensing terms.
 
 """
+*A port of the* **MATLAB Delta Sigma Toolbox** *based on free software and
+very little sleep.*
 
-:Author: Giuseppe Venturini
+:Author: Giuseppe Venturini, based on Richard Schreier's work, who deserves most of the credit.
 :Release: |release|
 :Date: |today|
 
@@ -27,11 +29,9 @@
 
 **Bug tracker:** https://github.com/ggventurini/python-deltasigma/issues
 
+
 Introduction
 ------------
-
-A port of the **MATLAB Delta Sigma Toolbox** based on free software and
-very little sleep.
 
 **Python-deltasigma** is a Python package to *synthesize, simulate,
 scale and map to implementable structures* **delta sigma modulators**.
@@ -41,6 +41,11 @@ It aims to provide **a 1:1 Python port** of Richard Schreier's
 Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
 which it is very heavily based.\ |githalytics.com alpha|
+
+Contents
+--------
+
+.. contents:: Contents
 
 Status
 ------
@@ -106,8 +111,8 @@ dependencies:
 
 -  *Archs*: x86, x86\_64 and armf (arm with floating point unit).
 
-Dependencies
-~~~~~~~~~~~~
+Required dependencies
+~~~~~~~~~~~~~~~~~~~~~
 
 Using ``python-deltasigma`` requires `Python 2 or 3 <http://www.python.org/>`__,
 at your choice, `numpy <http://www.numpy.org/>`__,
@@ -150,8 +155,8 @@ scipy
 yourself <https://github.com/ahkab/ahkab/wiki/Install:-numpy-and-scipy>`__,
 which also apply here. Be warned, it can easily get complicated.
 
-Optional dependencies
-~~~~~~~~~~~~~~~~~~~~~
+Optional (but recommended) dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The required dependencies have been kept to a minimum to allow running
 ``python-deltasigma`` on workstations that are not managed by the user
@@ -184,8 +189,8 @@ On Mac OS X, consider linking the headers to their conventional location::
 The Cython extensions were written by Sergio Callegari, please see the
 ``deltasigma/`` for copyright notice and more information.
 
-Install python-deltasigma
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Install the deltasigma package
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Once the dependencies set up, it is possible to install the latest stable
 version directly from the `Python Package Index (PYPI)
@@ -358,8 +363,8 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
-.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.11167.png
-   :target: http://dx.doi.org/10.5281/zenodo.11167
+.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.12639.png
+   :target: http://dx.doi.org/10.5281/zenodo.12639
 
 
 Credits
@@ -827,7 +832,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.1-9'
+__version__ = '0.1-10'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
