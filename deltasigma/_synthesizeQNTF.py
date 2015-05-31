@@ -4,7 +4,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is distributed with python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python port of Richard Schreier's 
+# python-deltasigma is a 1:1 Python port of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -20,8 +20,6 @@ Module providing the Quadrature NTF synthesis function.
 
 from __future__ import division, print_function
 
-import copy
-
 from warnings import warn
 
 import numpy as np
@@ -31,44 +29,46 @@ from scipy.linalg import norm
 
 from ._evalTF import evalTF
 from ._dbv import dbv
-from ._plotPZ import plotPZ
-from ._figureMagic import figureMagic
 from ._rmsGain import rmsGain
 from ._synthesizeNTF import synthesizeNTF
 from ._utils import _get_zpk
 
+# Maximum number of iterations to reach the obj
 ITN_MAX = 20
 
 def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
-    """Synthesize a noise transfer function for a quadrature delta-sigma modulator.
+    """Synthesize a noise transfer function for a quadrature modulator.
 
     **Parameters:**
 
     order : int, optional
-        The order of the modulator
+        The order of the modulator. Defaults to 4.
 
     OSR : int, optional
-        The oversampling ratio.
+        The oversampling ratio. Defaults to 64.
 
     f0 : float, optional
         The center frequency, normalized such that :math:`1 \rightarrow f_s`.
+        Defaults to 0, ie to a low-pass modultor.
 
     NG : float, optional
-        The in-band noise gain (dB).
+        The in-band noise gain, expressed in dB. Defaults to -60.
 
     ING : float, optional
-        The image-band noise gain (dB).
+        The image-band noise gain, in dB. Defaults to -20.
 
-    n_im : int, optional 
+    n_im : int, optional
         The number of in-band image zeros, defaults to ``floor(order/3)``.
 
     **Returns:**
 
     ntf : (z, p, k) tuple
-        ``ntf`` is a zpk tuple containing the zeros and poles of the NTF.
+        ``ntf`` is a zpk tuple containing the zeros, poles and the gain of the
+        synthesized NTF.
 
     .. note::
 
+        From the Matlab Delta-Sigma Toobox:
         ALPHA VERSION:
         This function uses an experimental ad-hoc method that is
         neither optimal nor robust.
@@ -85,9 +85,9 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
         dfdx = None
         for itn in range(ITN_MAX):
             ntf = synthesizeNTF(order, OSR, 1., x)
-            f = dbv(rmsGain(ntf, 0, f1)) - NG
+            f = dbv(rmsGain(ntf, 0., f1)) - NG
             if debug_it:
-                print('x=\n %.2f f=\n %.2f' % (x, f))
+                print('x=%.2f f=%.2f' % (x, f))
             if abs(f) < 0.01:
                 break
             if dfdx is None:
@@ -97,15 +97,15 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
                 dfdx = (f - f_old)/dx
                 dx_old = dx
                 dx = - f/dfdx
-                if abs(dx) > max(1, 2*abs(dx_old)):
-                    dx = np.sign(dx)*max(1, 2*abs(dx_old))
+                if abs(dx) > max((1, 2*abs(dx_old))):
+                    dx = np.sign(dx)*max((1, 2*abs(dx_old)))
                 if x + dx <= 1:
                     # Hinf must be at least 1
                     dx = dx/2.
             f_old = f
             x = x + dx
         if itn == ITN_MAX - 1:
-            warn('Warning: Iteration limit reached. NTF may be poor.')
+            warn('Iteration limit reached. NTF may be poor.')
         # Rotate the NTF
         z0 = np.exp(2j*np.pi*f0)
         zeros, poles, k = _get_zpk(ntf)
@@ -123,16 +123,18 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
         for itn in range(ITN_MAX):
             if debug_it:
                 print('\nx = [%.2f, %.2f]' % (x[0], x[1]))
-            b1, a1 = cheby2(n_in, x[0], 1./OSR, 'high')
-            b2, a2 = cheby2(n_im, x[1], 1./OSR, 'high')
-            #warning('off')
+            b1, a1 = cheby2(n_in, x[0], 1./OSR, 'highpass')
+            b2, a2 = cheby2(n_im, x[1], 1./OSR, 'highpass')
             ntf0 = (np.concatenate((np.roots(b1)*z0, np.roots(b2)*np.conj(z0))),
-                    np.concatenate((np.roots(a1)*z0, np.roots(a2)*np.conj(z0))), 1)
+                    np.concatenate((np.roots(a1)*z0, np.roots(a2)*np.conj(z0))),
+                    1)
             m = evalTF(ntf0, np.exp(2j*np.pi*freq))
             NG0 = dbv(rmsGain(ntf0, f1, f2))
             ING0 = dbv(rmsGain(ntf0, -f1, -f2))
             if debug_it:
                 import pylab as plt
+                from ._plotPZ import plotPZ
+                from ._figureMagic import figureMagic
                 plt.figure()
                 plt.subplot(121)
                 plotPZ(ntf0)
@@ -141,24 +143,26 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
                 plt.plot(freq, dbv(m))
                 figureMagic([-0.5, 0.5], 0.05, 2, [-100, 30], 10, 2)
                 plt.hold(True)
-                plt.plot([f1, f2], np.array([1, 1])*NG0, 'k')
-                plt.text(np.mean([f1, f2]), NG0, ('NG=\n %.1fdB' % NG0), verticalalignment='bottom')
-                plt.plot([-f1, -f2], np.array([1, 1])*ING0, 'k')
-                plt.text(np.mean([-f1, -f2]), ING0, ('ING=\n %.1fdB' % ING0), verticalalignment='bottom')
+                plt.plot([f1, f2], [NG0, NG0], 'k')
+                plt.text(np.mean([f1, f2]), NG0, ('NG=%.1fdB' % NG0), va='bottom')
+                plt.plot([-f1, -f2], [ING0, ING0], 'k')
+                plt.text(np.mean([-f1, -f2]), ING0, ('ING=%.1fdB' % ING0), va='bottom')
                 plt.show()
             f = np.array([NG0 - NG, ING0 - ING])
             if max(abs(f)) < 0.01:
                 break
             if norm(f) < lowest_f:
                 lowest_f = norm(f)
-                best = ntf0
+                # ntf0 is ALREADY a zpk tuple
+                zeros, poles, k = _get_zpk(ntf0)
+                best = (zeros.copy(), poles.copy(), k)
             if abs(f[0]) > abs(f[1]):
                 # adjust x(1)
                 i = 0
             else:
                 # adjust x(2)
                 i = 1
-            if np.isnan(dfdx[i]).any():
+            if np.isnan(dfdx[i]):
                 dx = np.sign(f[i])
                 dfdx[i] = 0
                 dfdx[1 - i] = float('NaN')
@@ -172,42 +176,10 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
                 else:
                     if xnew > 2*x[i]:
                         dx = x[i]
-            f_old = copy.copy(f)
+            f_old = f.copy()
             x[i] = x[i] + dx
         if itn == ITN_MAX - 1:
-            warn('Warning: Iteration limit reached. NTF may be poor')
+            warn('Iteration limit reached. NTF may be poor')
         ntf = best
     return ntf
-
-def test_synthesizeQNTF():
-    from ._utils import pretty_lti, _get_zpk
-    ntf = synthesizeQNTF(4, 32, 1/16, -50, -10)
-    z, p, k = _get_zpk(ntf)
-    p_ref = [0.573877782470855 + 0.569921695571522j,
-             0.808788367241398 + 0.002797375873482j,
-             0.591250299914031 + 0.244903892981552j,
-             0.673072277003855 - 0.278795665592338j]
-    z_ref = [0.888037198535288 + 0.459771610712905j,
-             0.953044748762363 + 0.302829501298050j,
-             0.923879532511340 + 0.382683432365112j,
-             0.923879532511287 - 0.382683432365090j]
-    k_ref = 1.
-    np.allclose(p, p_ref, atol=1e-4, rtol=1e-3) 
-    np.allclose(z, z_ref, atol=1e-4, rtol=1e-3) 
-    np.allclose(k, k_ref, atol=1e-4, rtol=1e-3) 
-    ntf = synthesizeQNTF(4, 32, 1/16, -50, -10, 0)
-    z, p, k = _get_zpk(ntf)
-    z_ref = [0.910594282901269 + 0.413301405692653j,
-             0.936135618988396 + 0.351639165709982j,
-             0.888265620891369 + 0.459330150047295j,
-             0.952894107929043 + 0.303303180125290j]
-
-    p_ref = [0.767590403998773 + 0.239841808290628j,
-             0.712362148895601 + 0.373174610786908j,
-             0.899297507221408 + 0.158408031000048j,
-             0.747910758574959 + 0.523887972745873j]
-    k_ref = 1.
-    np.allclose(p, p_ref, atol=1e-4, rtol=1e-3) 
-    np.allclose(z, z_ref, atol=1e-4, rtol=1e-3) 
-    np.allclose(k, k_ref, atol=1e-4, rtol=1e-3) 
 

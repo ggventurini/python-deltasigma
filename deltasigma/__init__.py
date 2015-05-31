@@ -910,6 +910,7 @@ from ._predictSNR import predictSNR
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
 from ._realizeNTF_ct import realizeNTF_ct
+from ._realizeQNTF import realizeQNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._scaleABCD import scaleABCD
@@ -919,6 +920,7 @@ from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
 from ._synthesizeChebyshevNTF import synthesizeChebyshevNTF
 from ._synthesizeNTF import synthesizeNTF
+from ._synthesizeQNTF import synthesizeQNTF
 from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp
