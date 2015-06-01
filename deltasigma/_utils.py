@@ -144,9 +144,10 @@ def minreal(tf, tol=None):
 
     **Returns:**
 
-    tf_simplified : supported TF representation or list
-        A list of TFs or a TF, depending on the input type, each of them
-        represented by an LTI object.
+    tf_simplified : tuple or list of tuples
+        A list of TFs in zpk format or a TF (aain in zpk format), depending
+        whether a single TF or a list of multiple TFs were passed to the
+        function.
     """
     # initially based on python-control
     # which is in turn based on octave minreal
@@ -194,14 +195,8 @@ def minreal(tf, tol=None):
         else:
             # no matching pole
             reducedzeros.append(z)
-    if len(reducedzeros):
-        newzeros = carray(reducedzeros)
-        num = k * np.real(np.poly(newzeros))
-    else:
-        num = np.array([k])
-    den = np.real(np.poly(poles))
-
-    return lti(num, den)
+    newzeros = carray(reducedzeros)
+    return (newzeros, poles, k)
 
 
 def diagonal_indices(a, offset=0):
