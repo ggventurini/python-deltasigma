@@ -32,7 +32,7 @@ class TestSynthesizeQNTF(unittest.TestCase):
         pass
 
     def test_synthesizeQNTF_1(self):
-        """Test function for synthesizeQNTF() 1/3"""
+        """Test function for synthesizeQNTF() 1/4"""
         ntf = synthesizeQNTF(4, 32, 1/16, -50, -10)
         z, p, k = ntf
         p_ref = [0.573877782470855 + 0.569921695571522j,
@@ -49,7 +49,7 @@ class TestSynthesizeQNTF(unittest.TestCase):
         np.allclose(k, k_ref, atol=1e-4, rtol=1e-3)
 
     def test_synthesizeQNTF_2(self):
-        """Test function for synthesizeQNTF() 2/3"""
+        """Test function for synthesizeQNTF() 2/4"""
         ntf = synthesizeQNTF(4, 32, 1/16, -50, -10, 0)
         z, p, k = ntf
         z_ref = [0.910594282901269 + 0.413301405692653j,
@@ -67,7 +67,7 @@ class TestSynthesizeQNTF(unittest.TestCase):
         np.allclose(k, k_ref, atol=1e-4, rtol=1e-3)
 
     def test_synthesizeQNTF_3(self):
-        """Test function for synthesizeQNTF() 3/3"""
+        """Test function for synthesizeQNTF() 3/4"""
         order = 4
         osr = 32
         NG = -50
@@ -92,4 +92,22 @@ class TestSynthesizeQNTF(unittest.TestCase):
         assert np.allclose(np.sort_complex(poles), np.sort_complex(poles_ref),
                            atol=1e-2, rtol=1e-2)
         assert ntf0[2] == 1.
+
+    def test_synthesizeQNTF_4(self):
+        """Test function for synthesizeQNTF() 4/4"""
+        # order 2
+        order = 2
+        osr = 32
+        NG = -50
+        ING = -10
+        f0 = 1 / 16
+        ntf0 = synthesizeQNTF(order, osr, f0, NG, ING)
+        z_ref = [0.900716472438935 + 0.434407454214544j,
+                 0.944075182261086 + 0.329730268914908j]
+        p_ref = [0.112333561599987 - 0.126178981177517j,
+                 -0.00979019007164386 + 0.168653836396020j]
+        k_ref = 1
+        assert np.allclose(np.sort(z_ref), np.sort(ntf0[0]))
+        assert np.allclose(np.sort(p_ref), np.sort(ntf0[1]))
+        assert ntf0[2] == k_ref
 
