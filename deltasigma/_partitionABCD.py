@@ -91,6 +91,10 @@ def partitionABCD(ABCD, m=None, r=None):
     # remember the ABCD matrix is assembled like this:
     # [[A, B],
     #  [C, D]]
+    #
+    # n is the number of states,
+    # m is the number of inputs
+    # r is the number of outputs
     if m is None:
         # we guess: the system has either one input or one output. Most
         # likely one output, but we keep this for consistency with the

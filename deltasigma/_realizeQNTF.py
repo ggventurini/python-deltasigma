@@ -26,7 +26,7 @@ from ._evalTF import evalTF
 from ._partitionABCD import partitionABCD
 from ._utils import _get_zpk, diagonal_indices
 
-def realizeQNTF(ntf, form='FB', rot=False, bn=None):
+def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     """Convert a quadrature NTF into an ABCD matrix
 
     The basic idea is to equate the value of the loop filter at a set of
@@ -59,7 +59,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
         many coefficients as possible real.
     bn : float, optional
         Coefficient of the auxiliary DAC, to be specified for a
-        'PFF' form. Defaults to ``None.``
+        'FF' form. Defaults to ``0.0``.
 
     """
     #Code common to all forms
@@ -78,12 +78,12 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
         n_in = np.sum(inband_zeros)
         imageband_zeros = np.logical_not(inband_zeros)
         n_im = np.sum(imageband_zeros)
-        if np.any(not imageband_zeros[n_in:]):
+        if np.any(np.logical_not(imageband_zeros[n_in:])):
             raise ValueError('Please put the image-band zeros at the end of' +
                              'the ntf zeros')
         if n_im > 0:
             A[n_in, n_in-1] = 0.
-    D = np.zeros(shape=(1, 2), dtype='float64')
+    D = np.zeros(shape=(1, 2), dtype='complex64')
 
     # Find a set of points in the z-plane that are not close to zeros of H
     zSet = np.zeros((2*order, ), dtype='complex64')
@@ -100,20 +100,20 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
         C = np.hstack((np.zeros((1, order-1), dtype='complex64'),
                        np.atleast_2d(1)))
         # Compute F = C * inv(zI-A) at each z in zSet
-        F = np.zeros((max(zSet.shape), order), dtype='float64')
+        F = np.zeros((zSet.shape[0], order), dtype='complex64')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
-        B[:, 1] = np.linalg.solve(F, L1)
+        B[:, 1] = np.linalg.lstsq(F, L1)[0]
         if rot == True:
-            ABCD = np.vstack((np.hstack((A, B[:, 1])),
+            ABCD = np.vstack((np.hstack((A, B[:, 1].reshape((-1, 1)))),
                               np.hstack((C, np.atleast_2d(0)))))
             for i in range(order):
                 phi = np.angle(ABCD[i, -1])
                 ABCD[i, :] = ABCD[i, :]*np.exp(-1j*phi)
                 ABCD[:, i] = ABCD[:, i]*np.exp(+1j*phi)
             A, B2, C, _ = partitionABCD(ABCD)
-            B[:, 1] = B2
+            B[:, 1] = np.squeeze(B2)
         B[0, 0] = np.abs(B[0, 1])
     elif form == 'PFB':
         B = np.zeros((order, 2), dtype='complex64')
@@ -128,7 +128,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
         B[:, 1] = np.linalg.lstsq(F, L1)[0]
         if rot == True:
-            ABCD = np.vstack((np.hstack((A, B[:, 1].reshape((4, -1)))),
+            ABCD = np.vstack((np.hstack((A, B[:, 1].reshape((-1, 1)))),
                               np.hstack((C, np.atleast_2d(0)))))
             for i in range(order):
                 phi = np.angle(ABCD[i, -1])
@@ -139,18 +139,18 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
         B[0, 0] = np.abs(B[0, 1])
     elif form == 'FF':
         B0 = np.vstack((np.atleast_2d(1),
-                        np.zeros((order-1, 1), dtype='float64')))
+                        np.zeros((order-1, 1), dtype='complex64')))
         B = B0.copy()
         B[-1, 0] = bn
         # Compute F = inv(zI-A)*B at each z in zSet
-        F = np.zeros((order, zSet.shape[0]), dtype='float64')
+        F = np.zeros((order, zSet.shape[0]), dtype='complex64')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
-            F[:, i] = np.dot(np.linalg.inv(zSet[i]*I - A), B)
-        C = np.linalg.solve(L1.T, F)
+            F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
+        C = np.linalg.lstsq(F.T, L1.reshape((-1, 1)))[0]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),
-                              np.hstack((C, np.atleast_2d(0)))))
+                              np.hstack((C.T, np.atleast_2d(0)))))
             for i in range(1, order - 1):
                 phi = np.angle(ABCD[-1, i])
                 ABCD[i, :] = ABCD[i, :]*np.exp(+1j*phi)
@@ -159,15 +159,15 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=None):
         B = np.hstack((-B0, B))
     elif form == 'PFF':
         B0 = np.vstack((np.atleast_2d(1),
-                        np.zeros((order-1, 1), dtype='float64')))
+                        np.zeros((order-1, 1), dtype='complex64')))
         B = B0.copy()
         B[n_in] = 1.
         # Compute F = inv(zI-A)*B at each z in zSet
-        F = np.zeros((order, zSet.shape[0]), dtype='float64')
+        F = np.zeros((order, zSet.shape[0]), dtype='complex64')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
-            F[:, i] = np.dot(np.linalg.inv(zSet[i]*I - A), B)
-        C = np.linalg.solve(L1.T, F)
+            F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
+        C = np.linalg.lstsq(L1.reshape((-1, 1)), F.T)[0]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),
                               np.hstack((C, np.zeros((1, 1))))))

@@ -858,9 +858,9 @@ from ._bilogplot import bilogplot
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
+from ._calculateQTF import calculateQTF
 from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
-from ._calculateQTF import calculateQTF
 from ._cancelPZ import cancelPZ
 from ._changeFig import changeFig
 from ._circ_smooth import circ_smooth
@@ -878,10 +878,10 @@ from ._ds_optzeros import ds_optzeros
 from ._ds_quantize import ds_quantize
 from ._ds_synNTFobj1 import ds_synNTFobj1
 from ._dsclansNTF import dsclansNTF
-from ._evalMixedTF import evalMixedTF
-from ._evalRPoly import evalRPoly
 from ._evalF0 import evalF0
 from ._evalF1 import evalF1
+from ._evalMixedTF import evalMixedTF
+from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._evalTFP import evalTFP
 from ._figureMagic import figureMagic
@@ -915,6 +915,8 @@ from ._rms import rms
 from ._rmsGain import rmsGain
 from ._scaleABCD import scaleABCD
 from ._simulateDSM import simulateDSM, simulation_backends
+from ._simulateQDSM import simulateQDSM
+from ._simulateQSNR import simulateQSNR
 from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
