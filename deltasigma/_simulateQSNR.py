@@ -36,8 +36,6 @@ def simulateQSNR(ntf,
     """
     Determine the SNR for a quadrature delta-sigma modulator using simulations.
 
-    snr,amp = simulateQSNR(ntf,R,amp,f0=0,nlev=2,f=1/(4*R),k=13)
-
     The modulator is described by a Noise Transfer Function (NTF)
     and the number of quantizer levels.
 
@@ -65,7 +63,7 @@ def simulateQSNR(ntf,
     f : float, optional
         The input signal frequency, normalized such that :math:`1 \\rightarrow
         f_s`. It is rounded to an FFT bin. If not set, defaults to
-        :math:`1/(4\\cdotOSR)`.
+        :math:`1/(4\\cdot OSR)`.
     k : int, optional
         The integer ``k`` sets the length of the FFT, which is :math:`2^k`.
         Defaults to 13.

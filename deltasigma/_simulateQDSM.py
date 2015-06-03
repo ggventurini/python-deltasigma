@@ -34,16 +34,21 @@ from ._utils import carray, diagonal_indices, _is_zpk, _is_A_B_C_D, _is_num_den
 def simulateQDSM(u, arg2, nlev=2, x0=None):
     """Simulate a quadrature Delta-Sigma modulator
 
-    This function computes the output of a quadrature delta-sigma modulator with input u,
-    a structure described by ABCD, an initial state x0 (default all zeros) and
-    a quantizer whose number of levels is specified by nlev.
+    This function computes the output of a quadrature delta-sigma modulator with
+    input :math:`u`, a structure described by :math:`ABCD`, an initial state
+    :math:`x_0` (default all zeros) and a quantizer whose number of levels is
+    specified by :math:`n_{lev}`.
 
-    For multiple quantizers, make nlev a 1D vector;
-    for complex quantization to a diamond lattice, multiply nlev by 1j.
-    size(u) = [nu N], size(nlev) = [nq 1], size(ABCD) = [order+nq order+nq+nu]
+    For multiple quantizers, make :math:`n_{lev}` a 1D vector, for complex
+    quantization to a diamond lattice, multiply :math:`n_{lev}` by :math:`j`.
 
-    Alternatively, the modulator may be described by an NTF.
-    The NTF is zpk object. The STF is assumed to be 1.
+    In that case, the shapes of the input parameters are:
+    ``u.shape = (nu, N)``, ``nlev.shape = (nqi,)``,
+    ``ABCD.shape = (order+nq, order+nq+nu)``.
+
+    Alternatively, the modulator may be described by a supported NTF,
+    representation, in particular it is recommended to use a zpk object. In this
+    case, the STF is assumed to be 1.
 
     **Parameters:**
 
