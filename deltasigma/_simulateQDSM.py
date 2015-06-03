@@ -29,23 +29,55 @@ from scipy.signal import freqresp
 from ._ds_quantize import ds_quantize
 from ._evalTF import evalTF
 from ._partitionABCD import partitionABCD
-from ._utils import carray, diagonal_indices, _is_zpk
+from ._utils import carray, diagonal_indices, _is_zpk, _is_A_B_C_D, _is_num_den
 
 def simulateQDSM(u, arg2, nlev=2, x0=None):
-    """v, xn, xmax, y = simulateQDSM(u, ABCD, nlev=2, x0=0)
-     or
-    v, xn, xmax, y = simulateQDSM(u, ntf, nlev=2, x0=0)
+    """Simulate a quadrature Delta-Sigma modulator
 
-    Compute the output of a quadrature delta-sigma modulator with input u,
-    a structure described by ABCD, an initial state x0 (default zero) and
+    This function computes the output of a quadrature delta-sigma modulator with input u,
+    a structure described by ABCD, an initial state x0 (default all zeros) and
     a quantizer whose number of levels is specified by nlev.
-    For multiple quantizers, make nlev a column vector;
+
+    For multiple quantizers, make nlev a 1D vector;
     for complex quantization to a diamond lattice, multiply nlev by 1j.
-     size(u) = [nu N], size(nlev) = [nq 1], size(ABCD) = [order+nq order+nq+nu]
+    size(u) = [nu N], size(nlev) = [nq 1], size(ABCD) = [order+nq order+nq+nu]
 
     Alternatively, the modulator may be described by an NTF.
-    The NTF is zpk object. (The STF is assumed to be 1.)
+    The NTF is zpk object. The STF is assumed to be 1.
+
+    **Parameters:**
+
+    u : ndarray
+        The input signal to the modulator.
+    arg2 : ndarray or a supported LTI representation
+        A description of the modulator to simulate.
+        An ndarray instance is interpreted as an ABCD description. Equivalently,
+        the ABCD matrix may be supplied in ``(A, B, C, D)`` tuple form. All
+        other supported modulator specifications result in a conversion to a zpk
+        representation.
+    nlev : int or sequence-like, optional
+        The number of levels in the quantizer. If set to a sequence, each of the
+        elements is assumed to be the number of levels associated with a
+        quantizer. Defaults to ``2``.
+    x0 : float or sequence-like, optional
+        The initial states of the modulator. If it is set to a float, all states
+        are assumed to have the same value, ``x0``. If it is set to a
+        sequence-like objct (list, tuple, 1D ndarray and similar), each entry is
+        assumed to be the value of one of the modulator states, in ascending
+        order. Defaults to ``0``.
+
+    **Returns:**
+
+    v : ndarray
+        The quantizer output.
+    xn : ndarray
+        The modulator states.
+    xmax : nedarray
+        The maximum value that each state reached during simulation.
+    y : ndarray
+        The quantizer input (ie the modulator output).
     """
+
     nu = u.shape[0]
     nlev = np.atleast_1d(nlev)
     nq = max(nlev.shape)

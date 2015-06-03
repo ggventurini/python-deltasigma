@@ -113,7 +113,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
     xmax : nedarray
         The maximum value that each state reached during simulation.
     y : ndarray
-        The quantizer input.
+        The quantizer input (ie the modulator output).
 
     **Notes:**
 

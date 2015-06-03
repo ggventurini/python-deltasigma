@@ -40,8 +40,7 @@ def calculateQTF(ABCDr):
     ntf, stf, intf, istf : tuple of zpk tuples
         The quadrature noise and signal transfer functions.
 
-    :raises RuntimeError: if the supplied ABCD matrix results in denominator
-    mismatches.
+    :raises RuntimeError: if the supplied ABCD matrix results in denominator mismatches.
     """
     A, B, C, D = partitionABCD(ABCDr, 4)
 

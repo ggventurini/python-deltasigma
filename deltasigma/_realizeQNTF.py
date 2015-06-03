@@ -61,6 +61,11 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         Coefficient of the auxiliary DAC, to be specified for a
         'FF' form. Defaults to ``0.0``.
 
+    **Returns:**
+
+    ABCD : ndarray
+        ABCD realization of the requested type.
+
     """
     #Code common to all forms
     ntf_z, ntf_p, _ = _get_zpk(ntf)

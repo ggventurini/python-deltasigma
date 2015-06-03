@@ -703,11 +703,10 @@ Key Functions
     mapCtoD
     evalTFP
 
-Functions for quadrature systems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Functions for quadrature Delta-Sigma modulators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following functions are available for quadrature modulators.
-Completion of these features is expected in v. 0.2.
 
 .. autosummary::
     :nosignatures:
@@ -715,6 +714,10 @@ Completion of these features is expected in v. 0.2.
     calculateQTF
     mapQtoR
     mapRtoQ
+    realizeQNTF
+    simulateQDSM
+    simulateQSNR
+    synthesizeQNTF
 
 Other selected functions
 ~~~~~~~~~~~~~~~~~~~~~~~~
