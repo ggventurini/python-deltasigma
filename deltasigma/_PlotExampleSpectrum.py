@@ -32,6 +32,7 @@ from ._ds_hann import ds_hann
 from ._evalTF import evalTF
 from ._figureMagic import figureMagic
 from ._simulateDSM import simulateDSM
+from ._simulateQDSM import simulateQDSM
 from ._undbv import undbv
 
 
@@ -63,13 +64,6 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
                  Whether the delta sigma modulator is a quadrature
                  modulator or not. Defaults to ``False``.
 
-    .. note::
-
-        Quadrature modulators require the following currently unimplemented
-        functions: :func:`simulateQDSM` (expected v. 0.2).
-        Setting ``quadrature`` to ``True`` results in a
-        ``NotImplementedError`` being raised.
-
     .. plot::
 
         import pylab as plt
@@ -98,11 +92,9 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         u = Amp*M*np.cos((2*np.pi/N)*fin*t)
         v, _, xmax, y = simulateDSM(u, ntf, M+1)
     else:
-        raise NotImplementedError("The required simulateQDSM function " + \
-                                  "is not available yet.")
         t = np.arange(0, N).reshape((1, -1))
         u = Amp*M*np.exp((2j*np.pi/N)*fin*t)
-        v, xn, xmax, y = simulateQDSM(u, ntf, M + 1)
+        v, _, xmax, y = simulateQDSM(u, ntf, M+1)
     window = ds_hann(N)
     NBW = 1.5/N
     spec0 = fft(v * window)/(M*N/4)
@@ -131,13 +123,13 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         freq = np.linspace(-0.5, 0.5, N + 1)
         freq = freq[:-1]
         plt.plot(freq, dbv(spec0), 'c', linewidth=1)
-        plt.hold('on')
-        spec_smoothed = circ_smooth(abs(spec0) ** 2, 16)
+        plt.hold(True)
+        spec_smoothed = circ_smooth(abs(spec0)**2, 16)
         plt.plot(freq, dbp(spec_smoothed), 'b', linewidth=3)
         Snn = abs(evalTF(ntf, np.exp(2j * np.pi * freq))) ** 2 * 2 / 12 * (delta / M) ** 2
-        plt.plot(freq, dbp(Snn * NBW), 'm', linewidth=1)
-        snr = calculateSNR(spec0[N/2 + np.arange(f1_bin, f2_bin + 1)], fin - f1_bin)
-        msg = 'SQNR  =  %.1fdB\\n @ A = %.1fdBFS & osr = %.0f\\n' % \
+        plt.plot(freq, dbp(Snn*NBW), 'm', linewidth=1)
+        snr = calculateSNR(spec0[N/2 + f1_bin:N/2 + f2_bin + 1], fin - f1_bin)
+        msg = 'SQNR  =  %.1fdB\n @ A = %.1fdBFS & osr = %.0f' % \
               (snr, dbv(spec0[N/2 + fin]), osr)
         if f0 >=  0:
             plt.text(f0 - 0.05, - 15, msg, horizontalalignment='right',

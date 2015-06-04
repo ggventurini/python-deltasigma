@@ -24,7 +24,8 @@ import numpy as np
 
 import scipy
 
-from scipy.signal import freqresp
+from scipy.linalg import lstsq
+from scipy.signal import freqz
 
 from ._ds_quantize import ds_quantize
 from ._evalTF import evalTF
@@ -84,8 +85,11 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
     """
 
     nu = u.shape[0]
-    nlev = np.atleast_1d(nlev)
-    nq = max(nlev.shape)
+    if hasattr(nlev, '__len__'):
+        nlev = np.atleast_1d(nlev)
+        nq = max(nlev.shape)
+    else:
+        nq = 1
     if isinstance(arg2, scipy.signal.lti):
         k = arg2.k
         zeros = np.asarray(arg2.z)
@@ -123,9 +127,10 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
                         'an NTF.')
 
     if x0 is None:
-        x0 = np.zeros(shape=(order, ), dtype='float64')
+        x0 = np.zeros(shape=(order, 1), dtype='complex64')
     else:
         x0 = carray(x0)
+        x0 = np.atleast_2d(x0)
     if form == 1:
         A, B, C, D = partitionABCD(ABCD, nq + nu)
         D1 = D[:, :nu]
@@ -133,9 +138,9 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         # Create a FF realization of 1-1/H.
         # Note that MATLAB's zp2ss and canon functions don't work for complex
         # TFs.
-        A = np.zeros(shape=(order, order), dtype='float64')
+        A = np.zeros(shape=(order, order), dtype='complex64')
         B2 = np.vstack((np.atleast_2d(1), np.zeros(shape=(order-1, 1),
-                                                   dtype='float64')))
+                                                   dtype='complex64')))
         diag = diagonal_indices(A, 0)
         A[diag] = zeros
         subdiag = diagonal_indices(A, -1)
@@ -143,20 +148,25 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         # Compute C st C*inv(zI-A)*B = 1-1/H(z);
         w = 2*np.pi*np.random.rand(2*order)
         desired = 1 - 1.0/evalTF((zeros, poles, k), np.exp(1j*w))
+        desired.reshape((1, -1))
         # suppress warnings about complex TFs ???
-        sys = scipy.signal.lti(A, B2, np.eye(order), np.zeros((order, 1)))
-        # not clear why this is being reshaped
-        sysresp = np.reshape(freqresp(sys, w)[1], order, max(w.shape))
-        C = desired/sysresp
+        sysresp = np.zeros((order, w.shape[0]), dtype='complex64')
+        for i in range(order):
+            Ctemp = np.zeros((1, order))
+            Ctemp[0, i] = 1
+            sys = (A, B2, Ctemp, np.zeros((1, 1)))
+            n, d = scipy.signal.ss2tf(*sys)
+            sysresp[i, :] = freqz(n[0, :], d, w)[1]
+        C = lstsq(sysresp.T, desired.T)[0].T
         # !!!! Assume stf=1
         B1 = -B2
         B = np.hstack((B1, B2))
         D1 = 1
     N = max(u.shape)
-    v = np.zeros(shape=(nq, N), dtype='float64')
-    y = np.zeros(shape=(nq, N), dtype='float64')
+    v = np.zeros(shape=(nq, N), dtype='complex64')
+    y = np.zeros(shape=(nq, N), dtype='complex64')
     # Need to store the state information
-    xn = np.zeros(shape=(order, N), dtype='float64')
+    xn = np.zeros(shape=(order, N), dtype='complex64')
     # Need to keep track of the state maxima
     xmax = abs(x0.copy())
     for i in range(N):
@@ -164,10 +174,10 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         v[:, i] = ds_qquantize(y[:, i], nlev)
         x0 = np.dot(A, x0) + np.dot(B, np.vstack((u[:, i], v[:, i])))
         # Save the next state
-        xn[:, i] = x0
+        xn[:, i] = np.squeeze(x0)
         # Keep track of the state maxima
-        xmax = np.max(np.abs(x0), xmax)
-    return v, xn, xmax, y
+        xmax = np.max((np.abs(x0), xmax), axis=0)
+    return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
 def ds_qquantize(y, n=2):
     """Quadrature quantization
