@@ -107,6 +107,17 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         else:
             raise ValueError('The ABCD argument does not have proper ' +
                              'dimensions.')
+    elif _is_A_B_C_D(arg2):
+        ABCD = np.vstack((np.hstack((np.atleast_2d(arg2[0]),
+                                     np.atleast_2d(arg2[1]))),
+                          np.hstack((np.atleast_2d(arg2[2]),
+                                     np.atleast_2d(arg2[3])))))
+        form = 1
+        order = ABCD.shape[0] - nq
+    elif _is_num_den(arg2):
+        zeros, poles, k = tf2zpk(*arg)
+        form = 2
+        order = max(zeros.shape)
     else:
         raise TypeError('The second argument is neither an ABCD matrix nor ' +
                         'an NTF.')
