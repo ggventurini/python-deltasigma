@@ -40,13 +40,23 @@ class TestDocumentNTF(unittest.TestCase):
         self.ABCD = stuffABCD(a, g, b, c, form)
 
     def test_documentNTF1(self):
-        """Test function for DocumentNTF(): check plot with f0 = 0 1/2"""
+        """Test function for DocumentNTF(): check plot with f0 = 0 1/3"""
         # check that DocumentNTF plots with no errors.
         f0 = 0.0
         self.assertIsNone(ds.DocumentNTF(self.ABCD, self.osr, f0))
 
     def test_documentNTF2(self):
-        """Test function for DocumentNTF(): check plot with f0 = 0.333 2/2"""
+        """Test function for DocumentNTF(): check plot with f0 = 0.333 2/3"""
         f0 = 0.333
         self.assertIsNone(ds.DocumentNTF(self.ntf2, self.osr, f0))
+
+    def test_documentNTF3(self):
+        """Test function for DocumentNTF(): check plot with QNTF 3/3"""
+        order = 4
+        osr = 32
+        NG = -50
+        ING = -10
+        f0 = 1./16
+        ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
+        self.assertIsNone(ds.DocumentNTF(ntf0, osr, f0, quadrature=True))
 
