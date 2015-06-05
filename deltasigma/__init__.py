@@ -40,7 +40,7 @@ It aims to provide **a 1:1 Python port** of Richard Schreier's
 ***excellent*** `MATLAB Delta Sigma
 Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
-which it is very heavily based.\ |githalytics.com alpha|
+which it is very heavily based.
 
 Contents
 --------
@@ -350,9 +350,6 @@ Giuseppe Venturini and the python-deltasigma contributors.
 
 MATLAB is a registered trademark of The MathWorks, Inc.
 
-.. |githalytics.com alpha| image:: https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8
-   :target: http://githalytics.com/ggventurini/python-deltasigma
-   :width: 1
 .. |Build Status| image:: https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master
    :target: https://travis-ci.org/ggventurini/python-deltasigma
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
