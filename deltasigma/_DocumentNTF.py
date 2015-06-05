@@ -102,7 +102,7 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
         plt.plot(-np.array([f1, f2]), ING0*np.array([1, 1]), 'k', linewidth=3)
         plt.text(-f0, ING0 + 1, '%.0fdB' % ING0, horizontalalignment = 'center',
                  verticalalignment = 'bottom')
-        f_left = - 0.5
+        f_left = -0.5
     else:
         f_left = 0
     # variable 'f_left' used before assignment in DocumentNTF.m #REP
@@ -112,7 +112,8 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
         plt.text(f_left, 0, msg, horizontalalignment = 'left', verticalalignment = 'top')
     plt.grid(True)
     y_bot = min(-80, np.round(NG0*1.1, -1))
-    figureMagic(xRange=(f_left, 0.5), dx=1/20., yRange=(y_bot, 15), dy=10)
+    dx = 1./10 if quadrature else 1./20
+    figureMagic(xRange=(f_left, 0.5), dx=dx, yRange=(y_bot, 15), dy=10)
     plt.ylabel('|H(f)| dB')
     plt.xlabel('Frequency ($1 \\rightarrow f_{s}$)')
     plt.title('Frequency Response')
