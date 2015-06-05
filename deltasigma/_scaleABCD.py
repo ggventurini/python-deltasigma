@@ -23,6 +23,7 @@ import numpy.random as npr
 
 from ._partitionABCD import partitionABCD
 from ._simulateDSM import simulateDSM
+from ._simulateQDSM import simulateQDSM
 
 
 def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10):
@@ -35,7 +36,8 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     **Parameters:**
 
     ABCD : ndarray
-        The state-space description of the loop filter.
+        The state-space description of the loop filter, real or imaginary
+        (quadrature).
 
     nlev : int, optional
         The number of levels in the quantizer.
@@ -85,20 +87,18 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     else:
         quadrature = True
     npr.seed(0) # So that this function is repeatable
-    # Envelope for smooth start-up 
+    # Envelope for smooth start-up
     raised_cosine = 0.5*(1 - np.cos(np.pi/N0*np.arange(N0)))
 
     if umax is None:
         # Simulate the modulator with DC or sine wave inputs to detect its stable
-        # input range. 
+        # input range.
         # First get a rough estimate of umax.
         ulist = np.arange(0.1, 1.1, 0.1)*(nlev - 1)
         umax = nlev - 1
         N = 1000.0
-        u0 = np.hstack((
-                        np.exp(2j*np.pi*f*np.arange(- N0, 0))*raised_cosine, \
-                        np.exp(2j*np.pi*f*np.arange(0, N))
-                      )) \
+        u0 = np.hstack((np.exp(2j*np.pi*f*np.arange(-N0, 0))*raised_cosine, \
+                        np.exp(2j*np.pi*f*np.arange(0, N)))) \
               + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
         if not quadrature:
             u0 = np.real(u0)
@@ -106,8 +106,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
             if not quadrature:
                 v, x, xmax, y = simulateDSM(u*u0, ABCD, nlev)
             else:
-                raise NotImplementedError("simulateQDSM has not been implemented yet.")
-                #v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
+                v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
             if np.max(np.abs(y)) > ymax:
                 umax = u
                 # umax is the smallest input found which causes 'instability'
@@ -116,14 +115,12 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
             msg = 'Modulator is unstable even with an input amplitude of %.1f.'\
              % umax
             raise RuntimeError(msg)
-            
+
     # More detailed simulation
     N = N_sim
-    u0 = np.hstack((
-                    np.exp(2j*np.pi*f*np.arange(-N0, 0))*raised_cosine, \
-                    np.exp(2j*np.pi*f*np.arange(0, N))
-                  )) \
-            + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
+    u0 = np.hstack((np.exp(2j*np.pi*f*np.arange(-N0, 0))*raised_cosine, \
+                    np.exp(2j*np.pi*f*np.arange(0, N)))) \
+         + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
     if not quadrature:
         u0 = np.real(u0)
     maxima = np.zeros((1, order)) - 1
@@ -132,8 +129,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
         if not quadrature:
             v, x, xmax, y = simulateDSM(u*u0, ABCD, nlev)
         else:
-            raise NotImplementedError("simulateQDSM has not been implemented yet.")
-            #v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
+            v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
         if np.max(np.abs(y)) > ymax:
             break
         umax = u
@@ -142,8 +138,6 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
     S = np.diag(1.0/scale)
     Sinv = np.diag(scale)
     A, B, C, D = partitionABCD(ABCD)
-    ABCDs = np.vstack((
-                       np.hstack((np.dot(np.dot(S, A), Sinv), np.dot(S, B))),
-                       np.hstack((np.dot(C, Sinv), D))
-                     ))
+    ABCDs = np.vstack((np.hstack((np.dot(np.dot(S, A), Sinv), np.dot(S, B))),
+                       np.hstack((np.dot(C, Sinv), D))))
     return ABCDs, umax, S
