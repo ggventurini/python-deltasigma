@@ -4,7 +4,7 @@
 # Copyright 2014 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -15,6 +15,8 @@
 
 """This module provides the test class for the scaleABCD() function.
 """
+
+from __future__ import division, print_function
 
 import unittest
 import numpy as np
@@ -37,10 +39,9 @@ class TestScaleABCD(unittest.TestCase):
         # if you use a single feed-in for the input, b may be scalar too
         ABCD = ds.stuffABCD(a, g, b[0], c, form)
         # now we correct b for the assert
-        b = np.concatenate(( # Use a single feed-in for the input
-                            np.atleast_1d(b[0]),
-                            np.zeros((max(b.shape) - 1,))
-                          ))
+        # Use a single feed-in for the input
+        b = np.concatenate((np.atleast_1d(b[0]),
+                            np.zeros((max(b.shape) - 1,))))
         self.ABCD0 = ABCD.copy()
 
         # References
@@ -70,7 +71,7 @@ class TestScaleABCD(unittest.TestCase):
     def test_scaleABCD(self):
         """Test function for scaleABCD()"""
         ABCD, umax, S = ds.scaleABCD(self.ABCD0, self.nlev, self.f0)
-        # mapping the NTF to states, there is not a perfect match between 
+        # mapping the NTF to states, there is not a perfect match between
         # the original code and the scipy version. -> rtol approx 20%
         #if not np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=3e-1):
         #    aerr = ABCD_ref-ABCD
@@ -85,5 +86,48 @@ class TestScaleABCD(unittest.TestCase):
         self.assertTrue(np.allclose(umax, self.umax_ref, atol=1e-4, rtol=1e-3))
         self.assertTrue(np.allclose(np.diag(S), self.Sdiag_ref, atol=1e-2, rtol=25e-1))
 
-        
+    def test_scaleABCD_Q(self):
+        """Test function for scaleABCD() with Imag ABCD"""
+        order = 4
+        osr = 32
+        M = 8
+        NG = -50
+        ING = -10
+        f0 = 1./16
+        form = 'PFB'
+        nlev = M + 1
+        ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
+        ABCD = ds.realizeQNTF(ntf0, form, True)
+        ABCD, umax, S = ds.scaleABCD(ABCD, nlev, f0)
+
+        #references here because I prefer to have 1 file
+        umax_ref = 8
+        S_ref = np.array([[0.3586, 0., 0., 0.],
+                          [0., 0.1207, 0., 0.],
+                          [0., 0., 0.0805, 0.],
+                          [0., 0., 0., 0.3671]])
+        ABCD_ref = np.array([[0.888037198535288 + 0.459771610712905j,
+                              0.0 + 0.0j, 0.0 + 0.0j, 0.0 + 0.0j,
+                              0.0185052748572140 + 0.0j,
+                              0.0185052748572140 + 4.35415940995948e-18j],
+                             [0.204472470161495 + 0.267520232240738j,
+                              0.953044748762363 + 0.302829501298050j,
+                              0.0 + 0.0j, 0.0 + 0.0j, 0.0 + 0.0j,
+                              0.0389934281708177 + 0.0j],
+                             [0.0 + 0.0j,
+                              0.630626110921381 + 0.216330153871036j,
+                              0.923879532511340 + 0.382683432365112j,
+                              0.0 + 0.0j, 0.0 + 0.0j,
+                              0.0737451799430360 - 1.22879569706001e-17j],
+                             [0.0 + 0.0j, 0.0 + 0.0j, 0.0 + 0.0j,
+                              0.923879532511287 - 0.382683432365090j,
+                              0.0 + 0.0j,
+                              0.0652579452814600 + 1.01879713420556e-17j],
+                             [0.0 + 0.0j, 0.0 + 0.0j, -12.3424213726332 -
+                              1.41434395098423j, -2.01750453626270 -
+                              1.83077728688503j, 0.0 + 0.0j, 0.0 + 0.0j]])
+
+        assert np.allclose(ABCD, ABCD_ref, atol=1e-2, rtol=1e-2)
+        assert np.allclose(S, S_ref, atol=1e-3, rtol=1e-2)
+        assert umax == umax_ref
 
