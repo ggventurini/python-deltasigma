@@ -25,7 +25,7 @@ import numpy as np
 import scipy
 
 from scipy.linalg import lstsq
-from scipy.signal import freqz
+from scipy.signal import freqz, tf2zpk
 
 from ._ds_quantize import ds_quantize
 from ._evalTF import evalTF
@@ -119,7 +119,7 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         form = 1
         order = ABCD.shape[0] - nq
     elif _is_num_den(arg2):
-        zeros, poles, k = tf2zpk(*arg)
+        zeros, poles, k = tf2zpk(*arg2)
         form = 2
         order = max(zeros.shape)
     else:
