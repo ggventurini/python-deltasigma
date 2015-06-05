@@ -20,8 +20,10 @@ from __future__ import division, print_function
 
 import unittest
 import numpy as np
+
 import deltasigma as ds
 
+from scipy.signal import zpk2tf
 from nose.tools import raises
 
 class TestMapCtoD(unittest.TestCase):
@@ -46,8 +48,9 @@ class TestMapCtoD(unittest.TestCase):
                           np.hstack((LF[2], LF[3]))
                         ))
         H = ds.calculateTF(ABCD)
-        self.assertTrue(np.allclose(H[0].num, [ 1., -2.,  1.], atol=1e-8, rtol=1e-5))
-        self.assertTrue(np.allclose(H[0].den, [1., 0., 0.], atol=1e-8, rtol=1e-5))
+        num, den = zpk2tf(*H[0])
+        self.assertTrue(np.allclose(num, [ 1., -2.,  1.], atol=1e-8, rtol=1e-5))
+        self.assertTrue(np.allclose(den, [1., 0., 0.], atol=1e-8, rtol=1e-5))
 
     def test_mapCtoD_2(self):
         """Test function for mapCtoD() 2/6"""
