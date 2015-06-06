@@ -69,6 +69,8 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     """
     #Code common to all forms
     ntf_z, ntf_p, _ = _get_zpk(ntf)
+    ntf_z = np.sort_complex(ntf_z)
+    ntf_p = np.sort_complex(ntf_p)
     order = ntf_p.shape[0]
     form = form.upper()
 
@@ -152,11 +154,12 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
-        C = np.linalg.lstsq(F.T, L1.reshape((-1, 1)))[0]
+        L1 = L1.reshape((-1, 1))
+        C = np.linalg.lstsq(F.T, L1)[0].T
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),
-                              np.hstack((C.T, np.atleast_2d(0)))))
-            for i in range(1, order - 1):
+                              np.hstack((C, np.atleast_2d(0)))))
+            for i in range(1, order-1):
                 phi = np.angle(ABCD[-1, i])
                 ABCD[i, :] = ABCD[i, :]*np.exp(+1j*phi)
                 ABCD[:, i] = ABCD[:, i]*np.exp(-1j*phi)
@@ -172,11 +175,13 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
-        C = np.linalg.lstsq(L1.reshape((-1, 1)), F.T)[0]
+        L1 = L1.reshape((-1, 1))
+        C = np.linalg.lstsq(F.T, L1)[0].T
+        C = C[:, ::-1]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),
                               np.hstack((C, np.zeros((1, 1))))))
-            for i in range(1, order):
+            for i in range(1, order-1):
                 phi = np.angle(ABCD[-1, i])
                 ABCD[i, :] = ABCD[i, :]*np.exp(+1j*phi)
                 ABCD[:, i] = ABCD[:, i]*np.exp(-1j*phi)
