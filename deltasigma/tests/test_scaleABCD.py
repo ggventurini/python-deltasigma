@@ -99,7 +99,7 @@ class TestScaleABCD(unittest.TestCase):
                             [0.+0.j, 0.+0.j, -0.9935-0.1138j, -0.7405-0.672j,
                              0.+0.j, 0.+0.j]])
 
-        ABCD, umax, S = ds.scaleABCD(ABCD_IN, nlev=9, f0=1./16)
+        ABCD, umax, S = ds.scaleABCD(ABCD_IN, nlev=9, f=1./16)
 
         #references here because I prefer to have 1 file
         umax_ref = 8
