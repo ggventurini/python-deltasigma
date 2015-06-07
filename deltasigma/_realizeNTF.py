@@ -363,7 +363,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
         # THIS CODE IS NOT OPTIMAL,  in terms of computational efficiency.
         stfList = []
         for i in range(0, order + 1):
-            bi = np.zeros(1, order + 1)
+            bi = np.zeros((1, order + 1))
             bi[i] = 1
             ABCD = stuffABCD(a, g, bi, c, form)
             if form[2:4] == 'FF':
