@@ -94,10 +94,10 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
                              ' the ntf zeros')
         if n_im > 0:
             A[n_in, n_in-1] = 0.
-    D = np.zeros(shape=(1, 2), dtype='complex64')
+    D = np.zeros(shape=(1, 2), dtype='complex128')
 
     # Find a set of points in the z-plane that are not close to zeros of H
-    zSet = np.zeros((2*order, ), dtype='complex64')
+    zSet = np.zeros((2*order, ), dtype='complex128')
     for i in range(2*order):
         z = 2*rand(1) - 1 + 1j*(2*rand(1) - 1)
         while np.any(np.abs(z - ntf_z) < 0.1) or np.any(np.abs(z - zSet)) < 0.1:
@@ -107,11 +107,11 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     L1 = 1.0 - 1.0/evalTF(ntf, zSet)
 
     if form == 'FB':
-        B = np.zeros(shape=(order, 2), dtype='complex64')
-        C = np.hstack((np.zeros((1, order-1), dtype='complex64'),
+        B = np.zeros(shape=(order, 2), dtype='complex128')
+        C = np.hstack((np.zeros((1, order-1), dtype='complex128'),
                        np.atleast_2d(1)))
         # Compute F = C * inv(zI-A) at each z in zSet
-        F = np.zeros((zSet.shape[0], order), dtype='complex64')
+        F = np.zeros((zSet.shape[0], order), dtype='complex128')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
@@ -127,13 +127,13 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
             B[:, 1] = np.squeeze(B2)
         B[0, 0] = np.abs(B[0, 1])
     elif form == 'PFB':
-        B = np.zeros((order, 2), dtype='complex64')
+        B = np.zeros((order, 2), dtype='complex128')
         C = np.hstack((np.zeros((1, n_in-1)),
                        np.ones((1, 1)),
                        np.zeros((1, n_im-1)),
                        np.ones((1, 1))))
         # Compute F = C * inv(zI-A) at each z in zSet
-        F = np.zeros((zSet.shape[0], order), dtype='complex64')
+        F = np.zeros((zSet.shape[0], order), dtype='complex128')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
@@ -150,11 +150,11 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         B[0, 0] = np.abs(B[0, 1])
     elif form == 'FF':
         B0 = np.vstack((np.atleast_2d(1),
-                        np.zeros((order-1, 1), dtype='complex64')))
+                        np.zeros((order-1, 1), dtype='complex128')))
         B = B0.copy()
         B[-1, 0] = bn
         # Compute F = inv(zI-A)*B at each z in zSet
-        F = np.zeros((order, zSet.shape[0]), dtype='complex64')
+        F = np.zeros((order, zSet.shape[0]), dtype='complex128')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
@@ -171,11 +171,11 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         B = np.hstack((-B0, B))
     elif form == 'PFF':
         B0 = np.vstack((np.atleast_2d(1),
-                        np.zeros((order-1, 1), dtype='complex64')))
+                        np.zeros((order-1, 1), dtype='complex128')))
         B = B0.copy()
         B[n_in] = 1.
         # Compute F = inv(zI-A)*B at each z in zSet
-        F = np.zeros((order, zSet.shape[0]), dtype='complex64')
+        F = np.zeros((order, zSet.shape[0]), dtype='complex128')
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
