@@ -79,15 +79,19 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     A[subdiag] = 1.
     if form == 'PFB' or form == 'PFF':
         # partition the NTF zeros into in-band and image-band
-        fz = np.angle(ntf_z)/(2*np.pi)
-        f0 = fz[0]
-        inband_zeros = np.abs(fz - f0) < np.abs(fz + f0)
+        for _ in range(2):
+            # if the zeros are not correctly sorted, we sort them here
+            fz = np.angle(ntf_z)/(2*np.pi)
+            f0 = fz[0]
+            inband_zeros = np.abs(fz - f0) < np.abs(fz + f0)
+            ntf_z, inband_zeros = _move_zeros_to_the_end(ntf_z, inband_zeros)
         n_in = np.sum(inband_zeros)
         imageband_zeros = np.logical_not(inband_zeros)
         n_im = np.sum(imageband_zeros)
         if np.any(np.logical_not(imageband_zeros[n_in:])):
+            # this should never happen.
             raise ValueError('Please put the image-band zeros at the end of' +
-                             'the ntf zeros')
+                             ' the ntf zeros')
         if n_im > 0:
             A[n_in, n_in-1] = 0.
     D = np.zeros(shape=(1, 2), dtype='complex64')
@@ -192,3 +196,16 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     ABCD = np.vstack((np.hstack((A, B)), np.hstack((C, D))))
     return ABCD
 
+def _move_zeros_to_the_end(ntf_z, inband_zeros):
+    """RealizeQNTF requires the imageband zeros to be put at the end
+    of the list of zeros.
+
+    This function ensures exactly that.
+    """
+    to_the_end = [i for i, iz in enumerate(inband_zeros) if not iz]
+    for i, orig in enumerate(to_the_end):
+        ntf_z = np.append(ntf_z, ntf_z[orig - i])
+        ntf_z = np.delete(ntf_z, orig - i)
+        inband_zeros = np.append(inband_zeros, inband_zeros[orig - i])
+        inband_zeros = np.delete(inband_zeros, orig - i)
+    return ntf_z, inband_zeros
