@@ -27,10 +27,24 @@ import scipy
 from scipy.linalg import lstsq
 from scipy.signal import freqz, tf2zpk
 
+from ._config import _debug, setup_args
 from ._ds_quantize import ds_quantize
 from ._evalTF import evalTF
 from ._partitionABCD import partitionABCD
 from ._utils import carray, diagonal_indices, _is_zpk, _is_A_B_C_D, _is_num_den
+
+# try to import and, if necessary, compile the Cython-optimized
+# core of the simulation code`
+try:
+    import pyximport
+    pyximport.install(setup_args=setup_args, inplace=True)
+    from ._simulateQDSM_core import simulateQDSM_core
+except ImportError as e:
+    if _debug:
+        print(str(e))
+    # we'll just fall back to the Python version
+    pass
+
 
 def simulateQDSM(u, arg2, nlev=2, x0=None):
     """Simulate a quadrature Delta-Sigma modulator
@@ -84,6 +98,8 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         The quantizer input (ie the modulator output).
     """
 
+    if len(u.shape) == 1:
+        u = u.reshape((1, -1))
     nu = u.shape[0]
     if hasattr(nlev, '__len__'):
         nlev = np.atleast_1d(nlev)
@@ -127,20 +143,24 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
                         'an NTF.')
 
     if x0 is None:
-        x0 = np.zeros(shape=(order, 1), dtype='complex64')
+        x0 = np.zeros(shape=(order, 1), dtype='complex128')
     else:
         x0 = carray(x0)
-        x0 = np.atleast_2d(x0)
+        x0 = np.atleast_2d(x0).astype('complex128')
     if form == 1:
         A, B, C, D = partitionABCD(ABCD, nq + nu)
-        D1 = D[:, :nu]
+        A = A.astype('complex128')
+        B = B.astype('complex128')
+        C = C.astype('complex128')
+        D = D.astype('complex128')
+        D1 = D[:, :nu].reshape((-1, nu))
     else:
         # Create a FF realization of 1-1/H.
         # Note that MATLAB's zp2ss and canon functions don't work for complex
         # TFs.
-        A = np.zeros(shape=(order, order), dtype='complex64')
+        A = np.zeros(shape=(order, order), dtype='complex128')
         B2 = np.vstack((np.atleast_2d(1), np.zeros(shape=(order-1, 1),
-                                                   dtype='complex64')))
+                                                   dtype='complex128')))
         diag = diagonal_indices(A, 0)
         A[diag] = zeros
         subdiag = diagonal_indices(A, -1)
@@ -150,44 +170,18 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         desired = 1 - 1.0/evalTF((zeros, poles, k), np.exp(1j*w))
         desired.reshape((1, -1))
         # suppress warnings about complex TFs ???
-        sysresp = np.zeros((order, w.shape[0]), dtype='complex64')
+        sysresp = np.zeros((order, w.shape[0]), dtype='complex128')
         for i in range(order):
             Ctemp = np.zeros((1, order))
             Ctemp[0, i] = 1
             sys = (A, B2, Ctemp, np.zeros((1, 1)))
             n, d = scipy.signal.ss2tf(*sys)
             sysresp[i, :] = freqz(n[0, :], d, w)[1]
-        C = lstsq(sysresp.T, desired.T)[0].T
+        C = lstsq(sysresp.T, desired.T)[0].reshape((1, -1))
         # !!!! Assume stf=1
         B1 = -B2
         B = np.hstack((B1, B2))
-        D1 = 1
-    N = max(u.shape)
-    v = np.zeros(shape=(nq, N), dtype='complex64')
-    y = np.zeros(shape=(nq, N), dtype='complex64')
-    # Need to store the state information
-    xn = np.zeros(shape=(order, N), dtype='complex64')
-    # Need to keep track of the state maxima
-    xmax = abs(x0.copy())
-    for i in range(N):
-        y[:, i] = np.dot(C, x0) + np.dot(D1, u[:, i])
-        v[:, i] = ds_qquantize(y[:, i], nlev)
-        x0 = np.dot(A, x0) + np.dot(B, np.vstack((u[:, i], v[:, i])))
-        # Save the next state
-        xn[:, i] = np.squeeze(x0)
-        # Keep track of the state maxima
-        xmax = np.max((np.abs(x0), xmax), axis=0)
+        D1 = np.ones((1, 1), dtype='complex128')
+    v, xn, xmax, y = simulateQDSM_core(u, A, B, C, D1, order, nlev, nq, x0)
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
-
-def ds_qquantize(y, n=2):
-    """Quadrature quantization
-    """
-    if np.isreal(n):
-        v = ds_quantize(np.real(y), n) + 1j*ds_quantize(np.imag(y), n)
-    else:
-        ytmp = np.concatenate((np.real(y) + np.imag(y),
-                               np.real(y) - np.imag(y)))
-        v = np.dot(ds_quantize(ytmp, np.abs(n)),
-                   np.array([[1 + 1j], [1 - 1j]]))/2.
-    return v
 
