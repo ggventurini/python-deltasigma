@@ -6,7 +6,7 @@ bilogplot.m,M-file,x,plotting,0.1
 bplogsmooth.m,M-file,x,plotting,0.1
 bquantize.m,M-file,x,,0.1
 bunquantize.m,M-file,x,,0.1
-calculateQTF.m,M-file,,,0.2
+calculateQTF.m,M-file,x,,0.2
 calculateSNR.m,M-file,x,,0.1
 calculateTF.m,M-file,x,,0.1
 cancelPZ.m,M-file,x,,0.1
@@ -96,7 +96,7 @@ printmif.m,M-file,x,plotting,NA
 pulse.m,M-file,x,,0.1
 realizeNTF_ct.m,M-file,x,,0.1
 realizeNTF.m,M-file,x,,0.1
-realizeQNTF.m,M-file,,,0.2
+realizeQNTF.m,M-file,x,,0.2
 rmsGain.m,M-file,x,,0.1
 rms.m,M-file,x,,0.1
 scaleABCD.m,M-file,x,,0.1
@@ -106,9 +106,9 @@ simulateDSM.m,M-file,x,,0.1
 simulateESL.c,C,,,0.3
 simulateESL.m,M-file,,,0.3
 simulateHBF.m,M-file,,,0.4
-simulateQDSM.m,M-file,,,0.2
+simulateQDSM.m,M-file,x,,0.2
 simulateQESL.m,M-file,,,0.3
-simulateQSNR.m,M-file,,,0.2
+simulateQSNR.m,M-file,x,,0.2
 simulateSNR.m,M-file,x,,0.1
 sinc_decimate.m,M-file,x,,0.1
 SIunits.m,M-file,x,,0.1
@@ -117,7 +117,7 @@ synthesizeChebyshevNTF.m,M-file,x,,0.1
 synthesizeNTF0.m,M-file,x,,0.1
 synthesizeNTF1.m,M-file,x,,0.1
 synthesizeNTF.m,M-file,x,,0.1
-synthesizeQNTF.m,M-file,,,0.2
+synthesizeQNTF.m,M-file,x,,0.2
 thermometer.m,M-file,x,,0.3
 undbm.m,M-file,x,,0.1
 undbp.m,M-file,x,,0.1
