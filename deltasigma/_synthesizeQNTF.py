@@ -73,6 +73,29 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
         This function uses an experimental ad-hoc method that is
         neither optimal nor robust.
 
+    **Example:**
+
+    Fourth order quadrature modulator::
+
+        from deltasigma import *
+        order = 4
+        osr = 32
+        NG = -50
+        ING = -10
+        f0 = 1 / 16
+        ntf0 = synthesizeQNTF(order, osr, f0, NG, ING)
+        pretty_lti(ntf0)
+
+    Returns::
+
+          (z - 0.888 - 0.4598j) (z - 0.9239 + 0.3827j) (z - 0.9239 - 0.3827j) (z - 0.953 - 0.3028j)  
+          ---------------------------------------------------------------------------------------------
+           (z - 0.5739 - 0.5699j) (z - 0.5913 - 0.2449j) (z - 0.6731 + 0.2788j) (z - 0.8088 - 0.0028j) 
+
+
+    .. image:: _static/synthesizeQNTF.png
+
+
     """
     if n_im is None:
         n_im = np.floor(order/3)
