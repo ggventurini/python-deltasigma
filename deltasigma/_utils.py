@@ -339,18 +339,29 @@ def pretty_lti(arg):
     for i, s in zip((0, 2), (z, p)):
         rz = None
         m = 1
-        sorted_singularities = cplxpair(s)
+        try:
+            sorted_singularities = cplxpair(s)
+            quadrature = False
+        except ValueError:
+            # quadrature modulator
+            sorted_singularities = np.sort_complex(s)
+            quadrature = True
         for zindex, zi in enumerate(sorted_singularities):
             zi = np.round(np.real_if_close(zi), 4)
-            if np.isreal(zi):
+            if np.isreal(zi) or quadrature:
                 if len(sorted_singularities) > zindex + 1 and \
                     sorted_singularities[zindex + 1] == zi:
                     m += 1
                     continue
                 if zi == 0.:
                     ppstr[i] += "z"
-                else:
+                elif np.isreal(zi):
                     ppstr[i] += "(z %s %g)" % (signs[np.sign(-zi)], np.abs(zi))
+                else:
+                    ppstr[i] += "(z %s %g %s %gj)" % (signs[np.sign(np.real(-zi))],
+                                                      np.abs(np.real(zi)),
+                                                      signs[np.sign(np.imag(-zi))],
+                                                      np.abs(np.imag(zi)))
                 if m == 1:
                     ppstr[i] += " "
                 else:
