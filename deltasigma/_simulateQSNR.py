@@ -80,8 +80,8 @@ def simulateQSNR(ntf,
 
     """
     if amp is None:
-        amp = np.concatenate((np.arange(-120, 30, 10),
-                              np.atleast_1d(15),
+        amp = np.concatenate((np.arange(-120, -20+1, 10),
+                              np.atleast_1d(-15),
                               np.arange(-10, 1)))
         if f is None:
             f = f0 + 1./(4*R)
