@@ -22,10 +22,12 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
+from scipy.signal import lti
+
 from deltasigma import synthesizeNTF
 
 from deltasigma._utils import *
-from deltasigma._utils import _get_zpk, _get_num_den
+from deltasigma._utils import _get_zpk, _get_num_den, _getABCD
 from deltasigma._constants import eps
 
 def test_rat():
@@ -299,3 +301,15 @@ def test_mround():
     tv = [-1.9, -0.5, -0.2, 3.4, 4.5, 5.6, 7.0, 2.4 + 3.6j]
     tres = [-2.0, -1.0,  0.0, 3.0, 5.0, 6.0, 7.0, 2.0 + 4.0j]
     assert mround(tv) == tres
+
+def test_getABCD():
+    H = lti(*((1.,),(-2, -2), 1))
+    x1 = _getABCD(H)
+    x2 = _getABCD((H.num, H.den))
+    x3 = _getABCD((H.zeros, H.poles, H.gain))
+    x4 = _getABCD((H.A, H.B, H.C, H.D))
+    for y1, y2, y3, y4 in zip(x1, x2, x3, x4):
+        assert np.allclose(y1, y2)
+        assert np.allclose(y1, y3)
+        assert np.allclose(y1, y4)
+
