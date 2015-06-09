@@ -20,7 +20,7 @@ which it is very heavily based. |githalytics.com alpha|
 **Documentation:**
 `docs.python-deltasigma.io <http://docs.python-deltasigma.io>`__
 
-**Latest version:** `0.1 <https://pypi.python.org/pypi/deltasigma/>`__
+**Latest version:** `0.2 <https://pypi.python.org/pypi/deltasigma/>`__
 
 |Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2
 clause license| |DOI BADGE|
@@ -132,7 +132,7 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://travis-ci.org/ggventurini/python-deltasigma
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
-.. |PyPi version| image:: http://img.shields.io/badge/version-0.1-brightgreen.png
+.. |PyPi version| image:: http://img.shields.io/badge/version-0.2-brightgreen.png
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image:: https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
