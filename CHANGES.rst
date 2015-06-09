@@ -1,11 +1,22 @@
 CHANGES
 ~~~~~~~
 
-Version 0.1 series
+Version 0.2 series
 ------------------
 
-The 0.1 series features support for (real) baseband and passband modulator
-topologies.
+The 0.2 series features support for real and quadrature baseband and passband
+modulator topologies.
+
+**0.2.0**: Add support for quadrature modulators.
+ * Add ``simulateQDSM()``,
+ * Add ``synthesizeQNTF()``,
+ * Add ``realizeQNTF()``,
+ * Add ``simulateQSNR()``,
+ * Add ``calculateQTF()``.
+ * Several functions have been extened to support quadrature modulator.
+
+Version 0.1 series
+------------------
 
 **0.1-10**: Bugfix and additional options in ``changeFig()``.
  * BUGFIX: ship Cython sources in the package.
