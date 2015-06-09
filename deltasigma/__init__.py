@@ -40,7 +40,7 @@ It aims to provide **a 1:1 Python port** of Richard Schreier's
 ***excellent*** `MATLAB Delta Sigma
 Toolbox <http://www.mathworks.com/matlabcentral/fileexchange/19-delta-sigma-toolbox>`__,
 the *de facto* standard tool for high-level delta sigma simulation, upon
-which it is very heavily based.\ |githalytics.com alpha|
+which it is very heavily based.
 
 Contents
 --------
@@ -55,12 +55,11 @@ Status
 
 This project is a *work in progress*, not all functionality has been
 ported, yet. The next figure shows the relationship between the main functions
-and the avaliable functionality at a glance.
+and the available functionality at a glance.
 
 .. image:: ../doc/_static/functionality.png
 
-All the basic features are available since v. 0.1. A detailed changelog may be
-found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
+A detailed changelog may be found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
 
 Detailed information split by file and function status may be found in
 `files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
@@ -223,7 +222,7 @@ necessary for developers.
 Building the documentation requires the
 `sphinx <http://sphinx-doc.org/>`__ package. It is an optional step,
 as the `the latest documentation is available
-online <http://python-deltasigma.readthedocs.org/en/latest/>`__, without
+on line <http://python-deltasigma.readthedocs.org/en/latest/>`__, without
 need for you to build it.
 
 If you plan to modify the code, `python-deltasigma` comes with a complete
@@ -282,7 +281,7 @@ is reasonable to do so:
    ``NaN`` default values have their default value replaced with
    ``None``.
 
--  If a function has a varible number of return values, its Python port
+-  If a function has a variable number of return values, its Python port
    should implement the maximum number of return values.
 
 No commit should ever fail the test suite.
@@ -350,14 +349,11 @@ Giuseppe Venturini and the python-deltasigma contributors.
 
 MATLAB is a registered trademark of The MathWorks, Inc.
 
-.. |githalytics.com alpha| image:: https://cruel-carlota.pagodabox.com/36f25accf60f391456efe66910bf84f8
-   :target: http://githalytics.com/ggventurini/python-deltasigma
-   :width: 1
 .. |Build Status| image:: https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master
    :target: https://travis-ci.org/ggventurini/python-deltasigma
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
-.. |PyPi version| image:: http://img.shields.io/badge/version-0.1-brightgreen.png
+.. |PyPi version| image:: http://img.shields.io/badge/version-0.2-brightgreen.png
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image::  https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
@@ -619,7 +615,7 @@ Where we define the vector :math:`K` as:
 
 In the ideal case, provided that the impulse responses have been evaluated for
 a sufficiently high number of points :math:`N` (:math:`N > order`), the
-equation has a exact solution, indepently of :math:`N` [R2]_.
+equation has a exact solution, independently of :math:`N` [R2]_.
 
 In presence of non-idealities, it is possible to use Least Squares fitting to
 find the optimum :math:`\{k_i\}`.
@@ -686,57 +682,84 @@ Package contents
 Key Functions
 ~~~~~~~~~~~~~
 
-.. autosummary::
-    :nosignatures:
 
-    synthesizeNTF
-    clans
-    synthesizeChebyshevNTF
-    simulateDSM
-    simulateSNR
-    realizeNTF
-    stuffABCD
-    mapABCD
-    scaleABCD
-    calculateTF
-    realizeNTF_ct
-    mapCtoD
-    evalTFP
+==============================  =======================================================================================
+:func:`synthesizeNTF`           Synthesize a Noise Transfer Function (NTF) for a delta-sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`clans`                   Optimal NTF design for a multi-bit modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`synthesizeChebyshevNTF`  Synthesize a noise transfer function for a delta-sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`simulateDSM`             Simulate a delta-sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`simulateSNR`             Determine the SNR for a delta-sigma modulator by using simulations.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`realizeNTF`              Convert an NTF into coefficients for the desired structure.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`stuffABCD`               Calculate the ABCD matrix from the parameters of a modulator topology.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mapABCD`                 Compute the coefficients for a given modulator topology.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`scaleABCD`               Scale the loop filter of a general delta-sigma modulator for dynamic range.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`calculateTF`             Calculate the NTF and STF of a delta-sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`realizeNTF_ct`           Realize an NTF with a continuous-time loop filter.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mapCtoD`                 Map a MIMO continuous-time modulator to an equivalent discrete-time counterpart.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`evalTFP`                 Evaluate a continuous-time - discrete-time transfer function product.
+==============================  =======================================================================================
 
-Functions for quadrature systems
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Functions for quadrature delta-sigma modulators
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Notice the current version of ``python-deltasigma`` cannot synthesize
-quadrature modulators. This feature is expected in v. 0.2.
+Several of the previous functions also handle quadrature modulators.
 
-Nontheless, the following functions are provided since if you already have
-a synthesized modulator (or know its ABCD matrix), they allow you to simulate
-the modulator with the standard tools for real ABCDs topologies.
+In addition to those, the following are available specifically for quadrature modulators:
 
-.. autosummary::
-    :nosignatures:
-
-    mapQtoR
-    mapRtoQ
+==============================  =======================================================================================
+:func:`synthesizeQNTF`          Synthesize a noise transfer function for a quadrature modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`realizeQNTF`             Convert a quadrature NTF into an ABCD matrix.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`simulateQDSM`            Simulate a quadrature Delta-Sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`simulateQSNR`            Determine the SNR for a quadrature delta-sigma modulator using simulations.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`calculateQTF`            Calculate noise and signal transfer functions for a quadrature modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mapQtoR`                 Map a quadrature ABCD matrix to a real one.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mapRtoQ`                 Map a real ABCD matrix to a quadrature one.
+==============================  =======================================================================================
 
 Other selected functions
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following are auxiliary functions that complement the key functions above.
 
-.. autosummary::
-    :nosignatures:
-
-    mod1
-    mod2
-    calculateSNR
-    predictSNR
-    partitionABCD
-    infnorm
-    impL1
-    l1norm
-    pulse
-    rmsGain
+==============================  =======================================================================================
+:func:`mod1`                    A description of the first-order modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mod2`                    A description of the second-order modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`calculateSNR`            Estimate the SNR from the FFT.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`predictSNR`              Predict the SNR curve of a binary delta-sigma modulator.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`partitionABCD`           Partition ABCD matrix into the state-space matrices A, B, C, D.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`infnorm`                 Find the infinity norm of a z-domain transfer function.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`impL1`                   Impulse response evaluation for NTFs.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`l1norm`                  Compute the l1-norm of a z-domain transfer function.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`pulse`                   Calculate the sampled pulse response of a CT system.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`rmsGain`                 Compute the root mean-square gain of a discrete-time TF.
+==============================  =======================================================================================
 
 Utility functions for simulation of delta-sigma modulators
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -744,87 +767,127 @@ Utility functions for simulation of delta-sigma modulators
 Functions for low-level handling of delta-sigma modulator representations,
 their evaluation and filtering.
 
-.. autosummary::
-    :nosignatures:
 
-    bquantize
-    bunquantize
-    cancelPZ
-    circshift
-    delay
-    ds_f1f2
-    ds_freq
-    ds_hann
-    ds_optzeros
-    ds_quantize
-    ds_synNTFobj1
-    dsclansNTF
-    evalMixedTF
-    evalRPoly
-    evalTF
-    nabsH
-    peakSNR
-    sinc_decimate
-    zinc
+==============================  =======================================================================================
+:func:`bquantize`               Bidirectionally quantize a 1D vector x to nsd signed digits.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`bunquantize`             The value corresponding to a bidirectionally quantized quantity.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`delay`                   Delay a signal by a give number of samples.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`ds_f1f2`                 Get the neighbouring frequencies to the carrier to calculate the SNR.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`ds_freq`                 Frequency vector suitable for plotting the frequency response of an NTF.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`ds_hann`                 A Hanning (Hann) window of given length.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`ds_quantize`             Quantize a vector.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`dsclansNTF`              Conversion of CLANS parameters into a NTF.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`evalMixedTF`             Evaluate a mixed-signal transfer function.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`evalRPoly`               Compute the value of a polynomial which is given in terms of its roots.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`evalTF`                  Evaluate the rational transfer function (TF) at the given z point(s).
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`nabsH`                   Compute the negative of the absolute value of H.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`peakSNR`                 Find the SNR peak by fitting the SNR curve.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`sinc_decimate`           Decimate a vector by a sinc filter of given order and length.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`zinc`                    Calculate the magnitude response of a cascade of n m-th order comb filters.
+==============================  =======================================================================================
 
 General utilities for data processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The following are generic functions, useful for misc. tasks, like
-manipulating data, conversions or padding, for example.
-They provide speciality functions which are not otherwise available
-in the usual scientific Python stack.
+The following are functions useful for misc. tasks, like manipulating data,
+conversions or padding, for example.
+They provide specialty functions which are not otherwise available in the usual
+scientific Python stack.
 
-.. autosummary::
-    :nosignatures:
 
-    db
-    dbm
-    dbp
-    dbv
-    undbm
-    undbp
-    undbv
-    rms
-    padb
-    padl
-    padr
-    padt
-    cplxpair
-    mfloor
-    mround
-    rat
-    gcd
-    lcm
+==============================  =======================================================================================
+:func:`circshift`               Shift an array circularly.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`cplxpair`                Sort complex roots into complex conjugate pairs.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`db`                      Calculate the dB equivalent of a given RMS signal.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`dbm`                     Calculate the dBm equivalent of a given RMS voltage.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`dbp`                     Calculate the dB equivalent of a given power ratio.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`dbv`                     Calculate the dB equivalent of a given voltage ratio.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`gcd`                     Calculate the Greatest Common Divisor (GCD) of two integers.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`lcm`                     Calculate the Least Common Multiple (LCD) of two integers.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mfloor`                  Round a vector towards ``-Inf``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`mround`                  Round a vector to the nearest integers.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`padb`                    Pad a matrix on the bottom to length ``n`` with value ``val``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`padl`                    Pad a matrix on the left to length ``n`` with value ``val``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`padr`                    Pad a matrix on the right to length ``n`` with value ``val``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`padt`                    Pad a matrix on the top to length ``n`` with value ``val``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`rat`                     Rational fraction approximation.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`rms`                     Calculate the RMS value of ``x``.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`undbm`                   Calculate the RMS voltage equivalent to a given power expressed in dBm.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`undbp`                   Calculate the power equivalent to a given value in dB.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`undbv`                   Calculate the voltage ratio equivalent to a given power expressed in dB.
+==============================  =======================================================================================
 
 Plotting and data display utilitites
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Graphic functions:
 
-.. autosummary::
-    :nosignatures:
+==============================  =======================================================================================
+:func:`DocumentNTF`             Plot the NTF’s poles and zeros as well as its frequency-response.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`PlotExampleSpectrum`     Plot a spectrum suitable to exemplify the NTF performance.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`axisLabels`              Utility function to quickly generate the alphanumeric labels for a plot axis.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`bilogplot`               Plot the spectrum of a band-pass modulator in dB.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`changeFig`               Quickly change several figure parameters.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`figureMagic`             Utility function to quickly set several plot parameters.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`lollipop`                Plot lollipops (o’s and sticks).
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`plotPZ`                  Plot the poles and zeros of a transfer function.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`plotSpectrum`            Plot a smoothed spectrum on a LOG x-axis.
+==============================  =======================================================================================
 
-    plotPZ
-    plotSpectrum
-    figureMagic
-    DocumentNTF
-    PlotExampleSpectrum
-    axisLabels
-    bilogplot
-    lollipop
-    changeFig
 
-Textual and non-graphic display-related functions
+Textual and non-graphic, display-related functions:
 
-.. autosummary::
-    :nosignatures:
-
-    circ_smooth
-    bplogsmooth
-    logsmooth
-    pretty_lti
-    SIunits
+==============================  =======================================================================================
+:func:`SIunits`                 Calculates the factor for representing a given value in engineering notation.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`bplogsmooth`             Smooth the FFT and convert it to dB.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`circ_smooth`             Smooth the PSD for linear x-axis plotting.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`logsmooth`               Smooth the FFT, and convert it to dB.
+------------------------------  ---------------------------------------------------------------------------------------
+:func:`pretty_lti`              A pretty representation of a TF, suitable for printing to screen.
+==============================  =======================================================================================
 
 All functions in alphabetical order
 -----------------------------------
@@ -835,7 +898,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.1-10'
+__version__ = '0.2.0'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
@@ -861,6 +924,7 @@ from ._bilogplot import bilogplot
 from ._bplogsmooth import bplogsmooth
 from ._bquantize import bquantize
 from ._bunquantize import bunquantize
+from ._calculateQTF import calculateQTF
 from ._calculateSNR import calculateSNR
 from ._calculateTF import calculateTF
 from ._cancelPZ import cancelPZ
@@ -880,10 +944,10 @@ from ._ds_optzeros import ds_optzeros
 from ._ds_quantize import ds_quantize
 from ._ds_synNTFobj1 import ds_synNTFobj1
 from ._dsclansNTF import dsclansNTF
-from ._evalMixedTF import evalMixedTF
-from ._evalRPoly import evalRPoly
 from ._evalF0 import evalF0
 from ._evalF1 import evalF1
+from ._evalMixedTF import evalMixedTF
+from ._evalRPoly import evalRPoly
 from ._evalTF import evalTF
 from ._evalTFP import evalTFP
 from ._figureMagic import figureMagic
@@ -912,15 +976,19 @@ from ._predictSNR import predictSNR
 from ._pulse import pulse
 from ._realizeNTF import realizeNTF
 from ._realizeNTF_ct import realizeNTF_ct
+from ._realizeQNTF import realizeQNTF
 from ._rms import rms
 from ._rmsGain import rmsGain
 from ._scaleABCD import scaleABCD
 from ._simulateDSM import simulateDSM, simulation_backends
+from ._simulateQDSM import simulateQDSM
+from ._simulateQSNR import simulateQSNR
 from ._simulateSNR import simulateSNR
 from ._sinc_decimate import sinc_decimate
 from ._stuffABCD import stuffABCD
 from ._synthesizeChebyshevNTF import synthesizeChebyshevNTF
 from ._synthesizeNTF import synthesizeNTF
+from ._synthesizeQNTF import synthesizeQNTF
 from ._thermometer import thermometer
 from ._undbm import undbm
 from ._undbp import undbp

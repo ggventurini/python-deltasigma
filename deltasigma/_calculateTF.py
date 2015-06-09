@@ -169,8 +169,8 @@ def calculateTF(ABCD, k=1.):
     for i in range(Dcl.shape[0]):
         # input #0 is the signal
         # inputs #1,... are quantization noise
-        stf_p, stf_z, stf_k  = ss2zpk(Acl, Bcl, Ccl[i, :], Dcl[i, :], input=0)
-        stf = lti(stf_p, stf_z, stf_k)
+        stf_z, stf_p, stf_k  = ss2zpk(Acl, Bcl, Ccl[i, :], Dcl[i, :], input=0)
+        stf = lti(stf_z, stf_p, stf_k)
         for j in range(nq):
             ntf_z, ntf_p, ntf_k = ss2zpk(Acl, Bcl, Ccl[i, :], Dcl[i, :], input=j+1)
             ntf = lti(ntf_z, ntf_p, ntf_k)

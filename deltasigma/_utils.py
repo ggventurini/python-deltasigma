@@ -144,9 +144,10 @@ def minreal(tf, tol=None):
 
     **Returns:**
 
-    tf_simplified : supported TF representation or list
-        A list of TFs or a TF, depending on the input type, each of them
-        represented by an LTI object.
+    tf_simplified : tuple or list of tuples
+        A list of TFs in zpk format or a TF (aain in zpk format), depending
+        whether a single TF or a list of multiple TFs were passed to the
+        function.
     """
     # initially based on python-control
     # which is in turn based on octave minreal
@@ -194,25 +195,32 @@ def minreal(tf, tol=None):
         else:
             # no matching pole
             reducedzeros.append(z)
-    if len(reducedzeros):
-        newzeros = carray(reducedzeros)
-        num = k * np.real(np.poly(newzeros))
-    else:
-        num = np.array([k])
-    den = np.real(np.poly(poles))
-
-    return lti(num, den)
+    newzeros = carray(reducedzeros)
+    return (newzeros, poles, k)
 
 
 def diagonal_indices(a, offset=0):
-    """Return the indices to the main diagonal of a 2D array a (if offset = 0),
-    or to a secondary diagonal, having the offset from the main one as specified.
+    """The indices to the diagonal of a 2D array ``a``
 
-    The array a does not need to be square.
+    The indices are those to the main diagonal (if ``offset`` is 0), or to a
+    secondary diagonal, having the specified offset from the main one.
 
-    Note: the sup-diagonal is at offset +1, the sub-diagonal at offset -1.
+    The array ``A`` does not need to be square.
 
-    Returns: (xs, ys)
+    **Parameters:**
+
+    a : ndarray
+        The 2D ndarray for which the diagonal indices should be calculated.
+    offset : int, optional
+        The diagonal offset from the main one. Note that the sup-diagonal is at
+        offset +1, the sub-diagonal at offset -1, and so on. Defaults to 0,
+        which corresponds to the main diagonal.
+
+    **Returns:**
+
+    xs, ys : tuples
+        The indices in the two coordinates. Thanks to ``numpy``'s advanced
+        slicing, the diagonal may be accessed with ``A[(xs, ys)]``.
     """
     di, dj = np.diag_indices_from(a[:min(a.shape), :min(a.shape)])
     if offset > 0:
@@ -331,18 +339,29 @@ def pretty_lti(arg):
     for i, s in zip((0, 2), (z, p)):
         rz = None
         m = 1
-        sorted_singularities = cplxpair(s)
+        try:
+            sorted_singularities = cplxpair(s)
+            quadrature = False
+        except ValueError:
+            # quadrature modulator
+            sorted_singularities = np.sort_complex(s)
+            quadrature = True
         for zindex, zi in enumerate(sorted_singularities):
             zi = np.round(np.real_if_close(zi), 4)
-            if np.isreal(zi):
+            if np.isreal(zi) or quadrature:
                 if len(sorted_singularities) > zindex + 1 and \
                     sorted_singularities[zindex + 1] == zi:
                     m += 1
                     continue
                 if zi == 0.:
                     ppstr[i] += "z"
-                else:
+                elif np.isreal(zi):
                     ppstr[i] += "(z %s %g)" % (signs[np.sign(-zi)], np.abs(zi))
+                else:
+                    ppstr[i] += "(z %s %g %s %gj)" % (signs[np.sign(np.real(-zi))],
+                                                      np.abs(np.real(zi)),
+                                                      signs[np.sign(np.imag(-zi))],
+                                                      np.abs(np.imag(zi)))
                 if m == 1:
                     ppstr[i] += " "
                 else:

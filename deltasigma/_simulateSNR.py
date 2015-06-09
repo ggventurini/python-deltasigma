@@ -16,7 +16,7 @@
 """Module providing the simulateSNR() function
 """
 
-from __future__ import division
+from __future__ import division, print_function
 
 import collections
 from warnings import warn
@@ -27,6 +27,7 @@ from numpy.fft import fft, fftshift
 from ._calculateSNR import calculateSNR
 from ._mapQtoR import mapQtoR
 from ._simulateDSM import simulateDSM
+from ._simulateQDSM import simulateQDSM
 from ._utils import _get_zpk
 
 
@@ -74,7 +75,9 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
 
     arg1 : scipy 'lti' object, or ndarray
         The first argument may be one of the various supported representations
-        for a (SISO) transfer function or an ABCD matrix.
+        for an NTF or an ABCD matrix. Quadrature modulators are supported both
+        with quadrature TFs or with quadrature ABCD matrices, the latter being
+        the recommended description.
 
     osr : int
         The over-sampling ratio.
@@ -109,10 +112,6 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     quadrature : boolean, optional
         Whether the delta sigma modulator is a quadrature modulator or not.
         Defaults to ``False``.
-
-    .. note:: Setting ``quadrature`` to ``True`` results in a \\
-        ``NotImplementedError`` being raised, as :func:`simulateQDSM` has not been \\
-        implemented yet.
 
     **Returns:**
 
@@ -170,23 +169,26 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     # Look at arg1 and decide if the system is quadrature
     quadrature_ntf = False
     if callable(arg1):
-        pass
-    elif hasattr(arg1, '__class__') and arg1.__class__.__name__ == 'lti':
-        # scipy LTI object
+        raise ValueError('There is no support for NTFs described through ' +
+                         'a function.')
+    elif not isinstance(arg1, np.ndarray):
+        # NTF of LTI type or zpk tuple, or (num,den) etc...
+        # in this case, if the modulator is in quadrature, 
+        # we will have to call simulateQDSM
         for roots in _get_zpk(arg1)[:2]:
             if np.any(np.abs(np.imag(np.poly(roots))) > 0.0001):
                 quadrature = True
                 quadrature_ntf = True
-    else: # ABCD matrix
+    else: # ABCD matrix, no matter what, here we will get through the
+        # simulation with simulateDSM()
+        arg1 = np.real_if_close(arg1) # tiny imaginary parts due to rounding
         if not np.all(np.imag(arg1) == 0):
             quadrature = True
 
     if amp is None:
-        amp = np.concatenate((
-                              np.arange(- 120, -20 + 1, 10),
+        amp = np.concatenate((np.arange(- 120, -20 + 1, 10),
                               np.array((-15,)),
-                              np.arange(-10, 1)
-                            ))
+                              np.arange(-10, 1)))
     elif not isinstance(amp, collections.Iterable):
         amp = np.array((amp, ))
     else:
@@ -199,9 +201,9 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     M = nlev - 1
     if quadrature and not quadrature_ntf:
         # Modify arg1 (ABCD) and nlev so that simulateDSM can be used
-        nlev = np.array([nlev, nlev]).reshape(1, -1)
+        nlev = np.array([nlev, nlev])
         arg1 = mapQtoR(arg1)
-    if abs(f - f0) > 1/(osr*osr_mult):
+    if abs(f - f0) > 1./(osr*osr_mult):
         warn('The input tone is out-of-band.')
     N = 2**k
     if N < 8*2*osr:
@@ -217,20 +219,20 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         F = 2
     Ntransient = 100
     soft_start = 0.5*(1 - np.cos(2*np.pi/Ntransient * \
-                                 np.arange(0, Ntransient/2)))
+                                 np.arange(Ntransient/2)))
     if not quadrature:
-        tone = M*np.sin(2*np.pi*F/N*np.arange(0, N + Ntransient))
+        tone = M*np.sin(2*np.pi*F/N*np.arange(N + Ntransient))
         tone[:Ntransient/2] = tone[:Ntransient/2] * soft_start
     else:
-        tone = M * np.exp(2j*np.pi*F/N * np.arange(0, N + Ntransient))
+        tone = M*np.exp(2j*np.pi*F/N * np.arange(N + Ntransient))
         tone[:Ntransient/2] = tone[:Ntransient/2] * soft_start
         if not quadrature_ntf:
-            tone = np.hstack((np.real(tone), np.imag(tone)))
+            tone = tone.reshape((1, -1))
+            tone = np.vstack((np.real(tone), np.imag(tone)))
     # create a Hann window
-    window = 0.5*(1 - np.cos(2*np.pi*np.arange(0, N)/N))
-    if quadrature:
-        window = np.vstack((window, window))
+    window = 0.5*(1 - np.cos(2*np.pi*np.arange(N)/N))
     if f0 == 0:
+        # Exclude DC and its adjacent bin
         inBandBins = int(N/2) + np.arange(3,
                                      np.round(N/osr_mult/osr) + 1,
                                      dtype=np.int32)
@@ -243,20 +245,14 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                                      dtype=np.int32)
         F = F - f1 + 1
     snr = np.zeros(amp.shape)
-    i = 0
-    for A in np.power(10.0, amp/20):
-        if callable(arg1):
-            v = arg1(A*tone)
+    for i, A in enumerate(np.power(10.0, amp/20)):
+        if quadrature_ntf:
+            v, _, _, _ = simulateQDSM(A*tone, arg1, nlev)
         else:
-            if quadrature_ntf:
-                raise NotImplementedError("simulateQDSM has not been \
-                                           implemented yet.")
-                #v = simulateQDSM(A*tone, arg1, nlev)
-            else:
-                v, _, _, _ = simulateDSM(A*tone, arg1, nlev)
-                if quadrature:
-                    v = v[0, :] + 1j*v[1, :]
+            v, _, _, _ = simulateDSM(A*tone, arg1, nlev)
+            if quadrature:
+                v = v[0, :] + 1j*v[1, :]
         hwfft = fftshift(fft(window*v[Ntransient:N + Ntransient]))
         snr[i] = calculateSNR(hwfft[inBandBins - 1], F)
-        i += 1
     return snr, amp
+
