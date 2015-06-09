@@ -654,34 +654,6 @@ def _is_A_B_C_D(arg):
         (isinstance(arg[3], collections.Iterable) or np.is_scalar(arg[3]))
 
 
-def _cell_like_list(shape, init=None):
-    """Returns a list of lists (possibly of lists... etc...),
-    with all values initialized to `init`.
-
-    **Parameters:**
-
-    shape: tuple of ints,
-           the dimensions of the desidered object
-
-    init: object, optional,
-          the initialization value for every element in the object
-
-    **Returns:**
-
-    cell, a list of lists (...)
-
-    .. deprecated:: 0.1-3
-
-    """
-    a = []
-    for _ in range(shape[0]):
-        if len(shape) == 1:
-            a.append(init)
-        else:
-            a.append(_cell_like_list(shape[1:], init))
-    return a
-
-
 def mround(x):
     """Round ``x`` to the nearest integers.
 

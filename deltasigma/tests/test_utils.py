@@ -25,7 +25,7 @@ import deltasigma as ds
 from deltasigma import synthesizeNTF
 
 from deltasigma._utils import *
-from deltasigma._utils import _get_zpk, _get_num_den, _cell_like_list
+from deltasigma._utils import _get_zpk, _get_num_den
 from deltasigma._constants import eps
 
 def test_rat():
@@ -284,15 +284,8 @@ def test_pretty_lti():
         '         z^2 (z - 1)        \n' + \
         '5 --------------------------\n' + \
         '   (z^2 - 4z + 5)^2 (z - 1) '
-
-
-def test_cell_like_list():
-    """Test function for _cell_like_list()"""
-    res = [[[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
-           [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
-           [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]]]
-    assert _cell_like_list((3, 4, 5), 1) == res
-
+    # check we can return a repr for a quadrature TF
+    pretty_lti(((1.+2j, 1.+3j), (-5+2j, -3-1j), 10))
 
 def test_mround():
     """Test function for mfloor()"""
