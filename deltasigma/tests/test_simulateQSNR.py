@@ -34,7 +34,7 @@ class TestSimulateQSNR(unittest.TestCase):
                                  -7, -6, -5, -4, -3, -2, -1, 0])
 
 
-    def test_simulateSNR_4(self):
+    def test_simulateQSNR(self):
         """Test function for simulateSNR() 4/4"""
         order = 4
         osr = 32
@@ -51,6 +51,6 @@ class TestSimulateQSNR(unittest.TestCase):
         FullScale = M
         ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
         ABCD = ds.realizeQNTF(ntf0, form, True)
-        a, b = ds.simulateSNR(ABCD, osr, None, f0, nlev);
+        a, b = ds.simulateQSNR(ABCD, osr, None, f0, nlev);
         assert np.allclose(a[6:], self.SNR_ref, atol=6, rtol=1e-3)
         assert np.allclose(b[5:], self.AMP_ref, atol=1)
