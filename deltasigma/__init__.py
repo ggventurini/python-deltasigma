@@ -59,8 +59,7 @@ and the available functionality at a glance.
 
 .. image:: ../doc/_static/functionality.png
 
-All the basic features are available since v. 0.1. A detailed changelog may be
-found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
+A detailed changelog may be found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
 
 Detailed information split by file and function status may be found in
 `files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
@@ -354,7 +353,7 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://travis-ci.org/ggventurini/python-deltasigma
 .. |Coverage Status| image:: https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
-.. |PyPi version| image:: http://img.shields.io/badge/version-0.1-brightgreen.png
+.. |PyPi version| image:: http://img.shields.io/badge/version-0.2-brightgreen.png
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |PyPi downloads| image::  https://pypip.in/download/deltasigma/badge.png
    :target: https://pypi.python.org/pypi/deltasigma/
@@ -899,7 +898,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.1-10'
+__version__ = '0.2.0'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
