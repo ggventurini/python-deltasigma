@@ -16,6 +16,8 @@
 """This module provides the test class for the simulateSNR() function.
 """
 
+from __future__ import division, print_function
+
 import unittest
 import pkg_resources
 import scipy.io
@@ -31,7 +33,7 @@ class TestSimulateSNR(unittest.TestCase):
         pass
 
     def test_simulateSNR_1(self):
-        """Test function for simulateSNR() 1/3"""
+        """Test function for simulateSNR() 1/4"""
         # first test: f0 = 0
         # Load test references
         fname = pkg_resources.resource_filename(__name__,
@@ -85,7 +87,7 @@ class TestSimulateSNR(unittest.TestCase):
                                     rtol=1e-5))
 
     def test_simulateSNR_2(self):
-        """Test function for simulateSNR() 2/3"""
+        """Test function for simulateSNR() 2/4"""
         # next test: f0 = 0
         # Load test references
         fname = pkg_resources.resource_filename(__name__,
@@ -120,7 +122,7 @@ class TestSimulateSNR(unittest.TestCase):
         self.assertTrue(np.allclose(amp, amp_ref, atol=1e-5, rtol=1e-5))
 
     def test_simulateSNR_3(self):
-        """Test function for simulateSNR() 3/3"""
+        """Test function for simulateSNR() 3/4"""
         # next test: amp is a scalar
         fname = pkg_resources.resource_filename(__name__,
                                                 "test_data/test_snr_amp2.mat")
@@ -140,3 +142,32 @@ class TestSimulateSNR(unittest.TestCase):
         self.assertTrue(np.allclose(snr, snr_ref, atol=1e-5, rtol=1e-5))
         self.assertTrue(np.allclose(amp, amp_ref, atol=1e-5, rtol=1e-5))
 
+    def test_simulateSNR_4(self):
+        """Test function for simulateSNR() 4/4"""
+        SNR_ref = np.array([23.0421, 32.1100, 43.3758, 53.1791,
+                            65.5504, 70.5023, 73.4608, 76.2416, 77.8770,
+                            78.2733, 79.3729, 79.5728, 80.8729, 82.7461,
+                            83.0723, 84.8488, 84.3327])
+        AMP_ref = np.array([-70, -60, -50, -40, -30, -20, -15, -10, -9, -8, -7,
+                            -6, -5, -4, -3, -2, -1, 0])
+
+        order = 4
+        osr = 32
+        M = 8
+        NG = -50
+        ING = -10
+        f0 = 1./ 16
+        quadrature = 1
+        form = 'PFB'
+        nlev = M + 1
+        z0 = np.exp(1j*2*np.pi*f0)
+        bw = 1./ osr
+        delta = 2
+        FullScale = M
+        ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
+        ABCD = ds.realizeQNTF(ntf0, form, True)
+        #print(ABCD)
+        #ds.PlotExampleSpectrum(ntf0, M, osr, f0, quadrature=True)
+        a, b = ds.simulateSNR(ABCD, osr, None, f0, nlev);
+        assert np.allclose(a[6:], SNR_ref, atol=10, rtol=1e-3)
+        assert np.allclose(b[5:], AMP_ref, atol=1)
