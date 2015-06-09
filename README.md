@@ -19,11 +19,11 @@ it is very heavily based.
 
 **Documentation:** [docs.python-deltasigma.io](http://docs.python-deltasigma.io)
 
-**Latest version:** [0.1](https://pypi.python.org/pypi/deltasigma/)
+**Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
 
 [![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
-[![PyPi version](http://img.shields.io/badge/version-0.1-brightgreen.png)](https://pypi.python.org/pypi/deltasigma/)
+[![PyPi version](http://img.shields.io/badge/version-0.2-brightgreen.png)](https://pypi.python.org/pypi/deltasigma/)
 [![PyPi downloads](https://pypip.in/download/deltasigma/badge.png)](https://pypi.python.org/pypi/deltasigma/)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11535.png)](http://dx.doi.org/10.5281/zenodo.11535)
