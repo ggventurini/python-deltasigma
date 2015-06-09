@@ -48,7 +48,10 @@ def simulateQSNR(ntf,
 
     ntf : tuple, ndarray or LTI object
         The Noise Transfer Function in any form supported by
-        :func:`simulateQDSM`, such as zpk tuple, ABCD matrix or LTI object.
+        :func:`simulateQDSM`, such as an ABCD matrix or an NTF description,
+        for example a zpk tuple, num-den tuple or an LTI object.
+        If no information is available regarding the STF, it is assumed to
+        be unitary.
     R : int, optional
         The oversampling ratio, defining the band of interest. Defaults to 64.
     amp : sequence, optional
@@ -74,9 +77,6 @@ def simulateQSNR(ntf,
         The calculated SNR.
     amp : ndarray
         The amplitude vector corresponding to the SNR.
-
-    The STF is assumed to be unitary. From the Matlab Delta-Sigma Toolbox:
-    future versions may accommodate STFs.
 
     """
     if amp is None:
