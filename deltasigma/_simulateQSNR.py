@@ -106,13 +106,13 @@ def simulateQSNR(ntf,
     # Hanning window of length N
     window = 0.5*(1 - np.cos(2*np.pi*np.arange(N)/N))
     f1 = max((np.round(N*(0.5 + f0 - 0.5/R)), 0))
-    inBandBins = np.arange(f1, np.round(N*(0.5 + f0 + 0.5/R)) + 1)
+    inBandBins = np.arange(f1, np.round(N*(0.5 + f0 + 0.5/R)) + 1, dtype=np.int32)
     F = F - f1 + N/2.
 
     snr = np.zeros(amp.shape)
     i = 0
     for A in 10.0**(amp/20.):
-        v = simulateQDSM(A*tone, ntf, nlev)
+        v, _, _, _ = simulateQDSM(A*tone, ntf, nlev)
         hwfft = fftshift(fft(window*v[Ntransient:N + Ntransient]))
         snr[i] = calculateSNR(hwfft[inBandBins], F)
         i = i + 1
