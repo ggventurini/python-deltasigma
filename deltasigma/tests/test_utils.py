@@ -27,7 +27,8 @@ from scipy.signal import lti
 from deltasigma import synthesizeNTF
 
 from deltasigma._utils import *
-from deltasigma._utils import _get_zpk, _get_num_den, _getABCD
+from deltasigma._utils import (_get_zpk, _get_num_den, _getABCD, _is_zpk,
+                               _is_num_den, _is_A_B_C_D)
 from deltasigma._constants import eps
 
 def test_rat():
@@ -303,6 +304,7 @@ def test_mround():
     assert mround(tv) == tres
 
 def test_getABCD():
+    """Test function for _getABCD()"""
     H = lti(*((1.,),(-2, -2), 1))
     x1 = _getABCD(H)
     x2 = _getABCD((H.num, H.den))
@@ -312,4 +314,34 @@ def test_getABCD():
         assert np.allclose(y1, y2)
         assert np.allclose(y1, y3)
         assert np.allclose(y1, y4)
+
+def test_is_zpk():
+    """Test function for _is_zpk()"""
+    assert _is_zpk([(1,2,3), (1,2), 2])
+    assert _is_zpk([np.array((1,2,3)), np.array((1,2)), 2])
+    assert _is_zpk([[1], [2], 1])
+    assert _is_zpk(((1, 2), (1, 2, 3), 1))
+    assert _is_zpk(((1,), (), 1e-17))
+    assert not _is_zpk([(1,2), (3,4), ()])
+    assert not _is_zpk(lti((1, 2), (1, 2, 3), 1))
+    assert not _is_zpk(((1,), (2,)))
+
+def test_is_num_den():
+    """Test function for _is_num_den()"""
+    assert _is_num_den([(1,2,3), (1,2)])
+    assert _is_num_den([np.array((1,2,3)), np.array((1,2))])
+    assert _is_num_den([[1], [2]])
+    assert _is_num_den(((1, 2), (1, 2, 3)))
+    assert _is_num_den(((1,), ()))
+    assert not _is_num_den([(1,2), (3,4), (1,)])
+    assert not _is_num_den(lti((1, 2), (1, 2, 3), 1))
+    assert not _is_num_den(((1,), (2,), 1))
+
+def test_is_A_B_C_D():
+    """Test function for _is_A_B_C_D()"""
+    A = np.eye(3)
+    B = np.zeros((3, 2))
+    C = np.zeros((2, 3))
+    D = np.ones((2, 2))
+    assert _is_A_B_C_D((A, B, C, D))
 
