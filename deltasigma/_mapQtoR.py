@@ -24,8 +24,8 @@ import numpy as np
 def mapQtoR(ABCD):
     """Map a quadrature ABCD matrix to a real one.
 
-    Each element z in ABCD is replaced by a 2x2 matrix in ``ABCDr``, the
-    return value.
+    Each element :math:`z` in :math:`ABCD` is replaced by a 2x2 matrix in
+    ``ABCDr``, the return value.
 
     Specifically:
 
@@ -38,7 +38,12 @@ def mapQtoR(ABCD):
          \\end{bmatrix}
         \\mathrm{where}\\ x = Re(z)\\ \\mathrm{and}\\ y = Im(z)
 
-    The non-quadrature topology can be simulated with :func:`simulateDSM`.::
+    The non-quadrature topology then can be simulated with
+    :func:`simulateDSM`.
+
+    **Example:**
+
+    ::
 
         import numpy as np
         from deltasigma import *
@@ -59,8 +64,11 @@ def mapQtoR(ABCD):
         vr = simulateDSM(ur, ABCDr, nlev*np.array([[1],[1]]))
         v = vr[0,:] + 1j*vr[1, :]
 
-    Notice the example above requires the function :func:`synthesizeQNTF`,
-    which is not part of the current release of python-deltasigma.
+
+    .. note::
+
+        The scheme above often results in a shorter simulation time compared to
+        calling :func:`simulateQDSM` directly.
 
     """
     A = np.zeros((2*ABCD.shape[0], 2*ABCD.shape[1]))
