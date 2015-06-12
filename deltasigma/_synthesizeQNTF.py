@@ -49,7 +49,7 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
 
     f0 : float, optional
         The center frequency, normalized such that :math:`1 \\rightarrow f_s`.
-        Defaults to 0, ie to a low-pass modultor.
+        Defaults to 0, ie to a low-pass modulator.
 
     NG : float, optional
         The in-band noise gain, expressed in dB. Defaults to -60.
