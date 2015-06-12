@@ -7,6 +7,10 @@ Version 0.2 series
 The 0.2 series features support for real and quadrature baseband and passband
 modulator topologies.
 
+**0.2.1**: Fix calculation of quadrature STFs.
+ * BUGFIX: Fix calculation of quadrature STFs from their ABCD matrix.
+ * Add ``dsexample4.ipynb`` to the examples.
+
 **0.2.0**: Add support for quadrature modulators.
  * Add ``simulateQDSM()``,
  * Add ``synthesizeQNTF()``,
