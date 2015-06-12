@@ -177,7 +177,7 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
             if norm(f) < lowest_f:
                 lowest_f = norm(f)
                 # ntf0 is ALREADY a zpk tuple
-                zeros, poles, k = _get_zpk(ntf0)
+                zeros, poles, k = ntf0
                 best = (zeros.copy(), poles.copy(), k)
             if abs(f[0]) > abs(f[1]):
                 # adjust x(1)
