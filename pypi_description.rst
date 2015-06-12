@@ -22,7 +22,7 @@ which it is very heavily based.
 
 **Latest version:** `0.2 <https://pypi.python.org/pypi/deltasigma/>`__
 
-|Build Status| |Coverage Status| |PyPi version| |PyPi downloads| |BSD 2
+|Build Status| |Coverage Status| |PyPi Pythons| |PyPi downloads| |BSD 2
 clause license| |DOI BADGE|
 
 Install
@@ -132,7 +132,9 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://coveralls.io/r/ggventurini/python-deltasigma?branch=master
 .. |PyPi version| image:: http://img.shields.io/badge/version-0.2-brightgreen.png
    :target: https://pypi.python.org/pypi/deltasigma/
-.. |PyPi downloads| image:: https://pypip.in/download/deltasigma/badge.png
+.. |PyPi Pythons| image:: https://img.shields.io/pypi/pyversions/deltasigma.svg
+   :target: https://pypi.python.org/pypi/deltasigma/
+.. |PyPi downloads| image:: https://img.shields.io/pypi/dm/deltasigma.svg
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
