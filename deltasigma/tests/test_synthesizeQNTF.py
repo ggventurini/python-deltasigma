@@ -87,10 +87,8 @@ class TestSynthesizeQNTF(unittest.TestCase):
         # to be different and sort wrongly, resulting in a failed test
         zeros = np.round(ntf0[0], 4)
         poles = np.round(ntf0[1], 4)
-        assert np.allclose(np.sort_complex(zeros), np.sort_complex(zeros_ref),
-                           atol=1e-2, rtol=1e-2)
-        assert np.allclose(np.sort_complex(poles), np.sort_complex(poles_ref),
-                           atol=1e-2, rtol=1e-2)
+        assert np.allclose(zeros, zeros_ref, atol=1e-2, rtol=1e-2)
+        assert np.allclose(poles, poles_ref, atol=1e-2, rtol=1e-2)
         assert ntf0[2] == 1.
 
     def test_synthesizeQNTF_4(self):
@@ -100,14 +98,14 @@ class TestSynthesizeQNTF(unittest.TestCase):
         osr = 32
         NG = -50
         ING = -10
-        f0 = 1 / 16
+        f0 = 1./ 16
         ntf0 = synthesizeQNTF(order, osr, f0, NG, ING)
         z_ref = [0.900716472438935 + 0.434407454214544j,
                  0.944075182261086 + 0.329730268914908j]
         p_ref = [0.112333561599987 - 0.126178981177517j,
                  -0.00979019007164386 + 0.168653836396020j]
         k_ref = 1
-        assert np.allclose(np.sort(z_ref), np.sort(ntf0[0]))
-        assert np.allclose(np.sort(p_ref), np.sort(ntf0[1]))
+        assert np.allclose(z_ref, ntf0[0])
+        assert np.allclose(p_ref, ntf0[1])
         assert ntf0[2] == k_ref
 
