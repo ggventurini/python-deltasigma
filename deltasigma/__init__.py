@@ -90,6 +90,8 @@ at the following ipython notebooks:
    version of ``dsexample2.m``.
 -  `dsexample3 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb>`__, Python
    version of ``dsexample3.m``.
+-  `dsexample4 <http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample4.ipynb>`__, Python
+   version of ``dsexample4.m``.
 
 They are also a good means for getting started quickly.
 
@@ -898,7 +900,7 @@ __author__ = "Giuseppe Venturini and the python-deltasigma contributors"
 __copyright__ = "Copyright 2013, Giuseppe Venturini"
 __credits__ = ["Giuseppe Venturini"]
 __license__ = "BSD 2-Clause License"
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 __maintainer__ = "Giuseppe Venturini"
 __email__ = "ggventurini+github@gmail.com"
 __status__ = "Stable"
