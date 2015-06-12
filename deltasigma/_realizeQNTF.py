@@ -69,8 +69,6 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
     """
     #Code common to all forms
     ntf_z, ntf_p, _ = _get_zpk(ntf)
-    ntf_z = np.sort_complex(ntf_z)
-    ntf_p = np.sort_complex(ntf_p)
     order = ntf_p.shape[0]
     form = form.upper()
 

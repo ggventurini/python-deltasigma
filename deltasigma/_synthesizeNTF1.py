@@ -19,8 +19,14 @@
 # Copyright (c) 2012, Sergio Callegari
 # All rights reserved.
 #
+# And it is a rather faithful transposition to Python of the original code
+# written by R. Schreier, as explained in the following.
+#
 # The code was ported from the MATLAB Delta Sigma toolbox, which is
 # Copyright (c) 2009, Richard Schreier
+#
+# The few bugs -- now fixed -- in the code were an addition and where not there
+# in the original code. GV 2015
 #
 # The three software follow the same license, known as the 2-clause BSD.
 # See the LICENSE file for details.
@@ -29,12 +35,7 @@
 Module providing the synthesizeNTF1() function.
 """
 
-# The following code is
-# Copyright (c) 2012, Sergio Callegari
-# All rights reserved.
-
-# Portions of code ported from the DELSIG toolbox
-# Copyright (c) 2009, Richard Schreier
+from __future__ import division
 
 from warnings import warn
 
@@ -208,5 +209,5 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
                 opt_iteration = 0
             else:
                 opt_iteration = opt_iteration - 1
-    z = cplxpair(z)
+    z = np.squeeze(z)
     return (z, p, k)
