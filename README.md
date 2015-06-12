@@ -26,7 +26,7 @@ it is very heavily based.
 [![PyPi downloads](https://img.shields.io/pypi/dm/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
 [![PyPi pythons](https://img.shields.io/pypi/pyversions/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11535.png)](http://dx.doi.org/10.5281/zenodo.11535)
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.18529.svg)](http://dx.doi.org/10.5281/zenodo.18529)
 
 
 ***

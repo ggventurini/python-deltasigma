@@ -361,8 +361,8 @@ MATLAB is a registered trademark of The MathWorks, Inc.
    :target: https://pypi.python.org/pypi/deltasigma/
 .. |BSD 2 clause license| image:: http://img.shields.io/badge/license-BSD-brightgreen.png
    :target: https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE
-.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.12639.png
-   :target: http://dx.doi.org/10.5281/zenodo.12639
+.. |DOI BADGE| image:: https://zenodo.org/badge/doi/10.5281/zenodo.18529.png
+   :target: http://dx.doi.org/10.5281/zenodo.18529
 
 
 Credits
