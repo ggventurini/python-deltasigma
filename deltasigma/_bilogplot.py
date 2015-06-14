@@ -43,7 +43,7 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
 
         This is implemented in a slightly different way from The MATLAB Delta
         Sigma Toolbox, where all values below ``xmin`` are clipped and the scale is
-        always logarithmic. It our implementation, no clippin is done and below
+        always logarithmic. It our implementation, no clipping is done and below
         ``xmin`` the data is simply plotted with a linear scale. For this reason
         slightly different plots may be generated.
 

@@ -46,7 +46,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     order : int, optional
         the order of the modulator, defaults to 3
     osr : float, optional
-        the oversamping ratio, defaults to 64
+        the oversampling ratio, defaults to 64
     opt : int or list of floats, optional
         flag for optimized zeros, defaults to 0
 
@@ -101,7 +101,7 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
 
     **Example:**
 
-    Fift-order lowpass modulator; zeros optimized for an oversampling ratio of 32.::
+    Fifth-order lowpass modulator; zeros optimized for an oversampling ratio of 32.::
 
         from deltasigma import *
         H = synthesizeNTF(5, 32, 1)

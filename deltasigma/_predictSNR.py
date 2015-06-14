@@ -81,9 +81,9 @@ def predictSNR(ntf, OSR=64, amp=None, f0=0.):
     .. rubric:: Implementation details:
 
     The describing function method of A&P treats the quantizer processes
-    signal and noise components separately. The quantizer is modelled as two
+    signal and noise components separately. The quantizer is modeled as two
     (not necessarily equal) linear gains, :math:`k_0` (``k0`` in the code) 
-    and :math:`k_1` (``k1``), and an additive white gaussian noise source of
+    and :math:`k_1` (``k1``), and an additive white Gaussian noise source of
     power :math:`\\sigma_e^2` (``sigma_e2``), as shown in the figure below. 
 
     :math:`k_0`, :math:`k_1` and :math:`\\sigma_e^2` are calculated as

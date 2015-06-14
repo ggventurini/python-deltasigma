@@ -45,7 +45,7 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
          line width value in points
 
     ybot : float, optional
-           Dummy parameter available for compatiblity
+           Dummy parameter available for compatibility
 
     **Returns:**
 

@@ -5,7 +5,7 @@
 # Copyright 2013 Giuseppe Venturini
 # This file is part of python-deltasigma.
 #
-# python-deltasigma is a 1:1 Python replacement of Richard Schreier's 
+# python-deltasigma is a 1:1 Python replacement of Richard Schreier's
 # MATLAB delta sigma toolbox (aka "delsigma"), upon which it is heavily based.
 # The delta sigma toolbox is (c) 2009, Richard Schreier.
 #
@@ -26,8 +26,10 @@ def changeFig(fontsize=None, linewidth=None, markersize=None, xfticks=False,
               yfticks=False, bw=False, fig=None):
     """Quickly change several figure parameters.
 
-    Take each axes in the figure, and for each line and text item 
-    in the axes, set linewidth, markersize and font size.
+    This function sweeps through all axes in the figure, and for each line and text item
+    sets the line width, marker size, font size and the other parameters, if set.
+
+    All parameters that are unset are left untouched.
 
     **Parameters:**
 
@@ -72,9 +74,9 @@ def changeFig(fontsize=None, linewidth=None, markersize=None, xfticks=False,
 
     None.
 
-    .. note:: 
+    .. note::
 
-        This function may be useful to enhance the readibility of
+        This function may be useful to enhance the readability of
         figures to be used in presentations.
 
     .. seealso:: :func:`figureMagic`, to quickly change plot ranges and more.

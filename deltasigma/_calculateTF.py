@@ -41,8 +41,8 @@ def calculateTF(ABCD, k=1.):
         The quantizer gains. If only one quantizer is present, it may be set
         to a float, corresponding to the quantizer gain. If multiple quantizers
         are present, a list should be used, with quantizer gains ordered
-        according to the order in which the quantizer inputs apperar in the
-        ``C`` and ``D`` submatrices. If not specified, a default of one quatizer
+        according to the order in which the quantizer inputs appear in the
+        ``C`` and ``D`` submatrices. If not specified, a default of one quantizer
         with gain ``1.`` is assumed.
 
     **Returns:**

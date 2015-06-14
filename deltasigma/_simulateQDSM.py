@@ -87,7 +87,7 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
     x0 : float or sequence-like, optional
         The initial states of the modulator. If it is set to a float, all states
         are assumed to have the same value, ``x0``. If it is set to a
-        sequence-like objct (list, tuple, 1D ndarray and similar), each entry is
+        sequence-like object (list, tuple, 1D ndarray and similar), each entry is
         assumed to be the value of one of the modulator states, in ascending
         order. Defaults to ``0``.
 
@@ -97,7 +97,7 @@ def simulateQDSM(u, arg2, nlev=2, x0=None):
         The quantizer output.
     xn : ndarray
         The modulator states.
-    xmax : nedarray
+    xmax : ndarray
         The maximum value that each state reached during simulation.
     y : ndarray
         The quantizer input (ie the modulator output).

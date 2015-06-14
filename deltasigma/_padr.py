@@ -29,7 +29,7 @@ def padr(x, n, val=0.):
         The matrix to be padded.
 
     n : int
-        The number of colums of the matrix after padding.
+        The number of columns of the matrix after padding.
 
     val : scalar, optional
         The value to be used used for padding.

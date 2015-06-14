@@ -59,7 +59,7 @@ and the available functionality at a glance.
 
 .. image:: ../doc/_static/functionality.png
 
-A detailed changelog may be found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
+A detailed change log may be found in `CHANGES.rst <https://github.com/ggventurini/python-deltasigma/blob/master/CHANGES.rst>`__.
 
 Detailed information split by file and function status may be found in
 `files.csv <https://github.com/ggventurini/python-deltasigma/blob/master/files.csv>`__.
@@ -455,22 +455,22 @@ tion and coefficients for the following topologies:
 
 .. [*] Contributed to the MATLAB delta sigma toolbox in 2007 by Jeff Gealow.
 
-See :ref:`topologies-diagrams` for a block-level view of the different modulator structures.
+See :ref:`topologies-diagrams` for a block-level view of the different modulator
+structures.
 
-Multi-input and multi-quantizer systems can also be described with an
-ABCD matrix and the previous equation
-will still apply. For an :math:`n_i`-input, :math:`n_o`-output modulator,
-the dimensions of the sub-matrices are
-:math:`A`: :math:`(n, n)`, :math:`B`: :math:`(n, n_i + n_o)`,
-:math:`C`: :math:`(n_o, n)` and :math:`D`: :math:`(n_o, n_i+n_o)`.
+Multi-input and multi-quantizer systems can also be described with an ABCD
+matrix and the previous equation will still apply. For an :math:`n_i`-input,
+:math:`n_o`-output modulator, the dimensions of the sub-matrices are :math:`A`:
+:math:`(n, n)`, :math:`B`: :math:`(n, n_i + n_o)`, :math:`C`: :math:`(n_o, n)`
+and :math:`D`: :math:`(n_o, n_i+n_o)`.
 
 Quantizer model
 :::::::::::::::
 
-The quantizer is ideal, producing integer outputs centered about zero. Quantizers with an even
-number of levels are of the mid-rise type and produce outputs which are odd integers. Quantizers
-with an odd number of levels are of the mid-tread type and produce outputs which are even inte-
-gers.
+The quantizer is ideal, producing integer outputs centered about zero.
+Quantizers with an even number of levels are of the mid-rise type and produce
+outputs which are odd integers. Quantizers with an odd number of levels are of
+the mid-tread type and produce outputs which are even integers.
 
 .. image:: ../doc/_static/quantizer_model.png
     :align: center
@@ -777,7 +777,7 @@ their evaluation and filtering.
 ------------------------------  ---------------------------------------------------------------------------------------
 :func:`delay`                   Delay a signal by a give number of samples.
 ------------------------------  ---------------------------------------------------------------------------------------
-:func:`ds_f1f2`                 Get the neighbouring frequencies to the carrier to calculate the SNR.
+:func:`ds_f1f2`                 Get the neighboring frequencies to the carrier to calculate the SNR.
 ------------------------------  ---------------------------------------------------------------------------------------
 :func:`ds_freq`                 Frequency vector suitable for plotting the frequency response of an NTF.
 ------------------------------  ---------------------------------------------------------------------------------------
@@ -851,7 +851,7 @@ scientific Python stack.
 :func:`undbv`                   Calculate the voltage ratio equivalent to a given power expressed in dB.
 ==============================  =======================================================================================
 
-Plotting and data display utilitites
+Plotting and data display utilities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Graphic functions:

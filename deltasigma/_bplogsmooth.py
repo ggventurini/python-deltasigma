@@ -31,7 +31,7 @@ def bplogsmooth(X, tbin, f0):
 
     Use 8 bins from the bin corresponding to ``f0`` to ``tbin`` and again as far.
     Thereafter increase bin sizes by a factor of 1.1, staying less than 2^10.
-    For tbin, group the bins together.
+    For ``tbin``, group the bins together.
 
     Use this for nice double-sided log-log plots.
 

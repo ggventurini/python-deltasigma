@@ -97,7 +97,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
         The STF is assumed to be 1.
     nlev : int or sequence or ndarray
         Number of levels in the quantizers. Set ``nlev`` to a scalar for a
-        signle quantizer modulator. Multiple quantizers are implied by
+        single quantizer modulator. Multiple quantizers are implied by
         making nlev an array.
     x0 : float or sequence or ndarray
         The initial status of the modulator. If ``x0`` is set to float, its
@@ -110,7 +110,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
         The quantizer output.
     xn : ndarray
         The modulator states.
-    xmax : nedarray
+    xmax : ndarray
         The maximum value that each state reached during simulation.
     y : ndarray
         The quantizer input (ie the modulator output).
