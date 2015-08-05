@@ -433,7 +433,7 @@ def _get_zpk(arg, input=0):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
         z, p, k = ss2zpk(A, B, C, D, input=input)
-    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+    elif isinstance(arg, lti):
         z, p, k = arg.zeros, arg.poles, arg.gain
     elif _is_zpk(arg):
         z, p, k = np.atleast_1d(arg[0]), np.atleast_1d(arg[1]), arg[2]
@@ -513,7 +513,7 @@ def _get_num_den(arg, input=0):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
         num, den = ss2tf(A, B, C, D, input=input)
-    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+    elif isinstance(arg, lti):
         num, den = arg.num, arg.den
     elif _is_num_den(arg):
         num, den = carray(arg[0]).squeeze(), carray(arg[1]).squeeze()
@@ -597,7 +597,7 @@ def _getABCD(arg):
     if isinstance(arg, np.ndarray):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
-    elif hasattr(arg, '__class__') and arg.__class__.__name__ == 'lti':
+    elif isinstance(arg, lti):
         A, B, C, D = arg.A, arg.B, arg.C, np.atleast_2d(arg.D)
     elif _is_zpk(arg) or _is_num_den(arg) or _is_A_B_C_D(arg):
         sys = lti(*arg)

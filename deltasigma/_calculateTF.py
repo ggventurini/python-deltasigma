@@ -48,6 +48,9 @@ def calculateTF(ABCD, k=1.):
     **Returns:**
 
     (NTF, STF) : a tuple of two LTI objects (or of two lists of LTI objects).
+                 If a version of the ``scipy`` library equal to 0.16.x or 
+                 greater is in use, the objects will be ``ZeroPolesGain``
+                 objects, a subclass of ``scipy.signal.lti``.
 
     If the system has multiple quantizers, multiple STFs and NTFs will be
     returned.

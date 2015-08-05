@@ -27,7 +27,14 @@ def mod1():
     **Returns:**
 
     ABCD, NTF, STF : a tuple of (ndarray, lti, lti)
-        The elements are the ABCD matrix (ndarray), the NTF (lti object), the STF (lti object).
+        The elements are the ABCD matrix (ndarray), the NTF (LTI object), the
+        STF (LTI object).
+
+    .. note::
+
+        If a version of the ``scipy`` library equal to 0.16.x or greater is in
+        use, the NTF and STF objects will be ``ZeroPolesGain`` objects, a
+        subclass of the scipy LTI object (``scipy.signal.lti``).
 
     """
     A = np.array([[1.]])
