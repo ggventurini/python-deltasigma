@@ -7,6 +7,13 @@ Version 0.2 series
 The 0.2 series features support for real and quadrature baseband and passband
 modulator topologies.
 
+**0.2.2**: Add support for scipy 0.16.x.
+ * scipy introduced several subclasses for ``scipy.signal.lti``, they are
+   now supported.
+ * BUGFIX: Merge pull request from Thomas Russell Murphy, fixing an off-by-one
+   slicing error in dsdemo3 (great catch! thanks you).
+ * Fix typos in the documentation.
+
 **0.2.1**: Fix calculation of quadrature STFs.
  * BUGFIX: Fix calculation of quadrature STFs from their ABCD matrix.
  * Add ``dsexample4.ipynb`` to the examples.
