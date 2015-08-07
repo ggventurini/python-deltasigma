@@ -327,7 +327,7 @@ def pretty_lti(arg):
     p = np.atleast_1d(p)
     z = np.round(np.real_if_close(z), 4)
     p = np.round(np.real_if_close(p), 4)
-    k = np.round(k, 4)
+    k = np.round(np.real_if_close(k), 4)
     signs = {1:'+', -1:'-'}
     if not len(z) and not len(p):
         return "%g" % k
@@ -335,7 +335,13 @@ def pretty_lti(arg):
     if np.allclose(k, 0., atol=1e-5):
         return "0"
     if k != 1:
-        ppstr[1] = "%g " % k
+        if np.isreal(k):
+            ppstr[1] = "%g " % k
+        else:
+            # quadrature modulators support
+            ppstr[1] += "(%g %s %gj) " % (np.real(k),
+                                          signs[np.sign(np.imag(k))],
+                                          np.abs(np.imag(k)))
     for i, s in zip((0, 2), (z, p)):
         rz = None
         m = 1
