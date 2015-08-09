@@ -49,8 +49,8 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
         A vector or scalar specifying the limit for each state variable.
 
     ymax : scalar, optional
-        The stability threshold. Inputs that yield quantizer inputs above ymax
-        are considered to be beyond the stable range of the modulator.
+        The stability threshold. Inputs that yield quantizer inputs above
+        ``ymax`` are considered to be beyond the stable range of the modulator.
         If not provided, it will be set to :math:`n_{lev} + 5`
 
     umax : scalar, optional
@@ -68,9 +68,9 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
         specified limits.
 
     S : ndarray
-        The diagonal scaling matrix S.
+        The diagonal scaling matrix.
 
-    `S` is defined such that::
+    :math:`S` is defined such that::
 
         ABCDs = [[S*A*Sinv, S*B], [C*Sinv, D]]
         xs = S*x

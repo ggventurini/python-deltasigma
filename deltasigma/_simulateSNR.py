@@ -102,15 +102,15 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         f = \\frac{1}{4\ \mathrm{OSR}}
 
     k : int, optional
-        The number of samples used to compute the FFT is set by the integer `k`
-        - default value 13 - through:
+        The number of samples used to compute the FFT is set by the integer
+        ``k`` - default value 13 - through the relationship:
 
     .. math::
 
         N_{samples} = 2^k
 
     quadrature : boolean, optional
-        Whether the delta sigma modulator is a quadrature modulator or not.
+        Whether the delta-sigma modulator is a quadrature modulator or not.
         Defaults to ``False``.
 
     **Returns:**
@@ -121,10 +121,12 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     amp : ndarray
         The amplitudes corresponding to the SNR values.
 
+    .. seealso:: :func:`predictSNR`.
+
     .. rubric:: Example:
 
     Compare the SNR vs input amplitude curve for a fifth-order modulator, as 
-    determined by the describing function method (:func:`predictSNR`) with
+    computed by the describing function method (:func:`predictSNR`) with
     that determined by simulation (:func:`simulateSNR`).::
 
         import pylab as plt

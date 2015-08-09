@@ -47,7 +47,7 @@ except ImportError as e:
 
 
 def simulateQDSM(u, arg2, nlev=2, x0=None):
-    """Simulate a quadrature Delta-Sigma modulator
+    """Simulate a quadrature delta-sigma modulator.
 
     This function computes the output of a quadrature delta-sigma modulator
     corresponding to an input :math:`u`, with a description of the modulator, an

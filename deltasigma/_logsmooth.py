@@ -25,7 +25,7 @@ from ._dbp import dbp
 
 
 def logsmooth(X, inBin, nbin=8, n=3):
-    """Smooth the fft, and convert it to dB.
+    """Smooth the FFT and convert it to dB.
 
     **Parameters:**
 
@@ -43,8 +43,8 @@ def logsmooth(X, inBin, nbin=8, n=3):
         Around the location of the input signal and its harmonics (up to the
         third harmonic), don't average for n bins.
 
-    The logsmooth algorithm uses nbin bins from 0 to 3*inBin,
-    thereafter the bin sizes is increased by a factor of 1.1,
+    The ``logsmooth`` algorithm uses ``nbin`` bins from 0 to 3*inBin,
+    thereafter the bin sizes are increased by a factor 1.1,
     staying less than 2^10.
 
     For the :math:`n` sets of bins:
@@ -59,14 +59,14 @@ def logsmooth(X, inBin, nbin=8, n=3):
 
     **Returns:**
 
-    f, p : tuple of 1d- ndarrays
+    f, p : tuple of 1d-arrays
         The bins and smoothed FFT, expressed in dB.
 
     .. seealso::
 
          * :func:`plotSpectrum`, convenience function to first call
            :func:`logsmooth` and then plot on a logarithmic x-axis its return
-           value.
+           values.
 
          * :func:`circ_smooth`, smoothing algorithm suitable for linear
            x-axis plotting.

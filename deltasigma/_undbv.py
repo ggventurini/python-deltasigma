@@ -39,7 +39,7 @@ def undbv(x):
     **Returns:**
 
     Vrms : scalar or sequence
-           The RMS voltage corresponding to x.
+        The RMS voltage corresponding to ``x``.
 
     .. seealso:: :func:`undbm`, :func:`undbp`, :func:`dbv`, :func:`db`
 

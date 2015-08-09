@@ -44,11 +44,12 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     **Parameters:**
 
     order : int, optional
-        the order of the modulator, defaults to 3
+        the order of the modulator, defaults to 3.
     osr : float, optional
-        the oversampling ratio, defaults to 64
+        the oversampling ratio, defaults to 64.
     opt : int or list of floats, optional
-        flag for optimized zeros, defaults to 0
+        flag to select which algorithm is to be used to place the zeros,
+        defaults to 0.
 
         * 0 -> not optimized,
         * 1 -> optimized,
@@ -57,13 +58,14 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
         * 4 -> same as 3, but with at least one zero at band-center
         * [z] -> zero locations in complex form
 
-    H_inf : real, optional
-        max allowed peak value of the NTF. Defaults to 1.5
-    f0 : real, optional
-        center frequency for BP modulators, or 0 for LP modulators.
+    H_inf : float, optional
+        maximum allowed value of the absolute value of the NTF. Defaults to 1.5.
+    f0 : float, optional
+        center frequency for band-pass modulators, or 0 for low-pass modulators.
         Defaults to 0.
-        1 corresponds to the sampling frequency, so that 0.5 is the
-        maximum value. Value 0 specifies an LP modulator.
+        The frequency is normalized throughout the ``deltasigma`` package. The
+        normalization is: 1 corresponds to the sampling frequency. Therefore 0.5
+        is the maximum value that can be assigned to ``f0``.
 
     **Returns:**
 
@@ -73,35 +75,36 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     **Raises:**
 
     ValueError
-        * 'Error. f0 must be less than 0.5' if f0 is out of range
+        * 'Error. ``f0`` must be less than 0.5', if ``f0`` is out of range.
 
         * 'Order must be even for a bandpass modulator.' if the order is
-          incompatible with the modulator type.
+          odd and therefore incompatible with the modulator type.
 
-        * 'The opt vector must be of length xxx' if opt is used to explicitly
-          pass the NTF zeros and these are in the wrong number.
+        * 'The ``opt`` vector must be of length xxx' if ``opt`` is used to
+          explicitly pass the NTF zeros and these are in the wrong number.
 
     **Warns:**
 
-        * 'Creating a lowpass ntf.' if the center frequency is different
-          from zero, but so low that a low pass modulator must be designed.
+        * 'Creating a low-pass NTF.', if the center frequency is different
+          from zero, but so close to 0 that a low-pass modulator must be
+          designed.
 
-        * 'Unable to achieve specified H_inf ...' if the desired H_inf
+        * 'Unable to achieve specified ``H_inf`` ...', if the desired ``H_inf``
           cannot be achieved.
 
-        * 'Iteration limit exceeded' if the routine converges too slowly.
+        * 'Iteration limit exceeded', if the routine converges too slowly.
 
     **Notes:**
 
-    This is actually a wrapper function which calls the appropriate version
-    of synthesizeNTF, based on the module control flag `optimize_NTF` which
+    This is actually a wrapper function which calls the appropriate version of
+    ``synthesizeNTF``, based on the module control flag ``optimize_NTF`` which
     determines whether to use optimization tools.
 
-    Parameter ``H_inf`` is used to enforce the Lee stability criterion.
+    The parameter ``H_inf`` is used to enforce the Lee stability criterion.
 
     **Example:**
 
-    Fifth-order lowpass modulator; zeros optimized for an oversampling ratio of 32.::
+    Fifth-order low-pass modulator; zeros optimized for an oversampling ratio of 32.::
 
         from deltasigma import *
         H = synthesizeNTF(5, 32, 1)
@@ -122,12 +125,12 @@ def synthesizeNTF(order=3, osr=64, opt=0, H_inf=1.5, f0=0.0):
     .. seealso::
 
        :func:`clans` : Closed-Loop Analysis of Noise-Shaper.
-               An alternative method for selecting NTFs based on the 1-norm of the
-               impulse response of the NTF
+           An alternative method for selecting NTFs based on the 1-norm of the
+           impulse response of the NTF.
 
        :func:`synthesizeChebyshevNTF()` : Select a type-2 highpass Chebyshev NTF.
-           This function does a better job than synthesizeNTF if osr
-           or H_inf is low.
+           This function does a better job than :func:`synthesizeNTF` if ``osr``
+           or ``H_inf`` is low.
 
     """
     if f0 > 0.5:

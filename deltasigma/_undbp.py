@@ -39,7 +39,7 @@ def undbp(x):
     **Returns:**
 
     Prms : scalar or sequence
-           The RMS power corresponding to x.
+           The RMS power corresponding to ``x``.
 
     .. seealso:: :func:`undbm`, :func:`undbv`, :func:`dbp`, :func:`db`
 

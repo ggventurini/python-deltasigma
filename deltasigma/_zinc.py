@@ -32,7 +32,7 @@ def zinc(f, m=64, n=1):
     **Parameters:**
 
     f : ndarray
-        The frequencies f at which the magnitude response is evaluated.
+        The frequencies at which the magnitude response is evaluated.
 
     m : int, optional
         The order of the comb filters.

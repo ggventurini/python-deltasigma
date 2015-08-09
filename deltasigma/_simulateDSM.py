@@ -73,7 +73,7 @@ simulation_backends = {'CBLAS':(_simulateDSM_cblas is not None),
                        'CPython':True}
 
 def simulateDSM(u, arg2, nlev=2, x0=0.):
-    """Simulate a Delta Sigma modulator
+    """Simulate a delta-sigma modulator.
 
     Compute the output of a general delta-sigma modulator with input ``u``,
     a structure described by ``ABCD``, an initial state ``x0`` (default zero) and
@@ -98,7 +98,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
     nlev : int or sequence or ndarray
         Number of levels in the quantizers. Set ``nlev`` to a scalar for a
         single quantizer modulator. Multiple quantizers are implied by
-        making nlev an array.
+        making ``nlev`` an array.
     x0 : float or sequence or ndarray
         The initial status of the modulator. If ``x0`` is set to float, its
         value will be used for all the states. If it is set to a sequence of

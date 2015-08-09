@@ -68,7 +68,7 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
 
     .. note::
 
-        From the Matlab Delta-Sigma Toobox:
+        From the MATLAB Delta-Sigma Toolbox:
         ALPHA VERSION:
         This function uses an experimental ad-hoc method that is
         neither optimal nor robust.
