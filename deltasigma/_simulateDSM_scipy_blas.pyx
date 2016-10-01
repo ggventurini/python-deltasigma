@@ -47,9 +47,9 @@ ctypedef void (*dgemv_ptr) (char *trans, int *m, int *n,\
 ctypedef void (*dcopy_ptr) (int *N, double *x, int *incx,\
     double *y, int*incy)
 cdef dgemv_ptr dgemv=<dgemv_ptr>PyCObject_AsVoidPtr(\
-    sp.linalg.blas.fblas.dgemv._cpointer)
+    sp.linalg.blas.dgemv._cpointer)
 cdef dcopy_ptr dcopy=<dcopy_ptr>PyCObject_AsVoidPtr(\
-    sp.linalg.blas.fblas.dcopy._cpointer)
+    sp.linalg.blas.dcopy._cpointer)
 
 include '_simulateDSM_helper.pxi'
 
