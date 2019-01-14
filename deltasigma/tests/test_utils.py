@@ -306,10 +306,12 @@ def test_mround():
 def test_getABCD():
     """Test function for _getABCD()"""
     H = lti(*((1.,),(-2, -2), 1))
+    Htf = H.to_tf()
+    Hss = H.to_ss()
     x1 = _getABCD(H)
-    x2 = _getABCD((H.num, H.den))
+    x2 = _getABCD((Htf.num, Htf.den))
     x3 = _getABCD((H.zeros, H.poles, H.gain))
-    x4 = _getABCD((H.A, H.B, H.C, H.D))
+    x4 = _getABCD((Hss.A, Hss.B, Hss.C, Hss.D))
     for y1, y2, y3, y4 in zip(x1, x2, x3, x4):
         assert np.allclose(y1, y2)
         assert np.allclose(y1, y3)

@@ -72,8 +72,8 @@ def bplogsmooth(X, tbin, f0):
         m = m - int(n)
     lsb1 = np.concatenate((lsb2[1:] + 1, np.ones((1,))))
 
-    startbin = np.concatenate((lsb1[::-1], usb1)) - 1
-    stopbin = np.concatenate((lsb2[::-1], usb2)) - 1
+    startbin = np.concatenate((lsb1[::-1], usb1)).astype(np.int) - 1
+    stopbin = np.concatenate((lsb2[::-1], usb2)).astype(np.int) - 1
 
     f = ((startbin + stopbin)/2.)/N - f0
     p = np.zeros(f.shape)

@@ -19,8 +19,8 @@
 from __future__ import division, print_function
 
 import numpy as np
-
 from ._ds_quantize import ds_quantize
+
 
 def simulateQDSM_core(u, A, B, C, D1, order, nlev, nq, x0):
     N = u.shape[1]
@@ -39,6 +39,7 @@ def simulateQDSM_core(u, A, B, C, D1, order, nlev, nq, x0):
         # Keep track of the state maxima
         xmax = np.max((np.abs(x0), xmax), axis=0)
     return v, xn, xmax, y
+
 
 def ds_qquantize(y, n):
     """Quadrature quantization

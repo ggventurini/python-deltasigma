@@ -112,7 +112,7 @@ def mapABCD(ABCD, form='CRFB'):
         for i in range(1, order, 2):
             b[i] = b[i] - c[i]*b[i - 1]
             if odd:
-                b[i] = b[i] + g[(i - 1)/2]*b[i + 1]
+                b[i] = b[i] + g[(i - 1)//2]*b[i + 1]
         yscale = ABCD[order + 1, order]
         a = a*yscale
         b[-1] = b[-1]*yscale

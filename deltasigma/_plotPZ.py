@@ -72,8 +72,8 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
     p = np.real_if_close(np.round(p, 5))
     z = np.real_if_close(np.round(z, 5))
 
-    pole_fmt = {'marker': 'x', 'markersize': markersize}
-    zero_fmt = {'marker': 'o', 'markersize': markersize}
+    pole_fmt = {'marker': 'x', 'markersize': markersize, 'mew': markersize}
+    zero_fmt = {'marker': 'o', 'markersize': markersize, 'mew': markersize}
 
     if isinstance(color, list) or isinstance(color, tuple):
         pole_fmt['color'] = color[0]
@@ -82,12 +82,10 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
         pole_fmt['color'] = color
         zero_fmt['color'] = color
 
-    hold_status = plt.ishold()
     plt.grid(True)
 
     # Plot x and o for poles and zeros, respectively
     plt.plot(p.real, p.imag, linestyle='None', **pole_fmt)
-    plt.hold(True)
     if len(z) > 0:
         plt.plot(z.real, z.imag, linestyle='None', **zero_fmt)
 
@@ -128,6 +126,3 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
     # plt.axes().set_aspect('equal', 'datalim')
     plt.ylabel('Imag')
     plt.xlabel('Real')
-
-    if not hold_status:
-        plt.hold(False)

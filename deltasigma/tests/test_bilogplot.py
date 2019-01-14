@@ -40,8 +40,8 @@ class TestBiLogPlot(unittest.TestCase):
         ftest = int(np.round(f0*N + 1./3 * fB))
         u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
         v, xn, xmax, y = ds.simulateDSM(u, H)
-        spec = np.fft.fft(v*ds.ds_hann(N))/(N/4)
-        X = spec[:N/2 + 1]
+        spec = np.fft.fft(v*ds.ds_hann(N))/(N//4)
+        X = spec[:N//2 + 1]
         plt.figure()
         # graphical function: we check it doesn't fail
-        ds.bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10, 20))
+        ds.bilogplot(X, int(f0*N), ftest, (.03, .3, .3), (-140, 0, 10, 20))
