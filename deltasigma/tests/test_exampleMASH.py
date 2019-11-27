@@ -47,8 +47,8 @@ class testMultipleQ:
         Amp = ds.undbv(-3) # Test tone amplitude, relative to full-scale.
         f = 0.3 # will be adjusted to a bin
         N = 2**12
-        f1_bin = np.round(f1*N)
-        f2_bin = np.round(f2*N)
+        f1_bin = int(np.round(f1*N))
+        f2_bin = int(np.round(f2*N))
         fin = np.round(((1 - f)/2*f1 + (f + 1)/2*f2) * N)
         # input sine
         t = np.arange(0, N).reshape((1, -1))

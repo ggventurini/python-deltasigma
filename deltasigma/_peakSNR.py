@@ -89,8 +89,5 @@ def peakSNR(snr, amp):
     if _debug:
         import pylab as plt
         pred = np.dot(A, ab)
-        hold = plt.ishold()
-        plt.hold(True)
         plt.plot(dbv(amp), dbv(pred), '-', color='b')
-        plt.hold(hold)
     return peak_snr, peak_amp

@@ -915,7 +915,9 @@ __status__ = "Stable"
 # if not os.system('python -c "import matplotlib.pyplot as plt;plt.figure()"')
 import matplotlib
 import os
-if not ('DISPLAY' in os.environ or os.environ.get('READTHEDOCS', None)):
+if not ('DISPLAY' in os.environ
+        or os.name == 'nt'
+        or os.environ.get('READTHEDOCS', None)):
     matplotlib.use('Agg')
 
 from ._DocumentNTF import DocumentNTF
