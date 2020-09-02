@@ -20,7 +20,7 @@
 from __future__ import division
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 from numpy.fft import fft, fftshift
 
 from ._calculateSNR import calculateSNR
@@ -84,8 +84,8 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     # (It will be adjusted to be an fft bin)
     f = 0.3
     N = 2**12
-    f1_bin = np.round(f1*N)
-    f2_bin = np.round(f2*N)
+    f1_bin = int(np.round(f1*N))
+    f2_bin = int(np.round(f2*N))
     fin = round(((1 - f)/2*f1 + (f + 1)/2*f2) * N)
     if not quadrature:
         t = np.arange(0, N).reshape((1, -1))
@@ -99,11 +99,11 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
     NBW = 1.5/N
     spec0 = fft(v * window)/(M*N/4)
     if not quadrature:
-        freq = np.linspace(0, 0.5, N/2 + 1)
-        plt.plot(freq, dbv(spec0[:N/2 + 1]), 'c', linewidth=1)
-        plt.hold(True)
+        freq = np.linspace(0, 0.5, int(N/2) + 1)
+        plt.plot(freq, dbv(spec0[:int(N/2) + 1]), 'c', linewidth=1)
+        #plt.hold(True)
         spec_smoothed = circ_smooth(np.abs(spec0)**2., 16)
-        plt.plot(freq, dbp(spec_smoothed[:N/2 + 1]), 'b', linewidth=3)
+        plt.plot(freq, dbp(spec_smoothed[:int(N/2) + 1]), 'b', linewidth=3)
         Snn = np.abs(evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta/M)**2
         plt.plot(freq, dbp(Snn*NBW), 'm', linewidth=1)
         snr = calculateSNR(spec0[f1_bin:f2_bin + 1], fin - f1_bin)
@@ -123,7 +123,7 @@ def PlotExampleSpectrum(ntf, M=1, osr=64, f0=0, quadrature=False):
         freq = np.linspace(-0.5, 0.5, N + 1)
         freq = freq[:-1]
         plt.plot(freq, dbv(spec0), 'c', linewidth=1)
-        plt.hold(True)
+        #plt.hold(True)
         spec_smoothed = circ_smooth(abs(spec0)**2, 16)
         plt.plot(freq, dbp(spec_smoothed), 'b', linewidth=3)
         Snn = abs(evalTF(ntf, np.exp(2j * np.pi * freq))) ** 2 * 2 / 12 * (delta / M) ** 2
