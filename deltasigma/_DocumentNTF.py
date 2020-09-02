@@ -19,7 +19,7 @@
 from __future__ import division
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 from ._calculateTF import calculateTF
 from ._dbv import dbv
@@ -79,15 +79,19 @@ def DocumentNTF(arg1, osr=64, f0=0, quadrature=False):
     if stf is not None:
         fig.suptitle('NTF and STF', fontsize=14)
         G = dbv(evalTF(stf, z))
-        plt.hold(True)
+        #plt.hold(True)
         plt.plot(f, G, 'm')
-        plt.hold(False)
+        #plt.hold(False)
     else:
         fig.suptitle('NTF', fontsize=14)
 
     f1, f2 = ds_f1f2(osr, f0, quadrature)
     NG0 = dbv(rmsGain(ntf, f1, f2))
-    plt.hold(True)
+    
+    """
+    plt.figure()
+    """
+    #plt.hold(True)
     plt.plot(np.array([f1, f2]), NG0*np.array([1, 1]), 'k', linewidth=3)
 
     if f0  ==  0:
