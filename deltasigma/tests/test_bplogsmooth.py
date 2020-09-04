@@ -24,7 +24,7 @@ class TestBplogsmooth(unittest.TestCase):
         u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
         v, xn, xmax, y = ds.simulateDSM(u, H)
         spec = np.fft.fft(v*ds.ds_hann(N))/(N/4)
-        X = spec[:N/2 + 1]
+        X = spec[:N//2 + 1]
         self.f, self.p = ds.bplogsmooth(X, ftest, f0)
 
     def test_one(self):
