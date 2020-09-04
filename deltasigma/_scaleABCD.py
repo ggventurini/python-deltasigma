@@ -120,7 +120,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=100000, N0=
     N = N_sim
     u0 = np.hstack((np.exp(2j*np.pi*f*np.arange(-N0, 0))*raised_cosine, \
                     np.exp(2j*np.pi*f*np.arange(0, N)))) \
-         + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
+         + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, int(N + N0)))
     if not quadrature:
         u0 = np.real(u0)
     maxima = np.zeros((1, order)) - 1
