@@ -30,7 +30,7 @@ Synthesize a noise transfer function (NTF) for a delta-sigma modulator without
 optimizing the result.
 """
 
-from __future__ import devision
+from __future__ import division
 from warnings import warn
 
 import numpy as np
