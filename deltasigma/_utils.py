@@ -521,7 +521,7 @@ def _get_num_den(arg, input=0):
         num, den = ss2tf(A, B, C, D, input=input)
     elif isinstance(arg, lti):
         arx = arg.to_tf()
-        num, den = arg.num, arg.den
+        num, den = arx.num, arx.den
     elif _is_num_den(arg):
         num, den = carray(arg[0]).squeeze(), carray(arg[1]).squeeze()
     elif _is_zpk(arg):
