@@ -26,7 +26,7 @@ from ._simulateDSM import simulateDSM
 from ._simulateQDSM import simulateQDSM
 
 
-def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10):
+def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=100000, N0=10):
     """Scale the loop filter of a general delta-sigma modulator for dynamic range.
 
     The ABCD matrix is scaled so that the state maxima are less than the
@@ -96,10 +96,10 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=1e5, N0=10)
         # First get a rough estimate of umax.
         ulist = np.arange(0.1, 1.1, 0.1)*(nlev - 1)
         umax = nlev - 1
-        N = 1000.0
+        N = 1000
         u0 = np.hstack((np.exp(2j*np.pi*f*np.arange(-N0, 0))*raised_cosine, \
                         np.exp(2j*np.pi*f*np.arange(0, N)))) \
-              + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
+             + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
         if not quadrature:
             u0 = np.real(u0)
         for u in ulist:
