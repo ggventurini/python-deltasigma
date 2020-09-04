@@ -75,7 +75,7 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
             # Bandpass design-- shift and replicate the zeros.
             order = order*2
             z = np.sort(z) + 2*np.pi*f0
-            z = np.vstack((z,-z)).transpose().flatten()
+            z = np.vstack((z, -z)).transpose().flatten()
         z = np.exp(1j*z)
     else:
         z = opt
@@ -198,15 +198,16 @@ def synthesizeNTF1(order, osr, opt, H_inf, f0):
             # %options = optimset(options,'Display','iter');
             opt_result = fmin_l_bfgs_b(ds_synNTFobj1, x0, args=(p, osr, f0),
                                       approx_grad=True, bounds=list(zip(lb,ub)))
-            x=opt_result[0]
+            x = opt_result[0]
             x0 = x
             z = np.exp(2j*np.pi*(f0+0.5/osr*x))
             if f0 > 0:
                 z = padl(z, len(p)/2, np.exp(2j*np.pi*f0))
-            z = np.concatenate((z, z.conj()), axis=1)
+            #z = np.concatenate((z, z.conj()), axis=1)
+            z = np.ravel(np.column_stack( (z, z.conj()) ))
             if f0 == 0:
                 z = padl(z, len(p), 1)
-            if  np.abs(np.real(evalTF((z, p, k), z_inf)) - H_inf ) < ftol:
+            if np.abs(np.real(evalTF((z, p, k), z_inf)) - H_inf ) < ftol:
                 opt_iteration = 0
             else:
                 opt_iteration = opt_iteration - 1
