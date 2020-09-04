@@ -47,5 +47,5 @@ class TestCalculateSNR(unittest.TestCase):
         N = self.N
         hwfft = np.zeros((N//2, ))
         hwfft[512] = 1.0  # specially crafted to have Inf snr
-        snr = ds.calculateSNR(hwfft[:N/2], 512)
+        snr = ds.calculateSNR(hwfft[:N//2], 512)
         self.assertEqual(snr, np.Inf)
