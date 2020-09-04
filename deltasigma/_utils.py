@@ -444,7 +444,7 @@ def _get_zpk(arg, input=0):
     elif _is_zpk(arg):
         z, p, k = np.atleast_1d(arg[0]), np.atleast_1d(arg[1]), arg[2]
     elif _is_num_den(arg):
-        sys = lti(*arg)
+        sys = lti(*arg).to_zpk()
         z, p, k = sys.zeros, sys.poles, sys.gain
     elif _is_A_B_C_D(arg):
         z, p, k = ss2zpk(*arg, input=input)
@@ -520,6 +520,7 @@ def _get_num_den(arg, input=0):
         A, B, C, D = partitionABCD(arg)
         num, den = ss2tf(A, B, C, D, input=input)
     elif isinstance(arg, lti):
+        arx = arg.to_tf()
         num, den = arg.num, arg.den
     elif _is_num_den(arg):
         num, den = carray(arg[0]).squeeze(), carray(arg[1]).squeeze()
@@ -604,16 +605,17 @@ def _getABCD(arg):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
     elif isinstance(arg, lti):
-        A, B, C, D = arg.A, arg.B, arg.C, np.atleast_2d(arg.D)
+        arx = arg.to_ss()
+        A, B, C, D = arx.A, arx.B, arx.C, np.atleast_2d(arx.D)
     elif _is_zpk(arg) or _is_num_den(arg) or _is_A_B_C_D(arg):
-        sys = lti(*arg)
+        sys = lti(*arg).to_ss()
         A, B, C, D = sys.A, sys.B, sys.C, sys.D
     elif isinstance(arg, collections.Iterable):
         A, B, C, D = None, None, None, None
         for i in arg:
             # Note we do not check if the user has assembled a list with
             # mismatched lti representations.
-            sys = lti(*i) if not hasattr(i, 'A') else i
+            sys = lti(*i).to_ss() if not hasattr(i, 'A') else i
             if A is None:
                 A = sys.A
             elif not np.allclose(sys.A, A, atol=1e-8, rtol=1e-5):
