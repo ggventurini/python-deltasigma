@@ -30,6 +30,7 @@ Synthesize a noise transfer function (NTF) for a delta-sigma modulator without
 optimizing the result.
 """
 
+from __future__ import devision
 from warnings import warn
 
 import numpy as np
@@ -111,7 +112,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
     # Determine the zeros.
     if f0 != 0:
         # Bandpass design-- halve the order temporarily.
-        order = order/2
+        order = order//2
         dw = np.pi/(2*osr)
     else:
         dw = np.pi/osr
@@ -192,7 +193,7 @@ def synthesizeNTF0(order, osr, opt, H_inf, f0):
             mb2 = c2pif0 + e2*np.exp(1j*w)
             p = mb2 - np.sqrt(mb2**2-1)
             # Reflect poles to be inside the unit circle
-            out = abs(p)>1
+            out = abs(p) > 1
             p[out] = 1/p[out]
             # The following is not exactly what delsig does.
             p = cplxpair(p)
