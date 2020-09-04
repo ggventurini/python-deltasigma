@@ -20,7 +20,7 @@ from __future__ import division
 
 import unittest
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 import deltasigma as ds
 
 class TestBiLogPlot(unittest.TestCase):
@@ -41,7 +41,7 @@ class TestBiLogPlot(unittest.TestCase):
         u = 0.5*np.sin(2*np.pi*ftest/N*np.arange(N))
         v, xn, xmax, y = ds.simulateDSM(u, H)
         spec = np.fft.fft(v*ds.ds_hann(N))/(N/4)
-        X = spec[:N/2 + 1]
+        X = spec[:N//2 + 1]
         plt.figure()
         # graphical function: we check it doesn't fail
         ds.bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10, 20))
