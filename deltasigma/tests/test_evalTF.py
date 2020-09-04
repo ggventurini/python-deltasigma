@@ -38,7 +38,7 @@ class TestEvalTF(unittest.TestCase):
         self.h2 = ds.evalTF(tstr2, z)
         self.h3 = ds.evalTF(H, z)
         self.h4 = ds.evalTF(lti(tstr2.zeros, tstr2.poles, tstr2.gain), z)
-        h5tf = lti(tstr2.zeros, tstr2.poles, tstr2.gain)
+        h5tf = lti(tstr2.zeros, tstr2.poles, tstr2.gain).to_ss()
         self.h5 = ds.evalTF((h5tf.A, h5tf.B, h5tf.C, h5tf.D), z)
         h6tf = np.vstack((np.hstack((h5tf.A, h5tf.B)),
                           np.hstack((h5tf.C, np.atleast_2d(h5tf.D)))))
