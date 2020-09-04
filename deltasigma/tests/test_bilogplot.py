@@ -44,4 +44,4 @@ class TestBiLogPlot(unittest.TestCase):
         X = spec[:N//2 + 1]
         plt.figure()
         # graphical function: we check it doesn't fail
-        ds.bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10, 20))
+        ds.bilogplot(X, int(f0*N), ftest, (.03, .3, .3), (-140, 0, 10, 20))
