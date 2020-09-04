@@ -67,7 +67,7 @@ class TestAxisLabels(unittest.TestCase):
         as_, gs, bs, cs = ds.mapABCD(ABCDs)
         # ### Calculate the state maxima
         u = np.linspace(0, umax, 30)
-        N = 1e4
+        N = 10000
         T = np.ones((N,))
         maxima = np.zeros((order, len(u)))
         for i in range(len(u)):
