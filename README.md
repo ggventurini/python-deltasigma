@@ -5,6 +5,8 @@ python-deltasigma
 This folked repository is maintained by **Yuki Fukuda**.  
 If you want to visit and original repository, visit [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
 
+***  
+
 A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
 
 
