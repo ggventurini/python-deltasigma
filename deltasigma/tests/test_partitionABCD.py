@@ -28,7 +28,7 @@ class TestPartitionABCD(unittest.TestCase):
 
     def setUp(self):
         # data for test 1
-        self.ob = lti((1, ), (1, 2, 10))
+        self.ob = lti((1, ), (1, 2, 10)).to_ss()
         ab = np.hstack((self.ob.A, self.ob.B))
         cd = np.hstack((self.ob.C, self.ob.D.reshape((1,1))))
         self.ABCD1 = np.vstack((ab, cd))

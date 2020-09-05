@@ -79,7 +79,7 @@ def bplogsmooth(X, tbin, f0):
     p = np.zeros(f.shape)
     for i in range(f.shape[0]):
         p[i] = dbp(
-                   norm(X[startbin[i]:stopbin[i] + 1]**2. /
+                   norm(X[int(startbin[i]):int(stopbin[i]) + 1]**2. /
                         (stopbin[i] - startbin[i] + 1.),
                        ord=1)
                   )

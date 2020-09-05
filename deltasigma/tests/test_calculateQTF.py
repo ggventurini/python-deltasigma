@@ -151,9 +151,12 @@ def allsortedclose(a, b, atol=1e-3, rtol=1e-3):
     if np.iscomplex(a).any():
         a = np.sort_complex(a)
     else:
-        a = np.sort(a)
+        #a = np.sort(list(a))
+        a = np.sort(a, axis=None)
     if np.iscomplex(b).any():
         b = np.sort_complex(b)
     else:
-        b = np.sort(b)
+        #b = np.sort(list(b))
+        b = np.sort(b, axis=None)
+        
     return np.allclose(a, b, rtol=rtol, atol=atol)

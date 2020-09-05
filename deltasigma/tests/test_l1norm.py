@@ -31,8 +31,12 @@ class Testl1norm(unittest.TestCase):
         k = 1.
         self.zpk_tuple = zeros, poles, k
         splti = lti(zeros, poles, k)
-        self.num_den_tuple = (splti.num, splti.den)
-        self.ABCD_tuple = (splti.A, splti.B, splti.C, splti.D)
+        #self.num_den_tuple = (splti.num, splti.den)
+        #self.ABCD_tuple = (splti.A, splti.B, splti.C, splti.D)
+        spltf = splti.to_tf()
+        self.num_den_tuple = (spltf.num, spltf.den)
+        splss = splti.to_ss()
+        self.ABCD_tuple = (splss.A, splss.B, splss.C, splss.D)
         self.splti = splti
 
     def test_l1norm_1(self):

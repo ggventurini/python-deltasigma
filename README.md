@@ -1,6 +1,8 @@
 python-deltasigma
 =================
 
+This folked repository is maintained by **Yuki Fukuda**.
+
 A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
 
 
