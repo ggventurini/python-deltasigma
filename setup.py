@@ -18,7 +18,7 @@ setup(
     package_data={
       'deltasigma': ['tests/test_data/*.mat', 'tests/test_data/*.txt']
     },
-    install_requires=['numpy>=1.18.1', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
+    install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
     zip_safe=False,
     include_package_data=True,
     author="Giuseppe Venturini and others",
