@@ -153,6 +153,7 @@ def allsortedclose(a, b, atol=1e-3, rtol=1e-3):
     else:
         #a = np.sort(list(a))
         a = np.sort(a)
+        print(type(a))
     if np.iscomplex(b).any():
         b = np.sort_complex(b)
     else:
