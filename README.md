@@ -1,7 +1,9 @@
 python-deltasigma
 =================
 
-This folked repository is maintained by **Yuki Fukuda**.
+## Notes  
+This folked repository is maintained by **Yuki Fukuda**.  
+If you want to visit and original repository, visit [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
 
 A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
 
@@ -20,7 +22,7 @@ it is very heavily based.
 
 **Documentation:** [docs.python-deltasigma.io](http://docs.python-deltasigma.io)
 
-**Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
+**Original Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
 
 [![Build Status](https://travis-ci.org/Yuki-F-HCU/python-deltasigma.svg?branch=master)](https://travis-ci.org/Yuki-F-HCU/python-deltasigma) 
@@ -47,7 +49,7 @@ according to
 
 `python-deltasigma` runs on Linux, Mac OS X and Windows.
 
-Installing requires **Python 2.6+** or **3.3+**, **numpy**, **scipy**
+Installing requires **Python 3.5+**, **numpy**, **scipy**
 (>= 0.11.0) and **matplotlib**.
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
@@ -62,7 +64,7 @@ When the dependencies are satisfied, run:
 
     pip install deltasigma
 
-to install the latest stable version from the [Python
+to install the latest original stable version from the [Python
 Package Index (PYPI)](http://pypi.python.org), or:
 
     python setup.py install
