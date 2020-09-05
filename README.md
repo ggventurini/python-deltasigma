@@ -23,10 +23,7 @@ it is very heavily based.
 **Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
-[![PyPi version](http://img.shields.io/badge/version-0.2-brightgreen.png)](https://pypi.python.org/pypi/deltasigma/)
-[![PyPi downloads](https://img.shields.io/pypi/dm/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
-[![PyPi pythons](https://img.shields.io/pypi/pyversions/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
+[![Build Status](https://travis-ci.org/Yuki-F-HCU/python-deltasigma.svg?branch=master)](https://travis-ci.org/Yuki-F-HCU/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.18529.svg)](http://dx.doi.org/10.5281/zenodo.18529)
 
