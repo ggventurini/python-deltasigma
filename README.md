@@ -66,7 +66,7 @@ When the dependencies are satisfied, run:
 
     pip install deltasigma
 
-to install the latest original stable version from the [Python
+to install the latest [original stable version](https://github.com/ggventurini/python-deltasigma) from the [Python
 Package Index (PYPI)](http://pypi.python.org), or:
 
     python setup.py install
