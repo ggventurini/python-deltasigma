@@ -21,7 +21,7 @@ from __future__ import division
 from warnings import warn
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 
 def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None,
