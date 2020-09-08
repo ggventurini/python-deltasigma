@@ -30,7 +30,6 @@ class TestchangeFig(unittest.TestCase):
 
     def test_changeFig(self):
         """Test function for changeFig()"""
-        changeFig(yfticks='sci') # first test to check line 85 -> 87
         fig = plt.figure()
         xval = np.arange(0, 1, .01)
 
