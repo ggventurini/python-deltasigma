@@ -17,7 +17,7 @@
 """
 from __future__ import division
 
-import pylab as plt
+import matplotlib.pyplot as plt
 
 from ._logsmooth import logsmooth
 
