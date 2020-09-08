@@ -30,7 +30,6 @@ it is very heavily based.
 [![Build Status](https://travis-ci.org/Yuki-F-HCU/python-deltasigma.svg?branch=master)](https://travis-ci.org/Yuki-F-HCU/python-deltasigma) 
 [![Coverage Status](https://coveralls.io/repos/github/Yuki-F-HCU/python-deltasigma/badge.svg?branch=master)](https://coveralls.io/github/Yuki-F-HCU/python-deltasigma?branch=master)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.18529.svg)](http://dx.doi.org/10.5281/zenodo.18529)
 
 
 ***
