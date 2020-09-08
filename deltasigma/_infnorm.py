@@ -57,7 +57,8 @@ def infnorm(H):
     dw = 2*np.pi/(N-1)
     Hval = evalTF(H, np.exp(1j*w))
     Hinf = np.max(np.abs(Hval))
-    wi = np.where(np.abs(Hval) == Hinf)[0]
+    wi = np.where(np.abs(Hval) == Hinf)
+    wi = wi[0][0]
 
     # Home in using the scipy "fminbound" function.
     # original MATLAB code:
