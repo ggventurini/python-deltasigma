@@ -26,7 +26,7 @@ class TestPlotExampleSpectrum(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_PlotExampleSpectrum_NTF(self):
+    def test_PlotExampleSpectrum_NTF_0(self):
         """Test function for PlotExampleSpectrum()"""
         order = 3
         osr = 32
@@ -35,8 +35,18 @@ class TestPlotExampleSpectrum(unittest.TestCase):
         ntf = ds.synthesizeNTF(order, osr, 0, Hinf, f0)
         ret = ds.PlotExampleSpectrum(ntf, M=1, osr=osr, f0=f0)
         self.assertIsNone(ret)
+        
+    def test_PlotExampleSpectrum_NTF_1(self):
+        """Test function for PlotExampleSpectrum()"""
+        order = 4
+        osr = 32
+        f0 = 0.5
+        Hinf = 1.5
+        ntf = ds.synthesizeNTF(order, osr, 0, Hinf, f0)
+        ret = ds.PlotExampleSpectrum(ntf, M=1, osr=osr, f0=f0)
+        self.assertIsNone(ret)
 
-    def test_PlotExampleSpectrum_QNTF(self):
+    def test_PlotExampleSpectrum_QNTF_0(self):
         """Test function for PlotExampleSpectrum() with QNTF"""
         order = 4
         osr = 32
@@ -44,6 +54,19 @@ class TestPlotExampleSpectrum(unittest.TestCase):
         NG = -50
         ING = -10
         f0 = 1 / 16
+        delta = 2
+        ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
+        ret = ds.PlotExampleSpectrum(ntf0, M, osr, f0, quadrature=True)
+        self.assertIsNone(ret)
+        
+    def test_PlotExampleSpectrum_QNTF_1(self):
+        """Test function for PlotExampleSpectrum() with QNTF"""
+        order = 4
+        osr = 32
+        M = 8
+        NG = -50
+        ING = -10
+        f0 = -1 / 16
         delta = 2
         ntf0 = ds.synthesizeQNTF(order, osr, f0, NG, ING)
         ret = ds.PlotExampleSpectrum(ntf0, M, osr, f0, quadrature=True)
