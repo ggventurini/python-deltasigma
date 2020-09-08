@@ -19,7 +19,7 @@
 from warnings import warn
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 
 # Plot lollipops (o's and sticks)
