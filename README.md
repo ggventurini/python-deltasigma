@@ -52,7 +52,7 @@ according to
 `python-deltasigma` runs on Linux, Mac OS X and Windows.
 
 Installing requires **Python 3.5+**, **numpy**, **scipy**
-(>= 0.11.0) and **matplotlib**.
+(>= 0.11.0) and **matplotlib**.  
 **Note: Python 2.7 is no longer supported, also this package.**
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
