@@ -51,7 +51,7 @@ class TestPlotSpectrum(unittest.TestCase):
         window = ds.ds_hann(N)
         NBW = 1.5/N
         spec0 = fft(v * window)/(N/4)
-        freq = np.linspace(0, 0.5, N/2 + 1)
+        freq = np.linspace(0, 0.5, N//2 + 1)
         # plotting
         plt.subplot(211)
         plt.plot(freq, ds.dbv(spec0[:N//2 + 1]), 'c', linewidth=1, label='$S$')
