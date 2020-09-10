@@ -23,7 +23,7 @@ before_install:
 install:
   - conda create --quiet --yes -n buildenv python=$TRAVIS_PYTHON_VERSION
   - source activate buildenv
-  - conda install --yes numpy scipy matplotlib cython nose setuptools coverage
+  - conda install --yes numpy scipy matplotlib>=3.1.0 cython nose setuptools coverage
   - pip install python-coveralls
   - python setup.py install
 
