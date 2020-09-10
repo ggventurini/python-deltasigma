@@ -74,7 +74,7 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
     
     if (sys.version_info.minor <= 5):
         markerline, stemlines, baseline = plt.stem(x, y, '-')
-    el (sys.version_info.minor > 5):
+    else:
         markerline, stemlines, baseline = plt.stem(x, y, '-', use_line_collection=False)
     
     if not color or color == 'None':
