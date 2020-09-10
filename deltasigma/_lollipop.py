@@ -70,7 +70,8 @@ def lollipop(x, y, color=None, lw=2, ybot=0):
     if ybot:
         warn('lollipop() got a non-zero ybot, but only ybot=0 is ' + \
              'supported. Setting ybot to 0.')
-    markerline, stemlines, baseline = plt.stem(x, y, '-')
+    #markerline, stemlines, baseline = plt.stem(x, y, '-')
+    markerline, stemlines, baseline = plt.stem(x, y, '-', use_line_collection=False)
     if not color or color == 'None':
         color = stemlines[0].get_color()
     lolli_fmt = {'linewidth': lw, 'color': color}
