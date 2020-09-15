@@ -14,7 +14,7 @@ def read(fname):
 setup(
     name='deltasigma',
     version=__version__,
-    packages=find_packages(),
+    packages=find_packages('deltasigma', exclude=['beta']),
     package_data={
       'deltasigma': ['tests/test_data/*.mat', 'tests/test_data/*.txt']
     },
