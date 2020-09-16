@@ -90,13 +90,15 @@ def figureMagic(xRange=None, dx=None, xLab=None, yRange=None, dy=None,
         ax.set_title(name, fontsize=14)
 
     if xRange is not None or yRange is not None:
-        ax.set_autoscale_on(False)
+        #ax.set_autoscale_on(False)
         ax.set_aspect('auto', 'box')
 
     if xRange is not None:
-        ax.set_xlim(xRange)
+        #ax.set_xlim(xRange)
+        ax.set_xlim(xRange[0], xRange[1])
     if yRange is not None:
-        ax.set_ylim(yRange)
+        #ax.set_ylim(yRange)
+        ax.set_ylim(yRange[0], yRange[1])
 
     if dx is not None:
         x1, x2 = ax.get_xlim()
