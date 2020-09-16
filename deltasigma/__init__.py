@@ -999,3 +999,4 @@ from ._undbp import undbp
 from ._undbv import undbv
 from ._utils import circshift, cplxpair, mfloor, mround, pretty_lti, rat, gcd, lcm
 from ._zinc import zinc
+# from . import PosInvSet
