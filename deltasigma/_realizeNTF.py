@@ -146,7 +146,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 T[j - 2, i] = product
             if odd:
                 T[0, i] = product / (z - 1)
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b[0,:order] = a[0, :]
             b[0, order] = 1
