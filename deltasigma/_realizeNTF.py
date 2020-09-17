@@ -172,7 +172,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = z / evalRPoly(ntf_z[j:j + 2], z) * product
                 T[j, i] = product * Dfactor
                 T[j + 1, i] = product
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b = np.hstack((np.atleast_2d(1),
                            np.zeros((1, order - 1)),
@@ -196,7 +196,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 T[j - 1, i] = product
             if odd:
                 T[0, i] = product / (z - 1.)
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b[0,:order] = a
             b[0, order] = 1.
@@ -220,7 +220,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = product / evalRPoly(ntf_z[j:j + 2], z)
                 T[j, i] = product * Dfactor
                 T[j + 1, i] = product
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b = np.zeros((1, order + 1))
             b[0, 0] = 1.
@@ -240,7 +240,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 T[j - 1, i] = product
             if odd:
                 T[0, i] = product * z / (z - 1.)
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b = np.hstack((a, np.zeros((1, 1))))
             b[0, order] = 1.
@@ -264,7 +264,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = z / evalRPoly(ntf_z[j:j + 2], z) * product
                 T[j, i] = product * Dfactor
                 T[j + 1, i] = product
-        a = -np.real(np.linalg.lstsq(T.T, zL1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, zL1.T, rcond=None)[0]).T
         if stf is None:
             b = np.hstack((np.atleast_2d(1),
                            np.zeros((1, order - 1)),
@@ -319,7 +319,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = z / evalRPoly(ntf_z[j:j + 2], z) * product
                 T[j, i] = product * Dfactor
                 T[j + 1, i] = product
-        a = -np.real(np.linalg.lstsq(T.T, zL1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, zL1.T, rcond=None)[0]).T
         if stf is None:
             b = np.hstack((np.atleast_2d(1),
                            np.zeros((1, order_1 - 1)),
@@ -350,7 +350,7 @@ def realizeNTF(ntf, form='CRFB', stf=None):
                 product = product / evalRPoly(ntf_z[j:j + 2], z)
                 T[j, i] = product * Dfactor
                 T[j + 1, i] = product
-        a = -np.real(np.linalg.lstsq(T.T, L1.T)[0]).T
+        a = -np.real(np.linalg.lstsq(T.T, L1.T, rcond=None)[0]).T
         if stf is None:
             b = np.hstack((
                            np.atleast_2d(1),
