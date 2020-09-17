@@ -278,7 +278,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         e1[0] = 1.
         y = y - e1
     # Solve for the coefficients
-    x = linalg.lstsq(yy, y)[0]
+    x = linalg.lstsq(yy, y, rcond=None)[0]
     if linalg.norm(np.dot(yy, x) - y) > 0.0001:
         warn('Pulse response fit is poor.')
     if form == 'FB':
