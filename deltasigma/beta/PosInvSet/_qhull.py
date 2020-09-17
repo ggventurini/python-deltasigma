@@ -17,7 +17,7 @@ import scipy.spatial as spatial
 import numpy as np
 from typing import List, Tuple
 
-def qhull(points:int, qhull_options:str='Qcx C0.001 A0.999')->Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def qhull(points:np.ndarray, qhull_options:str='Qcx C0.001 A0.999')->Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Convex hull finder based on qhull
 
     Parameters
@@ -52,7 +52,7 @@ def qhull(points:int, qhull_options:str='Qcx C0.001 A0.999')->Tuple[np.ndarray, 
     hull = spatial.ConvexHull(points, qhull_options)
     V = hull.vertices
     E = hull.simplices
-    N = hull.equations[:, 0:-2]
+    N = hull.equations[:, 0:-1]
     O = hull.equations[:, -1]
 
     return V, E, N, O
