@@ -29,6 +29,6 @@ def dscut(p1: np.ndarray, y1: np.ndarray, p2: np.ndarray, y2: np.ndarray)->np.nd
     k1 = y2 / (y2 - y1)
     k2 = 1 - k1
     n = np.shape(p1)[0]
-    p = k1[np.ones((n, 1)), :] * p1 + k2[np.ones((n, 1))] * p2
+    p = np.tile([k1[0, :]], (n, 1)) * p1 + np.tile([k2[0, :]], (n, 1)) * p2
 
     return p
