@@ -62,7 +62,7 @@ def mapABCD(ABCD, form='CRFB'):
     supdiag = [a[odd:order - 1:2] for a in diagonal_indices(ABCD, +1)]
     if form in ('CRFB', 'CIFB', 'CRFBD'):
         c = ABCD[subdiag]
-        g = -ABCD[supdiag]
+        g = -ABCD[tuple(supdiag)]
         if form == 'CRFB':
             dly = np.arange(1 + odd, order, 2)
             ABCD[dly, :] = ABCD[dly, :] \
@@ -82,7 +82,7 @@ def mapABCD(ABCD, form='CRFB'):
                             np.array((-ABCD[0, order + 1],)), 
                             ABCD[subdiag][:-1]
                           ))
-        g = -ABCD[supdiag]
+        g = -ABCD[tuple(supdiag)]
         if even:
             multg = np.arange(0, order, 2)
             ABCD[multg, :] = ABCD[multg, :] + np.dot(np.diag(g), ABCD[multg + 1, :])
@@ -101,7 +101,7 @@ def mapABCD(ABCD, form='CRFB'):
         subdiag = diagonal_indices(ABCD[:order, :order], -1)
         supdiag = [a[odd:order:2] for a in 
                       diagonal_indices(ABCD[:order, :order], +1)]
-        g = -ABCD[supdiag]
+        g = -ABCD[tuple(supdiag)]
         c = np.concatenate((np.atleast_1d(-ABCD[0, order + 2]), ABCD[subdiag]))
         a = np.zeros((order, ))
         for i in range(0, order, 2):
@@ -120,7 +120,7 @@ def mapABCD(ABCD, form='CRFB'):
         a = ABCD[order, :order]
         c = np.concatenate((np.atleast_1d(-ABCD[0, order + 1]),
                             ABCD[subdiag][:-1]))
-        g = -ABCD[supdiag]
+        g = -ABCD[tuple(supdiag)]
         b = ABCD[:, order].T
     else:
         raise ValueError('Form %s is not yet supported.' % form)
