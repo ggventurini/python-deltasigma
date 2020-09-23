@@ -170,9 +170,9 @@ def stuffABCD(a, g, b, c, form='CRFB'):
         # rows to have c*(preceding row) added.
         multc = np.arange(1, order, 2)
         if order > 2:
-            ABCD[[i[1::2] for i in tuple(subdiag)]] = c[0, 2::2]
+            ABCD[tuple([i[1::2] for i in subdiag])] = c[0, 2::2]
         if even:
-            ABCD[[i[::2] for i in tuple(supdiag)]] = -g.reshape((-1,))
+            ABCD[tuple([i[::2] for i in supdiag])] = -g.reshape((-1,))
         else:
             # subtract g*(following row) from the multc rows
             ABCD[multc, :] = ABCD[multc, :] - np.dot(np.diag(g[0, :]), ABCD[multc + 1, :])
