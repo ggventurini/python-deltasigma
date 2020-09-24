@@ -29,7 +29,54 @@ def edgeplot(e, s, fmt:str = '-'):
                [3, 2, 3],
                [2, 9, 9]]
 
-    elif np.shape(s)[0] == 4:
+        for p in range(3):
+            ax = fig.add_subplot(2, 2, tbl[p, 0])
+            x = tbl[p, 1]
+            y = tbl[p, 2]
+            ax.set_xlabel('x' + str(x))
+            ax.set_ylabel('x' + str(y))
 
+            for i in range(np.shape(e)[1]):
+                p1 = s[:, e[0, i]]
+                p2 = s[:, e[1, i]]
+                ax.plot([p1[x], p2[x]], [p1[y], p2[y]], fmt)
+            
+            ax.grid(True)
+
+        ax1 = fig.add_subplot(2, 2, tbl[3, 0], projection='3d')
+        ax1.set_xlabel('x1')
+        ax1.set_ylabel('x2')
+        ax1.set_zlabel('x3')
+
+        for i in range(np.shape(e)[1]):
+            p1 = s[:, e[0, i]]
+            p2 = s[:, e[1, i]]
+            ax1.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]], fmt)
+
+        ax1.grid(True)
+
+
+    elif np.shape(s)[0] == 4:
+        fig = plt.figure()
+        tbl = [[1, 1, 2, 3],
+               [2, 1, 2, 4],
+               [3, 1, 3, 4],
+               [4, 2, 3, 4]]
+
+        for p in range(4):
+            ax = fig.add_subplot(2, 2, tbl[p, 0], projection='3d')
+            x = tbl[p, 1]
+            y = tbl[p, 3]
+            z = tbl[p, 4]
+            ax.set_xlabel('x' + str(x))
+            ax.set_ylabel('x' + str(y))
+            ax.set_zlabel('x' + str(z))
+
+            for i in range(np.shape(e)[1]):
+                p1 = s[:, e[0, i]]
+                p2 = s[:, e[1, i]]
+                ax.plot([p1[x], p2[x]], [p1[y], p2[y]], [p1[z], p2[z]], fmt)
+
+            ax.grid(True)
     else:
         pass
