@@ -119,3 +119,4 @@ def dsmap(u:np.ndarray, ABCD:np.ndarray, nlev:int, x:np.ndarray, e:np.ndarray, v
         translation = (u2-u)*ABCD[0:n, n]
         nx = np.hstack([nx, nx+np.tile(translation[:, 0], (1, np.shape(nx)[1]))])
     
+    return nx
