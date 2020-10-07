@@ -50,7 +50,7 @@ try:
         # not being available.
         raise ImportError('CBLAS extension disabled on Windows')
     import pyximport
-    pyximport.install(setup_args=setup_args)
+    pyximport.install(setup_args=setup_args, language_level=3)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
 except ImportError as e:
     if _debug:
@@ -59,7 +59,7 @@ except ImportError as e:
 
 try:
     import pyximport
-    pyximport.install(setup_args=setup_args, inplace=True)
+    pyximport.install(setup_args=setup_args, inplace=True, language_level=3)
     from ._simulateDSM_scipy_blas import simulateDSM as _simulateDSM_scipy_blas
 except ImportError as e:
     if _debug:
