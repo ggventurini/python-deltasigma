@@ -53,7 +53,8 @@ according to
 
 Installing requires **Python 3.5+**, **numpy**, **scipy**
 (>= 0.11.0) and **matplotlib**.  
-**Note: Python 2.7 is no longer supported officialy, also this package.**
+**Note: Python 2.7 is no longer supported officialy, also this package.**  
+**      Python 3.5 support will be dropped soon in this package.**  
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
 
