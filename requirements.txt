@@ -1,0 +1,7 @@
+# python >= 3.6
+numpy
+scipy
+matplotlib
+cython
+nose
+setuptools
