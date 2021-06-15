@@ -109,6 +109,7 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
         for itn in range(ITN_MAX):
             ntf = synthesizeNTF(order, OSR, 1., x)
             f = dbv(rmsGain(ntf, 0., f1)) - NG
+            f_old = f
             if debug_it:
                 print('x=%.2f f=%.2f' % (x, f))
             if abs(f) < 0.01:
@@ -172,6 +173,7 @@ def synthesizeQNTF(order=4, OSR=64, f0=0., NG=-60, ING=-20, n_im=None):
                 plt.text(np.mean([-f1, -f2]), ING0, ('ING=%.1fdB' % ING0), va='bottom')
                 plt.show()
             f = np.array([NG0 - NG, ING0 - ING])
+            f_old = f.copy()
             if max(abs(f)) < 0.01:
                 break
             if norm(f) < lowest_f:
