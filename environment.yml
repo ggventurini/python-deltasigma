@@ -1,0 +1,12 @@
+name: base
+channels:
+  - defaults
+dependencies:
+  - python==3.8.*
+  - numpy
+  - scipy
+  - matplotlib
+  - cython
+  - nose
+  - setuptools
+  
