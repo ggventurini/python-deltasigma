@@ -3,7 +3,7 @@ python-deltasigma
 
 ## Notes  
 This forked repository is maintained by **Yuki Fukuda**.  
-If you want to visit original repository, visit [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
+If you want to visit original repository,  [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
 
 ---
 
