@@ -43,12 +43,14 @@ warned = False
 # https://github.com/ggventurini/python-deltasigma/issues
 
 try:
+    """
     if 'nt' in os.name:
         # if somebody actually goes through the trouble of compiling
         # it on Windows, we'll make available a patch to re-enable it.
         # In most cases now, users only get error messages from BLAS
         # not being available.
         raise ImportError('CBLAS extension disabled on Windows')
+    """
     import pyximport
     pyximport.install(setup_args=setup_args, language_level=3)
     from ._simulateDSM_cblas import simulateDSM as _simulateDSM_cblas
