@@ -39,7 +39,7 @@ def dsisPlot(dbg, itn, order, x, s, e, ns, out):
         dotplot(x)
         plt.grid()
         polyplot(s, 'k')
-        dotplot(ns, ko)
+        dotplot(ns, 'ko')
         dotplot(ns[:, np.nonzero(out)[0]], 'rs')
         plt.title(str_title)
     elif order >= 3:
