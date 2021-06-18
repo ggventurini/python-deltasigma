@@ -62,7 +62,7 @@ def hull2d(p)->Tuple[np.ndarray, np.ndarray]:
     below = p[ib, :]
 
     # Sort them in terms of increasing first coordinate
-    if isabove.any() == True:
+    if isAbove.any() == True:
         junk = np.sort(above[:, 0])
         isort = np.argsort(above[:, 0])
         above = [[l],
