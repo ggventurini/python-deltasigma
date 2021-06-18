@@ -24,7 +24,7 @@ from .._simulateDSM import simulateDSM
 from .._partitionABCD import partitionABCD
 from typing import Tuple
 
-def findPIS(u, ABCD, nlev:int=2, dbg:int=0, itnLimit:int=2000, expFactor:float=0.01, N:int=1000, skip:int=100, qhullArgA:float=0.999, qhullArgC:float=0.001)->Tuple[]:
+def findPIS(u, ABCD, nlev:int=2, dbg:int=0, itnLimit:int=2000, expFactor:float=0.01, N:int=1000, skip:int=100, qhullArgA:float=0.999, qhullArgC:float=0.001):
     """
     Find a positively-invariant set.
 
