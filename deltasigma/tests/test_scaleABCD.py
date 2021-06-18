@@ -83,6 +83,10 @@ class TestScaleABCD(unittest.TestCase):
         # this is a rather high relative error. We get it on Travis-CI
         # Probably related to the libs used?
         self.assertTrue(np.allclose(ABCD, self.ABCD_ref, atol=1e-2, rtol=30e-2))
+        if not np.allclose(umax, self.umax_ref, atol=1e-4, rtol=1e-3):
+            # An error occured on Vanilla Python 3.8
+            print(umax)
+            print(self.umax_ref)
         self.assertTrue(np.allclose(umax, self.umax_ref, atol=1e-4, rtol=1e-3))
         self.assertTrue(np.allclose(np.diag(S), self.Sdiag_ref, atol=1e-2, rtol=25e-1))
 
