@@ -14,6 +14,7 @@
 # LICENSE file for the licensing terms.
 
 import numpy as np
+from ._leftof import leftof
 from typing import Tuple
 
 def hull2d(p)->Tuple[np.ndarray, np.ndarray]:
@@ -87,7 +88,7 @@ def hull2d(p)->Tuple[np.ndarray, np.ndarray]:
     i = [[ib[0]], [ib[1]]]
     nv = 2
 
-    for i in range(2, nb):
+    for n in range(2, nb):
         p = below[n, :]
 
         while leftof(p, a, b) != True:
