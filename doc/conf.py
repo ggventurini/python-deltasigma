@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 #
 # python-deltasigma documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct 16 17:52:17 2013.
@@ -200,7 +201,7 @@ latex_elements = {
 'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-'preamble': '\\usepackage{mathrsfs}\n',
+'preamble': '\usepackage{mathrsfs}\n',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
