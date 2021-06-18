@@ -19,7 +19,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 def edgeplot(e, s, fmt:str = '-'):
     if np.shape(s)[0] == 2:
-        plt.plot([s[0, :] s[0, 0]], [s[1, :], s[1, 0]], fmt)
+        plt.plot([s[0, :], s[0, 0]], [s[1, :], s[1, 0]], fmt)
         plt.grid()
 
     elif np.shape(s)[0] == 3:
