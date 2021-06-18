@@ -9,4 +9,4 @@ dependencies:
   - cython
   - nose
   - setuptools
-  
+  - coverage
