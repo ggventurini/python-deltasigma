@@ -55,7 +55,7 @@ def hull2d(p)->Tuple[np.ndarray, np.ndarray]:
         return v, i
 
     # Split the points into those above and those below the l-r line.
-    isabove = leftof(p, l, r)
+    isAbove = leftof(p, l, r)
     ia = np.nonzero(isAbove)[0]
     ib = np.where(isAbove == 0)[0]
     above = p[ia, :]
