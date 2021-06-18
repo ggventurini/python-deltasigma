@@ -1,19 +1,19 @@
 % Delta-Sigma Toolbox
-% Version 7.4 2011-12-23
-% R. Schreier, Analog Devices Inc.
+% Version 2020.0
+% R. Schreier, now retired from Analog Devices
 %
-% Consult the DSToolbox.pdf and OnePageStory.pdf 
-% files for more complete documentation.
+% Consult the DSToolbox.pdf and OnePageStory files for more complete documentation.
 %
 % Modulator synthesis and simulation
 %   synthesizeNTF - Noise transfer function (NTF) synthesis.
 %   clans         - "Closed-loop analysis of noise shapers"
 %		    (NTF synthesis for multi-bit modulators).
+%		    Requires the Optimization Toolbox.
 %   simulateDSM   - Simulate a delta-sigma modulator using either 
 %		    its NTF or its state-space description.
-%   simulateSNR   - Use simulateDSM to simulate a DSM with sine wave inputs 
-%		    of varying amplitudes and then determine the SNR for each.
-%   simulateESL   - Simulate the element selection logic in a mismatch-shaping DAC.
+%   simulateSNR   - Simulate a DSM with sine wave inputs of varying amplitudes 
+%		    using simulateDSM and record the resulting SNR.
+%   simulateMS    - Simulate vector-based mismatch-shaping.
 %
 % Modulator realization
 %   realizeNTF	  - Compute coefficients for one of the supported modulator topologies.
@@ -34,13 +34,15 @@
 %   simulateQESL  - Simulate the element selection logic in a quadrature differential mismatch-shaping DAC.
 %
 % Other functions related to delta-sigma 
-%   designHBF     - Design multiplierless half-band filters which use the 
-%                 - the Saramaki recursive filter structure.
-%   predictSNR    - SNR predicttion for binary modulators 
-%		    (Ardalan & Paulos describing function method)
+%   infnorm       - Calculate the infinity norm (maximum gain) of a DT TF.
+%   predictSNR    - SNR prediction for binary modulators 
+%		    (Uses the describing function method of Ardalan & Paulos)
+%   designHBF     - Design a multiplierless half-band filter which uses
+%                   Saramaki's hierarchical filter structure.
+%   designPBF     - Design a symmetric polynomial-based filter using
+%                   Hunter's method
 %   findPIS       - Compute a positively-invariant set for a DSM. (The 
 %                   PosInvSet sub-directory will need to be added to your PATH)
-%   infnorm       - Calculate the infinity norm (maximum gain) of a TF.
 %
 % Demonstrations and Examples
 %   dsdemo1       - Synthesize a 5th-order lowpass and an 8th-order bandpass NTF.
@@ -51,9 +53,7 @@
 %   dsdemo6	  - Design a hardware-efficient halfband filter.
 %   dsdemo7	  - Find positively-invariant sets for second-order (and third-order) modulators.
 %   dsdemo8       - Continuous-time bandpass modulator design using LC tanks.
-%   dsexample1	  - Discrete-time lowpass modulator.
-%   dsexample2	  - Discrete-time bandpass modulator.
-%   dsexample3	  - Continuous-time lowpass modulator.
-%   dsexample4	  - Discrete-time quadrature bandpass modulator.
+%   dsexample1	  - Discrete-time lowpass/bandpass/quadrature modulator.
+%   dsexample2	  - Continuous-time lowpass modulator.
 %
-% Copyright (c) 1993-2011 R. Schreier
+% Copyright (c) 1993-2020 R. Schreier

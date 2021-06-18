@@ -1,193 +1,121 @@
-% Demonstrate the simulateESL function
+% Demonstrate the simulateMS function
 echo off;
-if exist('LiveDemo','var') == 0
-    LiveDemo=0;
+if ~exist('LiveDemo','var')
+    LiveDemo = 0;
 end
-clc;
-fprintf(1,'\t\tMismatch-Shaping Unit-Element DAC\n\n');
 
-% Specify the modulator NTF, the mismatch-shaping TF, and the number of elements
-echo on;
-ntf = synthesizeNTF(3,[],[],4);
+show_usage = 1;
+osr = 25;
+ntf = synthesizeNTF(6,osr,1,4);
 M = 16;
+N = 2^14;
 sigma_d = 0.01;		% 1% mismatch
-mtf1 = zpk(1,0,1,1);	%First-order shaping
-echo off;	
-A = 1/sqrt(2);		% Test tone amplitude, relative to full-scale.
-f = 0.33;			% Test tone frequency, relative to fB. 
-					% (Will be adjusted to be an fft bin)
+window = ds_hann(N)/(M*N/8);
+windowM = repmat(window,M,1);
 
-if LiveDemo
-    N = 2^12;
-else
-    N = 2^14;
-end
-fin = round(f*N/(2*12));
-w = (2*pi/N)*fin;
-echo on;
-u = M*A*sin(w*[0:N-1]);
-v = simulateDSM(u,ntf,M+1);	% M unit elements requires an M+1-level quant.
-v = (v+M)/2;				% scale v to [0,M]
-sv0 = thermometer(v,M);
-sv1 = simulateESL(v,mtf1,M);
-echo off
+mtf1 = zpk(1,0,1,1);                    % First-order shaping
+mtf2 = zpk([ 1 1 ], [ 0.3 0.3 ], 1, 1);	% Second-order shaping
+mtf2b = synthesizeNTF(2,osr,1,2);	    % Second-order shaping
+mtf4 = synthesizeNTF(4,osr*0.9,1,1.3);	% Fourth-order shaping
+dw1 = [8 8 4 4 2 2 1 1 zeros(1,8)]';
 
-figure(1); clf
-T = 20;
-subplot(211);
-plotUsage(sv0(:,1:T));
-set(gcf,'NumberTitle','off'); 
-set(gcf,'Name','Element Usage');
-title('Thermometer-Coding')
-subplot(212);
-plotUsage(sv1(:,1:T));
-title('First-Order Shaping');
-if LiveDemo
-    set(1,'position',[9 204 330 525]);
-    changeFig(18,.5,1);
-    pause
-end
+cases = {
+    'A'        'f'  'mtf' 'dither' 'dw'  'leg_i'        %case number
+    undbv(-3)  0.01   []      0     []   'Thermometer'  %1
+    undbv(-3)  0.01  mtf1     0     []   'Rotation'     %2
+    undbv(-3)  0.01  mtf2     0     []   '2^{nd}-order' %3
+    undbv(-30) 0.01  mtf1     0     []   'Rotation'     %4
+    undbv(-30) 0.01  mtf1    0.5    []   'Rot + dither'    %5
+    undbv(-3)  0.01  mtf2b    0     []   '2^{nd}-order with zero'    %6
+    undbv(-3)  0.01  mtf4     0     []   '4^{th}-order' %7
+   };
+comparisons = { [1 2], [2 3], [4 5], [3 6], [6 7] };
 
-ideal = v;
-
-% DAC element values
-e_d = randn(M,1); 
-e_d = e_d - mean(e_d);
-e_d = sigma_d * e_d/std(e_d);
-ue = 1 + e_d;
-
-% Convert v to analog form, assuming no shaping
-dv0 = ue' * sv0;
-
-% Convert sv to analog form 
-dv1 = ue' * sv1;
-
-window = ds_hann(N);
-spec = fft(ideal.*window)/(M*N/8);
-spec0 = fft(dv0.*window)/(M*N/8);
-spec1 = fft(dv1.*window)/(M*N/8);
-
-figure(2); clf
-set(gcf,'NumberTitle','off'); 
-set(gcf,'Name','Spectra');
-plotSpectrum(spec0,fin,'r');
-hold on;
-plotSpectrum(spec1,fin,'b');
-plotSpectrum(spec,fin,'g');
-axis([1e-3 0.5 -200 0]);
-x1 = 2e-3; x2=1e-2; y0=-180; dy=dbv(x2/x1); y3=y0+3*dy;
-plot([x1 x2 x2 x1],[y0 y0 y3 y0],'k')
-text(x2, (y0+y3)/2,' 60 dB/decade')
-hold off;
-grid;
-ylabel('PSD');
-xlabel('Normalized Frequency');
-if LiveDemo
-    figure(1);
-    set(1,'position',[9 427 200 300]);
-    changeFig;
-    subplot(211)
-    xlabel('')
-    figure(2);
-    set(2,'position',[237 288 553 439]);
-    changeFig(18,2,12);
-    legend('thermom.','1^{st}-Order','Ideal');
-    set(gcf,'NumberTitle','off'); 
-    set(gcf,'Name','Output Spectra');
-	pause
-    changeFig;
-    legend;
-    set(2,'position',[238 427 325 300]);
-end
-legend('thermometer','rotation','ideal DAC');
-fprintf(1,'Paused.\n');
-pause
-
-%Now repeat the above for second-order shaping
-echo on;
-mtf2 = zpk([ 1 1 ], [ 0 0 ], 1, 1);	%Second-order shaping
-sv2 = simulateESL(v,mtf2,M);
-echo off;
-
-figure(1); clf
-T = 20;
-subplot(211);
-plotUsage(sv1(:,1:T));
-title('First-Order Shaping');
-subplot(212);
-plotUsage(sv2(:,1:T));
-title('Second-Order Shaping');
-if LiveDemo
-    set(1,'position',[9 204 330 525]);
-    changeFig(18,.5,1);
-    pause
+%% Run simulations
+sv = cell(size(cases,1)-1,1);
+leg = sv;
+Svv = sv;
+Sdd = sv;
+fin = zeros(size(cases,1)-1,1);
+for i = 1:size(cases,1)-1
+    for j = 1:size(cases,2) % Set the variables for each case
+        eval([cases{1,j} '= cases{i+1,j};'])
+    end
+    fin(i) = round(f*N);
+    inband = setdiff(2:1+ceil(0.5*N/osr),1+[0 1 fin(i)+[-1 0 1]]);
+    w = (2*pi/N)*fin(i);
+    u = M*A*sin(w*(0:N-1));
+    v = simulateDSM(u,ntf,M+1);	% M unit elements requires an (M+1)-level quant.
+    Svv{i} = abs(fft(v.*window)).^2;
+    if isempty(mtf)
+        sv{i} = ds_therm(v,M);
+    else
+        sv{i} = simulateMS(v,M,mtf,dither,dw);
+    end
+    Sdd{i} = sigma_d^2 * sum( abs(fft(sv{i}.*windowM,[],2)).^2 );
+    mnp = sum(Sdd{i}(inband))/1.5;
+    leg{i} = sprintf('%s (MNP= %.0f dBFS)',leg_i,dbp(mnp));
 end
 
-dv2 = ue' * sv2;
-spec2 = fft(dv2.*window)/(M*N/8);
+%% Plot results
+ for comp_i=1:length(comparisons)
+    clc
+    case_nums = comparisons{comp_i};
+    fprintf(1,'\t\tMismatch-Shaping Unit-Element DAC\n\n');
+    fprintf(1,'Comparing %s vs. %s.\n', leg{case_nums(1)}, leg{case_nums(2)});
+    nc = length(case_nums);
+    if show_usage
+        figure(1); clf
+        set(gcf,'NumberTitle','off');
+        set(gcf,'Name','Element Usage');
+        T = 25;
+        for i = 1:nc
+            subplot(nc,1,i);
+            ci = case_nums(i);
+            plotUsage(sv{ci}(:,1:T));
+        end
+    end
+    if LiveDemo
+        set(1,'position',[9 204 330 525]);
+        changeFig(18,.5,1);
+        pause
+    end
 
-figure(2); clf
-plotSpectrum(spec1,fin,'r');
-hold on;
-plotSpectrum(spec2,fin,'b');
-plotSpectrum(spec,fin,'g');
-axis([1e-3 0.5 -200 0]);
-x1 = 2e-3; x2=1e-2; y0=-180; dy=dbv(x2/x1); y3=y0+3*dy;
-plot([x1 x2 x2 x1],[y0 y0 y3 y0],'k')
-text(x2, (y0+y3)/2,' 60 dB/decade')
-legend('1^{st}-Order','2^{nd}-Order','Ideal');
-hold off;
-grid;
-xlabel('Normalized Frequency');
-ylabel('PSD');
-if LiveDemo
-    figure(1);
-    set(1,'position',[9 427 200 300]);
-    changeFig;
-    subplot(211)
-    xlabel('')
-    figure(2);
-    set(2,'position',[237 288 553 439]);
-    changeFig(18,2,12);
-    legend('1^{st}-Order','2^{nd}-Order','Ideal');
-	pause
-    changeFig;
-    legend('1^{st}-Order','2^{nd}-Order','Ideal');
-    set(2,'position',[238 427 325 300]);
-end
-
-if 0 
-    % Plot everything
-    figure(1); clf
-    T = 20;
-    subplot(311);
-    plotUsage(thermometer(v(1:T),M));
-    set(gcf,'NumberTitle','off'); 
-    set(gcf,'Name','Element Usage');
-    title('Thermometer-Coding')
-    subplot(312);
-    plotUsage(sv1(:,1:T));
-    title('First-Order Shaping');
-    subplot(313);
-    plotUsage(sv2(:,1:T));
-    title('Second-Order Shaping');
-    %printmif(fullfile('MIF','elementUsage'), [3 6], 'Helvetica10')
-    figure(2); clf
-    plotSpectrum(spec0,fin,'r');
-    hold on;
-    plotSpectrum(spec1,fin,'r');
-    plotSpectrum(spec2,fin,'b');
-    plotSpectrum(spec,fin,'g');
-    axis([1e-3 0.5 -200 0]);
-    x1 = 2e-3; x2=1e-2; y0=-180; dy=dbv(x2/x1); y3=y0+3*dy;
-    plot([x1 x2 x2 x1],[y0 y0 y3 y0],'k')
-    text(x2, (y0+y3)/2,' 60 dB/decade')
-    legend('Thermometer','1^{st}-Order','2^{nd}-Order','Ideal');
-    hold off;
-    grid;
+    figure(2); clf;
+    set(gcf,'NumberTitle','off');
+    set(gcf,'Name','Error Spectra');
+    cols = {'b1','m1','r1'};
+    cleg = cell(nc,1);
+    for i = 1:nc
+        ci = case_nums(i);
+        plotSpectrum(sqrt(Sdd{ci}),fin(ci),cols{i},[],4);
+        cleg{i} = leg{ci};
+        hold on;
+    end
+    plotSpectrum(sqrt(Svv{ci}),fin(ci),'g',[],5);
+    axis([1e-3 0.5 -140 -50]);
+    plot([1e-3 0.5/osr],-140*[1 1],'-k','Linewidth',4);
+    text(0.5,-140,sprintf('NBW=%.1e ',1.5/N),'Hor','right','Ver','bot');
+    grid on;
+    ylabel('Error PSD');
     xlabel('Normalized Frequency');
-    ylabel('PSD');
-    printmif(fullfile('MIF','mmSpetcra'), [3 3], 'Helvetica10')
+    title(sprintf('A = %.0fdBFS', dbp(Svv{ci}(fin(ci)))));
+    legend(cleg,'Location','Northeast');
+    if LiveDemo
+        figure(1);
+        set(1,'position',[9 427 200 300]);
+        changeFig;
+        figure(2);
+        set(2,'position',[237 288 553 439]);
+        changeFig(18,2,12);
+        pause
+        changeFig;
+        legend;
+        set(2,'position',[238 427 325 300]);
+    elseif comp_i<length(comparisons)
+        fprintf(1,'Paused.\n');
+        pause
+    end
 end
 
 if 0 % Quadrature example
@@ -206,10 +134,10 @@ if 0 % Quadrature example
     f2_bin = round(f2*N);
     fin = round(((1-f)/2*f1 + (f+1)/2*f2)*N);
 
-    u = Amp*M*exp((2i*pi/N)*fin*[0:N-1]);
+    u = Amp*M*exp((2i*pi/N)*fin*(0:N-1));
     v = simulateQDSM(u,ntf,M+1);
-    sv0 = [2i*thermometer((imag(v)+M)/2,M)-1i; 
-           2*thermometer((real(v)+M)/2,M)-1];
+    sv0 = [1i*ds_therm(imag(v),M); 
+           ds_therm(real(v),M)];
     mtf1 = zpk(exp(2i*pi*f0),0,1,1);	%First-order complex shaping
     sv1 = simulateQESL(v,mtf1,M);
     figure(1); clf
@@ -247,5 +175,6 @@ if 0 % Quadrature example
     xlabel('frequency')
     ylabel('PSD (dBFS/NBW)');
     legend(msg,msg0,msg1);
-    printmif(fullfile('MIF','QMS'), [4 2], 'Helvetica8')
+    % printmif(fullfile('MIF','QMS'), [4 2], 'Helvetica8')
 end
+

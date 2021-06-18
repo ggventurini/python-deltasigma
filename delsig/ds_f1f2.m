@@ -22,7 +22,3 @@ else
 	f2 = 0.5/OSR;
     end
 end
-
-if nargout<2
-    f1 = [f1 f2];
-end
