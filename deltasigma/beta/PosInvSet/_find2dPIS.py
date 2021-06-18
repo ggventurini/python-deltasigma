@@ -24,13 +24,13 @@ from .._simulateDSM import simulateDSM
 from typing import Tuple
 
 def find2dPIS(u, ABCD, dbg:int=0, itnLimit:int=2000, expFactor:float=0.01, N:int=1000, skip:int=100):
-"""
-Find a positively invariant set for the 2nd-order binary modulator.
-
-find2dPIS finds a positively invariant set for the 2nd-order binary modulator whose 
-loop filter is described by ABCD and whose input is a constant u.
-
-"""
+    """
+    Find a positively invariant set for the 2nd-order binary modulator.
+    
+    find2dPIS finds a positively invariant set for the 2nd-order binary modulator whose 
+    loop filter is described by ABCD and whose input is a constant u.
+    
+    """
     n = np.shape(ABCD)[0]-1
 
     # Compute a few iterations of difference equations.
