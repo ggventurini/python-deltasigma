@@ -1,4 +1,4 @@
-name: Python Package using Conda
+name: Python 3.8 Package using Conda
 
 on: [push]
 
