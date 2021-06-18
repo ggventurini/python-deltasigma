@@ -38,7 +38,7 @@ def dsmap(u:np.ndarray, ABCD:np.ndarray, nlev:int, x:np.ndarray, e:np.ndarray, v
     A = ABCD[0:n, 0:n]
     B = ABCD[0:n, n:n+2]
     C = ABCD[n, 0:n]
-    D = ABCD[n, n]
+    D1 = ABCD[n, n]
 
     N = np.shape(x)[1]
     if np.max(np.shape(u)) == 2:
