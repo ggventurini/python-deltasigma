@@ -47,6 +47,7 @@ def find2dPIS(u, ABCD, dbg:int=0, itnLimit:int=2000, expFactor:float=0.01, N:int
         print("find2dPIS: Error. Argument 1 (u) has the wrong dimensions.")
         return
 
+    nlev = 2
     [v, x] = simulateDSM(un, ABCD, nlev)[0:2]
     x = x[:, skip+1:skip+N+1]
 
