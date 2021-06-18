@@ -200,7 +200,7 @@ latex_elements = {
 'pointsize': '10pt',
 
 # Additional stuff for the LaTeX preamble.
-'preamble': '\usepackage{mathrsfs}\n',
+'preamble': '\\usepackage{mathrsfs}\n',
 }
 
 # Grouping the document tree into LaTeX files. List of tuples
