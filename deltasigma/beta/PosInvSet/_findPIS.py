@@ -105,15 +105,20 @@ def findPIS(u, ABCD, nlev:int=2, dbg:int=0, itnLimit:int=2000, expFactor:float=0
             # Use the hull of x for the first iteration
             qhull_options = 'Qcx C'+str(qhullArgC)+' A'+str(qhullArgA)
             s, e, n, o = qhull(x, qhull_options=qhull_options)
+            
+            # Map the set
+            ns = dsmap(u, ABCD, nlev, s, e)
+            out = outsideConvex(ns, n, o)
         else:
             # Expand the outside points
             ns = dsexpand(ns[:, np.nonzero(out)], center, expFactor)
             # Use the hull of s and the expanded ns for the next iteration
             s, e, n, o = qhull([s, ns], qhull_options=qhull_options)
-        
-        # Map the set
-        ns = dsmap(u, ABCD, nlev, s, e)
+            # Map the set
+            ns = dsmap(u, ABCD, nlev, s, e)
 
+        
+        
         if np.where(np.max(np.abs(ns.T)).T > 10*xmax) != None:
             print('Set is much larger than necessary--')
             print('Reducing expansion factor, increasing hull accuracy, and re-starting.')
@@ -174,7 +179,7 @@ def findPIS(u, ABCD, nlev:int=2, dbg:int=0, itnLimit:int=2000, expFactor:float=0
                 xmax = np.max(np.abs(x).T).T # !! I should use the hull of the points
                 ABCD = np.array([[Si*A0*Sc, Si*B0], [C0*Sc, D0]])
 
-    if coveraged == 1:
+    if converged == 1:
         # Undo the scaling
         s = Sc*Si
         n = Si.T*n
