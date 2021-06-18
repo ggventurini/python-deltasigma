@@ -47,11 +47,11 @@ def dssplit2d(u:np.ndarray, ABCD:np.ndarray, p:np.ndarray)->Tuple[np.ndarray, np
             y = C*p
 
     sign1 = sgn(y[0])
-    i = np.where(sgn(y) != sign[1])
+    i = np.where(sgn(y) != sign1)
     i1 = i[0] # First change of sign
     pa = dscut(p[:, i1-1], y[i1-1], p[:, i1], y[i1])
     i2 = i[np.max(np.shape(i))]
-    pb = dscut(p[:, i2], y[i2], p[:, i2+1], y[y2+1])
+    pb = dscut(p[:, i2], y[i2], p[:, i2+1], y[i2+1])
 
     if sign1 > 0:
         pminus = np.hstack([pa, p[:, i], pb, pa])
