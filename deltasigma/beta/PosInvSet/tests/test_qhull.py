@@ -56,7 +56,7 @@ class TestQHull(unittest.TestCase):
 
     def test_qhull_generation(self):
         V, E, N, O = ds.qhull(self.points)
-        vert = np.array([ 4,  8, 26,  6, 11,  2, 24,  0, 18, 28, 15], dtype=int32)
+        vert = np.array([ 4,  8, 26,  6, 11,  2, 24,  0, 18, 28, 15], dtype='int32')
         edge = np.array([[ 4,  8],
                          [26,  8],
                          [15, 28],
@@ -67,7 +67,7 @@ class TestQHull(unittest.TestCase):
                          [ 6, 11],
                          [ 6, 26],
                          [ 2, 11],
-                         [ 2, 24]], dtype=int32)
+                         [ 2, 24]], dtype='int32')
         normals = np.array([[-0.07811175, -0.99694461],
                             [ 0.79635185, -0.60483364],
                             [-0.94882979, -0.31578794],
