@@ -36,7 +36,12 @@
 #if __MWERKS__
 #include  <SIOUX.h>
 #include  <Files.h>
-#include	<Desk.h>
+// June 1, 2001
+// Commented this out and added the following 3 lines
+// #include	<Desk.h>
+#include <Menus.h>
+#include <Devices.h>
+#include <Events.h>
 #endif
 
 #include "user.h"      /* user defineable constants */

@@ -42,9 +42,9 @@ void qh_qhull (void) {
   /* qh_maxmin sets DISTround and other precision constants */
   if (qh PRINToptions1st || qh TRACElevel || qh IStracing) {
     if (qh TRACElevel || qh IStracing)
-      fprintf (qh ferr, "\nTrace level %d for %s | %s\n", 
+      mexPrintf( "\nTrace level %d for %s | %s\n", 
          qh IStracing ? qh IStracing : qh TRACElevel, qh rbox_command, qh qhull_command);
-    fprintf (qh ferr, "Options selected for qhull %s:\n%s\n", qh_version, qh qhull_options);
+    mexPrintf( "Options selected for qhull %s:\n%s\n", qh_version, qh qhull_options);
   }
   vertices= qh_initialvertices(qh hull_dim, maxpoints, qh first_point, qh num_points); 
   qh_initialhull (vertices);  /* initial qh facet_list */
@@ -56,7 +56,7 @@ void qh_qhull (void) {
   if (qh ONLYgood) {
     if (!(qh GOODthreshold || qh GOODpoint
 	  || (qh GOODvertex > 0 && !qh MERGING))) {
-      fprintf (qh ferr, "qhull input error: 'Qg' (ONLYgood) needs a good threshold ('Pd0D0'), a\n\
+      mexPrintf( "qhull input error: 'Qg' (ONLYgood) needs a good threshold ('Pd0D0'), a\n\
 good point (QGn or QG-n), or a good vertex without merging (QVn).\n");
       qh_errexit (qh_ERRinput, NULL, NULL);
     }
@@ -66,7 +66,7 @@ good point (QGn or QG-n), or a good vertex without merging (QVn).\n");
 			  &dist, &isoutside, &numpart);
       zadd_(Zdistgood, numpart);
       if (!isoutside) {
-        fprintf (qh ferr, "qhull input error: point for QV%d is inside initial simplex\n",
+        mexPrintf( "qhull input error: point for QV%d is inside initial simplex\n",
 	       qh_pointid(qh GOODvertexp));
         qh_errexit (qh_ERRinput, NULL, NULL);
       }
@@ -86,7 +86,7 @@ good point (QGn or QG-n), or a good vertex without merging (QVn).\n");
     if (qh ZEROall_ok && !qh TESTvneighbors && qh MERGEexact)
       qh_checkzero( qh_ALL);
     if (qh ZEROall_ok && !qh TESTvneighbors) {
-      trace2((qh ferr, "qh_qhull: all facets are clearly convex.  Post-merging not needed.\n"));
+      trace2(("qh_qhull: all facets are clearly convex.  Post-merging not needed.\n"));
     }else {
       if (qh MERGEexact || (qh hull_dim > qh_DIMreduceBuild && qh PREmerge))
         qh_postmerge ("First post-merge", qh premerge_centrum, qh premerge_cos, 
@@ -107,20 +107,20 @@ good point (QGn or QG-n), or a good vertex without merging (QVn).\n");
       if (qh DOcheckmax){
         if (qh REPORTfreq) {
 	  qh_buildtracing (NULL, NULL); 
-  	  fprintf (qh ferr, "\nTesting all coplanar points.\n");
+  	  mexPrintf( "\nTesting all coplanar points.\n");
         }
         qh_check_maxout();
       }
     }
   }
   if (qh_setsize (qhmem.tempstack) != 0) {
-    fprintf (qh ferr, "qhull internal error (qh_qhull): temporary sets not empty (%d)\n",
+    mexPrintf( "qhull internal error (qh_qhull): temporary sets not empty (%d)\n",
 	     qh_setsize (qhmem.tempstack));
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
   qh hulltime= (unsigned)clock() - qh hulltime;
   qh QHULLfinished= True;
-  trace1((qh ferr, "qh_qhull: algorithm completed\n"));
+  trace1(("qh_qhull: algorithm completed\n"));
 } /* qhull */
 
 /*-------------------------------------------------
@@ -230,7 +230,7 @@ boolT qh_addpoint (pointT *furthest, facetT *facet, boolT checkdist) {
   if (qh STOPpoint > 0 && qh furthest_id == qh STOPpoint-1)
     return False; 
   qh_resetlists (True /*qh visible_list newvertex_list newfacet_list */);
-  trace2((qh ferr, "qh_addpoint: added p%d new facets %d new balance %2.2g point balance %2.2g\n",
+  trace2(("qh_addpoint: added p%d new facets %d new balance %2.2g point balance %2.2g\n",
     qh_pointid (furthest), numnew, newbalance, pbalance));
   return True;
 } /* addpoint */
@@ -248,17 +248,17 @@ void qh_buildhull(void) {
   vertexT *vertex;
   int id;
   
-  trace1((qh ferr, "qh_buildhull: start build hull\n"));
+  trace1(("qh_buildhull: start build hull\n"));
   FORALLfacets {
     if (facet->visible || facet->newfacet) {
-      fprintf (qh ferr, "qhull internal error (qh_buildhull): visible or new facet f%d in facet list\n",
+      mexPrintf( "qhull internal error (qh_buildhull): visible or new facet f%d in facet list\n",
                    facet->id);    
       qh_errexit (qh_ERRqhull, facet, NULL);
     }
   }
   FORALLvertices {
     if (vertex->newlist) {
-      fprintf (qh ferr, "qhull internal error (qh_buildhull): new vertex f%d in vertex list\n",
+      mexPrintf( "qhull internal error (qh_buildhull): new vertex f%d in vertex list\n",
                    vertex->id);
       qh_errprint ("ERRONEOUS", NULL, NULL, NULL, vertex);
       qh_errexit (qh_ERRqhull, NULL, NULL);
@@ -278,10 +278,10 @@ void qh_buildhull(void) {
       break;
   }
   if (qh num_outside && !furthest) {
-    fprintf (qh ferr, "qhull internal error (qh_buildhull): %d outside points were never processed.\n", qh num_outside);
+    mexPrintf( "qhull internal error (qh_buildhull): %d outside points were never processed.\n", qh num_outside);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
-  trace1((qh ferr, "qh_buildhull: completed the hull construction\n"));
+  trace1(("qh_buildhull: completed the hull construction\n"));
 } /* buildhull */
   
 
@@ -307,7 +307,7 @@ void qh_buildtracing (pointT *furthest, facetT *facet) {
     cpu= (unsigned)clock() - qh hulltime;
     cpu /= qh_SECticks;
     total= zzval_(Ztotmerge) - zzval_(Zcyclehorizon) + zzval_(Zcyclefacettot);
-    fprintf (qh ferr, "\n\
+    mexPrintf( "\n\
 At %02d:%02d:%02d & %2.5g CPU secs, qhull has created %d facets and merged %d.\n\
  The current hull contains %d facets and %d vertices.  Last point was p%d\n",
       tp->tm_hour, tp->tm_min, tp->tm_sec, cpu, qh facet_id -1,
@@ -328,7 +328,7 @@ At %02d:%02d:%02d & %2.5g CPU secs, qhull has created %d facets and merged %d.\n
     total= zzval_(Ztotmerge) - zzval_(Zcyclehorizon) + zzval_(Zcyclefacettot);
     zinc_(Zdistio);
     qh_distplane (furthest, facet, &dist);
-    fprintf (qh ferr, "\n\
+    mexPrintf( "\n\
 At %02d:%02d:%02d & %2.5g CPU secs, qhull has created %d facets and merged %d.\n\
  The current hull contains %d facets and %d vertices.  There are %d\n\
  outside points.  Next is point p%d (v%d), %2.2g above f%d.\n",
@@ -339,7 +339,7 @@ At %02d:%02d:%02d & %2.5g CPU secs, qhull has created %d facets and merged %d.\n
     cpu= (unsigned)clock() - qh hulltime;
     cpu /= qh_SECticks;
     qh_distplane (furthest, facet, &dist);
-    fprintf (qh ferr, "qh_buildhull: add p%d (v%d) to hull of %d facets (%2.2g above f%d) and %d outside at %4.4g CPU secs.  Previous was p%d.\n",
+    mexPrintf( "qh_buildhull: add p%d (v%d) to hull of %d facets (%2.2g above f%d) and %d outside at %4.4g CPU secs.  Previous was p%d.\n",
       furthestid, qh vertex_id, qh num_facets, dist,
       getid_(facet), qh num_outside+1, cpu, qh furthest_id);
   }
@@ -431,7 +431,7 @@ void qh_findhorizon(pointT *point, facetT *facet, int *goodvisible, int *goodhor
 	    }else
 	      minimize_(qh min_vertex, dist);  /* due to merge later */
 	  }
-      	  trace2((qh ferr, "qh_findhorizon: point p%d is coplanar to horizon f%d, dist=%2.7g < qh MINvisible (%2.7g)\n",
+      	  trace2(("qh_findhorizon: point p%d is coplanar to horizon f%d, dist=%2.7g < qh MINvisible (%2.7g)\n",
 	      qh_pointid(point), neighbor->id, dist, qh MINvisible));
 	}else
     	  neighbor->coplanar= False;
@@ -445,12 +445,12 @@ void qh_findhorizon(pointT *point, facetT *facet, int *goodvisible, int *goodhor
     }
   }
   if (!numhorizon) {
-    fprintf(qh ferr, "qhull precision error (qh_findhorizon): empty horizon\n\
+    mexPrintf("qhull precision error (qh_findhorizon): empty horizon\n\
 Point p%d was above all facets.\n", qh_pointid(point));
     qh_printfacetlist (qh facet_list, NULL, True);
     qh_errexit(qh_ERRprec, NULL, NULL);
   }
-  trace1((qh ferr, "qh_findhorizon: %d horizon facets (good %d), %d visible (good %d), %d coplanar\n", 
+  trace1(("qh_findhorizon: %d horizon facets (good %d), %d visible (good %d), %d coplanar\n", 
        numhorizon, *goodhorizon, qh num_visible, *goodvisible, coplanar));
   if (qh IStracing >= 4 && qh num_facets < 50) 
     qh_printlists ();
@@ -501,7 +501,7 @@ pointT *qh_nextfurthest (facetT **visible) {
             index -= size;
         }
       }
-      fprintf (qh ferr, "qhull internal error (qh_nextfurthest): num_outside %d incorrect or random %2.2g >= 1.0\n",
+      mexPrintf( "qhull internal error (qh_nextfurthest): num_outside %d incorrect or random %2.2g >= 1.0\n",
               qh num_outside, randr);
       qh_errexit (qh_ERRqhull, NULL, NULL);
     }else { /* VIRTUALmemory */
@@ -537,7 +537,7 @@ void qh_partitionall(setT *vertices, pointT *points, int numpoints){
   facetT *facet;
   realT bestdist= -REALmax, dist, distoutside;
     
-  trace1((qh ferr, "qh_partitionall: partition all points into outside sets\n"));
+  trace1(("qh_partitionall: partition all points into outside sets\n"));
   pointset= qh_settemp (numpoints);
   pointp= SETaddr_(pointset, pointT);
   for (i=numpoints, point= points; i--; point += qh hull_dim)
@@ -675,11 +675,11 @@ void qh_partitioncoplanar (pointT *point, facetT *facet, realT *dist) {
     }
   }
   if (istrace) {
-    fprintf (qh ferr, "qh_partitioncoplanar: ====== p%d increases max_outside to %2.2g of f%d last p%d\n",
+    mexPrintf( "qh_partitioncoplanar: ====== p%d increases max_outside to %2.2g of f%d last p%d\n",
 		   qh_pointid(point), bestdist, bestfacet->id, qh furthest_id);
     qh_errprint ("DISTANT", bestfacet, NULL, NULL, NULL);
   }
-  trace4((qh ferr, "qh_partitioncoplanar: point p%d is coplanar with facet f%d (or inside) dist %2.2g\n",
+  trace4(("qh_partitioncoplanar: point p%d is coplanar with facet f%d (or inside) dist %2.2g\n",
 	  qh_pointid(point), bestfacet->id, bestdist));
 } /* partitioncoplanar */
 
@@ -737,7 +737,7 @@ void qh_partitionpoint (pointT *point, facetT *facet) {
 #endif
     }
     qh num_outside++;
-    trace4((qh ferr, "qh_partitionpoint: point p%d is outside facet f%d\n",
+    trace4(("qh_partitionpoint: point p%d is outside facet f%d\n",
 	  qh_pointid(point), bestfacet->id));
   }else if (bestdist >= -qh MAXcoplanar) {
     zzinc_(Zcoplanarpart);
@@ -748,7 +748,7 @@ void qh_partitionpoint (pointT *point, facetT *facet) {
     qh_partitioncoplanar (point, bestfacet, &bestdist);
   }else {
     zinc_(Zpartinside);
-    trace4((qh ferr, "qh_partitionpoint: point p%d is inside all facets, closest to f%d dist %2.2g\n",
+    trace4(("qh_partitionpoint: point p%d is inside all facets, closest to f%d dist %2.2g\n",
 	  qh_pointid(point), bestfacet->id, bestdist));
     if (qh KEEPinside)	  
       qh_partitioncoplanar (point, bestfacet, &bestdist);
@@ -838,52 +838,52 @@ void qh_printsummary(FILE *fp) {
   if (id >=0 && qh STOPcone-1 != id && -qh STOPpoint-1 != id)
     size--;
   if (qh VORONOI)
-    fprintf (fp, "\nVoronoi diagram by the convex");
+    mexPrintf("\nVoronoi diagram by the convex");
   else if (qh DELAUNAY)
-    fprintf (fp, "\nDelaunay triangulation by the convex");
+    mexPrintf("\nDelaunay triangulation by the convex");
   else if (qh HALFspace)
-    fprintf (fp, "\nHalfspace intersection by the convex");
+    mexPrintf("\nHalfspace intersection by the convex");
   else
-    fprintf (fp, "\nConvex");
-  fprintf(fp, " hull of %d points in %d-d:\n\n", size, qh hull_dim);
-  fprintf(fp, "  Number of vertices%s: %d\n",
+    mexPrintf("\nConvex");
+  mexPrintf(" hull of %d points in %d-d:\n\n", size, qh hull_dim);
+  mexPrintf("  Number of vertices%s: %d\n",
 	  qh HALFspace ? " (halfspaces)" : "", numvertices);
   if (numcoplanars) 
-    fprintf(fp, "  Number of %s points: %d\n", 
+    mexPrintf("  Number of %s points: %d\n", 
 	    qh DELAUNAY ? "similar" : "coplanar", numcoplanars); 
-  fprintf(fp, "  Number of facets%s: %d\n", 
+  mexPrintf("  Number of facets%s: %d\n", 
 	  qh HALFspace ? " (intersections)" : "",
 	  qh num_facets - qh num_visible);
   if (qh num_good)
-    fprintf(fp, "  Number of good facets: %d\n", qh num_good);
-  fprintf(fp, "\nStatistics for: %s | %s", 
+    mexPrintf("  Number of good facets: %d\n", qh num_good);
+  mexPrintf("\nStatistics for: %s | %s", 
                       qh rbox_command, qh qhull_command);
   if (qh ROTATErandom > 0)
-    fprintf(fp, " QR%d\n\n", qh ROTATErandom);
+    mexPrintf(" QR%d\n\n", qh ROTATErandom);
   else
-    fprintf(fp, "\n\n");
-  fprintf(fp, "  Number of points processed: %d\n", zzval_(Zprocessed));
-  fprintf(fp, "  Number of hyperplanes created: %d\n", zzval_(Zsetplane));
-  fprintf(fp, "  Number of distance tests for qhull: %d\n", zzval_(Zpartition)+
+    mexPrintf("\n\n");
+  mexPrintf("  Number of points processed: %d\n", zzval_(Zprocessed));
+  mexPrintf("  Number of hyperplanes created: %d\n", zzval_(Zsetplane));
+  mexPrintf("  Number of distance tests for qhull: %d\n", zzval_(Zpartition)+
   zzval_(Zpartitionall)+zzval_(Znumvisibility)+zzval_(Zpartcoplanar));
 #if 0  /* NOTE: must print before printstatistics() */
   {realT stddev, ave;
-  fprintf(fp, "  average new facet balance: %2.2g\n",
+  mexPrintf("  average new facet balance: %2.2g\n",
 	  wval_(Wnewbalance)/zval_(Zprocessed));
   stddev= qh_stddev (zval_(Zprocessed), wval_(Wnewbalance), 
                                  wval_(Wnewbalance2), &ave);
-  fprintf(fp, "  new facet standard deviation: %2.2g\n", stddev);
-  fprintf(fp, "  average partition balance: %2.2g\n",
+  mexPrintf("  new facet standard deviation: %2.2g\n", stddev);
+  mexPrintf("  average partition balance: %2.2g\n",
 	  wval_(Wpbalance)/zval_(Zpbalance));
   stddev= qh_stddev (zval_(Zpbalance), wval_(Wpbalance), 
                                  wval_(Wpbalance2), &ave);
-  fprintf(fp, "  partition standard deviation: %2.2g\n", stddev);
+  mexPrintf("  partition standard deviation: %2.2g\n", stddev);
   }
 #endif
   if (qh MERGING) {
     total= zzval_(Ztotmerge) - zzval_(Zcyclehorizon) + zzval_(Zcyclefacettot);
-    fprintf(fp,"  Number of merged facets: %d\n", total);
-    fprintf(fp,"  Number of distance tests for merging: %d\n",zzval_(Zbestdist)+
+    mexPrintf("  Number of merged facets: %d\n", total);
+    mexPrintf("  Number of distance tests for merging: %d\n",zzval_(Zbestdist)+
           zzval_(Zcentrumtests)+zzval_(Zdistconvex)+zzval_(Zdistcheck)+
           zzval_(Zdistzero));
   }
@@ -891,37 +891,37 @@ void qh_printsummary(FILE *fp) {
     cpu= qh hulltime;
     cpu /= qh_SECticks;
     wval_(Wcpu)= cpu;
-    fprintf (fp, "  CPU seconds to compute hull (after input): %2.4g\n", cpu);
+    mexPrintf("  CPU seconds to compute hull (after input): %2.4g\n", cpu);
   }
   if (qh totarea != 0.0) {
-    fprintf(fp, "  %s facet area:   %2.8g\n", 
+    mexPrintf("  %s facet area:   %2.8g\n", 
 	    zzval_(Ztotmerge) ? "Approximate" : "Total", qh totarea);
-    fprintf(fp, "  %s volume:       %2.8g\n", 
+    mexPrintf("  %s volume:       %2.8g\n", 
 	    zzval_(Ztotmerge) ? "Approximate" : "Total", qh totvol);
   }
   if (!qh FORCEoutput && qh max_outside > qh DISTround) {
     dist= qh max_outside + qh DISTround;   /* agrees with qh_check_points */
     /* 1 DISTround to actual point */
-    fprintf(fp, "  Maximum distance of %spoint above facet: %2.2g", 
+    mexPrintf("  Maximum distance of %spoint above facet: %2.2g", 
 	    (qh QHULLfinished ? "" : "merged "), dist);
     ratio= dist/(qh ONEmerge+ qh DISTround);
     if (qh MERGING && ratio > 0.05 && (qh ONEmerge > qh MINoutside))
-      fprintf (fp, " (%.1fx)\n", ratio);
+      mexPrintf(" (%.1fx)\n", ratio);
     else
-      fprintf (fp, "\n");
+      mexPrintf("\n");
   }
   if (!qh FORCEoutput && qh min_vertex < -qh DISTround) {
     dist= qh min_vertex - qh DISTround;   /* agrees with qh_check_points */
     /* 1 DISTround to actual point */
-    fprintf(fp, "  Maximum distance of %svertex below facet: %2.2g", 
+    mexPrintf("  Maximum distance of %svertex below facet: %2.2g", 
 	    (qh QHULLfinished ? "" : "merged "), dist);
     ratio= -dist/(qh ONEmerge+qh DISTround);
     if (qh MERGING && ratio > 0.05) 
-      fprintf (fp, " (%.1fx)\n", ratio);
+      mexPrintf(" (%.1fx)\n", ratio);
     else
-      fprintf (fp, "\n");
+      mexPrintf("\n");
   }
-  fprintf(fp, "\n");
+  mexPrintf("\n");
 } /* printsummary */
 
 

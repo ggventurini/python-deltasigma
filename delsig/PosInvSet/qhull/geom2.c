@@ -49,7 +49,7 @@ realT qh_determinant (realT **rows, int dim, boolT *nearzero) {
 
   *nearzero= False;
   if (dim < 2) {
-    fprintf (qh ferr, "qhull internal error (qh_determinate): only implemented for dimension >= 2\n");
+    mexPrintf( "qhull internal error (qh_determinate): only implemented for dimension >= 2\n");
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }else if (dim == 2) {
     det= det2_(rows[0][0], rows[0][1],
@@ -99,12 +99,12 @@ realT qh_detsimplex(pointT *apex, setT *points, int dim, boolT *nearzero) {
       *(gmcoord++)= *coordp++ - *coorda++;
   }
   if (i < dim) {
-    fprintf (qh ferr, "qhull internal error (qh_detsimplex): #points %d < dimension %d\n", 
+    mexPrintf( "qhull internal error (qh_detsimplex): #points %d < dimension %d\n", 
                i, dim);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
   det= qh_determinant (rows, dim, nearzero);
-  trace2((qh ferr, "qh_detsimplex: det=%2.2g for point p%d, dim %d, nearzero? %d\n",
+  trace2(("qh_detsimplex: det=%2.2g for point p%d, dim %d, nearzero? %d\n",
 	  det, qh_pointid(apex), dim, *nearzero)); 
   return det;
 } /* detsimplex */
@@ -169,7 +169,7 @@ realT qh_facetarea (facetT *facet) {
     if (qh CENTERtype != qh_AScentrum)
       qh_memfree (centrum, qh normal_size);
   }
-  trace4((qh ferr, "qh_facetarea: f%d area %2.2g\n", facet->id, area)); 
+  trace4(("qh_facetarea: f%d area %2.2g\n", facet->id, area)); 
   return area;
 } /* facetarea */
 
@@ -221,7 +221,7 @@ realT qh_facetarea_simplex (int dim, coordT *apex, setT *vertices,
     }
   }
   if (i != dim-1) {
-    fprintf (qh ferr, "qhull internal error (qh_facetarea_simplex): #points %d != dim %d -1\n", 
+    mexPrintf( "qhull internal error (qh_facetarea_simplex): #points %d != dim %d -1\n", 
                i, dim);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
@@ -242,7 +242,7 @@ realT qh_facetarea_simplex (int dim, coordT *apex, setT *vertices,
   if (toporient)
     area= -area;
   area *= qh AREAfactor;
-  trace4((qh ferr, "qh_facetarea_simplex: area=%2.2g for point p%d, toporient %d, nearzero? %d\n",
+  trace4(("qh_facetarea_simplex: area=%2.2g for point p%d, toporient %d, nearzero? %d\n",
 	  area, qh_pointid(apex), toporient, nearzero)); 
   return area;
 } /* facetarea_simplex */
@@ -356,11 +356,11 @@ facetT *qh_findgooddist (pointT *point, facetT *facetA, realT *distp,
   }
   if (bestfacet) {
     *distp= bestdist;
-    trace2((qh ferr, "qh_findgooddist: p%d is %2.2g above good facet f%d\n",
+    trace2(("qh_findgooddist: p%d is %2.2g above good facet f%d\n",
       qh_pointid(point), bestdist, bestfacet->id));
     return bestfacet;
   }
-  trace4((qh ferr, "qh_findgooddist: no good facet for p%d above f%d\n", 
+  trace4(("qh_findgooddist: no good facet for p%d above f%d\n", 
       qh_pointid(point), facetA->id));
   return NULL;
 }  /* findgooddist */
@@ -381,9 +381,9 @@ void qh_getarea (facetT *facetlist) {
   facetT *facet;
 
   if (qh REPORTfreq)
-    fprintf (qh ferr, "computing area of each facet and volume of the convex hull\n");
+    mexPrintf( "computing area of each facet and volume of the convex hull\n");
   else 
-    trace1((qh ferr, "qh_getarea: computing volume and area for each facet\n"));
+    trace1(("qh_getarea: computing volume and area for each facet\n"));
   qh totarea= qh totvol= 0.0;
   FORALLfacet_(facetlist) {
     if (!facet->normal)
@@ -507,7 +507,7 @@ setT *qh_maxmin(pointT *points, int numpoints, int dimension) {
   && REALmax > 0.0 && -REALmax < 0.0)
     ; /* all ok */
   else {
-    fprintf (qh ferr, "qhull error: floating point constants in user.h are wrong\n\
+    mexPrintf( "qhull error: floating point constants in user.h are wrong\n\
 REALepsilon %g REALmin %g REALmax %g -REALmax %g\n",
 	     REALepsilon, REALmin, REALmax, -REALmax);
     qh_errexit (qh_ERRinput, NULL, NULL);
@@ -626,7 +626,7 @@ REALepsilon %g REALmin %g REALmax %g -REALmax %g\n",
   qh_option ("_wide-facet", NULL, &qh WIDEfacet);
   if (qh MINvisible > qh MINoutside + 3 * REALepsilon 
   && !qh BESToutside && !qh FORCEoutput)
-    fprintf (qh ferr, "qhull input warning: minimum visibility V%.2g is greater than \nminimum outside W%.2g.  Flipped facets are likely.\n",
+    mexPrintf( "qhull input warning: minimum visibility V%.2g is greater than \nminimum outside W%.2g.  Flipped facets are likely.\n",
 	     qh MINvisible, qh MINoutside);
   qh max_vertex= qh DISTround;
   qh min_vertex= -qh DISTround;
@@ -688,11 +688,11 @@ void qh_maxsimplex (int dim, setT *maxpoints, pointT *points, int numpoints, set
     sizinit= qh_setsize (*simplex);
     if (sizinit < 2) {
       if (zzval_(Zsetplane) > qh hull_dim+1) {
-	fprintf (qh ferr, "qhull precision error (qh_maxsimplex for voronoi_center):\n%d points with the same x coordinate.\n",
+	mexPrintf( "qhull precision error (qh_maxsimplex for voronoi_center):\n%d points with the same x coordinate.\n",
 		 qh_setsize(maxpoints)+numpoints);
 	qh_errexit (qh_ERRprec, NULL, NULL);
       }else {
-	fprintf (qh ferr, "qhull input error: input is less than %d-dimensional since it has the same x coordinate\n", qh hull_dim);
+	mexPrintf( "qhull input error: input is less than %d-dimensional since it has the same x coordinate\n", qh hull_dim);
 	qh_errexit (qh_ERRinput, NULL, NULL);
       }
     }
@@ -713,9 +713,9 @@ void qh_maxsimplex (int dim, setT *maxpoints, pointT *points, int numpoints, set
     if (!maxpoint || maxnearzero) {
       zinc_(Zsearchpoints);
       if (!maxpoint) {
-        trace0((qh ferr, "qh_maxsimplex: searching all points for %d-th initial vertex.\n", k));
+        trace0(("qh_maxsimplex: searching all points for %d-th initial vertex.\n", k));
       }else {
-        trace0((qh ferr, "qh_maxsimplex: searching all points for %d-th initial vertex, better than p%d det %2.2g\n",
+        trace0(("qh_maxsimplex: searching all points for %d-th initial vertex, better than p%d det %2.2g\n",
 		k+1, qh_pointid(maxpoint), maxdet));
       }
       FORALLpoint_(points, numpoints) {
@@ -732,11 +732,11 @@ void qh_maxsimplex (int dim, setT *maxpoints, pointT *points, int numpoints, set
       }
     } /* !maxpoint */
     if (!maxpoint) {
-      fprintf (qh ferr, "qhull internal error (qh_maxsimplex): not enough points available\n");
+      mexPrintf( "qhull internal error (qh_maxsimplex): not enough points available\n");
       qh_errexit (qh_ERRqhull, NULL, NULL);
     }
     qh_setappend(simplex, maxpoint);
-    trace1((qh ferr, "qh_maxsimplex: selected point p%d for %d`th initial vertex, det=%2.2g\n",
+    trace1(("qh_maxsimplex: selected point p%d for %d`th initial vertex, det=%2.2g\n",
 	    qh_pointid(maxpoint), k, maxdet));
   } /* k */ 
 } /* maxsimplex */
@@ -825,12 +825,12 @@ void qh_printmatrix (FILE *fp, char *string, realT **rows, int numrow, int numco
   realT r; /*bug fix*/
   int i,k;
 
-  fprintf (fp, "%s\n", string);
+  mexPrintf("%s\n", string);
   for (i= 0; i<numrow; i++) {
     rowp= rows[i];
     for (k= 0; k<numcol; k++)
-      fprintf (fp, "%6.3g ", r=*rowp++);
-    fprintf (fp, "\n");
+      mexPrintf("%6.3g ", r=*rowp++);
+    mexPrintf("\n");
   }
 } /* printmatrix */
 
@@ -843,14 +843,14 @@ void qh_printpoints (FILE *fp, char *string, setT *points) {
   pointT *point, **pointp;
 
   if (string) {
-    fprintf (fp, "%s", string);
+    mexPrintf("%s", string);
     FOREACHpoint_(points) 
-      fprintf (fp, " p%d", qh_pointid(point));
-    fprintf (fp, "\n");
+      mexPrintf(" p%d", qh_pointid(point));
+    mexPrintf("\n");
   }else {
     FOREACHpoint_(points) 
-      fprintf (fp, " %d", qh_pointid(point));
-    fprintf (fp, "\n");
+      mexPrintf(" %d", qh_pointid(point));
+    mexPrintf("\n");
   }
 } /* printpoints */
 
@@ -891,17 +891,17 @@ void qh_projectinput (void) {
       newnum++;
   }
   if (newdim != qh hull_dim) {
-    fprintf(qh ferr, "qhull internal error (qh_projectinput): dimension after projection %d != hull_dim %d\n", newdim, qh hull_dim);
+    mexPrintf("qhull internal error (qh_projectinput): dimension after projection %d != hull_dim %d\n", newdim, qh hull_dim);
     qh_errexit(qh_ERRqhull, NULL, NULL);
   }
   if (!(newpoints=(coordT*)malloc(newnum*newdim*sizeof(coordT)))){
-    fprintf(qh ferr, "qhull error: insufficient memory to project %d points\n",
+    mexPrintf("qhull error: insufficient memory to project %d points\n",
            qh num_points);
     qh_errexit(qh_ERRmem, NULL, NULL);
   }
   qh_projectpoints (project, qh input_dim+1, qh first_point,
                     qh num_points, qh input_dim, newpoints, newdim);
-  trace1((qh ferr, "qh_projectinput: updating lower and upper_bound\n"));
+  trace1(("qh_projectinput: updating lower and upper_bound\n"));
   qh_projectpoints (project, qh input_dim+1, qh lower_bound,
                     1, qh input_dim+1, qh lower_bound, newdim+1);
   qh_projectpoints (project, qh input_dim+1, qh upper_bound,
@@ -930,7 +930,7 @@ void qh_projectinput (void) {
       *(coord++) /= qh num_points;
     *(coord++)= maxboloid * 1.1;
     qh num_points++;
-    trace0((qh ferr, "qh_projectinput: projected points to paraboloid for Delaunay\n"));
+    trace0(("qh_projectinput: projected points to paraboloid for Delaunay\n"));
   }
 } /* projectinput */
 
@@ -952,7 +952,7 @@ void qh_projectpoints (signed char *project, int n, realT *points,
   for (k= 0; k<n; k++)
     testdim += project[k];
   if (testdim != newdim) {
-    fprintf (qh ferr, "qhull internal error (qh_projectpoints): newdim %d should be %d after projection\n",
+    mexPrintf( "qhull internal error (qh_projectpoints): newdim %d should be %d after projection\n",
       newdim, testdim);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
@@ -976,7 +976,7 @@ void qh_projectpoints (signed char *project, int n, realT *points,
     if (oldk >= dim)
       break;
   }
-  trace1((qh ferr, "qh_projectpoints: projected %d points from dim %d to dim %d\n", 
+  trace1(("qh_projectpoints: projected %d points from dim %d to dim %d\n", 
     numpoints, dim, newdim));
 } /* projectpoints */
         
@@ -1069,7 +1069,7 @@ void qh_rotateinput (realT **rows) {
   if (!qh POINTSmalloc) {
     size= qh num_points*qh hull_dim*sizeof(pointT);
     if (!(newpoints=(coordT*)malloc(size))) {
-      fprintf(qh ferr, "qhull error: insufficient memory to rotate %d points\n",
+      mexPrintf("qhull error: insufficient memory to rotate %d points\n",
           qh num_points);
       qh_errexit(qh_ERRmem, NULL, NULL);
     }
@@ -1118,7 +1118,7 @@ void qh_scaleinput (void) {
   if (!qh POINTSmalloc) {
     size= qh num_points*qh hull_dim*sizeof(pointT);
     if (!(newpoints=(coordT*)malloc(size))) {
-      fprintf(qh ferr, "qhull error: insufficient memory to scale %d points\n",
+      mexPrintf("qhull error: insufficient memory to scale %d points\n",
           qh num_points);
       qh_errexit(qh_ERRmem, NULL, NULL);
     }
@@ -1159,7 +1159,7 @@ void qh_scalepoints (pointT *points, int numpoints, int dim,
     scale= qh_divzero (newhigh - newlow, high - low,
                   qh MINdenom_1, &nearzero);
     if (nearzero) {
-      fprintf (qh ferr, "qhull input error: %d'th dimension's new bounds [%2.2g, %2.2g] too wide for\nexisting bounds [%2.2g, %2.2g]\n",
+      mexPrintf( "qhull input error: %d'th dimension's new bounds [%2.2g, %2.2g] too wide for\nexisting bounds [%2.2g, %2.2g]\n",
               k, newlow, newhigh, low, high);
       qh_errexit (qh_ERRinput, NULL, NULL);
     }
@@ -1179,7 +1179,7 @@ void qh_scalepoints (pointT *points, int numpoints, int dim,
       minimize_(*coord, maxcoord);  /* because of roundoff error */
       maximize_(*coord, mincoord);
     }
-    trace0((qh ferr, "qh_scalepoints: scaled %d'th coordinate [%2.2g, %2.2g] to [%.2g, %.2g] for %d points by %2.2g and shifted %2.2g\n",
+    trace0(("qh_scalepoints: scaled %d'th coordinate [%2.2g, %2.2g] to [%.2g, %.2g] for %d points by %2.2g and shifted %2.2g\n",
       k, low, high, newlow, newhigh, numpoints, scale, shift));
   }
 } /* scalepoints */    
@@ -1218,26 +1218,26 @@ boolT qh_sethalfspace (int dim, coordT *coords, coordT **nextp,
   }
   *nextp= coordp;
   if (qh IStracing >= 4) {
-    fprintf (qh ferr, "qh_sethalfspace: halfspace at offset %6.2g to point: ", *offset);
+    mexPrintf( "qh_sethalfspace: halfspace at offset %6.2g to point: ", *offset);
     for (k= dim, coordp= coords; k--; )
-      fprintf (qh ferr, " %6.2g", r=*coordp++);
-    fprintf (qh ferr, "\n");
+      mexPrintf( " %6.2g", r=*coordp++);
+    mexPrintf( "\n");
   }
   return True;
 LABELerroroutside:
   feasiblep= feasible;
   normp= normal;
-  fprintf(qh ferr, "qhull input error: feasible point is not clearly inside halfspace\nfeasible point: ");
+  mexPrintf("qhull input error: feasible point is not clearly inside halfspace\nfeasible point: ");
   for (k= dim; k--; )
-    fprintf (qh ferr, qh_REAL_1, r=*(feasiblep++));
-  fprintf (qh ferr, "\n     halfspace: "); 
+    mexPrintf( qh_REAL_1, r=*(feasiblep++));
+  mexPrintf( "\n     halfspace: "); 
   for (k= dim; k--; )
-    fprintf (qh ferr, qh_REAL_1, r=*(normp++));
-  fprintf (qh ferr, "\n     at offset: ");
-  fprintf (qh ferr, qh_REAL_1, *offset);
-  fprintf (qh ferr, " and distance: ");
-  fprintf (qh ferr, qh_REAL_1, dist);
-  fprintf (qh ferr, "\n");
+    mexPrintf( qh_REAL_1, r=*(normp++));
+  mexPrintf( "\n     at offset: ");
+  mexPrintf( qh_REAL_1, *offset);
+  mexPrintf( " and distance: ");
+  mexPrintf( qh_REAL_1, dist);
+  mexPrintf( "\n");
   return False;
 } /* sethalfspace */
 
@@ -1258,10 +1258,10 @@ coordT *qh_sethalfspace_all (int dim, int count, coordT *halfspaces, pointT *fea
   pointT *newpoints;
   coordT *coordp, *normalp, *offsetp;
 
-  trace0((qh ferr, "qh_sethalfspace_all: compute dual for halfspace intersection\n"));
+  trace0(("qh_sethalfspace_all: compute dual for halfspace intersection\n"));
   newdim= dim - 1;
   if (!(newpoints=(coordT*)malloc(count*newdim*sizeof(coordT)))){
-    fprintf(qh ferr, "qhull error: insufficient memory to compute dual of %d halfspaces\n",
+    mexPrintf("qhull error: insufficient memory to compute dual of %d halfspaces\n",
           count);
     qh_errexit(qh_ERRmem, NULL, NULL);
   }
@@ -1270,7 +1270,7 @@ coordT *qh_sethalfspace_all (int dim, int count, coordT *halfspaces, pointT *fea
   for (i= 0; i < count; i++) {
     offsetp= normalp + newdim;
     if (!qh_sethalfspace (newdim, coordp, &coordp, normalp, offsetp, feasible)) {
-      fprintf (qh ferr, "The halfspace was at index %d\n", i);
+      mexPrintf( "The halfspace was at index %d\n", i);
       qh_errexit (qh_ERRinput, NULL, NULL);
     }
     normalp= offsetp + 1;
@@ -1298,7 +1298,7 @@ pointT *qh_voronoi_center (int dim, setT *points) {
   if (size == dim+1)
     simplex= points;
   else if (size < dim+1) {
-    fprintf (qh ferr, "qhull internal error (qh_voronoi_center):\n  need at least %d points to construct a Voronoi center\n",
+    mexPrintf( "qhull internal error (qh_voronoi_center):\n  need at least %d points to construct a Voronoi center\n",
 	     dim+1);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }else {
@@ -1351,14 +1351,14 @@ pointT *qh_voronoi_center (int dim, setT *points) {
     }
 #ifndef qh_NOtrace
     if (qh IStracing >= 3) {
-      fprintf (qh ferr, "qh_voronoi_center: det %2.2g factor %2.2g ", det, factor);
+      mexPrintf( "qh_voronoi_center: det %2.2g factor %2.2g ", det, factor);
       qh_printmatrix (qh ferr, "center:", &center, 1, dim);
       if (qh IStracing >= 5) {
 	qh_printpoints (qh ferr, "points", simplex);
 	FOREACHpoint_(simplex)
-	  fprintf (qh ferr, "p%d dist %.2g, ", qh_pointid (point),
+	  mexPrintf( "p%d dist %.2g, ", qh_pointid (point),
 		   qh_pointdist (point, center, dim));
-	fprintf (qh ferr, "\n");
+	mexPrintf( "\n");
       }
     }
 #endif

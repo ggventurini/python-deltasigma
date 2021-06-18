@@ -134,7 +134,7 @@
      4       for lrand48() with 31 bits (Solaris)
      5       for qh_rand() with 31 bits (included with Qhull)
 */
-#define qh_RANDOMtype 4   /* *** change to the desired number *** */
+#define qh_RANDOMtype 5   /* *** change to the desired number *** */
 
 #if (qh_RANDOMtype == 1)
 #define qh_RANDOMmax ((realT)0x7fffffffUL)  /* 31 bits, random()/MAX */
