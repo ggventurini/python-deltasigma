@@ -1,6 +1,6 @@
 function sv = ESLselect(v,sy,dw,df)
 %sv = ESLselect(v,sy,dw,df)	Select the elements of a multi-element
-%DAC to minimize the selection error, subject to the constraint that 
+%DAC to minimize the selection error, subject to the constraint that
 %the nominal DAC output is v, i.e. v = sv'*dw.
 %df is a vector of dac error factors. de is defined s.t. df'*de = 0.
 %Assume that the preferred usage order is that given by dw.
@@ -8,6 +8,12 @@ function sv = ESLselect(v,sy,dw,df)
 % Go through sv possibilities one by one, until one which meets the
 % v = sv'*dw constraint is found.
 
+if nargin<4
+    df = ones(length(sy),1);
+    if nargin<3
+        dw = ones(length(sy),1);
+    end
+end
 if v<0 | v>sum(dw)
     error('v argument is invalid (too large or too small)');
 end
@@ -30,26 +36,26 @@ pointer = 1;			% Array of pointers to selected elements
 selected = [];			% Selected elements
 while 1
     while pointer(i)>n;
-	% backtrack
-	i = i-1;
-	if i==0
-	    break;	%failure!
-	end
-	pointer(i) = pointer(i)+1;
-	selected = selected(1:i);
+        % backtrack
+        i = i-1;
+        if i==0
+            break;	%failure!
+        end
+        pointer(i) = pointer(i)+1;
+        selected = selected(1:i);
     end
     selected(i) = possibilities(pointer(i));
     dv = sum(dw(selected));
     if dv==v
-	break;		%success!
+        break;		%success!
     elseif dv<v
-	% Proceed to the next level of selection
-	pointer(i+1) = pointer(i)+1;
-	i = i+1;
+        % Proceed to the next level of selection
+        pointer(i+1) = pointer(i)+1;
+        i = i+1;
     else
-	% Try the next element at the current level.
-	pointer(i) = pointer(i)+1;
+        % Try the next element at the current level.
+        pointer(i) = pointer(i)+1;
     end
 end
 
-sv(selected) = ones(1,length(selected));
+sv(selected) = 1;

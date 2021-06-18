@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include <math.h>
+/* #define _FLOAT_H_ This stops deploytool from complaining, but still doesn't work */
 #include "mex.h"
 
 /* Global variables */
@@ -47,14 +48,7 @@ double
     *nlev,	/* The number of quantizer levels. */
     default_nlev=2;
 
-#ifdef __STDC__
-double quantize(double yy, int nLevels)
-#else
-double quantize(yy, nLevels)
-double yy;
-int nLevels;
-#endif
-{ 
+double quantize(double yy, int nLevels) { 
     double vv;
     if(nLevels%2) { /* Mid-tread quantizer */
 	vv = 2*floor(0.5*(yy+1));
@@ -74,14 +68,7 @@ int nLevels;
 }
 
 /* The following function is for debugging purposes only */
-#ifdef __STDC__
-void printMatrix(double *x, int m, int n)
-#else
-printMatrix(x, m, n)
-double *x;
-int m, n;
-#endif
-{
+void printMatrix(double *x, int m, int n) {
 int i,j;
 for(i=0; i<m; ++i){
     for(j=0; j<n; ++j)
@@ -90,25 +77,13 @@ for(i=0; i<m; ++i){
     }
 }
 
-#ifdef __STDC__
-void fatalError(char *s)
-#else
-fatalError(s)
-char *s;
-#endif
-{
+void fatalError(char *s) {
     char msg[1024];
     sprintf(msg, "%s: %s", cmdName, s);
     mexErrMsgTxt(msg);
 }
 
-#ifdef __STDC__
-void initializeX(const mxArray *M_x0)
-#else
-initializeX(M_x0)
-mxArray *M_x0;
-#endif
-{
+void initializeX(const mxArray *M_x0) {
     int i;
     double *x0 = mxGetPr(M_x0);
     if( mxGetM(M_x0)!=order || mxGetN(M_x0)!=1 )
@@ -117,14 +92,7 @@ mxArray *M_x0;
 	x[i] = *x0++;
 }
 
-#ifdef __STDC__
-void checkArgs(int nlhs, mxArray **plhs, int nrhs, const mxArray **prhs)
-#else
-checkArgs(nlhs, plhs, nrhs, prhs)
-int nlhs, nrhs;
-mxArray *plhs[], *prhs[];
-#endif
-{
+void checkArgs(int nlhs, mxArray **plhs, int nrhs, const mxArray **prhs) {
     int i;
     int form;
     double *pABCD;
@@ -152,7 +120,7 @@ mxArray *plhs[], *prhs[];
 	/* Matlab code: [z,p,k] = zpkdata(ntf); zeros = z{1}; poles=p{1} */
 	mxArray *lhs[3];
 	form = 0;
-	mexCallMATLAB(3,lhs,1,&arg2,"zpkdata"); 
+	mexCallMATLAB(3,lhs,1,(mxArray **)&arg2,"zpkdata"); 
 	zeros = mxGetCell(lhs[0],0);
 	poles = mxGetCell(lhs[1],0);
 	if( (order=mxGetNumberOfElements(zeros)) != mxGetNumberOfElements(poles) )
@@ -300,11 +268,7 @@ mxArray *plhs[], *prhs[];
 /* (These variables may be recycled internally, depending
    on the output variables requested.) */
 
-#ifdef __STDC__
 void simulateDSM()
-#else
-simulateDSM()
-#endif
 {
     int i,j,t, qi;
     double *pABCD, *ptr, *pxn, tmp;
@@ -356,14 +320,7 @@ simulateDSM()
 }
 
 
-#ifdef __STDC__
-void mexFunction(int nlhs, mxArray **plhs, int nrhs, const mxArray **prhs)
-#else
-mexFunction(nlhs, plhs, nrhs, prhs)
-int nlhs, nrhs;
-mxArray *plhs[], *prhs[];
-#endif
-{
+void mexFunction(int nlhs, mxArray **plhs, int nrhs, const mxArray **prhs) {
     checkArgs(nlhs, plhs, nrhs, prhs);
     /* Print the variables being used 
     mexPrintf("x=\n");		printMatrix(x,order,1);

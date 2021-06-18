@@ -11,17 +11,19 @@ function h = evalTF(tf,z)
 
 if isobject(tf)		% zpk object
     if strcmp(class(tf),'zpk')
-	h = tf.k * evalRPoly(tf.z{1},z) ./ evalRPoly(tf.p{1},z);
+       % Speed improvement by D. Alldred (2013-02-01)
+       [zs ps k] = zpkdata(tf);
+       h = k * evalRPoly(zs{1},z) ./ evalRPoly(ps{1},z);
     else
-	fprintf(1,'%s: Only zpk objects supported.\n', mfilename);
+        fprintf(1,'%s: Only zpk objects supported.\n', mfilename);
     end
 elseif any(strcmp(fieldnames(tf),'form'))
     if strcmp(tf.form,'zp')
-	h = tf.k * evalRPoly(tf.zeros,z) ./ evalRPoly(tf.poles,z);
+        h = tf.k * evalRPoly(tf.zeros,z) ./ evalRPoly(tf.poles,z);
     elseif strcmp(tf.form,'coeff')
-	h = polyval(tf.num,z) ./ polyval(tf.den,z);
+        h = polyval(tf.num,z) ./ polyval(tf.den,z);
     else
-	fprintf(1,'%s: Unknown form: %s\n', mfilename, tf.form);
+        fprintf(1,'%s: Unknown form: %s\n', mfilename, tf.form);
     end
 else	% Assume zp form
     h = tf.k * evalRPoly(tf.zeros,z) ./ evalRPoly(tf.poles,z);

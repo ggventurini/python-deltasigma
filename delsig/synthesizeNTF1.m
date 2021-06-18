@@ -20,20 +20,20 @@ if length(opt)==1
     end
     if f0~=0		% Bandpass design-- shift and replicate the zeros.
         order = order*2;
-        z = sort(z) + 2*pi*f0;
+        z = z + 2*pi*f0;
         ztmp = [ z'; -z' ];
         z = ztmp(:);
     end
-    z = exp(1i*z);
+    z = exp(j*z);
 else
     z = opt(:);
 end
 
 zp = z(angle(z)>0);
 x0 = (angle(zp)-2*pi*f0) * osr / pi;
-if opt==4 && f0~=0
+if opt==4 & f0~=0
     % Do not optimize the zeros at f0
-    x0( abs(x0)<1e-10 ) = [];
+    x0(find( abs(x0)<1e-10 )) = [];
 end
 
 ntf = zpk(z,zeros(1,order),1,1);
@@ -57,10 +57,11 @@ while opt_iteration > 0
             ntf.p = zeros(order,1);
         else
             x=0.3^(order-1);	% starting guess
+            converged = 0;
             for itn=1:Hinf_itn_limit
                 me2 = -0.5*(x^(2./order));
-                w = (2*(1:order)'-1)*pi/order;
-                mb2 = 1+me2*exp(1i*w);
+                w = (2*[1:order]'-1)*pi/order;
+                mb2 = 1+me2*exp(j*w);
                 p = mb2 - sqrt(mb2.^2-1);
                 out = find(abs(p)>1);
                 p(out) = 1./p(out);	% reflect poles to be inside the unit circle.
@@ -81,7 +82,8 @@ while opt_iteration > 0
                     x = x*0.1;
                 end
                 fprev = f;
-                if abs(f)<ftol || abs(delta_x)<1e-10
+                if abs(f)<ftol | abs(delta_x)<1e-10
+                    converged = 1;
                     break;
                 end
                 if x>1e6
@@ -101,8 +103,8 @@ while opt_iteration > 0
         c2pif0 = cos(2*pi*f0);
         for itn=1:Hinf_itn_limit
             e2 = 0.5*x^(2./order);
-            w = (2*(1:order)'-1)*pi/order;
-            mb2 = c2pif0 + e2*exp(1i*w);
+            w = (2*[1:order]'-1)*pi/order;
+            mb2 = c2pif0 + e2*exp(j*w);
             p = mb2 - sqrt(mb2.^2-1);
             % reflect poles to be inside the unit circle.
             out = find(abs(p)>1);
@@ -124,7 +126,7 @@ while opt_iteration > 0
                 x = x*0.1;
             end
             fprev = f;
-            if abs(f)<ftol || abs(delta_x)<1e-10
+            if abs(f)<ftol | abs(delta_x)<1e-10
                 break;
             end
             if x>1e6
@@ -167,7 +169,7 @@ while opt_iteration > 0
         if f0>0
             z = padt(z,length(p)/2,exp(2i*pi*f0));
         end
-        z = [z conj(z)].'; z = z(:);
+        z = [z conj(z)]; z = z(:);
         if f0==0
             z = padt(z,length(p),1);
         end

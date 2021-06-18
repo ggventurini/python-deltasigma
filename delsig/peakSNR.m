@@ -1,37 +1,36 @@
 function [peak_snr,peak_amp] = peakSNR(snr,amp) 
-% [peak_snr,peak_amp] = peakSNR(snr,amp)	Find the snr peak by fitting
-% a smooth curve to the top end of the SNR vs input amplitude data.
+% [peak_snr,peak_amp] = peakSNR(snr,amp)	Estimate the snr peak 
+% by threading a line of slope 1 through the (amp,snr) data.
 % Both amp and snr are expressed in dB.
 
 % Delete garbage data
-i = Inf == abs(snr); snr(i) = []; amp(i) = [];
-i = isnan(snr); snr(i) = []; amp(i) = [];
+i = abs(snr) == Inf;    snr(i) = []; amp(i) = [];
+i = isnan(snr);         snr(i) = []; amp(i) = [];
+i = snr<3;              snr(i) = []; amp(i) = [];
+n = length(amp);
 
-max_snr = max(snr);
-i = find(snr>max_snr-10);
-min_i = min(i); max_i = max(i);
-j = find( snr(min_i:max_i) < max_snr-15 );
-if j
-	max_i = min_i + min(j) -2;
-	i = min_i:max_i;
+
+% Sort by amplitude
+[amp, i] = sort(amp);   snr = snr(i);
+
+i = 1; 
+while any(i~=0) && n > 3
+    % Draw a 45-degree median line through the data
+    tmp = sort(snr-amp);
+    if rem(n,2) == 0
+        m = mean( tmp(n/2 +[1 0]) );
+    else
+        m = tmp((n+1)/2);
+    end
+    % Discard data that is more than 6dB off 
+    i = abs(amp-snr+m) > 6;    
+    snr(i) = []; 
+    amp(i) = [];
+    n = length(amp);
 end
-snr = 10.^(snr(i)/20);
-amp = 10.^(amp(i)/20);
-n = length(i);
 
-c = max(amp)*1.05;
-% fit y = ax + b/(x-c) to the data
-A = [amp; 1./(amp-c)];
-ab = snr/A; 
+peak_amp = max(amp);
+peak_snr = peak_amp + m;
 
-peak_amp = c- sqrt(ab(2)/ab(1));
-peak_snr = ab*[peak_amp; 1/(peak_amp-c)];
-peak_snr = dbv(peak_snr);
-peak_amp = dbv(peak_amp);
 
-return
-% For debugging
-amp = linspace(min(amp),max(amp));
-pred = ab*[amp; 1./(amp-1)];
-plot(amp,pred,'g')
 
