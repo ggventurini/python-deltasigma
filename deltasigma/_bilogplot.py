@@ -126,8 +126,8 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
     p = np.concatenate((pl[::-1], pr))
     f = np.concatenate((-fl[::-1], fr))
     plt.plot(f, p, **fmt)
-    plt.xscale('symlog', linthreshx=x[0],
-               subsx=np.logspace(10**int(np.ceil(np.log10(x[0]))),
+    plt.xscale('symlog', linthresh=x[0],
+               subs=np.logspace(10**int(np.ceil(np.log10(x[0]))),
                                  10**int(1+np.ceil(np.log10(max(x[2], x[1])))))
                )
     ax = plt.gca()
