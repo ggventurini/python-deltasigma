@@ -126,16 +126,16 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=100000, N0=
     maxima = np.zeros((1, order)) - 1
     ulist = np.linspace(0.7*umax, umax, 10)
     print("ulist: ", ulist) # Debug
-    print("Quadrature = ", quadrature) # Debug
+    #print("Quadrature = ", quadrature) # Debug
     for u in ulist:
         if not quadrature:
             v, x, xmax, y = simulateDSM(u*u0, ABCD, nlev)
+            print("Current umax:", u, "max(abs(y)):", np.max(np.abs(y)), "ymax:", y) # debug
         else:
             v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
         if np.max(np.abs(y)) > ymax:
             break
         umax = u
-        print("Current umax: ", umax) # debug
         maxima = np.max(np.vstack((maxima, xmax.T)), axis=0, keepdims=True)
     scale = (maxima/xlim).reshape((-1))
     S = np.diag(1.0/scale)
