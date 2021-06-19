@@ -163,9 +163,11 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
 
     #N = u.shape[1]
     N = np.max(np.shape(u)) # Return max dimension
-    v = np.empty((nq, N), dtype=np.float64)
-    y = np.empty((nq, N), dtype=np.float64)     # to store the quantizer input
-    xn = np.empty((order, N), dtype=np.float64) # to store the state information
+    
+    #empty -> zeros
+    v = np.zeros((nq, N), dtype=np.float64)
+    y = np.zeros((nq, N), dtype=np.float64)     # to store the quantizer input
+    xn = np.zeros((order, N), dtype=np.float64) # to store the state information
     xmax = np.abs(x0) # to keep track of the state maxima
 
     for i in range(N):
