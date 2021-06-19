@@ -5,6 +5,9 @@ python-deltasigma
 This forked repository is maintained by **Yuki Fukuda**.  
 If you want to visit original repository,  [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
 
+Today, I noified that the calcuration is sometimes incorrect in vanilla python.
+I stlongly recommend to use this library with [Anaconda](https://www.anaconda.com/).
+
 ---
 
 A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
@@ -51,10 +54,8 @@ according to
 
 `python-deltasigma` runs on Linux, Mac OS X and Windows.
 
-Installing requires **Python 3.5+**, **numpy**, **scipy**
+Installing requires **Python 3.6+**, **numpy**, **scipy**
 (>= 0.11.0) and **matplotlib**.  
-**Note: Python 2.7 is no longer supported officialy, also this package.**  
-      **Python 3.5 support will be dropped soon in this package.**  
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
 
