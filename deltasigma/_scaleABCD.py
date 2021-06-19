@@ -102,6 +102,8 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=100000, N0=
              + 0.01*np.dot(np.array([[1, 1j]]), npr.randn(2, N + N0))
         if not quadrature:
             u0 = np.real(u0)
+        print("ulist: ", ulist) # Debug
+        print("Quadrature = ", quadrature) # Debug
         for u in ulist:
             if not quadrature:
                 v, x, xmax, y = simulateDSM(u*u0, ABCD, nlev)
