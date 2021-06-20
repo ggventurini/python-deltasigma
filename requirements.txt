@@ -1,6 +1,6 @@
 # python >= 3.6
 numpy
-intel-numpy
+#intel-numpy
 #scipy
 intel-scipy
 matplotlib
