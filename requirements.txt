@@ -1,6 +1,8 @@
 # python >= 3.6
-numpy-mkl
-scipy
+#numpy
+intel-numpy
+#scipy
+intel-scipy
 matplotlib
 cython
 nose
