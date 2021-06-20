@@ -1,5 +1,5 @@
 # python >= 3.6
-#numpy
+numpy
 intel-numpy
 #scipy
 intel-scipy
