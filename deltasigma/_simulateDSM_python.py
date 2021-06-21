@@ -177,9 +177,11 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
         y0 = np.real(np.dot(C, x0) + np.dot(D1, u[:, i]))
         y[:, i] = y0
         v[:, i] = ds_quantize(y0, nlev)
+        print('x0 =', x0, 'y0 =', y0) # Debug
         x0 = np.dot(A, x0) + np.dot(B, np.concatenate((u[:, i], v[:, i])))
         xn[:, i] = np.real_if_close(x0.T)
         xmax = np.max(np.hstack((np.abs(x0).reshape((-1, 1)), xmax.reshape((-1, 1)))), axis=1, keepdims=True)
+        print('xn[:,', i,']=', xn[:, i], 'xmax =', xmax) # Debug
         
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
