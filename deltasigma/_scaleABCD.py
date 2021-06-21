@@ -130,7 +130,7 @@ def scaleABCD(ABCD, nlev=2, f=0, xlim=1, ymax=None, umax=None, N_sim=100000, N0=
     for u in ulist:
         if not quadrature:
             v, x, xmax, y = simulateDSM(u*u0, ABCD, nlev)
-            print("Current umax:", u, "max(abs(y)):", np.max(np.abs(y)), "ymax:", ymax) # debug
+            print("Current umax:", u, "max(abs(y)):", np.max(np.abs(y)), "ymax:", ymax, "v:", v, "x:", x, "xmax:", xmax) # debug
         else:
             v, x, xmax, y = simulateQDSM(u*u0, ABCD, nlev)
         if np.max(np.abs(y)) > ymax:
