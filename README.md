@@ -29,7 +29,7 @@ it is very heavily based.
 
 **Original Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
-**Forked Latest version:** [0.2.](https://github.com/Y-F-Acoustics/python-deltasigma)
+**Forked Latest version:** [0.2.6](https://github.com/Y-F-Acoustics/python-deltasigma)
 
 [![Python Package using Conda](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml)
 [![Build Status](https://travis-ci.org/Y-F-Acoustics/python-deltasigma.svg?branch=master)](https://travis-ci.org/Y-F-Acoustics/python-deltasigma)
