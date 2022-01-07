@@ -6,6 +6,6 @@ scipy
 #intel-scipy
 matplotlib
 cython
-nose
+nose2
 setuptools
 coverage
