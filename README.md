@@ -29,7 +29,7 @@ it is very heavily based.
 
 **Original Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
-**Forked Latest version:** [0.2.6](https://github.com/Y-F-Acoustics/python-deltasigma)
+**Forked Latest version:** [0.2.7](https://github.com/Y-F-Acoustics/python-deltasigma)
 
 [![Python Package using Conda](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml)
 [![Python package](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml)
@@ -57,8 +57,8 @@ according to
 
 `python-deltasigma` runs on Linux, Mac OS X and Windows.
 
-Installing requires **Python 3.7+**, **numpy**, **scipy**
-(>= 0.11.0) and **matplotlib**.  
+Installing requires **Python 3.7+**, **numpy**(<= 1.20.3), **scipy**
+(<= 1.7.1) and **matplotlib**.  
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
 
