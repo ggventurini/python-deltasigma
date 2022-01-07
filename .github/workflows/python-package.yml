@@ -39,4 +39,4 @@ jobs:
 #        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with nose2
       run: |
-        nose2 --with-coverage --cover-package=deltasigma deltasigma
+        nose2 --with-coverage deltasigma
