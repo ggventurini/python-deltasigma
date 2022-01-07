@@ -5,7 +5,7 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
-#  - nose2
+  - nose
   - setuptools
   - coverage
   - cython
