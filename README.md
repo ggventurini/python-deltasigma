@@ -32,6 +32,7 @@ it is very heavily based.
 **Forked Latest version:** [0.2.6](https://github.com/Y-F-Acoustics/python-deltasigma)
 
 [![Python Package using Conda](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml)
+[![Python package](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml)
 [![Build Status](https://travis-ci.org/Y-F-Acoustics/python-deltasigma.svg?branch=master)](https://travis-ci.org/Y-F-Acoustics/python-deltasigma)
 [![Coverage Status](https://coveralls.io/repos/github/Y-F-Acoustics/python-deltasigma/badge.svg?branch=master)](https://coveralls.io/github/Y-F-Acoustics/python-deltasigma?branch=master)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
