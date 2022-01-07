@@ -2,8 +2,8 @@ name: base
 channels:
   - defaults
 dependencies:
-  - numpy
-  - scipy
+  - numpy <= 1.20.3
+  - scipy <= 1.7.1
   - matplotlib
   - nose
   - setuptools
