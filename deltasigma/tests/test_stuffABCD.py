@@ -20,7 +20,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
-from nose.tools import raises
+#from nose.tools import raises
 
 class TestStuffABCD(unittest.TestCase):
     """Test class for stuffABCD()"""
@@ -473,8 +473,9 @@ class TestStuffABCD(unittest.TestCase):
                     self.assertTrue(np.allclose(ABCD, self.tv[f0][form][order]['ABCD'],
                                     atol=1e-4, rtol=1e-3))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_stuffABCD_2(self):
         """Test function for stuffABCD() 2/2"""
-        ds.stuffABCD((0.2164, 0.7749), (0, ), (0.2164, 0.7749, 1.), (1., 1. ), 'DUMMY')
+        with self.assertRaises(ValueError):
+            ds.stuffABCD((0.2164, 0.7749), (0, ), (0.2164, 0.7749, 1.), (1., 1. ), 'DUMMY')
 

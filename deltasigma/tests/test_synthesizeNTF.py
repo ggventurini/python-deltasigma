@@ -19,7 +19,7 @@
 import unittest
 import numpy as np
 
-from nose.tools import raises
+#from nose.tools import raises
 
 from deltasigma import synthesizeNTF
 from deltasigma._utils import cplxpair as cpx
@@ -162,27 +162,31 @@ class TestSynthesizeNTF(unittest.TestCase):
         self.assertTrue(np.allclose(cpx(p), cpx(pref), atol=1e-4, rtol=1e-3))
         self.assertTrue(np.allclose(k, kref, atol=1e-4, rtol=1e-4))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_synthesizeNTF_12(self):
         """Test function for synthesizeNTF() 12/15"""
         # f0 > 0.5 -> ValueError
-        z, p, k = synthesizeNTF(order=2, osr=32, opt=0, H_inf=1.3, f0=0.7)
+        with self.assertRaises(ValueError):
+            z, p, k = synthesizeNTF(order=2, osr=32, opt=0, H_inf=1.3, f0=0.7)
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_synthesizeNTF_13(self):
         """Test function for synthesizeNTF() 13/15"""
         # f0 > 0. and order odd -> ValueError
-        z, p, k = synthesizeNTF(order=3, osr=32, opt=0, H_inf=1.3, f0=0.3)
+        with self.assertRaises(ValueError):
+            z, p, k = synthesizeNTF(order=3, osr=32, opt=0, H_inf=1.3, f0=0.3)
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_synthesizeNTF_14(self):
         """Test function for synthesizeNTF() 14/15"""
         # 1 < len(opt) < order
-        z, p, k = synthesizeNTF(order=3, osr=32, opt=[0., 0.], H_inf=1.3, f0=0.3)
+        with self.assertRaises(ValueError):
+            z, p, k = synthesizeNTF(order=3, osr=32, opt=[0., 0.], H_inf=1.3, f0=0.3)
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_synthesizeNTF_15(self):
         """Test function for synthesizeNTF() 15/15"""
         # order < len(opt)
-        z, p, k = synthesizeNTF(order=3, osr=32, opt=[0., 0., 0., 0.], H_inf=1.3, f0=0.)
+        with self.assertRaises(ValueError):
+            z, p, k = synthesizeNTF(order=3, osr=32, opt=[0., 0., 0., 0.], H_inf=1.3, f0=0.)
 
