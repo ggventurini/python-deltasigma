@@ -20,7 +20,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
-from nose.tools import raises
+#from nose.tools import raises
 
 class TestDB(unittest.TestCase):
     """Test class for db()"""
@@ -59,10 +59,11 @@ class TestDB(unittest.TestCase):
         res = ds.undbv(ds.db(self.tv4, 'voltage'))
         self.assertTrue(np.allclose(self.tv4, res, atol=1e-8, rtol=1e-5))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_db_5(self):
         """Test function for db() 5/6"""
-        res = ds.db([1], 'wrong')
+        with self.assertRaises(ValueError):
+            res = ds.db([1], 'wrong')
 
     def test_db_6(self):
         """Test function for db() 6/6"""

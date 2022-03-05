@@ -18,7 +18,8 @@
 
 import unittest
 import numpy as np
-import pylab as plt
+#import pylab as plt
+import matplotlib.pyplot as plt
 
 from warnings import catch_warnings
 

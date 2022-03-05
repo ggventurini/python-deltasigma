@@ -21,7 +21,7 @@ import pkg_resources
 import numpy as np
 import scipy.io
 
-from nose.tools import raises
+#from nose.tools import raises
 
 from deltasigma import pulse, axisLabels
 
@@ -65,24 +65,30 @@ class TestPulse(unittest.TestCase):
 
     # FIXME ALSO CHECK MIMO TFS
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_pulse4_tp_scalar(self):
         """Test function for pulse(): fail if tp scalar 4/6"""
         H = ((1,), (0, 0))
-        pulse(H, tp=1, dt=.1, tfinal=10)
 
-    @raises(ValueError)
+        with self.assertRaises(ValueError):
+            pulse(H, tp=1, dt=.1, tfinal=10)
+
+    #@raises(ValueError)
     def test_pulse5_tp_not_nx2(self):
         """Test function for pulse(): fail if tp.shape not (n, 2) 5/6"""
         H = ((1,), (0, 0))
         tp = ((1, 2, 3), (4, 5, 6))
-        pulse(H, tp=1, dt=.1, tfinal=10)
+        
+        with self.assertRaises(ValueError):
+            pulse(H, tp=1, dt=.1, tfinal=10)
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_pulse6_S_tp_mismatch(self):
         """Test function for pulse(): fail if mismatched ndac, ni 6/6"""
         H = ((1,), (0, 0))
         S = [[H], [H], [H]]
         tp = ((1, 2), (3, 4), (5, 6))
-        pulse(H, tp=1, dt=.1, tfinal=10)
+
+        with self.assertRaises(ValueError):
+            pulse(H, tp=1, dt=.1, tfinal=10)
 
