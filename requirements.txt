@@ -2,7 +2,7 @@
 numpy
 #intel-numpy
 #scipy < 1.7.0
-scipy
+scipy <= 1.7.2
 #intel-scipy
 matplotlib
 cython
