@@ -28,5 +28,5 @@ class TestCHANGEME(unittest.TestCase):
 
     def test_CHANGEME(self):
         """Test function for CHANGEME() 1/3"""
-        self.assertTrue()
+        self.assertTrue(True)
 
