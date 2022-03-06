@@ -30,13 +30,13 @@ class TestRealizeNTF_CT(unittest.TestCase):
         self.ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
         self.ABCDc_ref1 = np.array(((0, 0, 1, -1),
                                    (1, 0, 0, -1.5),
-                                   (0, 1, 0, 0)), dtype=np.float)
+                                   (0, 1, 0, 0)), dtype=np.float64)
         self.tdac2_ref1 = np.array(((-1, -1),
                                     (0,  1)))
         # FB NRTZ 0 delay tdac in short list form
         self.ABCDc_ref2 = np.array(((0, 0, 1, -1),
                                     (1, 0, 0, -1.5),
-                                    (0, 1, 0, 0)), dtype=np.float)
+                                    (0, 1, 0, 0)), dtype=np.float64)
         self.tdac2_ref2 = np.array(((-1, -1),
                                     (0,  1)))
         # FB multi-timing DAC
