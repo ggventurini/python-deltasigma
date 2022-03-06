@@ -63,7 +63,7 @@ class TestPlotSpectrum(unittest.TestCase):
                         label='$\\mathrm{plotSpectrum}(S)$')
         Snn = np.abs(ds.evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta)**2
         plt.plot(freq, ds.dbp(Snn*NBW), 'm', linewidth=1.5,
-                 label='$\mathrm{from\\ NTF}$')
+                 label='$\\mathrm{from\\ NTF}$')
         plt.text(0.5, -3, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='top')
         ds.figureMagic((0, 0.5), None, None, (-140, 0), 20, None)
@@ -79,7 +79,7 @@ class TestPlotSpectrum(unittest.TestCase):
         plt.plot(freq, ds.dbp(spec_smoothed[:N//2 + 1]), 'b', linewidth=2,
                  label='$\\mathrm{circ\\_smooth}(S)$')
         plt.plot(freq, ds.dbp(Snn*NBW), 'm', linewidth=1.5,
-                 label='$\mathrm{from\\ NTF}$')
+                 label='$\\mathrm{from\\ NTF}$')
         plt.text(0.5, -3, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='top')
         ds.figureMagic((0, 0.5), None, None, (-140, 0), 20, None)
