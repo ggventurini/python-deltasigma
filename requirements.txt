@@ -1,7 +1,5 @@
 # python >= 3.7
 numpy < 1.21.2
-#intel-numpy
-#scipy < 1.7.0
 scipy
 #intel-scipy
 matplotlib
