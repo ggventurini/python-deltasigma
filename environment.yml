@@ -2,7 +2,7 @@ name: base
 channels:
   - defaults
 dependencies:
-  - numpy
+  - numpy < 1.21.2
   - scipy
   - matplotlib
 #  - nose
