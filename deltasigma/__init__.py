@@ -12,7 +12,6 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # LICENSE file for the licensing terms.
-
 """
 *A port of the* **MATLAB Delta Sigma Toolbox** *based on free software and
 very little sleep.*
