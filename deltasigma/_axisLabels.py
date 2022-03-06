@@ -51,7 +51,7 @@ def axisLabels(ran, incr):
     ran = np.asarray(ran)
     ran[np.abs(ran) < 1e-6] = 0
     s = []
-    if not isinstance(incr, collections.Iterable):
+    if not isinstance(incr, collections.abc.Iterable):
         incr = int(incr)
         first = 0
     elif len(incr) == 2:

@@ -191,7 +191,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         amp = np.concatenate((np.arange(- 120, -20 + 1, 10),
                               np.array((-15,)),
                               np.arange(-10, 1)))
-    elif not isinstance(amp, collections.Iterable):
+    elif not isinstance(amp, collections.abc.Iterable):
         amp = np.array((amp, ))
     else:
         amp = np.asarray(amp)

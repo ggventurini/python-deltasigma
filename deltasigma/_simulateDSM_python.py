@@ -132,7 +132,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
     # need to set order and form now.
     order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
     
-    if not isinstance(x0, collections.Iterable):
+    if not isinstance(x0, collections.abc.Iterable):
         x0 = x0*np.ones((order,), dtype=np.float64)
     else:
         x0 = np.array(x0).reshape((-1,))
