@@ -32,10 +32,12 @@ int
     M,		/* The number of unit elemtents. */
     OnlyUnitElements = 1,	/* Flag for the usual case of all unit el. */
     Want_sx, Want_sigma_se, Want_max_sx, /* Output flags */
-    *tentative;	/* Used by calculate_sv1() */
+    *tentative,	/* Used by calculate_sv1() */
+    dither = 0;
 double 
     *sv,	/* The selection vector. */
-    *sy,	/* The input to the vector quantizer, not normalized. */
+    *sy0,	/* The input to the vector quantizer, before normalization and without dither. */
+    *sy,	/* The input to the vector quantizer. */
     *se,	/* The selection error, sv-sy(normalized). */
     *pv,	/* Pointer into the input array. */
     *sx_start,	/* An n by (M+1) circular array containing the state vectors */
@@ -201,6 +203,8 @@ mxArray *prhs[];
 		M = 16;
     initialize_dw(nrhs>3?prhs[3]:NullMatrix);
     initialize_sx(nrhs>4?prhs[4]:NullMatrix);
+    if( nrhs >= 6 && mxGetM(prhs[5])>0 && !mxIsNaN(*mxGetPr(prhs[5])) )
+		dither = (int)(*mxGetPr(prhs[5]));
 }
 
 #ifdef __STDC__
@@ -235,6 +239,7 @@ mxArray *plhs[];
 	default:
 	    fatalError("Too many output arguments.");
     }
+    sy0 = (double *) mxCalloc(M,sizeof(double));
     sy = (double *) mxCalloc(M,sizeof(double));
     tentative = (int *) mxCalloc(M,sizeof(int));
 }
@@ -285,26 +290,37 @@ double *sxc;
 {
 double *sy_p, *sx_p, *B_p=B, bi;
 int i,j,MTF_orderp1=MTF_order+1;
-for( j=0, sy_p=sy; j<M; ++j )
+for( j=0, sy_p=sy0; j<M; ++j )
     *sy_p++ = 0;
 for( i=0; i<MTF_order; ++i ){
     bi = *B_p++;
-    for( j=0, sy_p=sy, sx_p=sxc; j<M; ++j ){
+    for( j=0, sy_p=sy0, sx_p=sxc; j<M; ++j ){
 	*sy_p++ += bi * *sx_p;
 	sx_p += MTF_orderp1;
 	}
     if( ++sxc == sx_end )
 	sxc = sx_start;
     }
+/* Normalize sy and add dither */
+double min_sy0=INFINITY;
+for( j=0; j<M; ++j )
+    if(sy0[j] < min_sy0)
+	min_sy0 = sy0[j];
+
+for( j=0; j<M; ++j ){
+    sy0[j] -= min_sy0;
+    if(dither)
+	sy[j] = sy0[j] + drand48();
+    else
+	sy[j] = sy0[j];
+    }
 }
 
 /* Implement the (floating point) vector quantizer for unit elements */
 /* !! I could create an integer version for even greater speed. */
-#define my_INFINITY 1e38 /* !! should use INFINITY, if it were guaranteed
-to exist on all platforms */
 void calculate_sv1(){
 int i, v=(int)(*pv++), num_tentative, need=v, committed_ones=0, itn;
-double sy_max=-my_INFINITY, sy_min=my_INFINITY, *psy;
+double sy_max=-INFINITY, sy_min=INFINITY, *psy;
 double threshold, thresh_min, thresh_max;
 double endpoint_offset; 
 if( v<0 || v>M )
@@ -479,7 +495,7 @@ double *sxn_p, *sx_p, *sx_pp, *sv_p, *sy_p, *A_p=A;
 int i,j,MTF_orderp1=MTF_order+1;
 if( Want_sigma_se ){
     double sum_se=0;
-    for( i=0, sxn_p=sxn, sv_p=sv, sy_p=sy; i<M; ++i ){
+    for( i=0, sxn_p=sxn, sv_p=sv, sy_p=sy0; i<M; ++i ){
 	double se = *sv_p++ - *sy_p++;
 	*sxn_p = se;
 	sxn_p  += MTF_orderp1;
@@ -489,7 +505,7 @@ if( Want_sigma_se ){
     Sum_se2 -= sum_se*sum_se/M;	/* subtract off the mean value of se */
 }
 else
-    for( i=0, sxn_p=sxn, sv_p=sv, sy_p=sy; i<M; ++i ){
+    for( i=0, sxn_p=sxn, sv_p=sv, sy_p=sy0; i<M; ++i ){
 	*sxn_p = *sv_p++ - *sy_p++;
 	sxn_p  += MTF_orderp1;
 	}
@@ -548,6 +564,7 @@ int nlhs, nrhs;
 mxArray *plhs[], *prhs[];
 #endif
 {
+    mexPrintf("simulateESL() is obsolete. Please use simulateMS() instead.\n");
     processInputArgs(nrhs, prhs);
     allocateSpace(nlhs, plhs);
     simulateESL();

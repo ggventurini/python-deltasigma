@@ -24,7 +24,7 @@ import numpy as np
 import deltasigma as ds
 
 from scipy.signal import zpk2tf
-from nose.tools import raises
+#from nose.tools import raises
 
 class TestMapCtoD(unittest.TestCase):
     """Test class for mapCtoD()"""
@@ -126,7 +126,7 @@ class TestMapCtoD(unittest.TestCase):
                             [0., 1., 0., 0.]])
         self.assertTrue(np.allclose(ABCD, ABCDref, atol=1e-4, rtol=1e-4))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_mapCtoD_6(self):
         """Test function for mapCtoD() 6/6"""
         # wrong ni
@@ -135,5 +135,7 @@ class TestMapCtoD(unittest.TestCase):
                           [1., 0., 0., -1.5],
                           [0, 1, 0, 0]])
         tdac = np.array([0.1, 0.4, 0.1, 3.])
-        sys_d, Gp = ds.mapCtoD(ABCDc, tdac, f0=f0)
+
+        with self.assertRaises(ValueError):
+            sys_d, Gp = ds.mapCtoD(ABCDc, tdac, f0=f0)
 

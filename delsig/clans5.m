@@ -6,9 +6,8 @@ NTF = synthesizeNTF(order,OSR,opt,1+Q,0);
 Hz = NTF.z{1};
 x = zeros(1,order);
 odd = rem(order,2);
-poles = cplxpair(NTF.p{1}); poles=poles(end:-1:1);
 if odd
-    z = poles(1)/rmax;
+    z = NTF.p{1}(1)/rmax;
     if any(abs(z))>1 %project poles outside rmax onto the circle
 	z = z./abs(z);
     end
@@ -16,7 +15,7 @@ if odd
     x(1)= sqrt(-s);
 end
 for i=odd+1:2:order
-    z = poles(i:i+1)/rmax;
+    z = NTF.p{1}(i:i+1)/rmax;
     if any(abs(z))>1 %project poles outside rmax onto the circle
 	z = z./abs(z);
     end
@@ -32,3 +31,4 @@ end
 x=constr('dsclansObj',x,[],[],[],[],order,OSR,Q,rmax,Hz);
 NTF = dsclansNTF(x,order,rmax,Hz);
 return
+

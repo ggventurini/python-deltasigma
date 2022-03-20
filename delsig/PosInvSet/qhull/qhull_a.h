@@ -50,12 +50,12 @@
   removing tracing reduces code size but doesn't change execution speed
 */
 #ifndef qh_NOtrace
-#define trace0(args) {if (qh IStracing) fprintf args;}
-#define trace1(args) {if (qh IStracing >= 1) fprintf args;}
-#define trace2(args) {if (qh IStracing >= 2) fprintf args;}
-#define trace3(args) {if (qh IStracing >= 3) fprintf args;}
-#define trace4(args) {if (qh IStracing >= 4) fprintf args;}
-#define trace5(args) {if (qh IStracing >= 5) fprintf args;}
+#define trace0(args) {if (qh IStracing) mexPrintf args;}
+#define trace1(args) {if (qh IStracing >= 1) mexPrintf args;}
+#define trace2(args) {if (qh IStracing >= 2) mexPrintf args;}
+#define trace3(args) {if (qh IStracing >= 3) mexPrintf args;}
+#define trace4(args) {if (qh IStracing >= 4) mexPrintf args;}
+#define trace5(args) {if (qh IStracing >= 5) mexPrintf args;}
 #else /* qh_NOtrace */
 #define trace0(args) {}
 #define trace1(args) {}

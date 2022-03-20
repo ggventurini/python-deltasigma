@@ -20,7 +20,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
-from nose.tools import raises
+#from nose.tools import raises
 
 class TestRealizeNTF_CT(unittest.TestCase):
     """Test class for realizeNTF_ct()"""
@@ -30,13 +30,13 @@ class TestRealizeNTF_CT(unittest.TestCase):
         self.ntf = (np.array([1., 1.]), np.array([0., 0.]), 1)
         self.ABCDc_ref1 = np.array(((0, 0, 1, -1),
                                    (1, 0, 0, -1.5),
-                                   (0, 1, 0, 0)), dtype=np.float)
+                                   (0, 1, 0, 0)), dtype=np.float64)
         self.tdac2_ref1 = np.array(((-1, -1),
                                     (0,  1)))
         # FB NRTZ 0 delay tdac in short list form
         self.ABCDc_ref2 = np.array(((0, 0, 1, -1),
                                     (1, 0, 0, -1.5),
-                                    (0, 1, 0, 0)), dtype=np.float)
+                                    (0, 1, 0, 0)), dtype=np.float64)
         self.tdac2_ref2 = np.array(((-1, -1),
                                     (0,  1)))
         # FB multi-timing DAC
@@ -102,26 +102,30 @@ class TestRealizeNTF_CT(unittest.TestCase):
         self.assertTrue(np.allclose(tdac2, self.tdac2_ref5, atol=1e-8,
                                     rtol=1e-4))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_realizeNTF_ct_6(self):
         """Test function for realizeNTF_ct() 6/15"""
-        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'DUMMY', tdac=[.5, 1.5])
+        with self.assertRaises(ValueError):
+            ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'DUMMY', tdac=[.5, 1.5])
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_realizeNTF_ct_7(self):
         """Test function for realizeNTF_ct() 7/15"""
-        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', tdac=[.5, 1.5, 3.])
+        with self.assertRaises(ValueError):
+            ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf, 'FF', tdac=[.5, 1.5, 3.])
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_realizeNTF_ct_8(self):
         """Test function for realizeNTF_ct() 8/15"""
         tdac= [[-1, -1], [.5, 1.5], [.5, .8], [0.1, 2.]]
-        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', tdac)
+        with self.assertRaises(ValueError):
+            ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', tdac)
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_realizeNTF_ct_9(self):
         """Test function for realizeNTF_ct() 9/15"""
-        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FF', self.tdac3)
+        with self.assertRaises(ValueError):
+            ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FF', self.tdac3)
 
     def test_realizeNTF_ct_10(self):
         """Test function for realizeNTF_ct() 10/15"""
@@ -164,8 +168,9 @@ class TestRealizeNTF_CT(unittest.TestCase):
         self.assertTrue(np.allclose(tdac2, self.tdac2_ref5, atol=1e-8,
                                     rtol=1e-4))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_realizeNTF_ct_15(self):
         """Test function for realizeNTF_ct() 15/15"""
-        ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', method='DUMMY')
+        with self.assertRaises(ValueError):
+            ABCDc, tdac2 = ds.realizeNTF_ct(self.ntf3, 'FB', method='DUMMY')
 

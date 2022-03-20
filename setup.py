@@ -2,7 +2,7 @@
 
 import os
 from setuptools import setup, find_packages
-__version__ = "0.2.2"
+__version__ = "0.2.6"
 
 def read(fname):
     try:
@@ -14,11 +14,11 @@ def read(fname):
 setup(
     name='deltasigma',
     version=__version__,
-    packages=find_packages(),
+    packages=find_packages(exclude=['beta']),
     package_data={
       'deltasigma': ['tests/test_data/*.mat', 'tests/test_data/*.txt']
     },
-    install_requires=['numpy', 'scipy>=0.11.0', 'matplotlib>=1.1.1'],
+    install_requires=['numpy', 'scipy', 'matplotlib>=3.0.0'],
     zip_safe=False,
     include_package_data=True,
     author="Giuseppe Venturini and others",
@@ -41,9 +41,10 @@ setup(
         "Operating System :: Microsoft :: Windows",
         "Operating System :: MacOS",
         "Natural Language :: English",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4"]
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+    ]
 )
 

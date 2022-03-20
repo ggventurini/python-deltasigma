@@ -19,7 +19,7 @@
 """
 
 import collections
-import fractions
+import math
 from fractions import Fraction as Fr
 
 import numpy as np
@@ -50,7 +50,7 @@ def rat(x, tol):
     return Fr(float(x)).limit_denominator(int(1 / float(tol))).numerator, \
         Fr(float(x)).limit_denominator(int(1 / float(tol))).denominator
 
-gcd = fractions.gcd
+gcd = math.gcd
 
 lcm = lambda a, b: int(a * b / float(gcd(a, b)))
 lcm.__doc__ = """Calculate the Least Common Multiple of ``a`` and ``b``.\n"""
@@ -91,7 +91,7 @@ def carray(x):
     """Check that x is an ndarray. If not, try to convert it to ndarray.
     """
     if not isinstance(x, np.ndarray):
-        if not isinstance(x, collections.Iterable):
+        if not isinstance(x, collections.abc.Iterable):
             x = np.array((x,))
         else:
             x = np.array(x)
@@ -444,11 +444,11 @@ def _get_zpk(arg, input=0):
     elif _is_zpk(arg):
         z, p, k = np.atleast_1d(arg[0]), np.atleast_1d(arg[1]), arg[2]
     elif _is_num_den(arg):
-        sys = lti(*arg)
+        sys = lti(*arg).to_zpk()
         z, p, k = sys.zeros, sys.poles, sys.gain
     elif _is_A_B_C_D(arg):
         z, p, k = ss2zpk(*arg, input=input)
-    elif isinstance(arg, collections.Iterable):
+    elif isinstance(arg, collections.abc.Iterable):
         ri = 0
         for i in arg:
             # Note we do not check if the user has assembled a list with
@@ -520,14 +520,15 @@ def _get_num_den(arg, input=0):
         A, B, C, D = partitionABCD(arg)
         num, den = ss2tf(A, B, C, D, input=input)
     elif isinstance(arg, lti):
-        num, den = arg.num, arg.den
+        arx = arg.to_tf()
+        num, den = arx.num, arx.den
     elif _is_num_den(arg):
         num, den = carray(arg[0]).squeeze(), carray(arg[1]).squeeze()
     elif _is_zpk(arg):
         num, den = zpk2tf(*arg)
     elif _is_A_B_C_D(arg):
         num, den = ss2tf(*arg, input=input)
-    elif isinstance(arg, collections.Iterable):
+    elif isinstance(arg, collections.abc.Iterable):
         ri = 0
         for i in arg:
             # Note we do not check if the user has assembled a list with
@@ -604,16 +605,17 @@ def _getABCD(arg):
         # ABCD matrix
         A, B, C, D = partitionABCD(arg)
     elif isinstance(arg, lti):
-        A, B, C, D = arg.A, arg.B, arg.C, np.atleast_2d(arg.D)
+        arx = arg.to_ss()
+        A, B, C, D = arx.A, arx.B, arx.C, np.atleast_2d(arx.D)
     elif _is_zpk(arg) or _is_num_den(arg) or _is_A_B_C_D(arg):
-        sys = lti(*arg)
+        sys = lti(*arg).to_ss()
         A, B, C, D = sys.A, sys.B, sys.C, sys.D
-    elif isinstance(arg, collections.Iterable):
+    elif isinstance(arg, collections.abc.Iterable):
         A, B, C, D = None, None, None, None
         for i in arg:
             # Note we do not check if the user has assembled a list with
             # mismatched lti representations.
-            sys = lti(*i) if not hasattr(i, 'A') else i
+            sys = lti(*i).to_ss() if not hasattr(i, 'A') else i
             if A is None:
                 A = sys.A
             elif not np.allclose(sys.A, A, atol=1e-8, rtol=1e-5):
@@ -639,25 +641,25 @@ def _getABCD(arg):
 
 def _is_zpk(arg):
     """Can the argument be safely assumed to be a zpk tuple?"""
-    return isinstance(arg, collections.Iterable) and len(arg) == 3 and \
-        isinstance(arg[0], collections.Iterable) and \
-        isinstance(arg[1], collections.Iterable) and np.isscalar(arg[2])
+    return isinstance(arg, collections.abc.Iterable) and len(arg) == 3 and \
+        isinstance(arg[0], collections.abc.Iterable) and \
+        isinstance(arg[1], collections.abc.Iterable) and np.isscalar(arg[2])
 
 
 def _is_num_den(arg):
     """Can the argument be safely assumed to be a num, den tuple?"""
-    return isinstance(arg, collections.Iterable) and len(arg) == 2 and \
-        isinstance(arg[0], collections.Iterable) and \
-        isinstance(arg[1], collections.Iterable)
+    return isinstance(arg, collections.abc.Iterable) and len(arg) == 2 and \
+        isinstance(arg[0], collections.abc.Iterable) and \
+        isinstance(arg[1], collections.abc.Iterable)
 
 
 def _is_A_B_C_D(arg):
     """Can the argument be safely assumed to be an (A, B, C, D) tuple?"""
-    return isinstance(arg, collections.Iterable) and len(arg) == 4 and \
-        (isinstance(arg[0], collections.Iterable) or np.is_scalar(arg[0])) and \
-        (isinstance(arg[1], collections.Iterable) or np.is_scalar(arg[1])) and \
-        (isinstance(arg[2], collections.Iterable) or np.is_scalar(arg[2])) and \
-        (isinstance(arg[3], collections.Iterable) or np.is_scalar(arg[3]))
+    return isinstance(arg, collections.abc.Iterable) and len(arg) == 4 and \
+        (isinstance(arg[0], collections.abc.Iterable) or np.is_scalar(arg[0])) and \
+        (isinstance(arg[1], collections.abc.Iterable) or np.is_scalar(arg[1])) and \
+        (isinstance(arg[2], collections.abc.Iterable) or np.is_scalar(arg[2])) and \
+        (isinstance(arg[3], collections.abc.Iterable) or np.is_scalar(arg[3]))
 
 
 def mround(x):

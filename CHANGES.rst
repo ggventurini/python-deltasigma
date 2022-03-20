@@ -5,8 +5,13 @@ Version 0.2 series
 ------------------
 
 The 0.2 series features support for real and quadrature baseband and passband
-modulator topologies.
+modulator topologies.  
 
+**0.2.3**: Bugfix and dropped supports.
+ * BUGFIX: Change division operator ``/`` to ``//`` to return integer.  
+ * Call plot functions from matplotlib: pylab is no longer recommended.  
+ * Support for Python versions 2 and <=3.4 has been dropped (need Python 3.5+).   
+   
 **0.2.2**: Add support for scipy 0.16.x.
  * scipy introduced several subclasses for ``scipy.signal.lti``, they are
    now supported.

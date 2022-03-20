@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 #
 # python-deltasigma documentation build configuration file, created by
 # sphinx-quickstart on Wed Oct 16 17:52:17 2013.

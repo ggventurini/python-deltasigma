@@ -191,7 +191,7 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
         amp = np.concatenate((np.arange(- 120, -20 + 1, 10),
                               np.array((-15,)),
                               np.arange(-10, 1)))
-    elif not isinstance(amp, collections.Iterable):
+    elif not isinstance(amp, collections.abc.Iterable):
         amp = np.array((amp, ))
     else:
         amp = np.asarray(amp)
@@ -224,10 +224,10 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
                                  np.arange(Ntransient/2)))
     if not quadrature:
         tone = M*np.sin(2*np.pi*F/N*np.arange(N + Ntransient))
-        tone[:Ntransient/2] = tone[:Ntransient/2] * soft_start
+        tone[:Ntransient//2] = tone[:Ntransient//2] * soft_start
     else:
         tone = M*np.exp(2j*np.pi*F/N * np.arange(N + Ntransient))
-        tone[:Ntransient/2] = tone[:Ntransient/2] * soft_start
+        tone[:Ntransient//2] = tone[:Ntransient//2] * soft_start
         if not quadrature_ntf:
             tone = tone.reshape((1, -1))
             tone = np.vstack((np.real(tone), np.imag(tone)))
@@ -235,14 +235,14 @@ def simulateSNR(arg1, osr, amp=None, f0=0, nlev=2, f=None, k=13,
     window = 0.5*(1 - np.cos(2*np.pi*np.arange(N)/N))
     if f0 == 0:
         # Exclude DC and its adjacent bin
-        inBandBins = int(N/2) + np.arange(3,
+        inBandBins = int(N//2) + np.arange(3,
                                      np.round(N/osr_mult/osr) + 1,
                                      dtype=np.int32)
         F = F - 2
     else:
         f1 = np.round(N*(f0 - 1./osr_mult/osr))
         # Should exclude DC
-        inBandBins = int(N/2) + np.arange(f1,
+        inBandBins = int(N//2) + np.arange(f1,
                                      np.round(N*(f0 + 1./osr_mult/osr)) + 1,
                                      dtype=np.int32)
         F = F - f1 + 1

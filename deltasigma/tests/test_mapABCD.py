@@ -21,7 +21,7 @@ from __future__ import division
 import unittest
 import numpy as np
 
-from nose.tools import raises
+#from nose.tools import raises
 
 from deltasigma import mapABCD, realizeNTF, synthesizeNTF, stuffABCD
 
@@ -293,10 +293,12 @@ class TestMapABCD(unittest.TestCase):
                     self.assertTrue(np.allclose(b1, b, atol=1e-4, rtol=1e-3))
                     self.assertTrue(np.allclose(c1, c, atol=1e-4, rtol=1e-3))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_mapABCD_2(self):
         """Test function for mapABCD() 2/2"""
         ABCD = np.array([[0., 0., 0.91561444, -0.91561444],
                          [1., 0., 0., -1.42857142],
                          [0., 1., 0., 0.]])
-        mapABCD(ABCD, 'DUMMY') 
+        
+        with self.assertRaises(ValueError):
+           mapABCD(ABCD, 'DUMMY') 

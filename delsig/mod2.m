@@ -7,4 +7,4 @@ C=[0 1];
 D=[0 0];
 ABCD=[A B; C D];
 mod.ABCD=[A B; C D];
-[mod.H mod.G] = calculateTF(mod.ABCD);
+[mod.NTF mod.STF] = calculateTF(mod.ABCD);

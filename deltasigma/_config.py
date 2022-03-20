@@ -45,8 +45,11 @@ else:
 # wrap it up: numpy or user-set environment var or a lucky guess on our side is
 # needed to get the cblas.h header path. If not found, simulateDSM() will use
 # a CPython implementation (slower).
+"""
 setup_args = {"script_args":(["--compiler=mingw32"]
                              if sys.platform == 'win32' else [])}
+"""
+setup_args = {"script_args":[]}
 lib_include = [np.get_include()]
 if "include_dirs" not in blas_info and "BLAS_H" not in os.environ and \
    'nt' not in os.name and (not guessed_include or \

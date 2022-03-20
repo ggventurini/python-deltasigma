@@ -4,6 +4,8 @@ fprintf(1,'\t\t\tDiscrete-Time Simulation\n');
 if exist('LiveDemo','var') == 0
     LiveDemo=0;
 end
+Do7thOrderOnly = 0;
+
 fig1pos1 = [0 630 300 200];
 fig1pos2 = [0 372 777 355];
 fig1pos3 = [8 562 300 250];
@@ -13,6 +15,7 @@ fig2pos2 = [185 372 662 355];
 fig3pos1 = [815 565 254 247];
 fig3pos2 = [275 365 520 362];
 
+if ~Do7thOrderOnly
 echo on
 OSR = 32;
 H = synthesizeNTF(5,OSR,1);
@@ -212,6 +215,7 @@ if LiveDemo
     set(3,'position',fig3pos1);
     changeFig;
 end
+end
 
 figure(3); clf;
 figure(2); clf;
@@ -239,7 +243,7 @@ for i=1:2
 	stairs(t, u(t+1),'g');
 	hold on;
 	stairs(t,v(t+1),col);
-	figureMagic([0 100],10,2, [-M M],2,3,[],'Input & Output');
+	figureMagic([0 100],10,2, [-M M],2,4,[],'Input & Output');
 	xlabel('Sample Number');
 	ylabel('u, v');
 	%title('Modulator Input & Output');
@@ -313,4 +317,5 @@ for i=1:2
 	    changeFig;
 	end
 end
+
 

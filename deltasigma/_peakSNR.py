@@ -81,16 +81,16 @@ def peakSNR(snr, amp):
     c = np.max(amp)*1.05
     # fit y = ax + b/(x-c) to the data
     A = np.hstack((amp.reshape(-1, 1), 1.0/(amp.reshape(-1, 1) - c)))
-    ab = np.linalg.lstsq(A, snr.reshape((-1, 1)))[0]
+    ab = np.linalg.lstsq(A, snr.reshape((-1, 1)), rcond=None)[0]
     peak_amp = c - np.sqrt(ab[1, 0]/ab[0, 0])
     peak_snr = np.dot(np.array([[peak_amp, 1./(peak_amp-c)]]), ab) #None check mcode
     peak_snr = dbv(peak_snr)
     peak_amp = dbv(peak_amp)
     if _debug:
-        import pylab as plt
+        import matplotlib.pyplot as plt
         pred = np.dot(A, ab)
-        hold = plt.ishold()
-        plt.hold(True)
+        #hold = plt.ishold()
+        #plt.hold(True)
         plt.plot(dbv(amp), dbv(pred), '-', color='b')
-        plt.hold(hold)
+        #plt.hold(hold)
     return peak_snr, peak_amp

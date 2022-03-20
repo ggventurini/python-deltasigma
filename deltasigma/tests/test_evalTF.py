@@ -20,7 +20,7 @@ import deltasigma as ds
 from scipy.signal import lti, tf2zpk
 from deltasigma._utils import empty
 
-from nose.tools import raises
+#from nose.tools import raises
 
 class TestEvalTF(unittest.TestCase):
     """Test functions for evalTF()"""
@@ -38,7 +38,7 @@ class TestEvalTF(unittest.TestCase):
         self.h2 = ds.evalTF(tstr2, z)
         self.h3 = ds.evalTF(H, z)
         self.h4 = ds.evalTF(lti(tstr2.zeros, tstr2.poles, tstr2.gain), z)
-        h5tf = lti(tstr2.zeros, tstr2.poles, tstr2.gain)
+        h5tf = lti(tstr2.zeros, tstr2.poles, tstr2.gain).to_ss()
         self.h5 = ds.evalTF((h5tf.A, h5tf.B, h5tf.C, h5tf.D), z)
         h6tf = np.vstack((np.hstack((h5tf.A, h5tf.B)),
                           np.hstack((h5tf.C, np.atleast_2d(h5tf.D)))))
@@ -65,7 +65,8 @@ class TestEvalTF(unittest.TestCase):
         """Test evalTF ABCD matrix form"""
         self.assertTrue(np.allclose(self.h6, self.h5, atol=1e-8, rtol=1e-5))
 
-    @raises(TypeError)
+    #@raises(TypeError)
     def test_evalTF_sixth(self):
         """Test unknown forms error"""
-        ds.evalTF(empty(), [1, 2, 3])
+        with self.assertRaises(TypeError):
+            ds.evalTF(empty(), [1, 2, 3])

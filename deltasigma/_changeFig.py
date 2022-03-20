@@ -19,7 +19,7 @@
 
 import matplotlib as mpl
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 
 def changeFig(fontsize=None, linewidth=None, markersize=None, xfticks=False,

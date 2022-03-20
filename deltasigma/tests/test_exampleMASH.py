@@ -47,8 +47,8 @@ class testMultipleQ:
         Amp = ds.undbv(-3) # Test tone amplitude, relative to full-scale.
         f = 0.3 # will be adjusted to a bin
         N = 2**12
-        f1_bin = np.round(f1*N)
-        f2_bin = np.round(f2*N)
+        f1_bin = int(np.round(f1*N))
+        f2_bin = int(np.round(f2*N))
         fin = np.round(((1 - f)/2*f1 + (f + 1)/2*f2) * N)
         # input sine
         t = np.arange(0, N).reshape((1, -1))
@@ -65,7 +65,7 @@ class testMultipleQ:
         spec0 = np.fft.fft(vf*window)/(M*N/2)/ds.undbv(-6)
         spec1 = np.fft.fft(v1*window)/(M*N/2)/ds.undbv(-6)
         spec2 = np.fft.fft(v1*window)/(M*N/2)/ds.undbv(-6)
-        freq = np.linspace(0, 0.5, N/2 + 1)
+        freq = np.linspace(0, 0.5, N//2 + 1)
 
         # smooth, calculate the theorethical response and the SNR for VF
         spec0_smoothed = ds.circ_smooth(np.abs(spec0)**2., 16)

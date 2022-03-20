@@ -132,7 +132,7 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
     # need to set order and form now.
     order = carray(zeros).shape[0] if form == 2 else ABCD.shape[0] - nq
     
-    if not isinstance(x0, collections.Iterable):
+    if not isinstance(x0, collections.abc.Iterable):
         x0 = x0*np.ones((order,), dtype=np.float64)
     else:
         x0 = np.array(x0).reshape((-1,))
@@ -161,10 +161,13 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
         D1 = 1
         B = np.hstack((B1, B2))
 
-    N = u.shape[1]
-    v = np.empty((nq, N), dtype=np.float64)
-    y = np.empty((nq, N), dtype=np.float64)     # to store the quantizer input
-    xn = np.empty((order, N), dtype=np.float64) # to store the state information
+    #N = u.shape[1]
+    N = np.max(np.shape(u)) # Return max dimension
+    
+    #empty -> zeros
+    v = np.zeros((nq, N), dtype=np.float64)
+    y = np.zeros((nq, N), dtype=np.float64)     # to store the quantizer input
+    xn = np.zeros((order, N), dtype=np.float64) # to store the state information
     xmax = np.abs(x0) # to keep track of the state maxima
 
     for i in range(N):
@@ -176,9 +179,8 @@ def simulateDSM(u, arg2, nlev=2, x0=0.):
         v[:, i] = ds_quantize(y0, nlev)
         x0 = np.dot(A, x0) + np.dot(B, np.concatenate((u[:, i], v[:, i])))
         xn[:, i] = np.real_if_close(x0.T)
-        xmax = np.max(np.hstack((np.abs(x0).reshape((-1, 1)), xmax.reshape((-1, 1)))),
-                      axis=1, keepdims=True)
-
+        xmax = np.max(np.hstack((np.abs(x0).reshape((-1, 1)), xmax.reshape((-1, 1)))), axis=1, keepdims=True)
+     
     return v.squeeze(), xn.squeeze(), xmax, y.squeeze()
 
 def ds_quantize(y, n):

@@ -80,8 +80,8 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     _, df = rat(tfinal, 1e-3)
     delta_t = 1./lcm(dd, lcm(ddt, df))
     delta_t = max(1e-3, delta_t)    # Put a lower limit on delta_t
-    if (isinstance(S, collections.Iterable) and len(S)) \
-       and (isinstance(S[0], collections.Iterable) and len(S[0])) \
+    if (isinstance(S, collections.abc.Iterable) and len(S)) \
+       and (isinstance(S[0], collections.abc.Iterable) and len(S[0])) \
            and (isinstance(S[0][0], lti) or _is_zpk(S[0][0]) or _is_num_den(S[0][0]) \
                 or _is_A_B_C_D(S[0][0])):
         pass
@@ -120,10 +120,11 @@ def pulse(S, tp=(0., 1.), dt=1., tfinal=10., nosum=False):
     nis = int(ni/ndac)
 
     # notice len(S[0]) is the number of outputs for us
+    tceil = int(np.ceil(tfinal/float(dt))) + 1
     if not nosum: # Sum the responses due to each input set
-        y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), nis))
+        y = np.zeros((tceil, len(S[0]), nis))
     else:
-        y = np.zeros((np.ceil(tfinal/float(dt)) + 1, len(S[0]), ni))
+        y = np.zeros((tceil, len(S[0]), ni))
 
     for i in range(ndac):
         n1 = int(np.round(tp[i, 0]/delta_t, 0))

@@ -22,7 +22,7 @@ import deltasigma as ds
 
 from warnings import catch_warnings
 
-from nose.tools import raises
+#from nose.tools import raises
 
 from deltasigma._utils import cplxpair
 
@@ -54,8 +54,9 @@ class TestSynthesizeChebyshevNTF(unittest.TestCase):
         self.assertTrue(np.allclose(cplxpair(p), cplxpair(pref), atol=1e-4, rtol=1e-4))
         self.assertTrue(np.allclose(k, kref, atol=1e-4, rtol=1e-4))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_synthesizeChebyshevNTF_3(self):
         """Test function for synthesizeChebyshevNTF() 3/3"""
-        z, p, k = ds.synthesizeChebyshevNTF(order=5, OSR=32, opt=0, H_inf=1.5, f0=.33)
+        with self.assertRaises(ValueError):
+            z, p, k = ds.synthesizeChebyshevNTF(order=5, OSR=32, opt=0, H_inf=1.5, f0=.33)
 

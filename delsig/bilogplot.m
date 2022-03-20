@@ -1,5 +1,5 @@
 function bilogplot(V,f0,fbin,x,y,fmt)
-% bilogplot(V,f0,fbin,x,y,fmt)	Plot two side-by-side spectra
+% bilogplot(V,f0,fbin,x,y)	Plot two side-by-side spectra
 % V    Hann-windowed FFT
 % f0   bin number of center frequency
 % fbin bin number of test tone

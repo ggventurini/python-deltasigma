@@ -1,5 +1,10 @@
-function plotUsave(sv)
-% Plot the elemet usage for a multi-elemet DAC
+function plotUsage(sv,colors)
+% plotUsage(sv,colors='bgry')
+% Plot the elemet usage for a multi-elemet DAC.
+% The colors are for sv = 1,-1,i,-i.
+if nargin<2
+    colors = 'bgry';
+end
 T = size(sv,2);					M = size(sv,1);
 
 % Plot the grid
@@ -17,15 +22,15 @@ axis('image');
 
 for t=1:T
     for i=1:M
-	if sv(i,t) == 1
-	    fill([t-1 t-1 t t],[i-1 i i i-1],'b');
-	elseif sv(i,t) == -1
-	    fill([t-1 t-1 t t],[i-1 i i i-1],'g');
-	elseif sv(i,t) == 1i
-	    fill([t-1 t-1 t t],[i-1 i i i-1],'r');
-	elseif sv(i,t) == -1i
-	    fill([t-1 t-1 t t],[i-1 i i i-1],'y');
-	end
+        if sv(i,t) == 1
+            fill([t-1 t-1 t t],[i-1 i i i-1],colors(1));
+        elseif sv(i,t) == -1
+            fill([t-1 t-1 t t],[i-1 i i i-1],colors(2));
+        elseif sv(i,t) == 1i
+            fill([t-1 t-1 t t],[i-1 i i i-1],colors(3));
+        elseif sv(i,t) == -1i
+            fill([t-1 t-1 t t],[i-1 i i i-1],colors(4));
+        end
     end
 end
 hold off

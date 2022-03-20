@@ -357,7 +357,7 @@ void qh_initstatistics (void) {
 
 #if qh_QHpointer
   if (!(qh_qhstat= (qhstatT *)malloc (sizeof(qhstatT)))) {
-    fprintf (qhmem.ferr, "qhull error (qh_initstatistics): insufficient memory\n");
+    mexPrintf("qhull error (qh_initstatistics): insufficient memory\n");
     exit (1);  /* can not use qh_errexit() */
   }
 #endif
@@ -454,11 +454,11 @@ void qh_printstatistics (FILE *fp, char *string) {
                                  wval_(Wpbalance2), &ave);
   wval_(Wnewbalance2)= qh_stddev (zval_(Zprocessed), wval_(Wnewbalance), 
                                  wval_(Wnewbalance2), &ave);
-  fprintf (fp, "\n\
+  mexPrintf("\n\
 %s\n\
  qhull invoked by: %s | %s\n%s with options:\n%s\n", string, qh rbox_command, 
      qh qhull_command, qh_version, qh qhull_options);
-  fprintf (fp, "\nprecision constants:\n\
+  mexPrintf("\nprecision constants:\n\
  %6.2g max. coordinate in the (transformed) input ('Qbd:n')\n\
  %6.2g max. roundoff error for distance computation ('En')\n\
  %6.2g max. roundoff error for angle computations\n\
@@ -470,24 +470,24 @@ void qh_printstatistics (FILE *fp, char *string) {
   qh maxmaxcoord, qh DISTround, qh ANGLEround, qh MINoutside, 
         qh MINvisible, qh MAXcoplanar, qh WIDEfacet);
   if (qh KEEPnearinside)
-    fprintf(fp, "\
+    mexPrintf("\
  %6.2g max. distance for near-inside points\n", qh NEARinside);
-  if (qh premerge_cos < REALmax/2) fprintf (fp, "\
+  if (qh premerge_cos < REALmax/2) mexPrintf("\
  %6.2g max. cosine for pre-merge angle\n", qh premerge_cos);
-  if (qh PREmerge) fprintf (fp, "\
+  if (qh PREmerge) mexPrintf("\
  %6.2g radius of pre-merge centrum\n", qh premerge_centrum);
-  if (qh postmerge_cos < REALmax/2) fprintf (fp, "\
+  if (qh postmerge_cos < REALmax/2) mexPrintf("\
  %6.2g max. cosine for post-merge angle\n", qh postmerge_cos);
-  if (qh POSTmerge) fprintf (fp, "\
+  if (qh POSTmerge) mexPrintf("\
  %6.2g radius of post-merge centrum\n", qh postmerge_centrum);
-  fprintf (fp, "\
+  mexPrintf("\
  %6.2g max. distance for merging two simplicial facets\n\
  %6.2g max. roundoff error for arithmetic operations\n\
  %6.2g min. denominator for divisions\n\
   zero diagonal for Gauss: ", qh ONEmerge, REALepsilon, qh MINdenom);
   for (k=0; k<qh hull_dim; k++)
-    fprintf (fp, "%6.2e ", qh NEARzero[k]);
-  fprintf (fp, "\n\n");
+    mexPrintf("%6.2e ", qh NEARzero[k]);
+  mexPrintf("\n\n");
   for (i=0 ; i<qhstat next; ) 
     qh_printstats (fp, i, &i);
 } /* printstatistics */
@@ -504,7 +504,7 @@ void qh_printstatlevel (FILE *fp, int id, int start) {
   if (id >= ZEND || qhstat printed[id])
     return;
   if (qhstat type[id] == zdoc) {
-    fprintf (fp, "%s\n", qhstat doc[id]);
+    mexPrintf("%s\n", qhstat doc[id]);
     return;
   }
   start= 0; /* not used */
@@ -513,16 +513,16 @@ void qh_printstatlevel (FILE *fp, int id, int start) {
   qhstat printed[id]= True;
   if (qhstat count[id] != -1 
       && qhstat stats[(unsigned char)(qhstat count[id])].i == 0)
-    fprintf (fp, " *0 cnt*");
+    mexPrintf(" *0 cnt*");
   else if (qhstat type[id] >= ZTYPEreal && qhstat count[id] == -1)
-    fprintf (fp, "%7.2g", qhstat stats[id].r);
+    mexPrintf("%7.2g", qhstat stats[id].r);
   else if (qhstat type[id] >= ZTYPEreal && qhstat count[id] != -1)
-    fprintf (fp, "%7.2g", qhstat stats[id].r/ qhstat stats[(unsigned char)(qhstat count[id])].i);
+    mexPrintf("%7.2g", qhstat stats[id].r/ qhstat stats[(unsigned char)(qhstat count[id])].i);
   else if (qhstat type[id] < ZTYPEreal && qhstat count[id] == -1)
-    fprintf (fp, "%7d", qhstat stats[id].i);
+    mexPrintf("%7d", qhstat stats[id].i);
   else if (qhstat type[id] < ZTYPEreal && qhstat count[id] != -1)
-    fprintf (fp, "%7.3g", (realT) qhstat stats[id].i / qhstat stats[(unsigned char)(qhstat count[id])].i);
-  fprintf (fp, " %s\n", qhstat doc[id]);
+    mexPrintf("%7.3g", (realT) qhstat stats[id].i / qhstat stats[(unsigned char)(qhstat count[id])].i);
+  mexPrintf(" %s\n", qhstat doc[id]);
 } /* printstatlevel */
 
 
@@ -537,7 +537,7 @@ void qh_printstats (FILE *fp, int index, int *nextindex) {
   if (qh_newstats (index, &nexti)) {
     for (j=index; j<nexti; j++)
       qh_printstatlevel (fp, qhstat id[j], 0);
-    fprintf (fp, "\n");
+    mexPrintf("\n");
   }
   if (nextindex)
     *nextindex= nexti;

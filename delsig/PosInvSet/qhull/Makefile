@@ -43,16 +43,16 @@ PRINTC = enscript -2r
 # PRINTMAN = lpr
 # PRINTC = lpr
 
-#for gcc compiler -O2 for optimization, -g for debugging, -Wall for check
+#for G*n*u gcc compiler -O2 for optimization, -g for debugging, -Wall for check
 #
-#CC     = gcc
-#CCOPTS1 = -O2 -ansi 
+CC     = gcc
+COPTS1 = -O2 -ansi 
 
 #for HP's cc compiler -Aa for ANSI mode, -O for optimization(NOT YET)
 # +z for PIC (needed for cmex to work)
 #
-CC     = cc
-CCOPTS1 = -Aa +z
+#CC     = cc
+#CCOPTS1 = -Aa +z
 
 # for Sun's cc compiler, -fast or O2 for optimization, -g for debugging, -Xc for ANSI
 #CC = cc
@@ -84,8 +84,12 @@ MFILES= qhull.1 rbox.1
 SFX = mexhp7
 INCLUDE = /usr/local/apps/matlab/extern/include
 
+SFX = mexmaci64
+INCLUDE = /Applications/MATLAB_R2011b.app/extern/include
+
 qhull.${SFX}: mex.o libqhull.a
-	cmex -I${INCLUDE} mex.o libqhull.a
+	# cmex -I${INCLUDE} mex.o libqhull.a
+	/Applications/MATLAB_R2011b.app/bin/mex -I${INCLUDE} mex.o libqhull.a
 	mv mex.${SFX} ../$@
  
 mex.o: mex.c

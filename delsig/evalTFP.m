@@ -5,10 +5,19 @@ function H=evalTFP(Hs,Hz,f)
 % Both Hs and Hz are SISO zpk objects.
 % This function attempts to cancel poles in Hs with zeros in Hz.
 
-szeros = Hs.z{1};
-spoles = Hs.p{1};
-zzeros = Hz.z{1};
-zpoles = Hz.p{1};
+% szeros = Hs.z{1};
+% spoles = Hs.p{1};
+% zzeros = Hz.z{1};
+% zpoles = Hz.p{1};
+% sk = Hs.k;
+% zk = Hz.k;
+
+[szeros, spoles, sk] = zpkdata(Hs);
+szeros = szeros{1};
+spoles = spoles{1};
+[zzeros, zpoles, zk] = zpkdata(Hz);
+zzeros = zzeros{1};
+zpoles = zpoles{1};
 
 slim = min(1e-3,max(1e-5,eps^(1/(1+length(spoles)))));
 zlim = min(1e-3,max(1e-5,eps^(1/(1+length(zzeros)))));
@@ -24,7 +33,10 @@ for i=1:length(f)
     end
     if ~cancel
     	% wi is far from a pole, so just use the product Hs*Hz
-    	H(i) = evalTF(Hs,si) * evalTF(Hz,zi);
+        %H(i) = evalTF(Hs,si) * evalTF(Hz,zi);
+        %use evalRPoly directly with z/p/k data, much faster. (David Alldred, Feb 4 2013)
+        H(i) = sk * evalRPoly(szeros,si) ./ evalRPoly(spoles,si) * ...
+            zk * evalRPoly(zzeros,zi) ./ evalRPoly(zpoles,zi);
     else
     	% cancel pole(s) of Hs with corresponding zero(s) of Hz
 		cancelz = abs(zi-zzeros)<zlim;

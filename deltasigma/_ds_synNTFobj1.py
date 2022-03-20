@@ -16,6 +16,7 @@
 """Module providing the ds_synNTFobj1() function
 """
 
+from __future__ import division
 import numpy as np
 
 from ._db import db
@@ -37,7 +38,7 @@ def ds_synNTFobj1(x, p, osr, f0):
     z = np.exp(2j*np.pi*(f0 + 0.5/osr*x))
     z = carray(z)
     if f0 > 0:
-        z = padt(z, p.shape[0]/2., np.exp(2j*np.pi*f0))
+        z = padt(z, p.shape[0]//2., np.exp(2j*np.pi*f0))
 
     z = np.hstack((z, np.conj(z))) 
     z = z[:]

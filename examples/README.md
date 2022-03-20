@@ -1,7 +1,7 @@
 How to open and modify the examples
 ===================================
 
-The examples in this directory are [IPython](http://ipython.org/) notebooks.
+The examples in this directory are [Jupyter](https://jupyter.org/) notebooks.
 
 IPython provides the excellent Notebook viewer, there is no need to install any
 software, just open any of the links below in a we browser to view the corresponding
@@ -26,7 +26,7 @@ notebook.
 * [dsexample4.ipynb](http://nbviewer.ipython.org/urls/raw.githubusercontent.com/ggventurini/python-deltasigma/master/examples/dsexample3.ipynb),
   synthesis and simulation of a 4th-order bandpass quadrature modulator (Python version of `dsexample4.m`).
 
-To modify the examples, you will need to install IPython.
+To modify the examples, you will need to install Jupyter.
 
 If you have some examples you would like to share, or corrections,
 [send me a mail](http://tinymailto.com/5310),

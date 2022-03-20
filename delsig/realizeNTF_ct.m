@@ -89,15 +89,14 @@ end
 if ~iscell(tdac)
     % Need direct terms for every interval of memory in the DAC
     n_direct = ceil(tdac(2))-1;
-    if ((tdac(1)>0) && (tdac(1)<1) && (tdac(2)>1) && (tdac(2)<2))
+    if ceil(tdac(2)) - floor(tdac(1)) > 1
 	n_extra = n_direct-1;     % tdac pulse spans a sample point
     else
 	n_extra = n_direct;
     end
     tdac2 = [ -1 -1; 
 	       tdac; 
-	       0.5*ones(n_extra,1)*[-1 1] + cumsum(ones(n_extra,2),1) ...
-                                          + (n_direct - n_extra) ];
+	       0.5*ones(n_extra,1)*[-1 1] + cumsum(ones(n_extra,2),1)];
 else
     n_direct = 0;
     n_extra = 0;
@@ -174,13 +173,9 @@ yy = squeeze(yy);
 % !! Note: if t1=int, matlab says pulse(sys) @t1 ~=0
 % !! This code corrects this problem.
 if n_extra>0
-    y_right = padb([zeros(1,n_direct); eye(n_direct)], n_imp+1);
+    y_right = padb([zeros(1,n_extra+1); eye(n_extra+1)], n_imp+1);
     % Replace the last column in yy with an ordered set of impulses
-    if (n_direct > n_extra)
-	yy = [yy y_right(:,2:end)];
-    else
-	yy = [yy(:,1:end-1) y_right];
-    end
+    yy = [yy(:,1:end-1) y_right(:,end:-1:1)];
 end
 
 % Solve for the coefficients
@@ -192,11 +187,7 @@ switch form
     case 'FB'
 	if ~iscell(tdac)
 	    Bc2 = [ x(1:order) zeros(order,n_extra) ];
-	    if (n_extra > 0)
-		Dc2 = [ 0 x(order+1:end).'];
-	    else
-		Dc2 = x(order+1:end).';
-	    end
+	    Dc2 = x(order+1:end).';
 	else
 	    BcDc = [Bc;Dc];
 	    i = find(BcDc);
@@ -207,11 +198,7 @@ switch form
     case 'FF'
 	Bc2 = [Bc zeros(order,n_extra)];
 	Cc = x(1:order).';
-	if (n_extra > 0)
-	    Dc2 = [ 0 x(order+1:end).'];
-	else
-	    Dc2 = x(order+1:end).';
-	end
+	Dc2 = x(order+1:end).';
     otherwise
 	fprintf(1,'%s error. No code for form "%s".\n', mfilename, form);
 end
@@ -230,12 +217,6 @@ if min(abs(fz)) < 3*min(abs(fz-f0))
 end
 L0c = zpk(ss(Ac,Bc1,Cc,Dc1));
 G0 = evalTFP(L0c,ntf,f0);
-if f0 == 0
-    Bc(:,1) = Bc(:,1)*abs(Bc(1,2:end)*(tdac2(2:end,2)-tdac2(2:end,1))/Bc(1,1));
-else
-    Bc(:,1) = Bc(:,1)/abs(G0);
-end
+Bc(:,1) = Bc(:,1)/abs(G0);
 
 ABCDc = [Ac Bc; Cc Dc];
-ABCDc = ABCDc .* ( abs(ABCDc) > eps^(1/2) ) ;
-

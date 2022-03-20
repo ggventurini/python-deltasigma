@@ -47,7 +47,7 @@ elseif strcmp(action,'Go')
 		u = linspace(-0.7,0.7,N);
 		u0 = u(1:DecFact:end);
 	case 3  % spech
-		load(mfilename);	% for sd, ds
+		load('dsdemo4.mat');	% for sd, ds
 		u0 = ds;
 		u = interp(sd,DecFact);
 		N = length(u);
@@ -178,7 +178,8 @@ elseif strcmp(action,'Duration')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    T = round(eval(s,num2str(v)));
+    try, v = str2double(s); end
+    T = round(v);
 	set(h,'Userdata',T);
     set(h,'String', num2str(T,'%.0f'));
 
@@ -186,7 +187,11 @@ elseif strcmp(action,'Fs')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    Fs = 1e3*eval(s,num2str(v/1e3));
+    try
+        Fs = 1e3*str2double(s);
+    catch
+        Fs = v;
+    end
 	FsOut = 8192;	% Output sample rate is fixed
 	% Round Fs to a multiple of FsOut
 	df = round(Fs/FsOut);
@@ -203,8 +208,9 @@ elseif strcmp(action,'DecFact')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    df = round(eval(s,num2str(v)));
-	set(h,'Userdata',df);
+    try, v = str2double(s); end
+	df = v;
+    set(h,'Userdata',df);
     set(h,'String', num2str(df,'%.0f'));
 	% Change Fs
 	h = findobj(gcf,'Tag','Fs');
@@ -217,7 +223,8 @@ elseif strcmp(action,'SincOrder')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    SincOrder = round(eval(s,num2str(v)));
+    try, v = str2double(s); end
+    SincOrder = round(v);
 	set(h,'Userdata',SincOrder);
     set(h,'String', num2str(SincOrder,'%2d'));
 
@@ -243,7 +250,8 @@ elseif strcmp(action,'SineFreq')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    SineFreq = round(eval(s,num2str(v)));
+    try, v = str2double(s); end
+    SineFreq = round(v);
  	FsOut = 8192;	% Output sample rate is fixed
 	if SineFreq >= FsOut/2
         waitfor(msgbox({'Anything above FsOut/2 will be inaudible.'},...
@@ -256,7 +264,8 @@ elseif strcmp(action,'SineAmp')
 	h = gco;
 	s = get(h,'String');
     v = get(h,'Userdata');
-    SineAmp = eval(s,num2str(v));
+    try, v = str2double(s); end
+    SineAmp = v;
 	SineAmp = min([SineAmp 1]);
 	SineAmp = max([SineAmp 0]);
     set(h,'Userdata',SineAmp,'String',num2str(SineAmp));

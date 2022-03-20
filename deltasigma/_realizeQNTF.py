@@ -113,7 +113,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
-        B[:, 1] = np.linalg.lstsq(F, L1)[0]
+        B[:, 1] = np.linalg.lstsq(F, L1, rcond=None)[0]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B[:, 1].reshape((-1, 1)))),
                               np.hstack((C, np.atleast_2d(0)))))
@@ -135,7 +135,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         I = np.eye(order)
         for i in range(zSet.shape[0]):
             F[i, :] = np.dot(C, np.linalg.inv(zSet[i]*I - A))
-        B[:, 1] = np.linalg.lstsq(F, L1)[0]
+        B[:, 1] = np.linalg.lstsq(F, L1, rcond=None)[0]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B[:, 1].reshape((-1, 1)))),
                               np.hstack((C, np.atleast_2d(0)))))
@@ -157,7 +157,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
         L1 = L1.reshape((-1, 1))
-        C = np.linalg.lstsq(F.T, L1)[0].T
+        C = np.linalg.lstsq(F.T, L1, rcond=None)[0].T
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),
                               np.hstack((C, np.atleast_2d(0)))))
@@ -178,7 +178,7 @@ def realizeQNTF(ntf, form='FB', rot=False, bn=0.):
         for i in range(zSet.shape[0]):
             F[:, i] = np.squeeze(np.dot(np.linalg.inv(zSet[i]*I - A), B))
         L1 = L1.reshape((-1, 1))
-        C = np.linalg.lstsq(F.T, L1)[0].T
+        C = np.linalg.lstsq(F.T, L1, rcond=None)[0].T
         C = C[:, ::-1]
         if rot == True:
             ABCD = np.vstack((np.hstack((A, B)),

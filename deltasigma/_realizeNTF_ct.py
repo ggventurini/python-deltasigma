@@ -122,7 +122,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     ntf_z = carray(ntf_z)
     ntf_p = carray(ntf_p)
     order = max(ntf_p.shape)
-    order2 = int(np.floor(order/2.))
+    order2 = order//2
     odd = order - 2*order2
     # compensate for limited accuracy of zero calculation
     ntf_z[np.abs(ntf_z - 1) < eps**(1./(1. + order))] = 1.
@@ -154,7 +154,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         bp = np.zeros((order2,))
     if not multi_timing:
         # Need direct terms for every interval of memory in the DAC
-        n_direct = np.ceil(tdac[1]) - 1
+        n_direct = int(np.ceil(tdac[1])) - 1
         if tdac[0] > 0 and tdac[0] < 1 and tdac[1] > 1 and tdac[1] < 2:
             n_extra = n_direct - 1 #  tdac pulse spans a sample point
         else:
@@ -234,7 +234,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
     else:
         raise ValueError('Sorry, no code for form "%s".', form)
 
-    n_imp = np.ceil(2*order + np.max(tdac2[:, 1]) + 1)
+    n_imp = int(np.ceil(2*order + np.max(tdac2[:, 1]) + 1))
     if method == 'LOOP':
         # Sample the L1 impulse response
         y = impL1(ntf, n_imp)
@@ -278,7 +278,7 @@ def realizeNTF_ct(ntf, form='FB', tdac=(0, 1), ordering=None, bp=None,
         e1[0] = 1.
         y = y - e1
     # Solve for the coefficients
-    x = linalg.lstsq(yy, y)[0]
+    x = linalg.lstsq(yy, y, rcond=None)[0]
     if linalg.norm(np.dot(yy, x) - y) > 0.0001:
         warn('Pulse response fit is poor.')
     if form == 'FB':

@@ -21,7 +21,7 @@ from __future__ import division
 from warnings import warn
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 from numpy.linalg import norm
 
 from ._dbp import dbp
@@ -110,6 +110,7 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
         bilogplot(X, f0*N, ftest, (.03, .3, .3), (-140, 0, 10))
 
     """
+    f0 = int(f0)
     V = carray(V)
     if len(V.shape) > 1:
         if np.prod(V.shape) > max(V.shape):
@@ -125,8 +126,8 @@ def bilogplot(V, f0, fbin, x, y, **fmt):
     p = np.concatenate((pl[::-1], pr))
     f = np.concatenate((-fl[::-1], fr))
     plt.plot(f, p, **fmt)
-    plt.xscale('symlog', linthreshx=x[0],
-               subsx=np.logspace(10**int(np.ceil(np.log10(x[0]))),
+    plt.xscale('symlog', linthresh=x[0],
+               subs=np.logspace(10**int(np.ceil(np.log10(x[0]))),
                                  10**int(1+np.ceil(np.log10(max(x[2], x[1])))))
                )
     ax = plt.gca()
@@ -172,6 +173,6 @@ def _logsmooth2(X, inBin, nbin=8):
     f = ((startbin + stopbin)/2. - 1)/N
     p = np.zeros(f.shape)
     for i in range(max(f.shape)):
-        p[i] = 10*np.log10(norm(X[(startbin[i] - 1):stopbin[i]])**2 /
+        p[i] = 10*np.log10(norm(X[int(startbin[i] - 1):int(stopbin[i])])**2 /
                            (stopbin[i] - startbin[i] + 1))
     return f, p

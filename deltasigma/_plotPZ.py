@@ -17,7 +17,7 @@
 """
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 from ._utils import _get_zpk
 
@@ -82,14 +82,16 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
         pole_fmt['color'] = color
         zero_fmt['color'] = color
 
-    hold_status = plt.ishold()
+    # hold_status = plt.ishold()
     plt.grid(True)
 
     # Plot x and o for poles and zeros, respectively
     plt.plot(p.real, p.imag, linestyle='None', **pole_fmt)
-    plt.hold(True)
+    #plt.plot(p.real, p.imag, linestyle='None', marker='x', markersize=markersize, mew=markersize)
+    
     if len(z) > 0:
         plt.plot(z.real, z.imag, linestyle='None', **zero_fmt)
+        #plt.plot(z.real, z.imag, linestyle='None', marker='x', markersize=markersize, mew=markersize)
 
     # Draw unit circle, real axis and imag axis
     circle = np.exp(2j*np.pi*np.linspace(0, 1, 100))
@@ -129,5 +131,7 @@ def plotPZ(H, color='b', markersize=5, showlist=False):
     plt.ylabel('Imag')
     plt.xlabel('Real')
 
+    """
     if not hold_status:
         plt.hold(False)
+    """

@@ -6,29 +6,31 @@ function [ntf,stf] = calculateTF(ABCD,k)
 if nargin < 2 | isnan(k)
     k = 1;
 end
-
-[A,B,C,D] = partitionABCD(ABCD);
-if size(B,2)>1
-    B1 = B(:,1);
-    B2 = B(:,2);
-else
-    B1 = B;
-    B2 = B;
+nq = length(k);
+n = size(ABCD,1) - nq;
+nu = size(ABCD,2) - size(ABCD,1);
+[A,B,C,D] = partitionABCD(ABCD,nu+nq);
+B1 = B(:,1:nu);
+B2 = B(:,nu+1:end);
+D1 = D(:,1:nu);
+if any(any( D(:,nu+1:end) ~= 0 ))
+    error('D2 must be zero');
 end
+K = diag(k);
 % Find the noise transfer function by forming the closed-loop
 % system (sys_cl) in state-space form.
-Acl = A + k*B2*C;
-Bcl = [B1 + k*B2*D(1), B2];
-Ccl = k*C;
-Dcl = [k*D(1) 1];
+Acl = A + B2*K*C;
+Bcl = [B1 + B2*K*D1, B2];
+Ccl = K*C;
+Dcl = [K*D1 eye(nq)];
 vn = sscanf(version,'%d');
 if vn>6 | all(imag(ABCD)==0)	% real modulator or recent version of MATLAB
     sys_cl = ss(Acl,Bcl,Ccl,Dcl,1);
-    tol = min(1e-3,max(1e-6,eps^(1/(size(ABCD,1)))));
     tfs = zpk(sys_cl);
+    tol = min(1e-3,max(1e-6,eps^(1/(size(ABCD,1)))));
     mtfs = minreal(tfs,tol);
-    stf = mtfs(1);
-    ntf = mtfs(2);
+    stf = mtfs(:,1:nu);
+    ntf = mtfs(:,nu+1:nu+nq);
 else	% quadrature modulator and old version of MATLAB
     p = eig(Acl);
     ntfz = eig(A);
@@ -58,3 +60,4 @@ function ztf = setPolesAndZeros(z,p,k)
 	ztf = ztf*(Z-z(i));
     end
 return
+

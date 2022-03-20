@@ -42,7 +42,9 @@ else
     quadrature = 1;
 end
 
-randn('seed',0);	% So that this function is repeatable
+% Make this function repeatable
+rng_state = rng;
+rng('default');
 
 % Envelope for smooth start-up 
 raised_cosine = 0.5*(1-cos(pi/N0*[0:N0-1]));
@@ -103,3 +105,6 @@ scale = maxima ./ xlim;
 S = diag(1./scale); Sinv = diag(scale); % xs = S * x;
 [A B C D]= partitionABCD(ABCD);
 ABCDs = [S*A*Sinv S*B; C*Sinv D];
+
+rng(rng_state);
+

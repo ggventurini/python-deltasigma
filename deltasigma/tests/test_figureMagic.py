@@ -16,7 +16,7 @@
 import unittest
 import numpy as np
 import deltasigma as ds
-import pylab as plt
+import matplotlib.pyplot as plt
 
 
 class TestFigureMagic(unittest.TestCase):

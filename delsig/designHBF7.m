@@ -91,12 +91,14 @@ end	    % for fp1
 
 if isinf(lowest_complexity)
     fprintf(1,'%s: Unable to meet the design requirements.\n', mfilename);
-elseif debug 
+else 
     complexity = floor(lowest_complexity);
     msg = sprintf( 'Final Design: %d adders', complexity);
     [junk pbr sbr] = frespHBF([], f1_saved, f2_saved, phi_saved, fp, msg);
     n1 = length(f1_saved);	n2 = length(f2_saved);
+    if debug
     fprintf(1,'%s (%d,%d,%.0fdB)\n', msg,n1,n2,dbv(sbr));
+    end
     info = [ complexity n1 n2 dbv(sbr) phi_saved ];
 end
 return
@@ -261,3 +263,5 @@ if ~success
     q2 = [];
 end
 return
+
+

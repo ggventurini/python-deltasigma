@@ -19,7 +19,7 @@
 import unittest
 import numpy as np
 import deltasigma as ds
-import pylab as plt
+import matplotlib.pyplot as plt
 
 from numpy.fft import fft
 
@@ -51,19 +51,19 @@ class TestPlotSpectrum(unittest.TestCase):
         window = ds.ds_hann(N)
         NBW = 1.5/N
         spec0 = fft(v * window)/(N/4)
-        freq = np.linspace(0, 0.5, N/2 + 1)
+        freq = np.linspace(0, 0.5, N//2 + 1)
         # plotting
         plt.subplot(211)
-        plt.plot(freq, ds.dbv(spec0[:N/2 + 1]), 'c', linewidth=1, label='$S$')
-        plt.hold(True)
+        plt.plot(freq, ds.dbv(spec0[:N//2 + 1]), 'c', linewidth=1, label='$S$')
+        #plt.hold(True)
         spec_smoothed = ds.circ_smooth(np.abs(spec0)**2., 16)
-        plt.plot(freq, ds.dbp(spec_smoothed[:N/2 + 1]), 'b--', linewidth=2,
+        plt.plot(freq, ds.dbp(spec_smoothed[:N//2 + 1]), 'b--', linewidth=2,
                  label='$\\mathrm{circ\\_smooth}(S)$')
         ds.plotSpectrum(spec0, fin, 'r', linewidth=2,
                         label='$\\mathrm{plotSpectrum}(S)$')
         Snn = np.abs(ds.evalTF(ntf, np.exp(2j*np.pi*freq)))**2 * 2/12*(delta)**2
         plt.plot(freq, ds.dbp(Snn*NBW), 'm', linewidth=1.5,
-                 label='$\mathrm{from\\ NTF}$')
+                 label='$\\mathrm{from\\ NTF}$')
         plt.text(0.5, -3, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='top')
         ds.figureMagic((0, 0.5), None, None, (-140, 0), 20, None)
@@ -72,14 +72,14 @@ class TestPlotSpectrum(unittest.TestCase):
         ax.set_title('Smoothing and plotting for LOG and LIN axes')
         plt.legend(loc=4)
         plt.subplot(212)
-        plt.plot(freq, ds.dbv(spec0[:N/2 + 1]), 'c', linewidth=1, label='$S$')
-        plt.hold(True)
+        plt.plot(freq, ds.dbv(spec0[:N//2 + 1]), 'c', linewidth=1, label='$S$')
+        #plt.hold(True)
         ds.plotSpectrum(spec0, fin, '--r', linewidth=2,
                         label='$\\mathrm{plotSpectrum}(S)$')
-        plt.plot(freq, ds.dbp(spec_smoothed[:N/2 + 1]), 'b', linewidth=2,
+        plt.plot(freq, ds.dbp(spec_smoothed[:N//2 + 1]), 'b', linewidth=2,
                  label='$\\mathrm{circ\\_smooth}(S)$')
         plt.plot(freq, ds.dbp(Snn*NBW), 'm', linewidth=1.5,
-                 label='$\mathrm{from\\ NTF}$')
+                 label='$\\mathrm{from\\ NTF}$')
         plt.text(0.5, -3, 'NBW = %.1e ' % NBW, horizontalalignment='right',
                  verticalalignment='top')
         ds.figureMagic((0, 0.5), None, None, (-140, 0), 20, None)

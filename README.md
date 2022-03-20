@@ -1,6 +1,15 @@
 python-deltasigma
 =================
 
+## Notes  
+This forked repository is maintained by **Yuki Fukuda**.  
+If you want to visit original repository,  [ggventurini/python-deltasigma](https://github.com/ggventurini/python-deltasigma).  
+
+**Today, I noified that the calcuration is sometimes incorrect in vanilla python.
+I stlongly recommend to use this library with [Anaconda](https://www.anaconda.com/).**
+
+---
+
 A port of the **MATLAB Delta Sigma Toolbox** based on free software and very little sleep
 
 
@@ -18,15 +27,15 @@ it is very heavily based.
 
 **Documentation:** [docs.python-deltasigma.io](http://docs.python-deltasigma.io)
 
-**Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
+**Original Latest version:** [0.2](https://pypi.python.org/pypi/deltasigma/)
 
+**Forked Latest version:** [0.2.7](https://github.com/Y-F-Acoustics/python-deltasigma)
 
-[![Build Status](https://travis-ci.org/ggventurini/python-deltasigma.png?branch=master)](https://travis-ci.org/ggventurini/python-deltasigma) [![Coverage Status](https://coveralls.io/repos/ggventurini/python-deltasigma/badge.png?branch=master)](https://coveralls.io/r/ggventurini/python-deltasigma?branch=master)
-[![PyPi version](http://img.shields.io/badge/version-0.2-brightgreen.png)](https://pypi.python.org/pypi/deltasigma/)
-[![PyPi downloads](https://img.shields.io/pypi/dm/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
-[![PyPi pythons](https://img.shields.io/pypi/pyversions/deltasigma.svg)](https://pypi.python.org/pypi/deltasigma/)
+[![Python Package using Conda](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package-conda.yml)
+[![Python package](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml/badge.svg)](https://github.com/Y-F-Acoustics/python-deltasigma/actions/workflows/python-package.yml)
+[![Build Status](https://travis-ci.org/Y-F-Acoustics/python-deltasigma.svg?branch=master)](https://travis-ci.org/Y-F-Acoustics/python-deltasigma)
+[![Coverage Status](https://coveralls.io/repos/github/Y-F-Acoustics/python-deltasigma/badge.svg?branch=master)](https://coveralls.io/github/Y-F-Acoustics/python-deltasigma?branch=master)
 [![BSD 2 clause license](http://img.shields.io/badge/license-BSD-brightgreen.png)](https://raw.githubusercontent.com/ggventurini/python-deltasigma/master/LICENSE)
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.18529.svg)](http://dx.doi.org/10.5281/zenodo.18529)
 
 
 ***
@@ -48,8 +57,8 @@ according to
 
 `python-deltasigma` runs on Linux, Mac OS X and Windows.
 
-Installing requires **Python 2.6+** or **3.3+**, **numpy**, **scipy**
-(>= 0.11.0) and **matplotlib**.
+Installing requires **Python 3.7+**, **numpy**(<= 1.20.3), **scipy**
+(<= 1.7.1) and **matplotlib**.  
 
 Strongly recommended: **Cython** - for significantly faster delta sigma modulator simulations. 
 
@@ -63,7 +72,7 @@ When the dependencies are satisfied, run:
 
     pip install deltasigma
 
-to install the latest stable version from the [Python
+to install the latest [original stable version](https://github.com/ggventurini/python-deltasigma) from the [Python
 Package Index (PYPI)](http://pypi.python.org), or:
 
     python setup.py install

@@ -174,8 +174,8 @@ def mapCtoD(sys_c, t=(0, 1), f0=0.):
         if t1 == 0 and t2 == 1 and D2 == 0: # No fancy stuff necessary
             Bp = Bp + padb(B2, npp)
         else:
-            n1 = np.floor(t1)
-            n2 = np.ceil(t2) - n1 - 1
+            n1 = int(np.floor(t1))
+            n2 = int(np.ceil(t2)) - n1 - 1
             t1 = t1 - n1
             t2 = t2 - n2 - n1
             if t2 == 1 and D2 != 0:

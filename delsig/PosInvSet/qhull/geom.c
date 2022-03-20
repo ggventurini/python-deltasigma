@@ -58,7 +58,7 @@ void qh_backnormal (realT **rows, int numrow, int numcol, boolT sign,
   if (zerocol != -1) {
     zzinc_(Zback0);
     *nearzero= True;
-    trace4((qh ferr, "qh_backnormal: zero diagonal at column %d.\n", i));
+    trace4(("qh_backnormal: zero diagonal at column %d.\n", i));
   }
 } /* backnormal */
 
@@ -110,9 +110,9 @@ void qh_distplane (pointT *point, facetT *facet, realT *dist) {
       qh RANDOMfactor * qh maxmaxcoord;
   }
   if (qh IStracing >= 4) {
-    fprintf (qh ferr, "qh_distplane: ");
-    fprintf (qh ferr, qh_REAL_1, *dist);
-    fprintf (qh ferr, "from p%d to f%d\n", qh_pointid(point), facet->id);
+    mexPrintf( "qh_distplane: ");
+    mexPrintf( qh_REAL_1, *dist);
+    mexPrintf( "from p%d to f%d\n", qh_pointid(point), facet->id);
   }
   return;
 } /* distplane */
@@ -175,15 +175,15 @@ facetT *qh_findbest (pointT *point, facetT *facet, boolT bestoutside,
   boolT testhorizon = ispartition && (bestoutside || qh APPROXhull || qh MERGING);
 
   if (!ischeckmax && !ispartition && !isfindfacet) {
-    fprintf (qh ferr, "qhull internal error (qh_findbest): unknown combination of arguments\n");
+    mexPrintf( "qhull internal error (qh_findbest): unknown combination of arguments\n");
     qh_errexit (qh_ERRqhull, facet, NULL);
   }
   if (qh TRACEpoint >= 0 && qh TRACEpoint == qh_pointid (point)) {
     qh IStracing= qh TRACElevel;
-    fprintf (qh ferr, "qh_findbest: point p%d starting at f%d bestoutside? %d newfacets %d\n",
+    mexPrintf( "qh_findbest: point p%d starting at f%d bestoutside? %d newfacets %d\n",
 	     qh TRACEpoint, facet->id, bestoutside, newfacets);
-    fprintf (qh ferr, "  Last point added to hull was p%d.", qh furthest_id);
-    fprintf(qh ferr, "  Last merge was #%d.\n", zzval_(Ztotmerge));
+    mexPrintf( "  Last point added to hull was p%d.", qh furthest_id);
+    mexPrintf( "  Last merge was #%d.\n", zzval_(Ztotmerge));
   }
   if (isoutside)
     *isoutside= True;
@@ -208,7 +208,7 @@ facetT *qh_findbest (pointT *point, facetT *facet, boolT bestoutside,
   do {  /* search all neighbors of coplanar and flipped facets */
     if (True) {
    LABELrestart:  /* directed search as long as improvement > searchdist */
-      trace4((qh ferr, "qh_findbest: neighbors of f%d\n", facet->id));
+      trace4(("qh_findbest: neighbors of f%d\n", facet->id));
       FOREACHneighbor_(facet) {
 	if (neighbor->visitid == qh visit_id)
           continue;
@@ -275,7 +275,7 @@ facetT *qh_findbest (pointT *point, facetT *facet, boolT bestoutside,
   }
   if (testhorizon) {
     facet= SETfirst_(bestfacet->neighbors);
-    trace4((qh ferr, "qh_findbest: horizon facet f%d\n", facet->id));
+    trace4(("qh_findbest: horizon facet f%d\n", facet->id));
     (*numpart)++;
     qh_distplane (point, facet, dist);
     if (*dist > bestdist && !facet->upperdelaunay) {
@@ -328,10 +328,10 @@ facetT *qh_findbestnew (pointT *point, facetT *startfacet,
     distoutside= qh MINoutside;
   if (qh TRACEpoint >= 0 && qh TRACEpoint == qh_pointid (point)) {
     qh IStracing= qh TRACElevel;
-    fprintf(qh ferr, "qh_findbestnew: point p%d facet f%d. Stop if dist > %2.2g\n",
+    mexPrintf( "qh_findbestnew: point p%d facet f%d. Stop if dist > %2.2g\n",
 	     qh TRACEpoint, startfacet->id, distoutside);
-    fprintf(qh ferr, "  Last point added to hull was p%d.", qh furthest_id);
-    fprintf(qh ferr, "  Last merge was #%d.\n", zzval_(Ztotmerge));
+    mexPrintf( "  Last point added to hull was p%d.", qh furthest_id);
+    mexPrintf( "  Last merge was #%d.\n", zzval_(Ztotmerge));
   }
   if (isoutside)
     *isoutside= True;
@@ -363,7 +363,7 @@ facetT *qh_findbestnew (pointT *point, facetT *startfacet,
   }
   newfacet= bestfacet;
   if (!newfacet) {
-    fprintf(qh ferr, "qhull internal error (qh_findbestnew): merging had formed an independent cycle of facets.  New facet list is empty\n");
+    mexPrintf("qhull internal error (qh_findbestnew): merging had formed an independent cycle of facets.  New facet list is empty\n");
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
   FOREACHneighbor_(newfacet) {
@@ -431,7 +431,7 @@ void qh_gausselim(realT **rows, int numrow, int numcol, boolT *sign, boolT *near
       *nearzero= True;
       if (pivot_abs == 0.0) {   /* remainder of column == 0 */
 	if (qh IStracing >= 4) {
-	  fprintf (qh ferr, "qh_gausselim: 0 pivot at column %d. (%2.2g < %2.2g)\n", k, pivot_abs, qh DISTround);
+	  mexPrintf( "qh_gausselim: 0 pivot at column %d. (%2.2g < %2.2g)\n", k, pivot_abs, qh DISTround);
 	  qh_printmatrix (qh ferr, "Matrix:", rows, numrow, numcol);
 	}
 	zzinc_(Zgauss0);
@@ -471,7 +471,7 @@ realT qh_getangle(pointT *vect1, pointT *vect2) {
     angle += (2.0 * randr / qh_RANDOMmax - 1.0) *
       qh RANDOMfactor;
   }
-  trace4((qh ferr, "qh_getangle: %2.2g\n", angle));
+  trace4(("qh_getangle: %2.2g\n", angle));
   return(angle);
 } /* getangle */
 
@@ -486,7 +486,7 @@ pointT *qh_getcenter(setT *vertices) {
   int count= qh_setsize(vertices);
 
   if (count < 2) {
-    fprintf (qh ferr, "qhull internal error (qh_getcenter): not defined for %d points\n", count);
+    mexPrintf( "qhull internal error (qh_getcenter): not defined for %d points\n", count);
     qh_errexit (qh_ERRqhull, NULL, NULL);
   }
   center= (pointT *)qh_memalloc(qh normal_size);
@@ -514,7 +514,7 @@ pointT *qh_getcentrum(facetT *facet) {
   qh_distplane (point, facet, &dist);
   centrum= qh_projectpoint(point, facet, dist);
   qh_memfree(point, qh normal_size);
-  trace4((qh ferr, "qh_getcentrum: for f%d, %d vertices dist= %2.2g\n",
+  trace4(("qh_getcentrum: for f%d, %d vertices dist= %2.2g\n",
 	  facet->id, qh_setsize(facet->vertices), dist));
   return centrum;
 } /* getcentrum */
@@ -640,7 +640,7 @@ void qh_normalize2 (coordT *normal, int dim, boolT toporient,
 	  *colp= 0.0;
 	*maxp= temp;
 	zzinc_(Znearlysingular);
-	trace0((qh ferr, "qh_normalize: norm=%2.2g too small during p%d\n", 
+	trace0(("qh_normalize: norm=%2.2g too small during p%d\n", 
 	       norm, qh furthest_id));
 	return;
       }
@@ -694,11 +694,11 @@ void qh_setfacetplane(facetT *facet) {
   if (facet == qh tracefacet) {
     oldtrace= qh IStracing;
     qh IStracing= 5;
-    fprintf (qh ferr, "qh_setfacetplane: facet f%d created.\n", facet->id);
-    fprintf (qh ferr, "  Last point added to hull was p%d.", qh furthest_id);
+    mexPrintf( "qh_setfacetplane: facet f%d created.\n", facet->id);
+    mexPrintf( "  Last point added to hull was p%d.", qh furthest_id);
     if (zzval_(Ztotmerge))
-      fprintf(qh ferr, "  Last merge was #%d.", zzval_(Ztotmerge));
-    fprintf (qh ferr, "\n\nCurrent summary is:\n");
+      mexPrintf( "  Last merge was #%d.", zzval_(Ztotmerge));
+    mexPrintf( "\n\nCurrent summary is:\n");
       qh_printsummary (qh ferr);
   }
   if (qh hull_dim <= 4) {
@@ -740,7 +740,7 @@ void qh_setfacetplane(facetT *facet) {
            	facet->normal, &facet->offset, &nearzero);
     if (nearzero) { 
       if (qh_orientoutside (facet)) {
-	trace0((qh ferr, "qh_setfacetplane: flipped orientation after testing interior_point during p%d\n", qh furthest_id));
+	trace0(("qh_setfacetplane: flipped orientation after testing interior_point during p%d\n", qh furthest_id));
       /* this is part of using Gaussian Elimination.  For example in 5-d
 	   1 1 1 1 0
 	   1 1 1 1 1
@@ -778,7 +778,7 @@ void qh_setfacetplane(facetT *facet) {
 	}else if (-dist > qh TRACEdist)
 	  istrace= True;
 	if (istrace) {
-	  fprintf (qh ferr, "qh_setfacetplane: ====== vertex p%d (v%d) increases max_outside to %2.2g for new facet f%d last p%d\n",
+	  mexPrintf( "qh_setfacetplane: ====== vertex p%d (v%d) increases max_outside to %2.2g for new facet f%d last p%d\n",
 	        qh_pointid(vertex->point), vertex->id, dist, facet->id, qh furthest_id);
 	  qh_errprint ("DISTANT", facet, NULL, NULL, NULL);
 	}
@@ -786,11 +786,11 @@ void qh_setfacetplane(facetT *facet) {
     }
   }
   if (qh IStracing >= 3) {
-    fprintf (qh ferr, "qh_setfacetplane: f%d offset %2.2g normal: ",
+    mexPrintf( "qh_setfacetplane: f%d offset %2.2g normal: ",
 	     facet->id, facet->offset);
     for (k=0; k<qh hull_dim; k++)
-      fprintf (qh ferr, "%2.2g ", facet->normal[k]);
-    fprintf (qh ferr, "\n");
+      mexPrintf( "%2.2g ", facet->normal[k]);
+    mexPrintf( "\n");
   }
   if (facet == qh tracefacet)
     qh IStracing= oldtrace;
@@ -849,7 +849,7 @@ void qh_sethyperplane_det (int dim, coordT **rows, coordT *point0,
   }
   if (*nearzero) {
     zzinc_(Zminnorm);
-    trace0((qh ferr, "qh_sethyperplane_det: degenerate norm during p%d.\n", qh furthest_id));
+    trace0(("qh_sethyperplane_det: degenerate norm during p%d.\n", qh furthest_id));
   }
 } /* sethyperplane_det */
 
@@ -881,13 +881,13 @@ void qh_sethyperplane_gauss (int dim, coordT **rows, pointT *point0,
   }
   if (*nearzero) {
     zzinc_(Znearlysingular);
-    trace0((qh ferr, "qh_sethyperplane_gauss: nearly singular or axis parallel hyperplane during p%d.\n", qh furthest_id));
+    trace0(("qh_sethyperplane_gauss: nearly singular or axis parallel hyperplane during p%d.\n", qh furthest_id));
     qh_backnormal(rows, dim-1, dim, sign, normal, &nearzero2);
   }else {
     qh_backnormal(rows, dim-1, dim, sign, normal, &nearzero2);
     if (nearzero2) {
       zzinc_(Znearlysingular);
-      trace0((qh ferr, "qh_sethyperplane_gauss: singular or axis parallel hyperplane at normalization during p%d.\n", qh furthest_id));
+      trace0(("qh_sethyperplane_gauss: singular or axis parallel hyperplane at normalization during p%d.\n", qh furthest_id));
     }
   }
   if (nearzero2)

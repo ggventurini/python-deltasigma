@@ -7,8 +7,8 @@ Returns vertices, edges, normals and offsets.
 char qh_version[] = "mex interface to qhull V2.2 by R. Schreier 95.12.21";
 
 /* Fill up the return matrices, keeping everything in order */
-Matrix* stuff2D( double *v, double *n, double *o){
-    Matrix *E = mxCreateFull(2, qh num_vertices, REAL);
+mxArray* stuff2D( double *v, double *n, double *o){
+    mxArray* E = mxCreateDoubleMatrix(2, qh num_vertices, mxREAL);
     double *e = mxGetPr(E);
     vertexT *vertex = qh vertex_list;
     facetT *facet;
@@ -47,8 +47,8 @@ Matrix* stuff2D( double *v, double *n, double *o){
 }
 
 /* Fill up the return matrices for the 3D case */
-Matrix *stuff3D( double *v, double *n, double *o){
-    Matrix *E;
+mxArray *stuff3D( double *v, double *n, double *o){
+    mxArray *E;
     double *e;
     facetT *facet, *neighbor;
     ridgeT **ridgep, *ridge;	/* needed by the FOREACHridge_ macro */
@@ -75,7 +75,7 @@ Matrix *stuff3D( double *v, double *n, double *o){
 	    num_edges += qh hull_dim;
 	else
 	    num_edges += qh_setsize(facet->ridges);
-    E = mxCreateFull(2, num_edges/2 , REAL);
+    E = mxCreateDoubleMatrix(2, num_edges/2 , mxREAL);
     }
 
     e = mxGetPr(E);
@@ -138,8 +138,8 @@ int id_number( int m, int n ){
 }
 
 /* Fill up the return matrices for the 4D case */
-Matrix *stuff4D( double *v, double *n, double *o){
-    Matrix *E;
+mxArray *stuff4D( double *v, double *n, double *o){
+    mxArray *E;
     double *e;
     int num_edges = 0;
     facetT *facet, *neighbor;
@@ -201,7 +201,7 @@ Matrix *stuff4D( double *v, double *n, double *o){
     } /* FORALLfacets */
 
     /* Use the connection matrix to fill the edge list */
-    E = mxCreateFull(2, num_edges, REAL);
+    E = mxCreateDoubleMatrix(2, num_edges, mxREAL);
     e = mxGetPr(E);
     for(i=1; i<qh num_vertices ; ++i){
 	for(j=0; j<i; ++j){
@@ -219,12 +219,12 @@ void cleanup(){
     qh_freeqhull(!qh_ALL);
     qh_memfreeshort (&curlong, &totlong);
     if (curlong || totlong)      /* optional */
-        fprintf (stderr, "qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
+        mexPrintf("qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
             totlong, curlong);
 }
 
-void mexFunction(int nlhs, Matrix *plhs[], int nrhs, Matrix *prhs[]){
-    Matrix *V, *E, *N, *O;
+void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]){
+    mxArray *V, *E, *N, *O;
     double *Vp, *Np, *Op;
     int exitcode, dim;
     char *cmd = "qhull(mex) Qcx C0.001 A0.999", string[256];
@@ -237,9 +237,9 @@ void mexFunction(int nlhs, Matrix *plhs[], int nrhs, Matrix *prhs[]){
     if( mxIsNumeric(prhs[0]) != 1 )
         mexErrMsgTxt("hull error: The first argument is not numeric.");
     if( nrhs > 1 ){	/* Use arg2 as the argument string for qhull */
-	Matrix *str = prhs[1];
+	const mxArray *str = prhs[1];
 	int strlen = mxGetM(str)*mxGetN(str)+1;
-	if( mxIsString(str) != 1 )
+	if( mxIsChar(str) != 1 )
 	    mexErrMsgTxt("hull error: the second argument is not a string.");
 	cmd = mxCalloc(strlen,sizeof(char));
 	mxGetString(str, cmd, strlen);
@@ -263,9 +263,9 @@ void mexFunction(int nlhs, Matrix *plhs[], int nrhs, Matrix *prhs[]){
 
         qh_qhull();
 
-        V = plhs[0] = mxCreateFull(dim, qh num_vertices, REAL);
-        N = plhs[2] = mxCreateFull(dim, qh num_facets, REAL);
-        O = plhs[3] = mxCreateFull(1, qh num_facets, REAL);
+        V = plhs[0] = mxCreateDoubleMatrix(dim, qh num_vertices, mxREAL);
+        N = plhs[2] = mxCreateDoubleMatrix(dim, qh num_facets, mxREAL);
+        O = plhs[3] = mxCreateDoubleMatrix(1, qh num_facets, mxREAL);
 
 	Vp = mxGetPr(V);
 	Np = mxGetPr(N);
@@ -304,28 +304,28 @@ qh_printfacetlist(qh facet_list, NULL, True);
 void qh_errexit(int exitcode, facetT *facet, ridgeT *ridge) {
 
     if (qh ERREXITcalled) {
-        fprintf (qh ferr, "\nqhull error while processing previous error.  Exit program\n");
+        mexPrintf( "\nqhull error while processing previous error.  Exit program\n");
         exit(1);
     }
     qh ERREXITcalled= True;
     if (!qh QHULLfinished)
         qh hulltime= clock() - qh hulltime;
     qh_errprint("ERRONEOUS", facet, NULL, ridge, NULL);
-    fprintf (qh ferr, "\nWhile executing: %s | %s\n", qh rbox_command, qh qhull_command);
+    mexPrintf( "\nWhile executing: %s | %s\n", qh rbox_command, qh qhull_command);
     if (qh furthest_id) {
-        fprintf(qh ferr, "Last point added to hull was p%d.", qh furthest_id);
+        mexPrintf("Last point added to hull was p%d.", qh furthest_id);
         if (zzval_(Ztotmerge))
-            fprintf(qh ferr, "  Last merge was #%d.", zzval_(Ztotmerge));
+            mexPrintf("  Last merge was #%d.", zzval_(Ztotmerge));
     }
     if (qh ROTATErandom > 0)
-        fprintf(qh ferr, "  Repeat with 'QR%d'.", qh ROTATErandom);
+        mexPrintf("  Repeat with 'QR%d'.", qh ROTATErandom);
     if (qh furthest_id || qh ROTATErandom > 0)
-        fprintf (qh ferr, "\n");
+        mexPrintf( "\n");
     if (qh FORCEoutput && (qh QHULLfinished || (!facet && !ridge)))
         qh_produce_output();
     else {
         if (exitcode != qh_ERRsingular && zzval_(Zsetplane) > qh hull_dim+1) {
-            fprintf (qh ferr, "\nAt error exit:\n");
+            mexPrintf( "\nAt error exit:\n");
             qh_printsummary (qh ferr);
             if (qh PRINTstatistics) {
                 qh_collectstatistics();
@@ -343,7 +343,7 @@ void qh_errexit(int exitcode, facetT *facet, ridgeT *ridge) {
     else if (exitcode == qh_ERRprec && !qh PREmerge)
         qh_printhelp_degenerate (qh ferr);
     if (qh NOerrexit) {
-        fprintf (qh ferr, "qhull error while ending program.  Exit program\n");
+        mexPrintf( "qhull error while ending program.  Exit program\n");
         exit(1);
     }
     qh NOerrexit= True;
@@ -359,15 +359,15 @@ void qh_errprint(char *string, facetT *atfacet, facetT *otherfacet, ridgeT *atri
     int i;
 
     if (atfacet) {
-        fprintf(qh ferr, "%s FACET:\n", string);
+        mexPrintf("%s FACET:\n", string);
         qh_printfacet(qh ferr, atfacet);
     }
     if (otherfacet) {
-        fprintf(qh ferr, "%s OTHER FACET:\n", string);
+        mexPrintf("%s OTHER FACET:\n", string);
         qh_printfacet(qh ferr, otherfacet);
     }
     if (atridge) {
-        fprintf(qh ferr, "%s RIDGE:\n", string);
+        mexPrintf("%s RIDGE:\n", string);
         qh_printridge(qh ferr, atridge);
         if (atridge->top && atridge->top != atfacet && atridge->top != otherfacet)
             qh_printfacet(qh ferr, atridge->top);
@@ -380,11 +380,11 @@ void qh_errprint(char *string, facetT *atfacet, facetT *otherfacet, ridgeT *atri
             otherfacet= otherfacet_(atridge, atfacet);
     }
     if (atvertex) {
-        fprintf(qh ferr, "%s VERTEX:\n", string);
+        mexPrintf("%s VERTEX:\n", string);
         qh_printvertex (qh ferr, atvertex);
     }
     if (qh FORCEoutput && atfacet && !qh QHULLfinished) {
-        fprintf(qh ferr, "ERRONEOUS and NEIGHBORING FACETS to output\n");
+        mexPrintf("ERRONEOUS and NEIGHBORING FACETS to output\n");
         for (i= 0; i< qh_PRINTEND; i++)
             qh_printneighborhood (qh fout, qh PRINTout[i], atfacet, otherfacet,
                 !qh_ALL);

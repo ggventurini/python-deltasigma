@@ -84,6 +84,8 @@ class TestScaleABCD(unittest.TestCase):
         # Probably related to the libs used?
         self.assertTrue(np.allclose(ABCD, self.ABCD_ref, atol=1e-2, rtol=30e-2))
         self.assertTrue(np.allclose(umax, self.umax_ref, atol=1e-4, rtol=1e-3))
+        print("umax = ", umax)
+        print("self.umax_ref = ", self.umax_ref)
         self.assertTrue(np.allclose(np.diag(S), self.Sdiag_ref, atol=1e-2, rtol=25e-1))
 
     def test_scaleABCD_Q(self):

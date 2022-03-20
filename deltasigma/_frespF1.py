@@ -19,7 +19,7 @@
 from __future__ import division
 
 import numpy as np
-import pylab as plt
+import matplotlib.pyplot as plt
 
 from ._dbv import dbv
 

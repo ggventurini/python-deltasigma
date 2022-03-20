@@ -78,7 +78,7 @@ def ds_optzeros(n, opt=1):
     """
     opt = int(opt)    
     if opt == 0:
-        optZeros = np.zeros((np.ceil(n/2.), ))
+        optZeros = np.zeros((int(np.ceil(n/2.)), ))
     else:
         optZeros = _oznopt[n][opt]
     

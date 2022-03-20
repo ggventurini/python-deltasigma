@@ -15,7 +15,9 @@
 #include <SIOUX.h>
 #include <Files.h>
 #include <console.h>
-#include <Desk.h>
+#include <Menus.h>
+#include <Devices.h>
+#include <Events.h>
 #endif
 
 char qh_version[]= "version 2.2 95/12/4"; /* Changes Announce README man make*/
@@ -219,7 +221,7 @@ int main(int argc, char *argv[]) {
   if (setvbuf (stdin, inBuf, _IOFBF, sizeof(inBuf)) < 0   /* w/o, SIOUX I/O is slow*/
   || setvbuf (stdout, outBuf, _IOFBF, sizeof(outBuf)) < 0
   || (stdout != stderr && setvbuf (stderr, errBuf, _IOFBF, sizeof(errBuf)) < 0)) 
-    fprintf (stderr, "qhull internal warning (main): could not change stdio to fully buffered.\n");
+    mexPrintf("qhull internal warning (main): could not change stdio to fully buffered.\n");
   argc= ccommand(&argv);
 #endif
 
@@ -252,7 +254,7 @@ int main(int argc, char *argv[]) {
   qh_freeqhull(False);
   qh_memfreeshort (&curlong, &totlong);
   if (curlong || totlong) 
-    fprintf (stderr, "qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
+    mexPrintf("qhull internal warning (main): did not free %d bytes of long memory (%d pieces)\n",
        totlong, curlong);
   return exitcode;
 } /* main */

@@ -59,7 +59,7 @@ def simulateDSM(np.ndarray u, arg2, nlev=2, x0=0,
     # Make sure that nlev is a 1D int array
     cdef np.ndarray c_nlev
     try:
-        c_nlev = np.asarray(nlev, dtype=np.int)
+        c_nlev = np.asarray(nlev, dtype=np.int64)
         if c_nlev.ndim > 1:
             raise TypeError()
         c_nlev=c_nlev.reshape(-1)

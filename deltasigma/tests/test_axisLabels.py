@@ -2,7 +2,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
-from nose.tools import raises
+# from nose.tools import raises
 
 class TestAxisLabels(unittest.TestCase):
     """Test function for axisLabels()"""
@@ -21,8 +21,9 @@ class TestAxisLabels(unittest.TestCase):
         r = ['10', '25', '40', '55', '70', '85']
         self.assertTrue(r == ss)
 
-    @raises(ValueError)
+    # @raises(ValueError)
     def test_axis_label_incr_length(self):
         """Test function for axisLabels() 3/3"""
-        ds.axisLabels([1., 2., 3., 4.], [1, 2, 3])
+        with self.assertRaises(ValueError):
+            ds.axisLabels([1., 2., 3., 4.], [1, 2, 3])
 

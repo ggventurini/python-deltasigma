@@ -20,7 +20,7 @@ import unittest
 import numpy as np
 import deltasigma as ds
 
-from nose.tools import raises
+#from nose.tools import raises
 from scipy.signal import lti
 
 class TestPartitionABCD(unittest.TestCase):
@@ -28,7 +28,7 @@ class TestPartitionABCD(unittest.TestCase):
 
     def setUp(self):
         # data for test 1
-        self.ob = lti((1, ), (1, 2, 10))
+        self.ob = lti((1, ), (1, 2, 10)).to_ss()
         ab = np.hstack((self.ob.A, self.ob.B))
         cd = np.hstack((self.ob.C, self.ob.D.reshape((1,1))))
         self.ABCD1 = np.vstack((ab, cd))
@@ -80,8 +80,9 @@ class TestPartitionABCD(unittest.TestCase):
         self.assertTrue(np.allclose(self.ct3, cr, rtol=1e-5, atol=1e-8))
         self.assertTrue(np.allclose(self.dt3, dr, rtol=1e-5, atol=1e-8))
 
-    @raises(ValueError)
+    #@raises(ValueError)
     def test_partitionABCD_5(self):
         """Test function for partitionABCD() 5/5"""
-        ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=2, r=2)
+        with self.assertRaises(ValueError):
+            ar, br, cr, dr = ds.partitionABCD(self.ABCD2, m=2, r=2)
 

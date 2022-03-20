@@ -38,14 +38,14 @@ class TestCalculateSNR(unittest.TestCase):
         """ Test that a particular SNR is within roundings errors of
         40 (dB?) """
         N = self.N
-        snr = ds.calculateSNR(self.hwfft[:N/2], int(N*self.f1))
+        snr = ds.calculateSNR(self.hwfft[:N//2], int(N*self.f1))
         # Consider replacing with assertAlmostEqual
         self.assertTrue(np.allclose(snr, 40, atol=1e-8, rtol=1e-8))
 
     def test_snr_is_inf(self):
         """ Test that a paricular SNR is infinite. """
         N = self.N
-        hwfft = np.zeros((N/2, ))
+        hwfft = np.zeros((N//2, ))
         hwfft[512] = 1.0  # specially crafted to have Inf snr
-        snr = ds.calculateSNR(hwfft[:N/2], 512)
+        snr = ds.calculateSNR(hwfft[:N//2], 512)
         self.assertEqual(snr, np.Inf)

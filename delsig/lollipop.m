@@ -14,7 +14,7 @@ h = ishold;
 hold on;
 
 %Plot circles
-plot(x,y,['d' color], 'linewidth', lw);
+plot(x,y,['o' color], 'linewidth', lw);
 
 % Make x and y row vectors, then plot as sticks
 x = x(:)'; y = y(:)';

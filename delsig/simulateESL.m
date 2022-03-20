@@ -1,5 +1,5 @@
-function [sv,sx,sigma_se,max_sx,max_sy] = simulateESL(v,mtf,M,dw,sx0)
-%[sv,sx,sigma_se,max_sx,max_sy] = simulateESL(v,mtf,M=16,dw=[1..],sx0=[0..])
+function [sv,sx,sigma_se,max_sx,max_sy] = simulateESL(v,mtf,M,dw,sx0,d)
+%[sv,sx,sigma_se,max_sx,max_sy] = simulateESL(v,mtf,M=16,dw=[1..],sx0=[0..],d=0)
 %Simulate the Element Selection Logic for a multi-element DAC.
 %Outputs:
 % sv	is an MxN matrix whose columns are the selection vectors.
@@ -11,14 +11,16 @@ function [sv,sx,sigma_se,max_sx,max_sy] = simulateESL(v,mtf,M,dw,sx0)
 % v	is a vector of the digital (positive integer) input values.
 % mtf	is the mismatch-shaping transfer function, given in zero-pole form.
 % M	is the number of elements.
-% sx0	is a matrix whose columns are the initial states of the ESL.
 % dw	is a vector of dac element weights
+% sx0	is a matrix whose columns are the initial states of the ESL.
+% d 	is a flag indicating that dither is to be added to sy. NOT IMPLEMENTED YET
 %
 % For a brief description of the theory of mismatch-shaping DACs, see
 % R. Schreier and B. Zhang "Noise-shaped multibit D/A convertor employing
 % unit elements," Electronics Letters, vol. 31, no. 20, pp. 1712-1713,
 % Sept. 28 1995.
 %
+fprintf(1,'simulateESL() is obsolete. Please use simulateMS() instead\n');
 
 % Handle the input arguments
 if nargin < 2
@@ -30,14 +32,14 @@ defaults = { NaN NaN 16 NaN NaN };
 for i=1:length(defaults)
     parameter = char(parameters(i));
     if i>nargin | ( eval(['isnumeric(' parameter ') '])  &  ...
-     eval(['any(isnan(' parameter ')) | isempty(' parameter ') ']) )
+            eval(['any(isnan(' parameter ')) | isempty(' parameter ') ']) )
         eval([parameter '=defaults{i};'])
     end
 end
 
-if isobject(mtf) 
+if isobject(mtf)
     if ~strcmp(class(mtf),'zpk')
-	error('The mtf is an unsupported type of object.')
+        error('The mtf is an unsupported type of object.')
     end
     tmp = mtf;	clear mtf;
     mtf.form = 'zp';
@@ -49,10 +51,10 @@ elseif isstruct(mtf)
     if strcmp(class(mtf),'zpk')
     end
     if ~any(strcmp(fieldnames(mtf),'zeros'))
-	error('No zeros field in the MTF.')
+        error('No zeros field in the MTF.')
     end
     if ~any(strcmp(fieldnames(mtf),'poles'))
-	error('No poles field in the MTF.')
+        error('No poles field in the MTF.')
     end
 elseif isnan(mtf)
     mtf.form = 'zp';
@@ -61,12 +63,12 @@ elseif isnan(mtf)
     mtf.poles = 0;
 elseif isnumeric(mtf)
     if size(mtf,2) == 2		% Probably old (ver. 2) ntf form
-	fprintf(1,'You appear to be using the old-style form of MTF specification.\n Automatic converstion to the new form will be done for this release only.\n');
-	tmp.form = 'zp';
-	tmp.k = 1;
-	tmp.zeros = mtf(:,1);
-	tmp.poles = mtf(:,2);
-	mtf = tmp;
+        fprintf(1,'You appear to be using the old-style form of MTF specification.\n Automatic converstion to the new form will be done for this release only.\n');
+        tmp.form = 'zp';
+        tmp.k = 1;
+        tmp.zeros = mtf(:,1);
+        tmp.poles = mtf(:,2);
+        mtf = tmp;
     end
 end
 order = length(mtf.poles);
